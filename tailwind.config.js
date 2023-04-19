@@ -2,7 +2,21 @@
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
-    extend: {},
+    fontFamily: {
+      body: ['Open Sans'],
+    },
+    extend: {
+      boxShadow: {
+        md: '0px 4px 60px rgba(0,0,0,0.1)',
+      },
+      spacing: {
+        '10px': '10px',
+      },
+    },
+    fontSize: {
+      base: ['16px', '22px'],
+      sm: ['14px', '20px'],
+    },
     colors: {
       primary: '#01AAED',
       black: '#000000',
@@ -16,6 +30,7 @@ module.exports = {
       twitterBlue: '#4099FF',
       googleBlack: '#25282B',
       mercury: '#E1E1E1',
+      'input-grey': 'rgba(112, 119, 133, 0.1)',
     },
   },
   plugins: [],
