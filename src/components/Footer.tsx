@@ -32,19 +32,25 @@ const Footer = () => {
           <div className="flex flex-col gap-3.5">
             <h5 className="text-primary font-medium">Product</h5>
             {productLinks.map(link => (
-              <Link href={link.href}>{link.label}</Link>
+              <Link href={link.href} key={link.href}>
+                {link.label}
+              </Link>
             ))}
           </div>
           <div className="flex flex-col gap-3.5">
             <h5 className="text-primary font-medium">Company</h5>
             {companyLinks.map(link => (
-              <Link href={link.href}>{link.label}</Link>
+              <Link href={link.href} key={link.href}>
+                {link.label}
+              </Link>
             ))}
           </div>
           <div className="flex flex-col gap-3.5">
             <h5 className="text-primary font-medium">Follow</h5>
             {socialMediaLinks.map(link => (
-              <Link href={link.href}>{link.label}</Link>
+              <Link href={link.href} key={link.href}>
+                {link.label}
+              </Link>
             ))}
           </div>
           <div>
@@ -62,7 +68,7 @@ const Footer = () => {
         <div className="flex text-white">
           {additionalLinks.map((link, index) => (
             <>
-              <Link href={link.href} className="mr-1">
+              <Link href={link.href} className="mr-1" key={link.href}>
                 {link.label}
               </Link>
               {index !== 2 && <span className="mr-1"> / </span>}
