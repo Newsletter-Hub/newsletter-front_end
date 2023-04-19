@@ -3,7 +3,7 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
-      body: ['Open Sans'],
+      body: ['Alegreya'],
     },
     extend: {
       boxShadow: {
@@ -20,6 +20,7 @@ module.exports = {
       base: ['16px', '22px'],
       sm: ['14px', '20px'],
       '2xl': ['24px', '32px'],
+      '7xl': ['72px', '98px'],
     },
     colors: {
       primary: '#01AAED',
