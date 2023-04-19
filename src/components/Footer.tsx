@@ -26,7 +26,7 @@ const additionalLinks = [
 
 const Footer = () => {
   return (
-    <div className="bg-white pt-29 px-32 pb-4">
+    <footer className="bg-white pt-29 px-32 pb-4">
       <div className="bg-light-grey pt-12 pb-24 pl-8 pr-21">
         <div className="flex gap-48">
           <div className="flex flex-col gap-3.5">
@@ -64,19 +64,22 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-primary py-8 pl-8 pr-20">
-        <div className="flex text-white">
+      <div className="bg-primary py-8 pl-8 pr-20 flex items-center">
+        <div className="flex text-white flex-1">
           {additionalLinks.map((link, index) => (
             <>
-              <Link href={link.href} className="mr-1" key={link.href}>
-                {link.label}
+              <Link href={link.href} className="mr-1 text-base" key={link.href}>
+                {link.label} {index !== 2 && '/'}
               </Link>
-              {index !== 2 && <span className="mr-1"> / </span>}
             </>
           ))}
         </div>
+        <div className="flex items-center gap-6">
+          <span className="text-white text-base font-medium">2021</span>
+          <span className="text-white text-4xl">TRADE</span>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     fontFamily: {
       body: ['Open Sans'],
+      footer: ['Montserrat'],
     },
     extend: {
       boxShadow: {
@@ -20,6 +21,7 @@ module.exports = {
       base: ['16px', '22px'],
       sm: ['14px', '20px'],
       '2xl': ['24px', '32px'],
+      '4xl': ['36px', '42px'],
     },
     colors: {
       primary: '#01AAED',
