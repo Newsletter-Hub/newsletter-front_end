@@ -3,8 +3,7 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
-      body: ['Open Sans'],
-      footer: ['Montserrat'],
+      body: ['Alegreya'],
     },
     extend: {
       boxShadow: {
@@ -22,6 +21,7 @@ module.exports = {
       sm: ['14px', '20px'],
       '2xl': ['24px', '32px'],
       '4xl': ['36px', '42px'],
+      '7xl': ['72px', '98px'],
     },
     colors: {
       primary: '#01AAED',
