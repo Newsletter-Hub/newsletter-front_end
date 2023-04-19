@@ -11,16 +11,20 @@ module.exports = {
       },
       spacing: {
         '10px': '10px',
+        29: '116px',
+        32: '126px',
+        21: '85px',
       },
     },
     fontSize: {
       base: ['16px', '22px'],
       sm: ['14px', '20px'],
+      '2xl': ['24px', '32px'],
     },
     colors: {
       primary: '#01AAED',
       black: '#000000',
-      'light-grey': '#6F6C90',
+      'light-grey': '#FAF9F7',
       'dark-grey': '#404040',
       grey: '#5A616D',
       'gull-grey': '#A3A9AC',
