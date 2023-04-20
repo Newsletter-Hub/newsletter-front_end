@@ -4,6 +4,8 @@ import { ReactElement } from 'react';
 import Layout from '@/components/Layout';
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
+import TrendingNewslettersBlock from '@/components/HomePage/TrendingNewslettersBlock';
+import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 
 const Home: NextPageWithLayout = () => {
   return (
@@ -16,6 +18,8 @@ const Home: NextPageWithLayout = () => {
         <div className="bg-white px-32 pt-32">
           <MainBlock />
           <ReviewsBlock />
+          <TrendingNewslettersBlock />
+          <GetStartedBlock />
         </div>
       </main>
     </>
