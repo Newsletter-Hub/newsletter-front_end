@@ -92,7 +92,10 @@ const ReviewsBlock = () => {
         <div className="shadow-lg pl-12 pt-12 pb-24 pr-16">
           <div className="mb-10">
             {latestReviews.map(review => (
-              <div className="flex border-b border-mercury pb-3 pt-2.5">
+              <div
+                className="flex border-b border-mercury pb-3 pt-2.5"
+                key={review.image}
+              >
                 <Image
                   src={review.image}
                   alt="latest"
@@ -144,8 +147,11 @@ const ReviewsBlock = () => {
           Reviews for Your Newsletters
         </h6>
         <div className="flex flex-col gap-3 items-stretch">
-          {reviewsNewsletters.map(review => (
-            <div className="max-w-[482px] hover:bg-light-grey px-7 py-6 rounded-2xl">
+          {reviewsNewsletters.map((review, index) => (
+            <div
+              className="max-w-[482px] hover:bg-light-grey px-7 py-6 rounded-2xl"
+              key={index}
+            >
               <p className="text-xl">{review.name}</p>
               <p>{review.city}</p>
               <div className="mb-6">
