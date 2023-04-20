@@ -1,4 +1,4 @@
-import { Logo } from '@/assets/images/logo';
+import Logo from '@/assets/images/logo';
 import Link from 'next/link';
 import Input from './Input';
 import Button from './Button';

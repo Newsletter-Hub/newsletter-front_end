@@ -3,12 +3,19 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
-      body: ['Open Sans'],
-      footer: ['Montserrat'],
+      body: ['Alegreya'],
     },
     extend: {
+      height: {
+        82: '341px',
+      },
+      backgroundImage: {
+        getStarted: "url('../assets/images/getStartedBackground.png')",
+      },
       boxShadow: {
         md: '0px 4px 60px rgba(0,0,0,0.1)',
+        lg: '0px 3px 14px rgba(74, 58, 255, 0.03), 0px -2px 4px rgba(20, 20, 43, 0.02), 0px 12px 24px rgba(20, 20, 43, 0.04);',
+        xl: '0px 7px 24px rgba(20, 20, 43, 0.05)',
       },
       spacing: {
         '10px': '10px',
@@ -18,10 +25,17 @@ module.exports = {
       },
     },
     fontSize: {
+      xs: ['13px', '18px'],
       base: ['16px', '22px'],
       sm: ['14px', '20px'],
+      lg: ['18px', '25px'],
+      xl: ['22px', '30px'],
       '2xl': ['24px', '32px'],
       '4xl': ['36px', '42px'],
+      '5xl': ['48px', '68px'],
+      '7xl': ['72px', '98px'],
+      '2xs': ['11px', '15px'],
+      '3xl': ['32px', '38px'],
     },
     colors: {
       primary: '#01AAED',
@@ -37,6 +51,9 @@ module.exports = {
       googleBlack: '#25282B',
       mercury: '#E1E1E1',
       'input-grey': 'rgba(112, 119, 133, 0.1)',
+      waterloo: '#6F6C90',
+      'dark-blue': '#170F49',
+      'shark-blue': '#1F2027',
     },
   },
   plugins: [],

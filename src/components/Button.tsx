@@ -4,6 +4,11 @@ interface ButtonProps {
   label: string;
   variant?: 'primary' | 'secondary';
   weight?: 'base' | 'bold';
+  fontSize?: 'base' | 'small' | 'md';
+  size?: 'base' | 'md' | 'full';
+  rounded?: boolean;
+  uppercase?: boolean;
+  bold?: boolean;
 }
 
 const variants = {
@@ -16,12 +21,37 @@ const weights = {
   bold: 'font-bold',
 };
 
+const fontSizes = {
+  base: 'text-lg',
+  small: 'text-2xs',
+  md: 'text-base',
+};
+
+const sizes = {
+  base: 'w-fit',
+  md: 'w-80',
+  full: 'w-full',
+};
+
 const Button = ({
   label,
   variant = 'primary',
   weight = 'base',
+  rounded = false,
+  uppercase = false,
+  bold = false,
+  fontSize = 'base',
+  size = 'base',
 }: ButtonProps) => {
-  const styles = clsx(variants[variant], weights[weight]);
+  const styles = clsx(
+    variants[variant],
+    weights[weight],
+    fontSizes[fontSize],
+    rounded && 'rounded',
+    uppercase && 'uppercase',
+    bold && 'font-bold',
+    sizes[size]
+  );
   return <button className={styles}>{label}</button>;
 };
 
