@@ -32,7 +32,11 @@ const Footer = () => {
           <div className="flex flex-col gap-3.5">
             <h5 className="text-primary font-medium">Product</h5>
             {productLinks.map(link => (
-              <Link href={link.href} key={link.href}>
+              <Link
+                href={link.href}
+                key={link.href}
+                className="whitespace-nowrap"
+              >
                 {link.label}
               </Link>
             ))}
