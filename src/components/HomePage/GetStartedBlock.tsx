@@ -11,7 +11,7 @@ const GetStartedBlock = () => {
             <p className="text-base mb-12">Sign up or contact us</p>
             <Button
               label="Start free trial"
-              rounded
+              rounded="md"
               bold
               uppercase
               fontSize="md"

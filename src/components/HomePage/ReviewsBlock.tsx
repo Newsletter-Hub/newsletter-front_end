@@ -123,10 +123,10 @@ const ReviewsBlock = () => {
                     <PlusIcon />
                     <Button
                       label="Read Newletter"
-                      rounded
+                      rounded="md"
                       bold
                       uppercase
-                      fontSize="small"
+                      fontSize="xs"
                     />
                   </div>
                 </div>
@@ -137,7 +137,7 @@ const ReviewsBlock = () => {
             label="See More"
             variant="secondary"
             size="full"
-            rounded
+            rounded="md"
             bold
           />
         </div>
