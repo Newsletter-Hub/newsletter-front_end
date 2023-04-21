@@ -28,7 +28,9 @@ const Header = () => {
       </div>
       <div className="flex gap-6 w-full items-center">
         <Link href="/login">Login</Link>
-        <Button label="Sign up" />
+        <Link href="/sign-up">
+          <Button label="Sign up" />
+        </Link>
       </div>
     </div>
   );
