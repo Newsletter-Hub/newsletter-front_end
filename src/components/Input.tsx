@@ -7,7 +7,7 @@ interface InputProps {
   register?: UseFormRegisterReturn;
   isSearch?: boolean;
   variant?: 'outlined' | 'filled';
-  error?: Boolean;
+  error?: boolean;
   errorText?: string;
 }
 
