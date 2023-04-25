@@ -20,7 +20,9 @@ const Header = () => {
         {links.map((link, index) => {
           return (
             <>
-              {index === 2 && <Input placeholder="Search Newsletter Hub" />}
+              {index === 2 && (
+                <Input placeholder="Search Newsletter Hub" isSearch />
+              )}
               <Link href={link.href}>{link.label}</Link>
             </>
           );

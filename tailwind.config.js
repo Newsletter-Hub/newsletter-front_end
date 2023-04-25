@@ -54,6 +54,8 @@ module.exports = {
       waterloo: '#6F6C90',
       'dark-blue': '#170F49',
       'shark-blue': '#1F2027',
+      'light-blue': '#e6f8fd',
+      red: '#FF0000',
     },
   },
   plugins: [],

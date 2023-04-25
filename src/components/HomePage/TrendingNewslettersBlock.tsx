@@ -76,7 +76,7 @@ const TrendingNewslettersBlock = () => {
             </div>
           ))}
         </div>
-        <Button label="See more" size="full" rounded />
+        <Button label="See more" size="full" rounded="md" />
       </div>
     </div>
   );
