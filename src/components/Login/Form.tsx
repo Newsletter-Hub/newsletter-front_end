@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Button from '../Button';
 import Link from 'next/link';
-import TwitterIcon from '@/assets/icons/twitter';
 
 const validationSchema = z.object({
   email: z
@@ -32,9 +31,12 @@ const Form = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
   const onSubmit: SubmitHandler<ValidationSchema> = data => console.log(data);
+  const isErrors = Boolean(Object.keys(errors).length);
+  console.log(getValues());
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -45,21 +47,48 @@ const Form = () => {
           register={{ ...register(field.name) }}
           variant="filled"
           placeholder={field.placeholder}
+          key={field.name}
+          error={Boolean(errors[field.name])}
+          errorText={errors[field.name]?.message}
         />
       ))}
-      <Button label="Login" uppercase size="full" rounded="xl" disabled />
+      <Button
+        label="Login"
+        uppercase
+        size="full"
+        rounded="xl"
+        disabled={isErrors}
+        type="submit"
+      />
       <Link
         href="forgot-password"
-        className="underline text-base text-grey mb-11"
+        className="underline text-base text-grey mb-2"
       >
         Forgot password?
       </Link>
       <Button
-        label="TWITTER"
+        label="Twitter"
         size="full"
         rounded="xl"
         weight="bold"
-        StartIcon={TwitterIcon}
+        uppercase
+        socialMedia="twitter"
+      />
+      <Button
+        label="Facebook"
+        size="full"
+        rounded="xl"
+        weight="bold"
+        uppercase
+        socialMedia="facebook"
+      />
+      <Button
+        label="Google"
+        size="full"
+        rounded="xl"
+        weight="bold"
+        uppercase
+        socialMedia="google"
       />
     </form>
   );

@@ -24,14 +24,13 @@ const Input = ({
   variant = 'outlined',
   error,
   errorText,
-  ...props
 }: InputProps) => {
   const styles = clsx(variants[variant], error && 'border-red');
   return (
     <div className="relative flex">
       {isSearch && <Search className="absolute right-3 top-2.5" />}
       <div>
-        <input className={styles} placeholder={placeholder} {...props} />
+        <input className={styles} placeholder={placeholder} {...register} />
         {error && <p className="absolute text-sm text-red">{errorText}</p>}
       </div>
     </div>

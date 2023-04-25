@@ -1,5 +1,8 @@
-import { clsx } from 'clsx';
 import React from 'react';
+import { clsx } from 'clsx';
+import TwitterIcon from '@/assets/icons/twitter';
+import FacebookIcon from '@/assets/icons/facebook';
+import GoogleIcon from '@/assets/icons/google';
 
 interface ButtonProps {
   label: string;
@@ -11,8 +14,9 @@ interface ButtonProps {
   uppercase?: boolean;
   bold?: boolean;
   disabled?: boolean;
+  socialMedia?: 'twitter' | 'facebook' | 'google' | 'none';
   customStyles?: string;
-  StartIcon?: React.FunctionComponent;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const variants = {
@@ -39,6 +43,13 @@ const sizes = {
   full: 'w-full',
 };
 
+const socialMedias = {
+  twitter: '!bg-twitterBlue',
+  facebook: '!bg-facebookBlue',
+  google: '!bg-googleBlack',
+  none: '',
+};
+
 const Button = ({
   label,
   variant = 'primary',
@@ -49,8 +60,9 @@ const Button = ({
   fontSize = 'base',
   size = 'base',
   disabled,
+  socialMedia = 'none',
   customStyles,
-  StartIcon,
+  type,
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -61,12 +73,26 @@ const Button = ({
     bold && 'font-bold',
     sizes[size],
     variant === 'primary' && disabled && '!text-grey !bg-mercury',
+    socialMedias[socialMedia],
     customStyles
   );
+  const socialIcon =
+    socialMedia === 'twitter' ? (
+      <TwitterIcon />
+    ) : socialMedia === 'facebook' ? (
+      <FacebookIcon />
+    ) : (
+      <GoogleIcon />
+    );
   return (
-    <button className={styles} disabled={disabled}>
-      {StartIcon}
-      {label}
+    <button className={styles} disabled={disabled} type={type}>
+      {socialMedia !== 'none' ? (
+        <span className="flex justify-center items-center gap-3 py-1">
+          {socialIcon} {label}
+        </span>
+      ) : (
+        label
+      )}
     </button>
   );
 };
