@@ -1,9 +1,4 @@
-import Button from '@/components/Button';
-import Link from 'next/link';
-import loginImage from '@/assets/images/loginImage.svg';
-import Image from 'next/image';
 import Form from '@/components/Login/Form';
-import Logo from '@/assets/images/logo';
 import EntryLayout from '@/components/EntryLayout';
 
 const Login = () => {
