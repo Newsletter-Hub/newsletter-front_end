@@ -50,6 +50,7 @@ const Form = () => {
           key={field.name}
           error={Boolean(errors[field.name])}
           errorText={errors[field.name]?.message}
+          isPassword={Boolean(field.name === 'password')}
         />
       ))}
       <Button
@@ -72,7 +73,6 @@ const Form = () => {
         rounded="xl"
         weight="bold"
         uppercase
-        socialMedia="twitter"
       />
       <Button
         label="Facebook"
@@ -80,7 +80,6 @@ const Form = () => {
         rounded="xl"
         weight="bold"
         uppercase
-        socialMedia="facebook"
       />
       <Button
         label="Google"
