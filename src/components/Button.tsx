@@ -1,7 +1,5 @@
 import React from 'react';
 import { clsx } from 'clsx';
-import TwitterIcon from '@/assets/icons/twitter';
-import FacebookIcon from '@/assets/icons/facebook';
 import GoogleIcon from '@/assets/icons/google';
 
 interface ButtonProps {
@@ -14,9 +12,10 @@ interface ButtonProps {
   uppercase?: boolean;
   bold?: boolean;
   disabled?: boolean;
-  socialMedia?: 'twitter' | 'facebook' | 'google' | 'none';
+  socialMedia?: 'google' | 'none';
   customStyles?: string;
   type?: 'button' | 'submit' | 'reset';
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const variants = {
@@ -44,8 +43,6 @@ const sizes = {
 };
 
 const socialMedias = {
-  twitter: '!bg-twitterBlue',
-  facebook: '!bg-facebookBlue',
   google: '!bg-googleBlack',
   none: '',
 };
@@ -63,6 +60,7 @@ const Button = ({
   socialMedia = 'none',
   customStyles,
   type,
+  onClick,
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -76,19 +74,16 @@ const Button = ({
     socialMedias[socialMedia],
     customStyles
   );
-  const socialIcon =
-    socialMedia === 'twitter' ? (
-      <TwitterIcon />
-    ) : socialMedia === 'facebook' ? (
-      <FacebookIcon />
-    ) : (
-      <GoogleIcon />
-    );
   return (
-    <button className={styles} disabled={disabled} type={type}>
+    <button
+      className={styles}
+      disabled={disabled}
+      type={type}
+      onClick={onClick}
+    >
       {socialMedia !== 'none' ? (
         <span className="flex justify-center items-center gap-3 py-1">
-          {socialIcon} {label}
+          <GoogleIcon /> {label}
         </span>
       ) : (
         label

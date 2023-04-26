@@ -10,7 +10,11 @@ const validationSchema = z.object({
     .string()
     .min(1, { message: 'Email is required' })
     .email({ message: 'Must be a valid email' }),
-  password: z.string().min(1, 'Password is required field'),
+  password: z
+    .string()
+    .min(1, 'Password is required field')
+    .max(30, 'Maximum length of password 30 symbols')
+    .min(8, 'Minimum length of password 8 symbols'),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
@@ -67,20 +71,6 @@ const Form = () => {
       >
         Forgot password?
       </Link>
-      <Button
-        label="Twitter"
-        size="full"
-        rounded="xl"
-        weight="bold"
-        uppercase
-      />
-      <Button
-        label="Facebook"
-        size="full"
-        rounded="xl"
-        weight="bold"
-        uppercase
-      />
       <Button
         label="Google"
         size="full"
