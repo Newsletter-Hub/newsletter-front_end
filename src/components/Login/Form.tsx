@@ -35,19 +35,22 @@ const fields: Fields = [
 ];
 
 const Form = () => {
-  const googleLogin = useGoogleLogin({
-    onSuccess: ({ access_token }) => googleAuth({ token: access_token }),
-  });
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-  const router = useRouter();
   const onSubmit: SubmitHandler<ValidationSchema> = ({ email, password }) => {
     login({ email, password, router });
   };
+  const googleLogin = useGoogleLogin({
+    onSuccess: ({ access_token }) => {
+      googleAuth({ token: access_token, router });
+    },
+    onError: error => console.log(error),
+  });
   const isErrors = Boolean(Object.keys(errors).length);
   return (
     <>

@@ -7,6 +7,11 @@ interface User {
   router: NextRouter;
 }
 
+interface GoogleAuth {
+  token: string;
+  router: NextRouter;
+}
+
 export const login = async ({ email, password, router }: User) => {
   try {
     const response = await publicApi
@@ -19,11 +24,12 @@ export const login = async ({ email, password, router }: User) => {
   }
 };
 
-export const googleAuth = async ({ token }: { token: string }) => {
+export const googleAuth = async ({ token, router }: GoogleAuth) => {
   try {
     const response = await publicApi
       .post('auth/google', { json: { token } })
-      .json();
+      .json()
+      .then(() => router.push('/'));
     return response;
   } catch (error) {
     console.log(error);
