@@ -15,6 +15,7 @@ interface ButtonProps {
   socialMedia?: 'google' | 'none';
   customStyles?: string;
   type?: 'button' | 'submit' | 'reset';
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const variants = {
@@ -59,6 +60,7 @@ const Button = ({
   socialMedia = 'none',
   customStyles,
   type,
+  onClick,
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -73,7 +75,12 @@ const Button = ({
     customStyles
   );
   return (
-    <button className={styles} disabled={disabled} type={type}>
+    <button
+      className={styles}
+      disabled={disabled}
+      type={type}
+      onClick={onClick}
+    >
       {socialMedia !== 'none' ? (
         <span className="flex justify-center items-center gap-3 py-1">
           <GoogleIcon /> {label}
