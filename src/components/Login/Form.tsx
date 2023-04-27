@@ -68,20 +68,6 @@ const Form = () => {
         Forgot password?
       </Link>
       <Button
-        label="Twitter"
-        size="full"
-        rounded="xl"
-        weight="bold"
-        uppercase
-      />
-      <Button
-        label="Facebook"
-        size="full"
-        rounded="xl"
-        weight="bold"
-        uppercase
-      />
-      <Button
         label="Google"
         size="full"
         rounded="xl"
