@@ -39,7 +39,8 @@ const Form = () => {
     getValues,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-  const onSubmit: SubmitHandler<ValidationSchema> = data => console.log(data);
+  const onSubmit: SubmitHandler<ValidationSchema> = ({ email, password }) =>
+    login({ email, password });
   const isErrors = Boolean(Object.keys(errors).length);
   console.log(getValues());
   return (
