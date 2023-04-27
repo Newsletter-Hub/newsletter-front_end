@@ -1,11 +1,11 @@
 import Image from 'next/image';
-import StarRatingComponent from 'react-star-rating-component';
 import HeartIcon from '@/assets/icons/heart';
 import StarIcon from '@/assets/icons/star';
 import PlusIcon from '@/assets/icons/plus';
 import Button from '../Button';
 import Link from 'next/link';
 import ArrowRight from '@/assets/icons/arrowRight';
+import starRating from '@/assets/images/star-rating.svg';
 
 const latestReviews = [
   {
@@ -106,11 +106,7 @@ const ReviewsBlock = () => {
                 <div className="mr-24 min-w-[200px]">
                   <p className="text-xl">{review.name}</p>
                   <p className="text-base">{review.city}</p>
-                  <StarRatingComponent
-                    name="reviews_rating"
-                    value={review.ratingCount}
-                    starColor="#F7B500"
-                  />
+                  <Image src={starRating} alt="Star rating" />
                   <p className="text-xs text-grey">{review.time}</p>
                 </div>
                 <div>
@@ -155,11 +151,7 @@ const ReviewsBlock = () => {
               <p className="text-xl">{review.name}</p>
               <p>{review.city}</p>
               <div className="mb-6">
-                <StarRatingComponent
-                  name="reviews_rating"
-                  value={review.ratingCount}
-                  starColor="#F7B500"
-                />
+                <Image src={starRating} alt="Star rating" />
               </div>
               <p className="mb-6">{review.description}</p>
               <Link
