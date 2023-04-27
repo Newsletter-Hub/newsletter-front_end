@@ -1,6 +1,6 @@
 import ky from 'ky';
 
-const baseUrl = 'http://apis.somecourseurl.com/api/';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const publicApi = ky.create({ prefixUrl: baseUrl });
 
