@@ -7,7 +7,7 @@ interface User {
 
 export const login = async ({ email, password }: User) => {
   const response = await publicApi
-    .post('/login', { json: { email, password } })
+    .post('login', { json: { email, password } })
     .json();
   return response;
 };
