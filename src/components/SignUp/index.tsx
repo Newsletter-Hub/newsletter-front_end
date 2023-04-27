@@ -44,6 +44,7 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 type Field = {
   placeholder: string;
   name: 'email' | 'password' | 'confirm_password' | 'username';
+  isPassword?: boolean;
 };
 
 type Fields = Field[];
@@ -51,8 +52,12 @@ type Fields = Field[];
 const fields: Fields = [
   { placeholder: 'Enter your username', name: 'username' },
   { placeholder: 'Enter your email address', name: 'email' },
-  { placeholder: 'Enter your password', name: 'password' },
-  { placeholder: 'Confirm password', name: 'confirm_password' },
+  { placeholder: 'Enter your password', name: 'password', isPassword: true },
+  {
+    placeholder: 'Confirm password',
+    name: 'confirm_password',
+    isPassword: true,
+  },
 ];
 
 const SignUpForm = ({
@@ -99,6 +104,7 @@ const SignUpForm = ({
           key={field.name}
           error={Boolean(errors[field.name])}
           errorText={errors[field.name]?.message}
+          isPassword={field.isPassword}
         />
       ))}
       <Button
