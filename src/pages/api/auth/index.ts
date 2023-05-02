@@ -12,6 +12,10 @@ interface GoogleAuth {
   router: NextRouter;
 }
 
+interface SignupUser extends User {
+  username: string;
+}
+
 export const login = async ({ email, password, router }: User) => {
   try {
     const response = await publicApi
@@ -30,6 +34,25 @@ export const googleAuth = async ({ token, router }: GoogleAuth) => {
       .post('auth/google', { json: { token } })
       .json()
       .then(() => router.push('/'));
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const signup = async ({
+  email,
+  password,
+  username,
+  router,
+}: SignupUser) => {
+  try {
+    const response = await publicApi
+      .post('auth/sign-up', {
+        json: { email, password, username },
+      })
+      .json()
+      .then(() => router.push('/sign-up/verify-email'));
     return response;
   } catch (error) {
     console.log(error);

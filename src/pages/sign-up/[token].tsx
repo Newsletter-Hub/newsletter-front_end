@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Payload } from '@/assets/types/signup-types';
 
 import EntryLayout from '@/components/EntryLayout';
-import SignUpForm from '@/components/SignUp';
 import BasicInformation from '@/components/SignUp/BasicInformation';
 
 export const UserContext = React.createContext<Payload>({
@@ -20,13 +19,6 @@ const SignUp = () => {
     confirm_password: '',
   });
   const pageToShow = [
-    <SignUpForm
-      key={0}
-      payload={payload}
-      setPayload={setPayload}
-      setPage={setPage}
-      page={page}
-    />,
     <BasicInformation
       key={1}
       payload={payload}
@@ -35,7 +27,7 @@ const SignUp = () => {
       page={page}
     />,
   ];
-  const titles = ['Sign Up', 'Basic Information'];
+  const titles = ['Basic Information'];
   return (
     <UserContext.Provider value={payload}>
       <EntryLayout type="signup">
