@@ -6,7 +6,7 @@ import Button from '../Button';
 import Link from 'next/link';
 import { login, googleAuth } from '@/pages/api/auth';
 import { useRouter } from 'next/router';
-import { useGoogleLogin, GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 const validationSchema = z.object({
   email: z
@@ -39,7 +39,6 @@ const Form = () => {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
   const onSubmit: SubmitHandler<ValidationSchema> = ({ email, password }) => {

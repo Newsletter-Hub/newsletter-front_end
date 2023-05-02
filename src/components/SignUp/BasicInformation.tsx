@@ -10,7 +10,7 @@ import { Country, State } from 'country-state-city';
 
 import { COUNTRIES } from '@/config/constants';
 import { Payload as SignupPayload } from '@/assets/types/signup-types';
-import { UserContext } from '@/pages/sign-up';
+import { UserContext } from '@/pages/sign-up/[token]';
 
 import { Option } from '../Select';
 import Select from '../Select';
@@ -51,22 +51,16 @@ const BasicInformation = ({
 }: BasicInformationProps) => {
   const [states, setStates] = useState<Option[]>([]);
   const user = useContext(UserContext);
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-    control,
-    getValues,
-    watch,
-  } = useForm<Payload>({
-    defaultValues: {
-      country: user.country,
-      state: user.state,
-      year: user.year,
-      month: user.month,
-      day: user.day,
-    },
-  });
+  const { register, handleSubmit, control, getValues, watch } =
+    useForm<Payload>({
+      defaultValues: {
+        country: user.country,
+        state: user.state,
+        year: user.year,
+        month: user.month,
+        day: user.day,
+      },
+    });
 
   const watchCountry = watch('country');
 
@@ -149,14 +143,14 @@ const BasicInformation = ({
         />
       </div>
       <div className="flex gap-2 w-full">
-        <Button
+        {/* <Button
           label="Back"
           customStyles="!w-1/2"
           rounded="xl"
           variant="secondary"
           onClick={handlePreviousStep}
-        />
-        <Button label="Next" type="submit" customStyles="!w-1/2" rounded="xl" />
+        /> */}
+        <Button label="Next" type="submit" customStyles="w-full" rounded="xl" />
       </div>
     </form>
   );

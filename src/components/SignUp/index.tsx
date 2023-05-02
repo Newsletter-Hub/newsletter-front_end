@@ -1,22 +1,14 @@
-import { useContext, Dispatch, SetStateAction } from 'react';
-
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { UserContext } from '@/pages/sign-up';
 import { Payload } from '@/assets/types/signup-types';
+import { googleAuth } from '@/pages/api/auth';
+import { GoogleLogin } from '@react-oauth/google';
 
 import Button from '../Button';
 import Input from '../Input';
-
-interface SignUpFormProps {
-  payload: object;
-  setPayload: Dispatch<SetStateAction<Payload>>;
-  setPage: Dispatch<SetStateAction<number>>;
-  page: number;
-}
 
 const validationSchema = z
   .object({
@@ -60,36 +52,19 @@ const fields: Fields = [
   },
 ];
 
-const SignUpForm = ({
-  setPage,
-  setPayload,
-  page,
-  payload,
-}: SignUpFormProps) => {
-  const user = useContext(UserContext);
+const SignUpForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      email: user.email,
-      password: user.password,
-      confirm_password: user.confirm_password,
-      username: user.username,
-    },
   });
-  const onSubmit: SubmitHandler<Payload> = data => {
-    setPayload({
-      ...payload,
-      email: data.email,
-      password: data.password,
-      confirm_password: data.confirm_password,
-      username: data.username,
-    });
-    setPage(page + 1);
+  const onGoogleLogin = (token: string) => {
+    googleAuth({ token, router });
   };
+  const onSubmit: SubmitHandler<Payload> = data => {};
   const isErrors = Boolean(Object.keys(errors).length);
   return (
     <form
@@ -108,12 +83,21 @@ const SignUpForm = ({
         />
       ))}
       <Button
-        label="Next"
+        label="Confirm email"
         uppercase
         size="full"
         rounded="xl"
         disabled={isErrors}
         type="submit"
+      />
+      <GoogleLogin
+        onSuccess={({ credential }) => onGoogleLogin(credential as string)}
+        theme="filled_black"
+        locale="en"
+        auto_select={false}
+        shape="circle"
+        size="large"
+        width="400"
       />
     </form>
   );
