@@ -24,6 +24,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "ky": "^0.33.3",
     "next": "13.3.0",
+    "node-buffer": "^1.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
