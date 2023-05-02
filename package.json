@@ -26,6 +26,7 @@
     "next": "13.3.0",
     "node-buffer": "^1.0.3",
     "react": "18.2.0",
+    "react-date-picker": "^10.0.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-query": "^3.39.3",
