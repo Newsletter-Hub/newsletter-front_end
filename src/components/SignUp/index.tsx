@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Payload } from '@/assets/types/signup-types';
 import { googleAuth } from '@/pages/api/auth';
 import { GoogleLogin } from '@react-oauth/google';
+import { signup } from '@/pages/api/auth';
 
 import Button from '../Button';
 import Input from '../Input';
@@ -64,7 +64,13 @@ const SignUpForm = () => {
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });
   };
-  const onSubmit: SubmitHandler<Payload> = data => {};
+  const onSubmit: SubmitHandler<ValidationSchema> = ({
+    email,
+    password,
+    username,
+  }) => {
+    signup({ email, password, username, router });
+  };
   const isErrors = Boolean(Object.keys(errors).length);
   return (
     <form
