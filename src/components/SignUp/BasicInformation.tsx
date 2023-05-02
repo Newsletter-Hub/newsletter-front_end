@@ -15,23 +15,12 @@ import { UserContext } from '@/pages/sign-up/[token]';
 import { Option } from '../Select';
 import Select from '../Select';
 import Button from '../Button';
-import Input from '@/components/Input';
-
-interface Field {
-  placeholder: 'Month' | 'Day' | 'Year';
-  name: 'month' | 'day' | 'year' | 'country' | 'state';
-}
-
-const fields: Field[] = [
-  { placeholder: 'Month', name: 'month' },
-  { placeholder: 'Day', name: 'day' },
-  { placeholder: 'Year', name: 'year' },
-];
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import { format } from 'date-fns';
 
 interface Payload {
-  month?: string;
-  day?: string;
-  year?: string;
+  dateBirth?: string;
   country?: string;
   state?: string;
 }
@@ -51,16 +40,13 @@ const BasicInformation = ({
 }: BasicInformationProps) => {
   const [states, setStates] = useState<Option[]>([]);
   const user = useContext(UserContext);
-  const { register, handleSubmit, control, getValues, watch } =
-    useForm<Payload>({
-      defaultValues: {
-        country: user.country,
-        state: user.state,
-        year: user.year,
-        month: user.month,
-        day: user.day,
-      },
-    });
+  const { handleSubmit, control, getValues, watch } = useForm<Payload>({
+    defaultValues: {
+      country: user.country,
+      state: user.state,
+      dateBirth: user.dateBirth,
+    },
+  });
 
   const watchCountry = watch('country');
 
@@ -69,11 +55,11 @@ const BasicInformation = ({
       ...payload,
       country: data.country,
       state: data.state,
-      year: data.year,
-      month: data.month,
-      day: user.day,
+      dateBirth: data.dateBirth,
     });
     setPage(page + 1);
+    const date = new Date(data.dateBirth as string);
+    console.log(format(date, 'dd-MM-yyyy'));
   };
 
   //   const handlePreviousStep = () => setPage(page - 1);
@@ -101,19 +87,20 @@ const BasicInformation = ({
   return (
     <form className="max-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
       <p className="text-xs text-grey border-b w-fit mb-3">Birth information</p>
-      <div className="flex gap-2 mb-7">
-        {fields.map(field => (
-          <div key={field.name}>
-            <Input
-              placeholder={field.placeholder}
-              variant="filled"
-              customStyles="w-full !pb-0 placeholder:text-sm"
-              type="number"
-              register={{ ...register(field.name, { min: 1, max: 12 }) }}
-            />
-          </div>
-        ))}
-      </div>
+      <Controller
+        control={control}
+        name="dateBirth"
+        render={({ field: { onChange, value } }) => (
+          <Datetime
+            timeFormat={false}
+            dateFormat="DD-MM-yyyy"
+            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-gull-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-gull-grey"
+            inputProps={{ placeholder: 'Date of birth' }}
+            onChange={onChange}
+            value={value}
+          />
+        )}
+      />
       <div className="flex gap-6 flex-col mb-10">
         <Controller
           control={control}
