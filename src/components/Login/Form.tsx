@@ -6,7 +6,7 @@ import Button from '../Button';
 import Link from 'next/link';
 import { login, googleAuth } from '@/pages/api/auth';
 import { useRouter } from 'next/router';
-import { useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin, GoogleLogin } from '@react-oauth/google';
 
 const validationSchema = z.object({
   email: z
@@ -45,12 +45,9 @@ const Form = () => {
   const onSubmit: SubmitHandler<ValidationSchema> = ({ email, password }) => {
     login({ email, password, router });
   };
-  const googleLogin = useGoogleLogin({
-    onSuccess: ({ access_token }) => {
-      googleAuth({ token: access_token, router });
-    },
-    onError: error => console.log(error),
-  });
+  const onGoogleLogin = (token: string) => {
+    googleAuth({ token, router });
+  };
   const isErrors = Boolean(Object.keys(errors).length);
   return (
     <>
@@ -79,20 +76,22 @@ const Form = () => {
         />
         <Link
           href="forgot-password"
-          className="underline text-base text-grey mb-2"
+          className="underline text-base text-grey mb-5"
         >
           Forgot password?
         </Link>
       </form>
-      <Button
-        label="Google"
-        size="full"
-        rounded="xl"
-        weight="bold"
-        uppercase
-        socialMedia="google"
-        onClick={() => googleLogin()}
-      />
+      <div>
+        <GoogleLogin
+          onSuccess={({ credential }) => onGoogleLogin(credential as string)}
+          theme="filled_black"
+          locale="en"
+          auto_select={false}
+          shape="circle"
+          size="large"
+          width="400"
+        />
+      </div>
     </>
   );
 };
