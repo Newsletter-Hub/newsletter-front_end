@@ -1,7 +1,5 @@
 export interface Payload {
-  month?: string;
-  day?: string;
-  year?: string;
+  dateBirth?: string;
   country?: string;
   state?: string;
   email?: string;
