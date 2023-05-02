@@ -76,7 +76,7 @@ const BasicInformation = ({
     setPage(page + 1);
   };
 
-  const handlePreviousStep = () => setPage(page - 1);
+//   const handlePreviousStep = () => setPage(page - 1);
 
   useEffect(() => {
     const formattedStates = State.getStatesOfCountry(getValues().country).map(

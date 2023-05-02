@@ -56,6 +56,8 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
 export async function getServerSideProps() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
+  console.log(baseUrl);
+
   return {
     props: {
       title: 'Title',

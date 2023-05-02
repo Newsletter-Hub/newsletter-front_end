@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-
-import { Payload } from '@/assets/types/signup-types';
+import React from 'react';
 
 import EntryLayout from '@/components/EntryLayout';
 import SignUpForm from '@/components/SignUp';
