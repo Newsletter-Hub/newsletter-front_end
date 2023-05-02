@@ -6,6 +6,7 @@ import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
 import TrendingNewslettersBlock from '@/components/HomePage/TrendingNewslettersBlock';
 import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
+import { getCookies } from 'cookies-next';
 
 const Home: NextPageWithLayout = () => {
   return (
