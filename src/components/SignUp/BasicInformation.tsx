@@ -1,15 +1,9 @@
-import {
-  SetStateAction,
-  Dispatch,
-  useEffect,
-  useState,
-  useContext,
-} from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Country, State } from 'country-state-city';
 
 import { COUNTRIES } from '@/config/constants';
-import { Payload as SignupPayload } from '@/assets/types/signup-types';
+import { UserInfoStepsProps } from '@/assets/types/signup-types';
 import { UserContext } from '@/pages/sign-up/[token]';
 
 import { Option } from '../Select';
@@ -25,19 +19,12 @@ interface Payload {
   state?: string;
 }
 
-interface BasicInformationProps {
-  payload: object;
-  setPayload: Dispatch<SetStateAction<SignupPayload>>;
-  setPage: Dispatch<SetStateAction<number>>;
-  page: number;
-}
-
 const BasicInformation = ({
   payload,
   setPayload,
   setPage,
   page,
-}: BasicInformationProps) => {
+}: UserInfoStepsProps) => {
   const [states, setStates] = useState<Option[]>([]);
   const user = useContext(UserContext);
   const { handleSubmit, control, getValues, watch } = useForm<Payload>({
@@ -51,18 +38,15 @@ const BasicInformation = ({
   const watchCountry = watch('country');
 
   const onSubmit: SubmitHandler<Payload> = data => {
+    const date = new Date(data.dateBirth as string);
     setPayload({
       ...payload,
       country: data.country,
       state: data.state,
-      dateBirth: data.dateBirth,
+      dateBirth: data.dateBirth && format(date, 'dd-MM-yyyy'),
     });
     setPage(page + 1);
-    const date = new Date(data.dateBirth as string);
-    console.log(format(date, 'dd-MM-yyyy'));
   };
-
-  //   const handlePreviousStep = () => setPage(page - 1);
 
   useEffect(() => {
     const formattedStates = State.getStatesOfCountry(getValues().country).map(

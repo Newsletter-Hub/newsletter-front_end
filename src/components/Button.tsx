@@ -16,6 +16,7 @@ interface ButtonProps {
   customStyles?: string;
   type?: 'button' | 'submit' | 'reset';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  selected?: boolean;
 }
 
 const variants = {
@@ -60,6 +61,7 @@ const Button = ({
   socialMedia = 'none',
   customStyles,
   type,
+  selected,
   onClick,
 }: ButtonProps) => {
   const styles = clsx(
@@ -72,7 +74,8 @@ const Button = ({
     sizes[size],
     variant === 'primary' && disabled && '!text-grey !bg-mercury',
     socialMedias[socialMedia],
-    customStyles
+    customStyles,
+    !selected && selected !== undefined && '!bg-mercury !text-grey'
   );
   return (
     <button
