@@ -11,7 +11,7 @@ export const UserContext = React.createContext<Payload>({
   confirm_password: '',
 });
 
-const SignUp = () => {
+const SignUpInfo = () => {
   const [page, setPage] = useState(0);
   const [payload, setPayload] = useState<Payload>({
     email: '',
@@ -42,4 +42,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUpInfo;
