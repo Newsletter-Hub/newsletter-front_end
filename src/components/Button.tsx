@@ -1,6 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import GoogleIcon from '@/assets/icons/google';
+import { Inter } from 'next/font/google';
 
 interface ButtonProps {
   label: string;
@@ -16,6 +17,8 @@ interface ButtonProps {
   customStyles?: string;
   type?: 'button' | 'submit' | 'reset';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  selected?: boolean;
+  height?: 'sm' | 'base';
 }
 
 const variants = {
@@ -47,6 +50,13 @@ const socialMedias = {
   none: '',
 };
 
+const heightVariants = {
+  sm: 'h-10',
+  base: 'h-12',
+};
+
+const inter = Inter({ subsets: ['latin'] });
+
 const Button = ({
   label,
   variant = 'primary',
@@ -60,7 +70,9 @@ const Button = ({
   socialMedia = 'none',
   customStyles,
   type,
+  selected,
   onClick,
+  height = 'base',
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -72,7 +84,10 @@ const Button = ({
     sizes[size],
     variant === 'primary' && disabled && '!text-grey !bg-mercury',
     socialMedias[socialMedia],
-    customStyles
+    customStyles,
+    !selected && selected !== undefined && '!bg-mercury !text-grey',
+    inter.className,
+    heightVariants[height]
   );
   return (
     <button
