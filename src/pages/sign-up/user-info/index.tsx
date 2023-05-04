@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-import { Payload } from '@/assets/types/signup-types';
+import { Payload } from '@/assets/types/signup';
 import UserType from '@/components/SignUp/UserType';
 
 import EntryLayout from '@/components/EntryLayout';
 import BasicInformation from '@/components/SignUp/BasicInformation';
 import ProfilePicture from '@/components/SignUp/ProfilePicture';
+import ChooseInterests from '@/components/SignUp/ChooseInterests';
 
 export const UserContext = React.createContext<Payload>({
   dateBirth: '',
@@ -14,6 +15,7 @@ export const UserContext = React.createContext<Payload>({
   username: '',
   profileType: '',
   avatar: '',
+  interests: [],
 });
 
 const SignUpInfo = () => {
@@ -41,13 +43,25 @@ const SignUpInfo = () => {
       setPage={setPage}
       page={page}
     />,
+    <ChooseInterests
+      key={3}
+      payload={payload}
+      setPayload={setPayload}
+      setPage={setPage}
+      page={page}
+    />,
   ];
-  const titles = ['Basic Information', 'Your Type', 'Choose Your Profile PIC'];
+  const titles = [
+    'Basic Information',
+    'Your Type',
+    'Choose Your Profile PIC',
+    'Choose interests',
+  ];
   return (
     <UserContext.Provider value={payload}>
       <EntryLayout type="signup">
-        <div className="shadow-md pt-20 px-16 pb-16">
-          <p className="text-3xl text-googleBlack font-semibold text-center mb-11">
+        <div className="shadow-md p-12 rounded-3xl">
+          <p className="text-3xl text-googleBlack font-semibold text-center mb-12">
             {titles[page]}
           </p>
           {pageToShow[page]}

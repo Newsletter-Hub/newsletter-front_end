@@ -8,10 +8,11 @@ export interface Payload {
   profileType?: string;
   avatar?: string;
   avatarURL?: string | ArrayBuffer;
+  interests?: number[];
 }
 
 export interface UserInfoStepsProps {
-  payload: object;
+  payload: Payload;
   setPayload: Dispatch<SetStateAction<Payload>>;
   setPage: Dispatch<SetStateAction<number>>;
   page: number;

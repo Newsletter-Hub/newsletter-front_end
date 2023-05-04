@@ -3,9 +3,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { UserContext } from '@/pages/sign-up/[token]';
+import { UserContext } from '@/pages/sign-up/user-info';
 
-import { UserInfoStepsProps } from '@/assets/types/signup-types';
+import { UserInfoStepsProps } from '@/assets/types/signup';
 
 import Button from '../Button';
 

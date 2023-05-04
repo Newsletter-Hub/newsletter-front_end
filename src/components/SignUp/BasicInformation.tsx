@@ -3,8 +3,8 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { Country, State } from 'country-state-city';
 
 import { COUNTRIES } from '@/config/constants';
-import { UserInfoStepsProps } from '@/assets/types/signup-types';
-import { UserContext } from '@/pages/sign-up/[token]';
+import { UserInfoStepsProps } from '@/assets/types/signup';
+import { UserContext } from '@/pages/sign-up/user-info';
 
 import { Option } from '../Select';
 import Select from '../Select';

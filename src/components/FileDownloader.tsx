@@ -8,8 +8,8 @@ import React, {
 } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import fileDownloaderImage from '@/assets/images/fileDownloaderImage.png';
-import { Payload } from '@/assets/types/signup-types';
-import { UserContext } from '@/pages/sign-up/[token]';
+import { Payload } from '@/assets/types/signup';
+import { UserContext } from '@/pages/sign-up/user-info';
 
 interface FileDownloaderProps {
   setValue: (file: BinaryData | string) => void;
