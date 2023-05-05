@@ -1,11 +1,13 @@
 import Image from 'next/image';
-import HeartIcon from '@/assets/icons/heart';
-import StarIcon from '@/assets/icons/star';
-import PlusIcon from '@/assets/icons/plus';
-import Button from '../Button';
 import Link from 'next/link';
+
 import ArrowRight from '@/assets/icons/arrowRight';
+import HeartIcon from '@/assets/icons/heart';
+import PlusIcon from '@/assets/icons/plus';
+import StarIcon from '@/assets/icons/star';
 import starRating from '@/assets/images/star-rating.svg';
+
+import Button from '../Button';
 
 const latestReviews = [
   {

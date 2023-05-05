@@ -1,7 +1,9 @@
-import Logo from '@/assets/images/logo';
 import Link from 'next/link';
-import Input from './Input';
+
+import Logo from '@/assets/images/logo';
+
 import Button from './Button';
+import Input from './Input';
 
 const links = [
   { label: 'Newsletters', href: '/newsletters' },

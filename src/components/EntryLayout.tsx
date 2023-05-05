@@ -1,12 +1,15 @@
-import Logo from '@/assets/images/logo';
-import Link from 'next/link';
-import Image from 'next/image';
-import Button from './Button';
-import loginImage from '@/assets/images/loginImage.svg';
-import signupImage from '@/assets/images/signupImage.svg';
-import addNewsletterImage from '@/assets/images/addNewsletterImage.svg';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Alegreya } from 'next/font/google';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+import addNewsletterImage from '@/assets/images/addNewsletterImage.svg';
+import loginImage from '@/assets/images/loginImage.svg';
+import Logo from '@/assets/images/logo';
+import signupImage from '@/assets/images/signupImage.svg';
+
+import Button from './Button';
 
 interface EntryLayoutProps {
   children: JSX.Element;

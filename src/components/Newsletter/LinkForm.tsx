@@ -1,11 +1,16 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import Input from '../Input';
-import Button from '../Button';
-import clsx from 'clsx';
+
 import { Inter } from 'next/font/google';
-import { NewsletterFormProps } from '@/assets/types/newsletters';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import clsx from 'clsx';
+
+import { NewsletterFormProps } from '@/types/newsletters';
+
+import Button from '../Button';
+import Input from '../Input';
 
 const inter = Inter({ subsets: ['latin'] });
 

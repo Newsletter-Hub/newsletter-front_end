@@ -1,20 +1,24 @@
 import React, {
-  useEffect,
-  useRef,
-  useState,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
-import Image, { StaticImageData } from 'next/image';
-import fileDownloaderImage from '@/assets/images/fileDownloaderImage.svg';
-import fileDownloaderEdit from '@/assets/images/fileDownloaderEdit.svg';
-import { Payload } from '@/assets/types/signup';
-import { UserContext } from '@/pages/sign-up/user-info';
-import CameraIcon from '@/assets/icons/camera';
-import RechooseIconWithBg from '@/assets/icons/rechooseWithBg';
-import DeleteIconWithBg from '@/assets/icons/deleteWithBg';
+
 import { Inter } from 'next/font/google';
+import Image, { StaticImageData } from 'next/image';
+
+import { UserContext } from '@/pages/sign-up/user-info';
+
+import { Payload } from '@/types/signup';
+
+import CameraIcon from '@/assets/icons/camera';
+import DeleteIconWithBg from '@/assets/icons/deleteWithBg';
+import RechooseIconWithBg from '@/assets/icons/rechooseWithBg';
+import fileDownloaderEdit from '@/assets/images/fileDownloaderEdit.svg';
+import fileDownloaderImage from '@/assets/images/fileDownloaderImage.svg';
 
 const inter = Inter({ subsets: ['latin'] });
 

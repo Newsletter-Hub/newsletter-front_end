@@ -1,5 +1,6 @@
-import Button from '../Button';
 import ContactUs from '@/assets/images/contactUs';
+
+import Button from '../Button';
 
 const GetStartedBlock = () => {
   return (

@@ -1,5 +1,5 @@
-import Form from '@/components/Login/Form';
 import EntryLayout from '@/components/EntryLayout';
+import Form from '@/components/Login/Form';
 
 const Login = () => {
   return (

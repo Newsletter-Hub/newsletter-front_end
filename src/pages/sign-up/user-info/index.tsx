@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import { Payload } from '@/assets/types/signup';
-import UserType from '@/components/SignUp/UserType';
+import { Payload } from '@/types/signup';
 
 import EntryLayout from '@/components/EntryLayout';
 import BasicInformation from '@/components/SignUp/BasicInformation';
-import ProfilePicture from '@/components/SignUp/ProfilePicture';
 import ChooseInterests from '@/components/SignUp/ChooseInterests';
+import ProfilePicture from '@/components/SignUp/ProfilePicture';
+import UserType from '@/components/SignUp/UserType';
 
 export const UserContext = React.createContext<Payload>({
   dateBirth: '',

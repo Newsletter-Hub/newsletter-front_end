@@ -2,9 +2,10 @@ import { UseQueryResult, useQuery } from 'react-query';
 
 import { getInterests } from '@/pages/api/user/interests';
 
-import { UserInfoStepsProps } from '@/assets/types/signup';
+import { Interest } from '@/types/interests';
+import { UserInfoStepsProps } from '@/types/signup';
+
 import Button from '../Button';
-import { Interest } from '@/assets/types/interests';
 
 const ChooseInterests = ({
   payload,

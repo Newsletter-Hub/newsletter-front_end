@@ -1,11 +1,14 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { useRouter } from 'next/router';
 
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { googleAuth } from '@/pages/api/auth';
-import { GoogleLogin } from '@react-oauth/google';
 import { signup } from '@/pages/api/auth';
+
+import { GoogleLogin } from '@react-oauth/google';
 
 import Button from '../Button';
 import Input from '../Input';

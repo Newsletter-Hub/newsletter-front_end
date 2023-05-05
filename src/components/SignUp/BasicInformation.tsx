@@ -1,17 +1,21 @@
-import { useEffect, useState, useContext } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { Country, State } from 'country-state-city';
-
-import { COUNTRIES } from '@/config/constants';
-import { UserInfoStepsProps } from '@/assets/types/signup';
-import { UserContext } from '@/pages/sign-up/user-info';
-
-import { Option } from '../Select';
-import Select from '../Select';
-import Button from '../Button';
+import { useContext, useEffect, useState } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+
+import { UserContext } from '@/pages/sign-up/user-info';
+
+import { COUNTRIES } from '@/config/constants';
+
+import { Country, State } from 'country-state-city';
+
 import { format } from 'date-fns';
+
+import { UserInfoStepsProps } from '@/types/signup';
+
+import Button from '../Button';
+import { Option } from '../Select';
+import Select from '../Select';
 
 interface Payload {
   dateBirth?: string;

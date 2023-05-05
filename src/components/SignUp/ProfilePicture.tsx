@@ -1,12 +1,14 @@
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { UserInfoStepsProps } from '@/assets/types/signup';
+import { getInterests } from '@/pages/api/user/interests';
+
 import { UserContext } from '@/pages/sign-up/user-info';
 
-import FileDownloader from '../FileDownloader';
+import { UserInfoStepsProps } from '@/types/signup';
+
 import Button from '../Button';
-import { getInterests } from '@/pages/api/user/interests';
+import FileDownloader from '../FileDownloader';
 
 interface Payload {
   avatar?: string;

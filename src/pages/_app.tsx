@@ -1,8 +1,10 @@
 import type { ReactElement, ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+
 import '@/styles/globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

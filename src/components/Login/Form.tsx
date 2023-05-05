@@ -1,12 +1,17 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
-import Input from '../Input';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import Button from '../Button';
+
 import Link from 'next/link';
-import { login, googleAuth } from '@/pages/api/auth';
 import { useRouter } from 'next/router';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { googleAuth, login } from '@/pages/api/auth';
+
 import { GoogleLogin } from '@react-oauth/google';
+
+import Button from '../Button';
+import Input from '../Input';
 
 const validationSchema = z.object({
   email: z

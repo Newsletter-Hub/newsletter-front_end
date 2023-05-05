@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { clsx } from 'clsx';
+
 import GoogleIcon from '@/assets/icons/google';
 
 interface ButtonProps {

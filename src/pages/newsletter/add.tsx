@@ -1,9 +1,12 @@
-import EntryLayout from '@/components/EntryLayout';
-import Link from 'next/link';
 import { useState } from 'react';
-import { AddNewsletterPayload } from '@/assets/types/newsletters';
-import LinkForm from '@/components/Newsletter/LinkForm';
+
+import Link from 'next/link';
+
+import { AddNewsletterPayload } from '@/types/newsletters';
+
+import EntryLayout from '@/components/EntryLayout';
 import DetailsForm from '@/components/Newsletter/DetailsForm';
+import LinkForm from '@/components/Newsletter/LinkForm';
 
 const AddNewsletter = () => {
   const [step, setStep] = useState(1);

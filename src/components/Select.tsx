@@ -1,6 +1,8 @@
 import React from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
+
 import * as RadixSelect from '@radix-ui/react-select';
+
 import ArrowDownIcon from '@/assets/icons/arrowDown';
 
 export interface Option {

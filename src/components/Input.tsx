@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
+
+import { Inter } from 'next/font/google';
+
 import clsx from 'clsx';
 
-import Search from '@/assets/icons/search';
 import EyeIcon from '@/assets/icons/eye';
-import { Inter } from 'next/font/google';
+import Search from '@/assets/icons/search';
 
 const inter = Inter({ subsets: ['latin'] });
 

@@ -1,7 +1,9 @@
-import trendingNewsletters from '@/assets/images/trendingNewsletters.png';
 import Image from 'next/image';
-import Quotes from '@/assets/icons/quotes';
 import Link from 'next/link';
+
+import Quotes from '@/assets/icons/quotes';
+import trendingNewsletters from '@/assets/images/trendingNewsletters.png';
+
 import Button from '../Button';
 
 const newsletters = [

@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { UseQueryResult, useQuery } from 'react-query';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import FileDownloader from '../FileDownloader';
 
-import { NewsletterFormProps } from '@/assets/types/newsletters';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { getInterests } from '@/pages/api/user/interests';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 
-import { Interest } from '@/assets/types/interests';
+import { Interest } from '@/types/interests';
+import { NewsletterFormProps } from '@/types/newsletters';
+
 import CrossIcon from '@/assets/icons/cross';
 
 import Button from '../Button';
+import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 
 const validationSchema = z.object({

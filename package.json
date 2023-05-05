@@ -36,6 +36,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/react-star-rating-component": "^1.4.1",
     "autoprefixer": "^10.4.14",
     "eslint-config-prettier": "^8.8.0",

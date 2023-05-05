@@ -1,11 +1,12 @@
-import { useState, useContext } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useContext, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { UserContext } from '@/pages/sign-up/user-info';
 
-import { UserInfoStepsProps } from '@/assets/types/signup';
+import { UserInfoStepsProps } from '@/types/signup';
 
 import Button from '../Button';
 

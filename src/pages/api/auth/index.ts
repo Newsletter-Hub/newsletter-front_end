@@ -1,5 +1,6 @@
-import { publicApi } from '@/config/ky';
 import { NextRouter } from 'next/router';
+
+import { publicApi } from '@/config/ky';
 
 interface User {
   email: string;

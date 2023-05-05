@@ -1,6 +1,8 @@
-import Button from '@/components/Button';
-import homeImage from '@/assets/images/homeImage.svg';
 import Image from 'next/image';
+
+import Button from '@/components/Button';
+
+import homeImage from '@/assets/images/homeImage.svg';
 
 const MainBlock = () => {
   return (

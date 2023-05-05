@@ -1,11 +1,14 @@
-import Head from 'next/head';
-import type { NextPageWithLayout } from './_app';
 import { ReactElement } from 'react';
-import Layout from '@/components/Layout';
+
+import Head from 'next/head';
+
+import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
 import TrendingNewslettersBlock from '@/components/HomePage/TrendingNewslettersBlock';
-import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
+import Layout from '@/components/Layout';
+
+import type { NextPageWithLayout } from './_app';
 
 const Home: NextPageWithLayout = () => {
   return (
