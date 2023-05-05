@@ -1,4 +1,4 @@
-import { SetStateAction, Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface Payload {
   dateBirth?: string;
@@ -6,7 +6,7 @@ export interface Payload {
   state?: string;
   username?: string;
   profileType?: string;
-  avatar?: string;
+  avatar?: Blob | string;
   avatarURL?: string | ArrayBuffer;
   interests?: number[];
 }

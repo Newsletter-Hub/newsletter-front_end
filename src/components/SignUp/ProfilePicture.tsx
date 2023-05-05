@@ -1,8 +1,6 @@
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { getInterests } from '@/pages/api/user/interests';
-
 import { UserContext } from '@/pages/sign-up/user-info';
 
 import { UserInfoStepsProps } from '@/types/signup';
@@ -11,7 +9,7 @@ import Button from '../Button';
 import FileDownloader from '../FileDownloader';
 
 interface Payload {
-  avatar?: string;
+  avatar?: string | Blob;
 }
 
 const ProfilePicture = ({
@@ -28,7 +26,7 @@ const ProfilePicture = ({
     },
   });
 
-  const handleSetValue = (value: BinaryData | string) =>
+  const handleSetValue = (value: BinaryData | string | File) =>
     setValue('avatar', value as string);
 
   const handlePreviousStep = () => setPage(page - 1);

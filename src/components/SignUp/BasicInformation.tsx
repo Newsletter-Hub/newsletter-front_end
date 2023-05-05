@@ -47,7 +47,7 @@ const BasicInformation = ({
       ...payload,
       country: data.country,
       state: data.state,
-      dateBirth: data.dateBirth && format(date, 'dd-MM-yyyy'),
+      dateBirth: data.dateBirth && format(date, 'yyyy-MM-dd'),
     });
     setPage(page + 1);
   };

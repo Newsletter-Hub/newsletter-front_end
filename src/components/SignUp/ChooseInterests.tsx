@@ -1,5 +1,6 @@
 import { UseQueryResult, useQuery } from 'react-query';
 
+import { updateUser } from '@/pages/api/user';
 import { getInterests } from '@/pages/api/user/interests';
 
 import { Interest } from '@/types/interests';
@@ -32,6 +33,14 @@ const ChooseInterests = ({
     } else {
       setPayload({ ...payload, interests: [id] });
     }
+  };
+
+  const handleSubmit = () => {
+    delete payload.avatarURL;
+    const formattedPayload = Object.fromEntries(
+      Object.entries(payload).filter(([key, value]) => value !== undefined)
+    );
+    updateUser(formattedPayload);
   };
   return (
     <>
@@ -71,6 +80,7 @@ const ChooseInterests = ({
           customStyles="w-full"
           rounded="xl"
           fontSize="md"
+          onClick={handleSubmit}
         />
       </div>
     </>
