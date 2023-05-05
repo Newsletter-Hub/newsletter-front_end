@@ -1,5 +1,7 @@
 import { UseQueryResult, useQuery } from 'react-query';
 
+import { useRouter } from 'next/router';
+
 import { updateUser } from '@/pages/api/user';
 import { getInterests } from '@/pages/api/user/interests';
 
@@ -14,6 +16,7 @@ const ChooseInterests = ({
   setPage,
   page,
 }: UserInfoStepsProps) => {
+  const router = useRouter();
   const { data }: UseQueryResult<Interest[], Error> = useQuery(
     'interests',
     getInterests
@@ -40,7 +43,7 @@ const ChooseInterests = ({
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(([key, value]) => value !== undefined)
     );
-    updateUser(formattedPayload);
+    updateUser(formattedPayload).then(() => router.push('/'));
   };
   return (
     <>
