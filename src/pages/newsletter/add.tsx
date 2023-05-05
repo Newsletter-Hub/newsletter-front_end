@@ -1,12 +1,9 @@
 import EntryLayout from '@/components/EntryLayout';
-import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AddNewsletterPayload } from '@/assets/types/newsletters';
 import LinkForm from '@/components/Newsletter/LinkForm';
 import DetailsForm from '@/components/Newsletter/DetailsForm';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const AddNewsletter = () => {
   const [step, setStep] = useState(1);
