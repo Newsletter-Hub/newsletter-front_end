@@ -1,11 +1,10 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import GoogleIcon from '@/assets/icons/google';
-import { Inter } from 'next/font/google';
 
 interface ButtonProps {
   label: string;
-  variant?: 'primary' | 'secondary' | 'outlined';
+  variant?: 'primary' | 'secondary' | 'outlined' | 'outlined-primary';
   weight?: 'base' | 'bold';
   fontSize?: 'base' | 'xs' | 'md' | 'sm';
   size?: 'base' | 'md' | 'full';
@@ -24,7 +23,10 @@ interface ButtonProps {
 const variants = {
   primary: 'text-white bg-primary whitespace-nowrap py-10px px-7',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
-  outlined: 'border-2 py-5 px-16 rounded-[36px]',
+  outlined:
+    'border-2 py-5 px-16 rounded-[36px] flex justify-center items-center',
+  'outlined-primary':
+    'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
 };
 
 const weights = {
@@ -55,8 +57,6 @@ const heightVariants = {
   base: 'h-12',
 };
 
-const inter = Inter({ subsets: ['latin'] });
-
 const Button = ({
   label,
   variant = 'primary',
@@ -86,7 +86,7 @@ const Button = ({
     socialMedias[socialMedia],
     customStyles,
     !selected && selected !== undefined && '!bg-mercury !text-grey',
-    inter.className,
+    'font-inter',
     heightVariants[height]
   );
   return (

@@ -7,24 +7,33 @@ import React, {
   useContext,
 } from 'react';
 import Image, { StaticImageData } from 'next/image';
-import fileDownloaderImage from '@/assets/images/fileDownloaderImage.png';
+import fileDownloaderImage from '@/assets/images/fileDownloaderImage.svg';
+import fileDownloaderEdit from '@/assets/images/fileDownloaderEdit.svg';
 import { Payload } from '@/assets/types/signup';
 import { UserContext } from '@/pages/sign-up/user-info';
+import CameraIcon from '@/assets/icons/camera';
+import RechooseIconWithBg from '@/assets/icons/rechooseWithBg';
+import DeleteIconWithBg from '@/assets/icons/deleteWithBg';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 interface FileDownloaderProps {
   setValue: (file: BinaryData | string) => void;
   setPayload?: Dispatch<SetStateAction<Payload>>;
   payload?: object;
+  variant?: 'base' | 'lg';
 }
 
 const FileDownloader = ({
   setValue,
   setPayload,
   payload,
+  variant = 'base',
 }: FileDownloaderProps) => {
   const user = useContext(UserContext);
   const ref = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<Blob>();
+  const [file, setFile] = useState<Blob | string>('');
   const [fileDataURL, setFileDataURL] = useState<
     StaticImageData | string | ArrayBuffer
   >(user.avatarURL || fileDownloaderImage);
@@ -66,7 +75,11 @@ const FileDownloader = ({
       reader.readAsBinaryString(file as Blob);
     }
   }, [file, setValue]);
-
+  const reset = () => {
+    if (ref.current) {
+      ref.current.value = '';
+    }
+  };
   return (
     <div>
       <input
@@ -76,21 +89,72 @@ const FileDownloader = ({
         onChange={e => handleChange(e)}
         accept="image/png, image/jpeg"
       />
-      <div className="flex flex-col items-center gap-4">
-        <Image
-          src={fileDataURL as string}
-          width={104}
-          height={104}
-          alt="file downloader"
-          className="rounded-xl"
-        />
-        <p
-          className="text-2xl text-primary underline cursor-pointer"
+      {variant === 'base' ? (
+        <div className="flex flex-col items-center">
+          <div onClick={e => handleClick(e)} className="cursor-pointer">
+            <Image
+              src={fileDataURL as string}
+              width={105}
+              height={104}
+              alt="file downloader"
+              className="rounded-xl"
+            />
+            <div className="flex justify-end -mt-8">
+              <Image
+                src={fileDownloaderEdit}
+                width={36}
+                height={36}
+                alt="file downloader edit"
+                className="rounded-full"
+              />
+            </div>
+          </div>
+        </div>
+      ) : file && fileDataURL ? (
+        <>
+          <Image
+            src={fileDataURL as string}
+            alt="image"
+            width={400}
+            height={236}
+            className="max-h-[236px] object-cover rounded-xl"
+          />
+          <div className="flex justify-end -mt-11 mr-2 gap-2">
+            <div onClick={e => handleClick(e)}>
+              <RechooseIconWithBg className="cursor-pointer" />
+            </div>
+            <div
+              onClick={() => {
+                setFile('');
+                setFileDataURL('');
+                reset();
+              }}
+            >
+              <DeleteIconWithBg className="cursor-pointer" />
+            </div>
+          </div>
+        </>
+      ) : (
+        <div
+          className="flex flex-col px-11 py-12 bg-primary-light rounded-2xl border border-primary border-dashed justify-center items-center cursor-pointer"
           onClick={e => handleClick(e)}
         >
-          Upload Picture
-        </p>
-      </div>
+          <div className="mb-6">
+            <CameraIcon />
+          </div>
+          <div className={inter.className}>
+            <div className="text-center">
+              <p className="text-cornflower-blue font-semibold mb-2">
+                Click to upload your images
+              </p>
+              <p className="text-[#A8AFB5] text-sm">
+                Format: .png, .jpg, .jpeg. Max size: 5 MB.
+                <br /> Minimum 1236px width recommended.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

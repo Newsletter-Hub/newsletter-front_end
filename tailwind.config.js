@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     fontFamily: {
       body: ['Alegreya'],
+      inter: ['Inter'],
     },
     extend: {
       height: {
@@ -27,9 +28,10 @@ module.exports = {
     fontSize: {
       xs: ['13px', '18px'],
       base: ['16px', '22px'],
-      sm: ['14px', '20px'],
+      sm: ['14px', '24px'],
       lg: ['18px', '25px'],
       xl: ['22px', '30px'],
+      xs: ['12px', '24px'],
       '2xl': ['24px', '32px'],
       '4xl': ['36px', '42px'],
       '5xl': ['48px', '68px'],
@@ -39,6 +41,7 @@ module.exports = {
     },
     colors: {
       primary: '#01AAED',
+      'primary-light': '#E6F7FD',
       black: '#000000',
       'light-grey': '#FAF9F7',
       'dark-grey': '#404040',
@@ -56,6 +59,7 @@ module.exports = {
       'shark-blue': '#1F2027',
       'light-blue': '#e6f8fd',
       red: '#FF0000',
+      'cornflower-blue': '#253646',
     },
   },
   plugins: [],
