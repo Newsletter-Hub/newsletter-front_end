@@ -1,15 +1,21 @@
+import { useEffect, useRef, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { UseQueryResult, useQuery } from 'react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Input from '../Input';
-import Button from '../Button';
-import { NewsletterFormProps } from '@/assets/types/newsletters';
 import FileDownloader from '../FileDownloader';
-import { useEffect, useRef, useState } from 'react';
+
+import { NewsletterFormProps } from '@/assets/types/newsletters';
+
 import { getInterests } from '@/pages/api/user/interests';
-import { UseQueryResult, useQuery } from 'react-query';
+
+import useOnClickOutside from '@/hooks/useOnClickOutside';
+
 import { Interest } from '@/assets/types/interests';
 import CrossIcon from '@/assets/icons/cross';
+
+import Button from '../Button';
+import Input from '../Input';
 
 const validationSchema = z.object({
   title: z.string(),
@@ -19,12 +25,7 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-const DetailsForm = ({
-  setPayload,
-  payload,
-  setStep,
-  step,
-}: NewsletterFormProps) => {
+const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
   const { data }: UseQueryResult<Interest[], Error> = useQuery(
     'interests',
     getInterests
@@ -47,7 +48,6 @@ const DetailsForm = ({
   const onAdd: SubmitHandler<ValidationSchema> = data => {
     console.log(data);
     setStep(step + 1);
-    // setPayload({ ...payload, link: data.link });
   };
 
   const handleAddTag = (tag: Interest) => {
@@ -79,6 +79,20 @@ const DetailsForm = ({
     }
   }, [data]);
 
+  useEffect(() => {
+    if (tags.length === 5) {
+      setShowAutoComplete(false);
+      setInputValue('');
+    }
+  }, [tags]);
+
+  const handleClickOutside = () => {
+    setShowAutoComplete(false);
+    setInputValue('');
+  };
+
+  useOnClickOutside(autoCompleteRef, handleClickOutside);
+
   if (!data) {
     return <p>Loading...</p>;
   }
@@ -86,11 +100,12 @@ const DetailsForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-6">
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-12">
           <Input
             placeholder="Title"
             variant="filled"
             register={{ ...register('title') }}
+            customStyles="w-full"
           />
           <Input
             placeholder="Description"
@@ -98,11 +113,13 @@ const DetailsForm = ({
             register={{ ...register('description') }}
             maxLength={300}
             checkNumberOfSymbols
+            customStyles="w-full"
           />
           <Input
             placeholder="Author"
             variant="filled"
             register={{ ...register('author') }}
+            customStyles="w-full"
           />
           <FileDownloader setValue={file => console.log(file)} variant="lg" />
           <div className="border-b-[#A8AFB5] border-b-2 flex gap-3 w-[600px] flex-wrap">
@@ -120,16 +137,18 @@ const DetailsForm = ({
                 </>
               ))}
             <div className="relative w-full">
-              <input
-                placeholder={
-                  tags.length
-                    ? ''
-                    : 'Add topics (up to 5) so readers know what your story is about'
-                }
-                className="outline-none"
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-              />
+              {tags.length < 5 && (
+                <input
+                  placeholder={
+                    tags.length
+                      ? ''
+                      : 'Add topics (up to 5) so readers know what your story is about'
+                  }
+                  className={`outline-none w-full`}
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
+                />
+              )}
               {showAutoComplete &&
                 (suggests.length ? (
                   <div

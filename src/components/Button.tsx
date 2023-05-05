@@ -86,7 +86,7 @@ const Button = ({
     socialMedias[socialMedia],
     customStyles,
     !selected && selected !== undefined && '!bg-mercury !text-grey',
-    'font-inter',
+    '!font-inter',
     heightVariants[height]
   );
   return (

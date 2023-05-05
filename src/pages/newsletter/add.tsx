@@ -18,7 +18,7 @@ const AddNewsletter = () => {
 
   return (
     <EntryLayout type="newsletter">
-      <div className="shadow-md p-12 rounded-3xl">
+      <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
         <p className="text-3xl text-googleBlack font-semibold text-center mb-8 text-[40px]">
           Add Newsletter
         </p>

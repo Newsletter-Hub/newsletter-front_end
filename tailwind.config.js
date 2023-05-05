@@ -3,8 +3,7 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
-      body: ['Alegreya'],
-      inter: ['Inter'],
+      inter: ['Inter', 'Alegreya', 'ui-sans-serif', 'system-ui'],
     },
     extend: {
       height: {
