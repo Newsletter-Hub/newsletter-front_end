@@ -4,12 +4,13 @@ import Image from 'next/image';
 import Button from './Button';
 import loginImage from '@/assets/images/loginImage.svg';
 import signupImage from '@/assets/images/signupImage.svg';
+import addNewsletterImage from '@/assets/images/addNewsletterImage.svg';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Alegreya } from 'next/font/google';
 
 interface EntryLayoutProps {
   children: JSX.Element;
-  type: 'signup' | 'login';
+  type: 'signup' | 'login' | 'newsletter';
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
@@ -36,13 +37,26 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
                 </Link>
                 <Image src={loginImage} width={450} alt="login" priority />
               </>
-            ) : (
+            ) : type === 'signup' ? (
               <>
                 <p className="font-bold text-3xl mb-3">Create Profile</p>
                 <p className="max-w-xs text-center mb-28">
                   Enter your personal details and start journey with us
                 </p>
                 <Image src={signupImage} width={450} alt="login" priority />
+              </>
+            ) : (
+              <>
+                <p className="font-bold text-3xl mb-3">Add Newsletter</p>
+                <p className="max-w-xs text-center mb-28">
+                  Enter your personal details and start journey with us
+                </p>
+                <Image
+                  src={addNewsletterImage}
+                  width={450}
+                  alt="login"
+                  priority
+                />
               </>
             )}
           </div>
