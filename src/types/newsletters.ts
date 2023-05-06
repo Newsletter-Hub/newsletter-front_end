@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { Interest } from './interests';
+
 export interface AddNewsletterPayload {
   link?: string;
   title?: string;
@@ -14,4 +16,5 @@ export interface NewsletterFormProps {
   payload: AddNewsletterPayload;
   setStep: Dispatch<SetStateAction<number>>;
   step: number;
+  interests?: Interest[];
 }

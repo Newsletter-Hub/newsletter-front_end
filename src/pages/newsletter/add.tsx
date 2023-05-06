@@ -2,13 +2,20 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 
+import { Interest } from '@/types/interests';
 import { AddNewsletterPayload } from '@/types/newsletters';
 
 import EntryLayout from '@/components/EntryLayout';
 import DetailsForm from '@/components/Newsletter/DetailsForm';
 import LinkForm from '@/components/Newsletter/LinkForm';
 
-const AddNewsletter = () => {
+import { getInterests } from '../api/user/interests';
+
+interface AddNewsletterProps {
+  interests: Interest[];
+}
+
+const AddNewsletter = ({ interests }: AddNewsletterProps) => {
   const [step, setStep] = useState(1);
   const [payload, setPayload] = useState<AddNewsletterPayload>({
     link: '',
@@ -38,6 +45,7 @@ const AddNewsletter = () => {
             payload={payload}
             step={step}
             setStep={setStep}
+            interests={interests}
           />
         )}
         <Link href="/" className="flex justify-center">
@@ -46,6 +54,20 @@ const AddNewsletter = () => {
       </div>
     </EntryLayout>
   );
+};
+
+export const getServerSideProps = async () => {
+  const interests = await getInterests();
+  if (!interests) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    props: {
+      interests: interests,
+    },
+  };
 };
 
 export default AddNewsletter;

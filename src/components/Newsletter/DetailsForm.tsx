@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { UseQueryResult, useQuery } from 'react-query';
 import { z } from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { getInterests } from '@/pages/api/user/interests';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 
@@ -26,16 +23,19 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
-  const { data }: UseQueryResult<Interest[], Error> = useQuery(
-    'interests',
-    getInterests
-  );
+const DetailsForm = ({
+  payload,
+  setStep,
+  step,
+  interests,
+}: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
-  const autoCompleteRef = useRef(null);
   const [inputValue, setInputValue] = useState('');
   const [suggests, setSuggests] = useState<Interest[]>([]);
+
+  const autoCompleteRef = useRef(null);
+
   const {
     register,
     handleSubmit,
@@ -43,6 +43,7 @@ const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
+
   const onSubmit: SubmitHandler<ValidationSchema> = data => {
     console.log(data);
   };
@@ -63,8 +64,8 @@ const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
   useEffect(() => {
     if (inputValue) {
       setShowAutoComplete(true);
-      if (data) {
-        const formattedData = data.filter(item =>
+      if (interests) {
+        const formattedData = interests.filter(item =>
           item.interestName.includes(inputValue)
         );
         setSuggests(formattedData);
@@ -72,13 +73,13 @@ const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
     } else {
       setShowAutoComplete(false);
     }
-  }, [inputValue, data]);
+  }, [inputValue, interests]);
 
   useEffect(() => {
-    if (data) {
-      setSuggests(data);
+    if (interests) {
+      setSuggests(interests);
     }
-  }, [data]);
+  }, [interests]);
 
   useEffect(() => {
     if (tags.length === 5) {
@@ -94,7 +95,7 @@ const DetailsForm = ({ payload, setStep, step }: NewsletterFormProps) => {
 
   useOnClickOutside(autoCompleteRef, handleClickOutside);
 
-  if (!data) {
+  if (!interests) {
     return <p>Loading...</p>;
   }
 
