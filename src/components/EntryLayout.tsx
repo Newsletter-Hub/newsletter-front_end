@@ -46,7 +46,7 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
                 <p className="max-w-xs text-center mb-28">
                   Enter your personal details and start journey with us
                 </p>
-                <Image src={signupImage} width={450} alt="login" priority />
+                <Image src={signupImage} width={450} height={450} alt="login" />
               </>
             ) : (
               <>

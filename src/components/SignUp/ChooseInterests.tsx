@@ -1,9 +1,6 @@
-import { UseQueryResult, useQuery } from 'react-query';
-
 import { useRouter } from 'next/router';
 
 import { updateUser } from '@/pages/api/user';
-import { getInterests } from '@/pages/api/user/interests';
 
 import { Interest } from '@/types/interests';
 import { UserInfoStepsProps } from '@/types/signup';
@@ -15,12 +12,9 @@ const ChooseInterests = ({
   setPayload,
   setPage,
   page,
-}: UserInfoStepsProps) => {
+  interests,
+}: UserInfoStepsProps & { interests?: Interest[] }) => {
   const router = useRouter();
-  const { data }: UseQueryResult<Interest[], Error> = useQuery(
-    'interests',
-    getInterests
-  );
 
   const handlePreviousStep = () => setPage(page - 1);
   const handleInterestClick = (id: number) => {
@@ -48,8 +42,8 @@ const ChooseInterests = ({
   return (
     <>
       <div className="flex w-[600px] flex-wrap h-[500px] mb-12">
-        {data ? (
-          data.map(item => (
+        {interests ? (
+          interests.map(item => (
             <Button
               label={item.interestName}
               key={item.id}

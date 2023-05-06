@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import { getInterests } from '@/pages/api/user/interests';
+
+import { Interest } from '@/types/interests';
 import { Payload } from '@/types/signup';
 
 import EntryLayout from '@/components/EntryLayout';
@@ -18,7 +21,10 @@ export const UserContext = React.createContext<Payload>({
   interests: [],
 });
 
-const SignUpInfo = () => {
+interface SignUpInfoProps {
+  interests: Interest[];
+}
+const SignUpInfo = ({ interests }: SignUpInfoProps) => {
   const [page, setPage] = useState(0);
   const [payload, setPayload] = useState<Payload>({});
   const pageToShow = [
@@ -49,6 +55,7 @@ const SignUpInfo = () => {
       setPayload={setPayload}
       setPage={setPage}
       page={page}
+      interests={interests}
     />,
   ];
   const titles = [
@@ -69,6 +76,20 @@ const SignUpInfo = () => {
       </EntryLayout>
     </UserContext.Provider>
   );
+};
+
+export const getServerSideProps = async () => {
+  const interests = await getInterests();
+  if (!interests) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    props: {
+      interests: interests,
+    },
+  };
 };
 
 export default SignUpInfo;
