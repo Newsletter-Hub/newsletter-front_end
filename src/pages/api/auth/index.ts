@@ -1,4 +1,5 @@
 import { NextRouter } from 'next/router';
+import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
 
@@ -55,6 +56,41 @@ export const signup = async ({
       .json()
       .then(() => router.push('/sign-up/verify-email'));
     return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const forgotPassword = async ({ email }: { email?: string }) => {
+  try {
+    const response = await api
+      .post('auth/forgot-password', {
+        json: { email },
+      })
+      .json();
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const resetPassword = async ({
+  resetPasswordToken,
+  newPassword,
+  router,
+}: {
+  resetPasswordToken?: string | string[];
+  newPassword?: string;
+  router: NextRouter;
+}): Promise<NextResponse | undefined> => {
+  try {
+    const response = await api.put('auth/reset-password', {
+      json: { resetPasswordToken, newPassword },
+    });
+    if (response.ok) {
+      router.push('/login');
+    }
+    return response.json();
   } catch (error) {
     console.log(error);
   }

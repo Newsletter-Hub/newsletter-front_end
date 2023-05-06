@@ -22,6 +22,7 @@ interface InputProps {
   type?: 'input' | 'number';
   maxLength?: number;
   checkNumberOfSymbols?: boolean;
+  label?: string;
 }
 
 const variants = {
@@ -42,6 +43,7 @@ const Input = ({
   type = 'input',
   maxLength,
   checkNumberOfSymbols,
+  label,
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -53,32 +55,37 @@ const Input = ({
   );
   const [value, setValue] = useState('');
   return (
-    <div className="relative flex">
-      {isSearch && <Search className="absolute right-3 top-2.5" />}
-      <input
-        className={styles}
-        placeholder={placeholder}
-        {...register}
-        type={isPassword ? (isShowPassword ? 'text' : 'password') : type}
-        maxLength={maxLength}
-        value={value}
-        onChange={e => setValue(e.target.value)}
-      />
-      {checkNumberOfSymbols && maxLength && (
-        <span className="absolute text-xs -bottom-6 left-2 text-[#D3D7DA] font-inter">
-          {value.length}/{maxLength}
-        </span>
-      )}
-      {isPassword && (
-        <EyeIcon
-          className="absolute right-3 top-2.5 stroke-gull-grey cursor-pointer"
-          onClick={handleShowPassword}
+    <>
+      <p className="font-inter font-semibold text-googleBlack text-xs mb-2 pl-2">
+        {label}
+      </p>
+      <div className="relative flex">
+        {isSearch && <Search className="absolute right-3 top-2.5" />}
+        <input
+          className={styles}
+          placeholder={placeholder}
+          {...register}
+          type={isPassword ? (isShowPassword ? 'text' : 'password') : type}
+          maxLength={maxLength}
+          value={value}
+          onChange={e => setValue(e.target.value)}
         />
-      )}
-      {error && (
-        <p className="absolute text-sm text-red -bottom-5">{errorText}</p>
-      )}
-    </div>
+        {checkNumberOfSymbols && maxLength && (
+          <span className="absolute text-xs -bottom-6 left-2 text-[#D3D7DA] font-inter">
+            {value.length}/{maxLength}
+          </span>
+        )}
+        {isPassword && (
+          <EyeIcon
+            className="absolute right-3 top-2.5 stroke-gull-grey cursor-pointer"
+            onClick={handleShowPassword}
+          />
+        )}
+        {error && (
+          <p className="absolute text-sm text-red -bottom-5">{errorText}</p>
+        )}
+      </div>
+    </>
   );
 };
 
