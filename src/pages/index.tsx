@@ -18,7 +18,7 @@ const Home: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <div className="bg-white px-32 pt-32">
+        <div className="px-32 pt-32">
           <MainBlock />
           <ReviewsBlock />
           <TrendingNewslettersBlock />

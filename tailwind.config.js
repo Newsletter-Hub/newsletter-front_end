@@ -15,7 +15,6 @@ module.exports = {
       },
       boxShadow: {
         md: '0px 4px 60px rgba(0,0,0,0.1)',
-        lg: '0px 3px 14px rgba(74, 58, 255, 0.03), 0px -2px 4px rgba(20, 20, 43, 0.02), 0px 12px 24px rgba(20, 20, 43, 0.04);',
         xl: '0px 7px 24px rgba(20, 20, 43, 0.05)',
       },
       spacing: {

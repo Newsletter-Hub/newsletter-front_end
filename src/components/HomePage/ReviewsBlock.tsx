@@ -91,7 +91,7 @@ const ReviewsBlock = () => {
     <div className="flex gap-6 mb-24">
       <div>
         <h4 className="text-5xl">Latest reviews</h4>
-        <div className="shadow-lg pl-12 pt-12 pb-24 pr-16">
+        <div className="pl-12 pt-12 pb-24 pr-16">
           <div className="mb-10">
             {latestReviews.map((review, index) => (
               <div
