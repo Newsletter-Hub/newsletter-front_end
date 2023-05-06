@@ -11,9 +11,9 @@ const CrossIcon = ({ className }: { className?: string }) => {
       <path
         d="M1 11L11 1M1 1L11 11"
         stroke="#A8AFB5"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

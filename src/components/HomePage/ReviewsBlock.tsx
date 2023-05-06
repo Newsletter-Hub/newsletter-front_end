@@ -93,10 +93,10 @@ const ReviewsBlock = () => {
         <h4 className="text-5xl">Latest reviews</h4>
         <div className="shadow-lg pl-12 pt-12 pb-24 pr-16">
           <div className="mb-10">
-            {latestReviews.map(review => (
+            {latestReviews.map((review, index) => (
               <div
                 className="flex border-b border-mercury pb-3 pt-2.5"
-                key={review.image}
+                key={index}
               >
                 <Image
                   src={review.image}

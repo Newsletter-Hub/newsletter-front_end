@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Link from 'next/link';
 
 const productLinks = [
@@ -71,11 +73,11 @@ const Footer = () => {
       <div className="bg-primary py-8 pl-8 pr-20 flex items-center">
         <div className="flex text-white flex-1">
           {additionalLinks.map((link, index) => (
-            <>
+            <React.Fragment key={link.href}>
               <Link href={link.href} className="mr-1 text-base" key={link.href}>
                 {link.label} {index !== 2 && '/'}
               </Link>
-            </>
+            </React.Fragment>
           ))}
         </div>
         <div className="flex items-center gap-6">

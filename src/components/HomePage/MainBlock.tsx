@@ -17,7 +17,12 @@ const MainBlock = () => {
         </p>
         <Button label="Create your profile now" />
       </div>
-      <Image alt="home_image" src={homeImage} />
+      <Image
+        alt="home_image"
+        src={homeImage}
+        placeholder="blur"
+        blurDataURL="src/assets/images/homeImage.svg"
+      />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Link from 'next/link';
 
 import Logo from '@/assets/images/logo';
@@ -21,12 +23,12 @@ const Header = () => {
       <div className="flex gap-12 text-lg items-center mr-24">
         {links.map((link, index) => {
           return (
-            <>
+            <React.Fragment key={index}>
               {index === 2 && (
                 <Input placeholder="Search Newsletter Hub" isSearch />
               )}
               <Link href={link.href}>{link.label}</Link>
-            </>
+            </React.Fragment>
           );
         })}
       </div>

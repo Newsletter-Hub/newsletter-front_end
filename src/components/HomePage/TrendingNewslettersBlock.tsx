@@ -47,11 +47,8 @@ const TrendingNewslettersBlock = () => {
       </div>
       <div>
         <div className="mb-8">
-          {newsletters.map(newsletter => (
-            <div
-              className="pb-9 border-b border-mercury mb-9"
-              key={newsletter.image}
-            >
+          {newsletters.map((newsletter, index) => (
+            <div className="pb-9 border-b border-mercury mb-9" key={index}>
               <div className="mb-1.5">
                 <Quotes />
               </div>

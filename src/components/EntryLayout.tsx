@@ -38,7 +38,13 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
                     uppercase
                   />
                 </Link>
-                <Image src={loginImage} width={450} alt="login" priority />
+                <Image
+                  src={loginImage}
+                  width={450}
+                  alt="login"
+                  placeholder="blur"
+                  blurDataURL="src/assets/images/loginImage.svg"
+                />
               </>
             ) : type === 'signup' ? (
               <>
@@ -46,7 +52,14 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
                 <p className="max-w-xs text-center mb-28">
                   Enter your personal details and start journey with us
                 </p>
-                <Image src={signupImage} width={450} height={450} alt="login" />
+                <Image
+                  src={signupImage}
+                  width={450}
+                  height={450}
+                  alt="login"
+                  placeholder="blur"
+                  blurDataURL="src/assets/images/signupImage.svg"
+                />
               </>
             ) : (
               <>
@@ -58,7 +71,8 @@ const EntryLayout = ({ children, type }: EntryLayoutProps) => {
                   src={addNewsletterImage}
                   width={450}
                   alt="login"
-                  priority
+                  placeholder="blur"
+                  blurDataURL="src/assets/images/addNewsletterImage.svg"
                 />
               </>
             )}

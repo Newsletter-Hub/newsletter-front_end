@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -152,7 +152,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           <div className="border-b-[#A8AFB5] border-b-2 flex gap-3 w-[600px] flex-wrap">
             {Boolean(tags.length) &&
               tags.map(item => (
-                <>
+                <React.Fragment key={item.id}>
                   <div className="flex bg-[#F4F5F6] py-[3px] px-3 rounded-lg gap-3 items-center">
                     <span className="text-[#515E6B] font-inter">
                       {item.interestName}
@@ -161,7 +161,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                       <CrossIcon className="cursor-pointer" />
                     </div>
                   </div>
-                </>
+                </React.Fragment>
               ))}
             <div className="relative w-full">
               {tags.length < 5 && (
