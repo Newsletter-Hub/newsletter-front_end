@@ -9,6 +9,7 @@ export interface AddNewsletterPayload {
   author?: string;
   image?: File | string;
   topics: [];
+  id?: number;
 }
 
 export interface NewsletterFormProps {

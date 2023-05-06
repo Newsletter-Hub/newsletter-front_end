@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router';
 
-import { publicApi } from '@/config/ky';
+import api from '@/config/ky';
 
 interface User {
   email: string;
@@ -19,7 +19,7 @@ interface SignupUser extends User {
 
 export const login = async ({ email, password, router }: User) => {
   try {
-    const response = await publicApi
+    const response = await api
       .post('auth/sign-in', { json: { email, password } })
       .json()
       .then(() => router.push('/'));
@@ -31,7 +31,7 @@ export const login = async ({ email, password, router }: User) => {
 
 export const googleAuth = async ({ token, router }: GoogleAuth) => {
   try {
-    const response = await publicApi
+    const response = await api
       .post('auth/google', { json: { token } })
       .json()
       .then(() => router.push('/'));
@@ -48,7 +48,7 @@ export const signup = async ({
   router,
 }: SignupUser) => {
   try {
-    const response = await publicApi
+    const response = await api
       .post('auth/sign-up', {
         json: { email, password, username },
       })

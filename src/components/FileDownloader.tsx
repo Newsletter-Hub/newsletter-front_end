@@ -23,7 +23,7 @@ import fileDownloaderImage from '@/assets/images/fileDownloaderImage.svg';
 const inter = Inter({ subsets: ['latin'] });
 
 interface FileDownloaderProps {
-  setValue: (file: BinaryData | string | File) => void;
+  setValue: (file: string | File) => void;
   setPayload?: Dispatch<SetStateAction<Payload>>;
   payload?: object;
   variant?: 'base' | 'lg';
@@ -69,17 +69,6 @@ const FileDownloader = ({
     }
   };
 
-  // useEffect(() => {
-  //   const reader = new FileReader();
-  //   reader.onloadend = () => {
-  //     if (reader.result) {
-  //       setValue(reader.result as string);
-  //     }
-  //   };
-  //   if (file) {
-  //     reader.readAsText(file as Blob);
-  //   }
-  // }, [file, setValue]);
   const reset = () => {
     if (ref.current) {
       ref.current.value = '';

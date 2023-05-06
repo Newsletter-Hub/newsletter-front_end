@@ -2,7 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useRouter } from 'next/router';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import {
+  newsletterUpdate,
+  newsletterVerifyOwnership,
+} from '@/pages/api/newsletters';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 
@@ -21,14 +28,11 @@ const validationSchema = z.object({
   author: z.string(),
 });
 
-type ValidationSchema = z.infer<typeof validationSchema>;
+type ValidationSchema = z.infer<typeof validationSchema> & {
+  image: string | File;
+};
 
-const DetailsForm = ({
-  payload,
-  setStep,
-  step,
-  interests,
-}: NewsletterFormProps) => {
+const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -36,20 +40,38 @@ const DetailsForm = ({
 
   const autoCompleteRef = useRef(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ValidationSchema>({
+  const router = useRouter();
+
+  const { register, handleSubmit, setValue } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<ValidationSchema> = data => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ValidationSchema> = () => {
+    newsletterVerifyOwnership({ link: payload.link })
+      .then(response => {
+        if (response && response.ok) {
+          router.push('/');
+        }
+      })
+      .catch(error => console.log(error));
   };
+
   const onAdd: SubmitHandler<ValidationSchema> = data => {
-    console.log(data);
-    setStep(step + 1);
+    newsletterUpdate({
+      id: payload.id,
+      link: payload.link,
+      title: data.title,
+      newsletterAuthor: data.author,
+      description: data.description,
+      image: data.image,
+      interests: tags.map(item => item.id),
+    })
+      .then(response => {
+        if (response.ok) {
+          router.push('/');
+        }
+      })
+      .catch(error => console.log(error));
   };
 
   const handleAddTag = (tag: Interest) => {
@@ -123,7 +145,10 @@ const DetailsForm = ({
             register={{ ...register('author') }}
             customStyles="w-full"
           />
-          <FileDownloader setValue={file => console.log(file)} variant="lg" />
+          <FileDownloader
+            setValue={file => setValue('image', file)}
+            variant="lg"
+          />
           <div className="border-b-[#A8AFB5] border-b-2 flex gap-3 w-[600px] flex-wrap">
             {Boolean(tags.length) &&
               tags.map(item => (

@@ -2,10 +2,17 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Inter } from 'next/font/google';
+import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import clsx from 'clsx';
+
+import { NewsletterLinkResponse } from '@/pages/api/newsletters';
+import {
+  newsletterLink,
+  newsletterVerifyOwnership,
+} from '@/pages/api/newsletters';
 
 import { NewsletterFormProps } from '@/types/newsletters';
 
@@ -29,6 +36,7 @@ const LinkForm = ({
   setStep,
   step,
 }: NewsletterFormProps) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -37,12 +45,17 @@ const LinkForm = ({
     resolver: zodResolver(validationSchema),
   });
   const onSubmit: SubmitHandler<ValidationSchema> = data => {
-    console.log(data);
+    newsletterVerifyOwnership({ link: data.link });
   };
   const onAdd: SubmitHandler<ValidationSchema> = data => {
-    console.log(data);
-    setStep(step + 1);
-    setPayload({ ...payload, link: data.link });
+    newsletterLink({ link: data.link })
+      .then((response: NewsletterLinkResponse | undefined) => {
+        setStep(step + 1);
+        if (response) {
+          setPayload({ ...payload, id: response.id, link: response.link });
+        }
+      })
+      .catch(error => console.error(error));
   };
   const labelStyles = clsx(
     'text-xs font-semibold text-cornflower-blue mb-2',
