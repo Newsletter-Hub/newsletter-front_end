@@ -2,7 +2,6 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from 'react';

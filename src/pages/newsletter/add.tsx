@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import Link from 'next/link';
-
 import { Interest } from '@/types/interests';
 import { AddNewsletterPayload } from '@/types/newsletters';
 
