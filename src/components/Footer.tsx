@@ -61,7 +61,7 @@ const Footer = () => {
           </div>
           <div>
             <h4 className="text-2xl mb-3">Ready to get started?</h4>
-            <p className="text-sm text-gull-grey">
+            <p className="text-sm text-dark-grey">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris

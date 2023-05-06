@@ -138,10 +138,10 @@ const FileDownloader = ({
           </div>
           <div className={inter.className}>
             <div className="text-center">
-              <p className="text-cornflower-blue font-semibold mb-2">
-                Click to upload your images
+              <p className="text-lightDark underline font-semibold mb-2">
+                Upload picture
               </p>
-              <p className="text-[#A8AFB5] text-sm">
+              <p className="text-grey text-sm">
                 Format: .png, .jpg, .jpeg. Max size: 5 MB.
                 <br /> Minimum 1236px width recommended.
               </p>

@@ -31,7 +31,7 @@ const Select = ({
     <div>
       <RadixSelect.Root value={value} onValueChange={onChange}>
         <RadixSelect.Trigger
-          className="border-b-2 outline-none border-gull-grey w-full text-sm text-gull-grey text-start pb-2 inline-flex items-center justify-between"
+          className="border-b-2 outline-none border-grey w-full text-sm text-dark-grey text-start pb-2 inline-flex items-center justify-between"
           name={name}
           placeholder={placeholder}
         >
@@ -45,7 +45,7 @@ const Select = ({
                 {options.map(item => (
                   <RadixSelect.Item
                     value={item.value}
-                    className="bg-white border-b-mercury border-b hover:outline-none hover:bg-light-grey"
+                    className="bg-white border-b-dark-grey border-b hover:outline-none hover:bg-light-grey"
                     key={item.value}
                   >
                     <RadixSelect.ItemText> {item.label}</RadixSelect.ItemText>

@@ -16,7 +16,7 @@ const links = [
 
 const Header = () => {
   return (
-    <div className="shadow-md bg-white py-4 px-32 flex items-center font-body">
+    <div className="shadow-md bg-white py-4 px-32 flex items-center font-inter">
       <div className="mr-24">
         <Logo />
       </div>
@@ -35,7 +35,7 @@ const Header = () => {
       <div className="flex gap-6 w-full items-center">
         <Link href="/login">Login</Link>
         <Link href="/sign-up">
-          <Button label="Sign up" />
+          <Button label="Sign up" fontSize="base" rounded="xl" />
         </Link>
       </div>
     </div>

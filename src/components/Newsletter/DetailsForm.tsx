@@ -149,12 +149,12 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
             setValue={file => setValue('image', file)}
             variant="lg"
           />
-          <div className="border-b-[#A8AFB5] border-b-2 flex gap-3 w-[600px] flex-wrap">
+          <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap">
             {Boolean(tags.length) &&
               tags.map(item => (
                 <React.Fragment key={item.id}>
                   <div className="flex bg-[#F4F5F6] py-[3px] px-3 rounded-lg gap-3 items-center">
-                    <span className="text-[#515E6B] font-inter">
+                    <span className="text-dark-grey font-inter">
                       {item.interestName}
                     </span>
                     <div onClick={() => handleDeleteTag(item.id)}>
@@ -184,7 +184,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                   >
                     {suggests.map(item => (
                       <p
-                        className="w-full border-b-[#A8AFB5] border-b text-grey last:border-b-0"
+                        className="w-full border-b-grey border-b text-grey last:border-b-0"
                         key={item.id}
                         onClick={() => handleAddTag(item)}
                       >
@@ -204,7 +204,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           </div>
         </div>
       </div>
-      <div className="flex w-full gap-4 mb-8">
+      <div className="flex w-full gap-4">
         <Button
           label="Verify Ownership"
           size="full"

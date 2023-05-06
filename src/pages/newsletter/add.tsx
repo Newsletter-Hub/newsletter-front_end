@@ -29,7 +29,7 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
   return (
     <EntryLayout type="newsletter">
       <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
-        <p className="text-3xl text-googleBlack font-semibold text-center mb-8 text-[40px]">
+        <p className="text-3xl text-lightBlack font-semibold text-center mb-8 text-5xl">
           Add Newsletter
         </p>
         {step === 1 ? (
@@ -48,9 +48,6 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
             interests={interests}
           />
         )}
-        <Link href="/" className="flex justify-center">
-          <span className="underline font-semibold font-inter">Skip</span>
-        </Link>
       </div>
     </EntryLayout>
   );

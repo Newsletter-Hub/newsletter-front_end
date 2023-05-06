@@ -68,7 +68,7 @@ const SignUpInfo = ({ interests }: SignUpInfoProps) => {
     <UserContext.Provider value={payload}>
       <EntryLayout type="signup">
         <div className="shadow-md p-12 rounded-3xl">
-          <p className="text-3xl text-googleBlack font-semibold text-center mb-12">
+          <p className="text-3xl text-lightBlack font-semibold text-center mb-12">
             {titles[page]}
           </p>
           {pageToShow[page]}

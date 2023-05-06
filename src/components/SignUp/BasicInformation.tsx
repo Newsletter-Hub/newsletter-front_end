@@ -82,7 +82,7 @@ const BasicInformation = ({
           <Datetime
             timeFormat={false}
             dateFormat="DD-MM-yyyy"
-            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-gull-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-gull-grey"
+            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-lightBlack"
             inputProps={{ placeholder: 'Date of birth' }}
             onChange={onChange}
             value={value}

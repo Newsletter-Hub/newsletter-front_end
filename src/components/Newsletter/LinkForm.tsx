@@ -1,12 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Inter } from 'next/font/google';
-import { useRouter } from 'next/router';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import clsx from 'clsx';
 
 import { NewsletterLinkResponse } from '@/pages/api/newsletters';
 import {
@@ -18,8 +13,6 @@ import { NewsletterFormProps } from '@/types/newsletters';
 
 import Button from '../Button';
 import Input from '../Input';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const validationSchema = z.object({
   link: z
@@ -36,7 +29,6 @@ const LinkForm = ({
   setStep,
   step,
 }: NewsletterFormProps) => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -57,13 +49,11 @@ const LinkForm = ({
       })
       .catch(error => console.error(error));
   };
-  const labelStyles = clsx(
-    'text-xs font-semibold text-cornflower-blue mb-2',
-    inter.className
-  );
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <p className={labelStyles}>Link a Newsletter</p>
+      <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
+        Link a Newsletter
+      </p>
       <div className="mb-8">
         <Input
           placeholder="http://"
@@ -73,7 +63,7 @@ const LinkForm = ({
           errorText={errors.link?.message}
         />
       </div>
-      <div className="flex w-full gap-4 mb-8">
+      <div className="flex w-full gap-4">
         <Button
           label="Verify Ownership"
           size="full"

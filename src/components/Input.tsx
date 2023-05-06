@@ -5,7 +5,8 @@ import { Inter } from 'next/font/google';
 
 import clsx from 'clsx';
 
-import EyeIcon from '@/assets/icons/eye';
+import EyeOffIcon from '@/assets/icons/eyeOffIcon';
+import EyeOnIcon from '@/assets/icons/eyeOn';
 import Search from '@/assets/icons/search';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -27,8 +28,9 @@ interface InputProps {
 
 const variants = {
   outlined:
-    'bg-input-grey border-0 outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm',
-  filled: 'border-b-2 outline-none border-gull-grey w-96 text-base pb-2 pl-2',
+    'bg-porcelain border-0 outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm',
+  filled:
+    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey',
 };
 
 const Input = ({
@@ -56,9 +58,11 @@ const Input = ({
   const [value, setValue] = useState('');
   return (
     <>
-      <p className="font-inter font-semibold text-googleBlack text-xs mb-2 pl-2">
-        {label}
-      </p>
+      {label && (
+        <p className="font-inter font-semibold text-lightBlack text-xs mb-2 pl-2">
+          {label}
+        </p>
+      )}
       <div className="relative flex">
         {isSearch && <Search className="absolute right-3 top-2.5" />}
         <input
@@ -71,16 +75,22 @@ const Input = ({
           onChange={e => setValue(e.target.value)}
         />
         {checkNumberOfSymbols && maxLength && (
-          <span className="absolute text-xs -bottom-6 left-2 text-[#D3D7DA] font-inter">
+          <span className="absolute text-xs -bottom-6 left-2 text-light-grey font-inter">
             {value.length}/{maxLength}
           </span>
         )}
-        {isPassword && (
-          <EyeIcon
-            className="absolute right-3 top-2.5 stroke-gull-grey cursor-pointer"
-            onClick={handleShowPassword}
-          />
-        )}
+        {isPassword &&
+          (isShowPassword ? (
+            <EyeOnIcon
+              className="absolute right-3 top-2.5 cursor-pointer"
+              onClick={handleShowPassword}
+            />
+          ) : (
+            <EyeOffIcon
+              className="absolute right-3 top-2.5 cursor-pointer"
+              onClick={handleShowPassword}
+            />
+          ))}
         {error && (
           <p className="absolute text-sm text-red -bottom-5">{errorText}</p>
         )}

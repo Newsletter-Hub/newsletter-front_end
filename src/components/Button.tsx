@@ -26,7 +26,7 @@ const variants = {
   primary: 'text-white bg-primary whitespace-nowrap py-10px px-7',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
   outlined:
-    'border-2 py-5 px-16 rounded-[36px] flex justify-center items-center',
+    'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack',
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
 };
@@ -50,7 +50,7 @@ const sizes = {
 };
 
 const socialMedias = {
-  google: '!bg-googleBlack',
+  google: '!bg-lightBlack',
   none: '',
 };
 
@@ -84,10 +84,12 @@ const Button = ({
     uppercase && 'uppercase',
     bold && 'font-bold',
     sizes[size],
-    variant === 'primary' && disabled && '!text-grey !bg-mercury',
+    variant === 'primary' && disabled && '!text-white !bg-light-grey',
     socialMedias[socialMedia],
     customStyles,
-    !selected && selected !== undefined && '!bg-mercury !text-grey',
+    !selected &&
+      selected !== undefined &&
+      '!bg-light-porcelain !text-dark-grey',
     '!font-inter',
     heightVariants[height]
   );

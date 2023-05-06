@@ -57,33 +57,35 @@ const Form = () => {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-7 items-center"
+        className="flex flex-col items-center"
       >
-        {fields.map(field => (
-          <Input
-            register={{ ...register(field.name) }}
-            variant="filled"
-            placeholder={field.placeholder}
-            key={field.name}
-            error={Boolean(errors[field.name])}
-            errorText={errors[field.name]?.message}
-            isPassword={Boolean(field.name === 'password')}
-          />
-        ))}
+        <div className="mb-8 gap-12 flex flex-col">
+          {fields.map(field => (
+            <Input
+              register={{ ...register(field.name) }}
+              variant="filled"
+              placeholder={field.placeholder}
+              key={field.name}
+              error={Boolean(errors[field.name])}
+              errorText={errors[field.name]?.message}
+              isPassword={Boolean(field.name === 'password')}
+            />
+          ))}
+        </div>
+        <Link
+          href="login/forgot-password"
+          className="underline text-base mb-8 font-inter text-lightBlack font-semibold"
+        >
+          Forgot password?
+        </Link>
         <Button
           label="Login"
-          uppercase
           size="full"
           rounded="xl"
           disabled={isErrors}
           type="submit"
+          customStyles="mb-4"
         />
-        <Link
-          href="forgot-password"
-          className="underline text-base text-grey mb-5"
-        >
-          Forgot password?
-        </Link>
       </form>
       <div>
         <GoogleLogin

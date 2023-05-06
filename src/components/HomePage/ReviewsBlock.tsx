@@ -95,7 +95,7 @@ const ReviewsBlock = () => {
           <div className="mb-10">
             {latestReviews.map((review, index) => (
               <div
-                className="flex border-b border-mercury pb-3 pt-2.5"
+                className="flex border-b border-light-grey pb-3 pt-2.5"
                 key={index}
               >
                 <Image
@@ -106,13 +106,17 @@ const ReviewsBlock = () => {
                   className="rounded mr-8 max-h-16"
                 />
                 <div className="mr-24 min-w-[200px]">
-                  <p className="text-xl">{review.name}</p>
-                  <p className="text-base">{review.city}</p>
+                  <p className="text-xl text-lightBlack">{review.name}</p>
+                  <p className="text-base text-dark-grey font-inter">
+                    {review.city}
+                  </p>
                   <Image src={starRating} alt="Star rating" />
-                  <p className="text-xs text-grey">{review.time}</p>
+                  <p className="text-xs text-grey-chat font-inter">
+                    {review.time}
+                  </p>
                 </div>
                 <div>
-                  <div className="text-base max-w-[600px] mb-7">
+                  <div className="text-base max-w-[600px] mb-7 font-inter">
                     {review.description}
                   </div>
                   <div className="flex justify-end gap-6 items-center">
@@ -141,24 +145,24 @@ const ReviewsBlock = () => {
         </div>
       </div>
       <div className="h-full">
-        <h6 className="text-2x whitespace-nowrap mb-6 mt-4">
+        <h6 className="text-2xl whitespace-nowrap mb-6 mt-4">
           Reviews for Your Newsletters
         </h6>
         <div className="flex flex-col gap-3 items-stretch">
           {reviewsNewsletters.map((review, index) => (
             <div
-              className="max-w-[482px] hover:bg-light-grey px-7 py-6 rounded-2xl"
+              className="max-w-[482px] hover:bg-light-porcelain px-7 py-6 rounded-2xl"
               key={index}
             >
               <p className="text-xl">{review.name}</p>
-              <p>{review.city}</p>
+              <p className="font-inter">{review.city}</p>
               <div className="mb-6">
                 <Image src={starRating} alt="Star rating" />
               </div>
-              <p className="mb-6">{review.description}</p>
+              <p className="mb-6 font-inter">{review.description}</p>
               <Link
                 href="/"
-                className="text-primary font-bold text-base flex items-center gap-4"
+                className="text-primary font-bold text-base flex items-center gap-4 font-inter"
               >
                 See more <ArrowRight />
               </Link>

@@ -35,10 +35,10 @@ const TrendingNewslettersBlock = () => {
     <div className="flex gap-16 mb-24">
       <div className="max-w-[40%] shadow-xl rounded-[40px]">
         <div className="p-14 pb-0">
-          <h6 className="text-4xl font-bold text-dark-blue mb-9">
+          <h6 className="text-4xl font-medium text-lightBlack mb-9">
             Trending Newsletters
           </h6>
-          <p className="text-waterloo text-lg mb-22">
+          <p className="text-dark-grey text-lg mb-22 font-inter">
             If you want to get a hand from the amazing team behind BRIX
             Templates, get in touch with BRIX Agency today.
           </p>
@@ -48,7 +48,7 @@ const TrendingNewslettersBlock = () => {
       <div>
         <div className="mb-8">
           {newsletters.map((newsletter, index) => (
-            <div className="pb-9 border-b border-mercury mb-9" key={index}>
+            <div className="pb-9 border-b border-porcelain mb-9" key={index}>
               <div className="mb-1.5">
                 <Quotes />
               </div>
@@ -61,15 +61,15 @@ const TrendingNewslettersBlock = () => {
                   className="rounded-[50px] max-h-[72px]"
                 />
                 <div>
-                  <p className="text-3xl text-shark-blue font-medium">
+                  <p className="text-3xl text-lightBlack font-medium">
                     {newsletter.name}
                   </p>
-                  <p className="text-3xl font-light text-shark-blue">
+                  <p className="text-3xl font-light text-lightBlack font-inter">
                     {newsletter.description}
                   </p>
                 </div>
               </div>
-              <Link href="/" className="text-primary font-semibold">
+              <Link href="/" className="text-primary font-semibold font-inter">
                 {newsletter.authorName}
               </Link>
             </div>

@@ -34,7 +34,7 @@ const ForgotPassword = () => {
     <EntryLayout type="login">
       <div className="flex justify-center items-center">
         <div className="shadow-md rounded-3xl p-12">
-          <p className="text-googleBlack text-[40px] font-medium text-center mb-16">
+          <p className="text-lightBlack text-5xl font-medium text-center mb-16">
             Forgot password
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
