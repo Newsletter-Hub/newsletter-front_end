@@ -27,8 +27,8 @@ export const Logo = ({ className }: { className?: string }) => {
           fill="url(#paint3_linear_603_23983)"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M29.849 34.8599C34.6121 30.5439 36.8349 25.4917 36.8349 19.3106C36.8349 8.64565 28.5891 0 18.4175 0C8.24577 0 0 8.64565 0 19.3106C0 29.591 7.66181 37.995 17.3249 38.5878V38.5982C17.9408 38.6801 18.4174 39.24 18.4174 39.9185V41.3296C18.4174 41.8443 18.9642 42.1647 19.4004 41.9116C20.0355 41.5431 20.6496 41.2022 21.2574 40.8648C23.8497 39.4257 26.3292 38.0492 29.849 34.8599ZM34.3376 19.3106C34.3376 28.4652 27.2483 35.9599 18.4175 35.9599C9.58661 35.9599 2.49728 28.4652 2.49728 19.3106C2.49728 10.156 9.58661 2.66124 18.4175 2.66124C27.2483 2.66124 34.3376 10.156 34.3376 19.3106Z"
           fill="url(#paint4_linear_603_23983)"
         />
@@ -49,8 +49,8 @@ export const Logo = ({ className }: { className?: string }) => {
             y2="42"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0193CC" />
-            <stop offset="1" stop-color="#1E3C8A" />
+            <stop stopColor="#0193CC" />
+            <stop offset="1" stopColor="#1E3C8A" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_603_23983"
@@ -60,8 +60,8 @@ export const Logo = ({ className }: { className?: string }) => {
             y2="42"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0193CC" />
-            <stop offset="1" stop-color="#1E3C8A" />
+            <stop stopColor="#0193CC" />
+            <stop offset="1" stopColor="#1E3C8A" />
           </linearGradient>
           <linearGradient
             id="paint2_linear_603_23983"
@@ -71,8 +71,8 @@ export const Logo = ({ className }: { className?: string }) => {
             y2="42"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0193CC" />
-            <stop offset="1" stop-color="#1E3C8A" />
+            <stop stopColor="#0193CC" />
+            <stop offset="1" stopColor="#1E3C8A" />
           </linearGradient>
           <linearGradient
             id="paint3_linear_603_23983"
@@ -82,8 +82,8 @@ export const Logo = ({ className }: { className?: string }) => {
             y2="42"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0193CC" />
-            <stop offset="1" stop-color="#1E3C8A" />
+            <stop stopColor="#0193CC" />
+            <stop offset="1" stopColor="#1E3C8A" />
           </linearGradient>
           <linearGradient
             id="paint4_linear_603_23983"
@@ -93,8 +93,8 @@ export const Logo = ({ className }: { className?: string }) => {
             y2="42"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0193CC" />
-            <stop offset="1" stop-color="#1E3C8A" />
+            <stop stopColor="#0193CC" />
+            <stop offset="1" stopColor="#1E3C8A" />
           </linearGradient>
         </defs>
       </svg>

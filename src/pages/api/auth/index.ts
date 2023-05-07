@@ -46,16 +46,12 @@ export const signup = async ({
   email,
   password,
   username,
-  router,
-}: SignupUser) => {
+}: SignupUser): Promise<NextResponse | undefined> => {
   try {
-    const response = await api
-      .post('auth/sign-up', {
-        json: { email, password, username },
-      })
-      .json()
-      .then(() => router.push('/sign-up/verify-email'));
-    return response;
+    const response = await api.post('auth/sign-up', {
+      json: { email, password, username },
+    });
+    return response.json();
   } catch (error) {
     console.log(error);
   }

@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -42,6 +43,10 @@ type Field = {
   isPassword?: boolean;
 };
 
+type SignUpProps = {
+  setEmail: Dispatch<SetStateAction<string>>;
+};
+
 type Fields = Field[];
 
 const fields: Fields = [
@@ -55,7 +60,7 @@ const fields: Fields = [
   },
 ];
 
-const SignUpForm = () => {
+const SignUpForm = ({ setEmail }: SignUpProps) => {
   const router = useRouter();
   const {
     register,
@@ -67,12 +72,15 @@ const SignUpForm = () => {
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });
   };
-  const onSubmit: SubmitHandler<ValidationSchema> = ({
+  const onSubmit: SubmitHandler<ValidationSchema> = async ({
     email,
     password,
     username,
   }) => {
-    signup({ email, password, username, router });
+    const response = await signup({ email, password, username, router });
+    if (response) {
+      setEmail(email);
+    }
   };
   const isErrors = Boolean(Object.keys(errors).length);
   return (
