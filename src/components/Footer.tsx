@@ -28,7 +28,7 @@ const additionalLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-white pt-29 px-32 pb-4">
+    <footer className="pt-29 px-32 pb-4">
       <div className="bg-light-grey pt-12 pb-24 pl-8 pr-21">
         <div className="flex gap-48">
           <div className="flex flex-col gap-3.5">

@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { Interest } from '@/types/interests';
 import { AddNewsletterPayload } from '@/types/newsletters';
 
-import EntryLayout from '@/components/EntryLayout';
 import DetailsForm from '@/components/Newsletter/DetailsForm';
 import LinkForm from '@/components/Newsletter/LinkForm';
+import withLayout from '@/components/withLayout';
 
 import { getInterests } from '../api/user/interests';
 
 interface AddNewsletterProps {
-  interests: Interest[];
+  interests?: Interest[];
 }
 
 const AddNewsletter = ({ interests }: AddNewsletterProps) => {
@@ -25,29 +25,27 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
   });
 
   return (
-    <EntryLayout type="newsletter">
-      <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
-        <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
-          Add Newsletter
-        </p>
-        {step === 1 ? (
-          <LinkForm
-            setPayload={setPayload}
-            payload={payload}
-            step={step}
-            setStep={setStep}
-          />
-        ) : (
-          <DetailsForm
-            setPayload={setPayload}
-            payload={payload}
-            step={step}
-            setStep={setStep}
-            interests={interests}
-          />
-        )}
-      </div>
-    </EntryLayout>
+    <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
+      <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
+        Add Newsletter
+      </p>
+      {step === 1 ? (
+        <LinkForm
+          setPayload={setPayload}
+          payload={payload}
+          step={step}
+          setStep={setStep}
+        />
+      ) : (
+        <DetailsForm
+          setPayload={setPayload}
+          payload={payload}
+          step={step}
+          setStep={setStep}
+          interests={interests}
+        />
+      )}
+    </div>
   );
 };
 
@@ -65,4 +63,4 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default AddNewsletter;
+export default withLayout(AddNewsletter, 'entry', { type: 'newsletter' });
