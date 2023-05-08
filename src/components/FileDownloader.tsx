@@ -90,7 +90,7 @@ const FileDownloader = ({
               width={105}
               height={104}
               alt="file downloader"
-              className="rounded-xl"
+              className="rounded-xl object-contain w-auto h-auto max-w-[105px] max-h-[104px]"
             />
             <div className="flex justify-end -mt-8">
               <Image

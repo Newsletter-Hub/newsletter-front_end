@@ -42,8 +42,8 @@ const LinkForm = ({
   const onAdd: SubmitHandler<ValidationSchema> = data => {
     newsletterLink({ link: data.link })
       .then((response: NewsletterLinkResponse | undefined) => {
-        setStep(step + 1);
         if (response) {
+          setStep(step + 1);
           setPayload({ ...payload, id: response.id, link: response.link });
         }
       })
