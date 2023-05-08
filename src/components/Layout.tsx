@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
-import Head from 'next/head';
 
 import { Alegreya } from 'next/font/google';
+import Head from 'next/head';
 
 import Footer from './Footer';
 import Header from './Header';
