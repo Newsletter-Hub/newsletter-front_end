@@ -11,14 +11,14 @@ import Logo from '@/assets/images/logo';
 
 import Button from './Button';
 
-interface EntryLayoutProps {
-  children: JSX.Element;
-  type: 'signup' | 'login' | 'newsletter';
+export interface EntryLayoutProps {
+  children?: React.ReactNode;
+  type?: 'signup' | 'login' | 'newsletter';
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
-const EntryLayout = ({ children, type }: EntryLayoutProps) => {
+const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
   return (
     <>
       <Head>

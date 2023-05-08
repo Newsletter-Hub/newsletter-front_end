@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from '@/components/Button';
-import EntryLayout from '@/components/EntryLayout';
 import Input from '@/components/Input';
+import withLayout from '@/components/withLayout';
 
 import { forgotPassword } from '../api/auth';
 
@@ -31,41 +31,39 @@ const ForgotPassword = () => {
     forgotPassword({ email });
   };
   return (
-    <EntryLayout type="login">
-      <div className="flex justify-center items-center">
-        <div className="shadow-md rounded-3xl p-12">
-          <p className="text-lightBlack text-5xl font-medium text-center mb-16">
-            Forgot password
-          </p>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-8">
-              <Input
-                register={{ ...register('email') }}
-                variant="filled"
-                placeholder="Enter your email address"
-                error={Boolean(errors.email)}
-                errorText={errors.email?.message}
-              />
-            </div>
-            <Button
-              label="Send reset link"
-              type="submit"
-              size="full"
-              rounded="xl"
-              fontSize="md"
-              customStyles="mb-8"
+    <div className="flex justify-center items-center">
+      <div className="shadow-md rounded-3xl p-12">
+        <p className="text-lightBlack text-5xl font-medium text-center mb-16">
+          Forgot password
+        </p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-8">
+            <Input
+              register={{ ...register('email') }}
+              variant="filled"
+              placeholder="Enter your email address"
+              error={Boolean(errors.email)}
+              errorText={errors.email?.message}
             />
-            <span className="flex justify-center gap-3 font-inter text-base">
-              Remembered password?{' '}
-              <Link href="/login" className="font-semibold underline">
-                Back to Login
-              </Link>
-            </span>
-          </form>
-        </div>
+          </div>
+          <Button
+            label="Send reset link"
+            type="submit"
+            size="full"
+            rounded="xl"
+            fontSize="md"
+            customStyles="mb-8"
+          />
+          <span className="flex justify-center gap-3 font-inter text-base">
+            Remembered password?{' '}
+            <Link href="/login" className="font-semibold underline">
+              Back to Login
+            </Link>
+          </span>
+        </form>
       </div>
-    </EntryLayout>
+    </div>
   );
 };
 
-export default ForgotPassword;
+export default withLayout(ForgotPassword, 'entry');

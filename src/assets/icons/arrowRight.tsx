@@ -1,4 +1,8 @@
-const ArrowRight = () => {
+interface ArrowRightProps {
+  className?: string;
+}
+
+const ArrowRight = ({ className }: ArrowRightProps) => {
   return (
     <svg
       width="25"
@@ -6,6 +10,7 @@ const ArrowRight = () => {
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M5.79688 12.5H19.7969"

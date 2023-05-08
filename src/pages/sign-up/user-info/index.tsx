@@ -5,11 +5,11 @@ import { getInterests } from '@/pages/api/user/interests';
 import { Interest } from '@/types/interests';
 import { Payload } from '@/types/signup';
 
-import EntryLayout from '@/components/EntryLayout';
 import BasicInformation from '@/components/SignUp/BasicInformation';
 import ChooseInterests from '@/components/SignUp/ChooseInterests';
 import ProfilePicture from '@/components/SignUp/ProfilePicture';
 import UserType from '@/components/SignUp/UserType';
+import withLayout from '@/components/withLayout';
 
 export const UserContext = React.createContext<Payload>({
   dateBirth: '',
@@ -22,7 +22,7 @@ export const UserContext = React.createContext<Payload>({
 });
 
 interface SignUpInfoProps {
-  interests: Interest[];
+  interests?: Interest[];
 }
 const SignUpInfo = ({ interests }: SignUpInfoProps) => {
   const [page, setPage] = useState(0);
@@ -66,14 +66,12 @@ const SignUpInfo = ({ interests }: SignUpInfoProps) => {
   ];
   return (
     <UserContext.Provider value={payload}>
-      <EntryLayout type="signup">
-        <div className="shadow-md p-12 rounded-3xl">
-          <p className="text-3xl text-lightBlack font-semibold text-center mb-12">
-            {titles[page]}
-          </p>
-          {pageToShow[page]}
-        </div>
-      </EntryLayout>
+      <div className="shadow-md p-12 rounded-3xl">
+        <p className="text-3xl text-lightBlack font-semibold text-center mb-12">
+          {titles[page]}
+        </p>
+        {pageToShow[page]}
+      </div>
     </UserContext.Provider>
   );
 };
@@ -92,4 +90,4 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default SignUpInfo;
+export default withLayout(SignUpInfo, 'entry', { type: 'signup' });

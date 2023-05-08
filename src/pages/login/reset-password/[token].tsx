@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { resetPassword } from '@/pages/api/auth';
 
 import Button from '@/components/Button';
-import EntryLayout from '@/components/EntryLayout';
 import Input from '@/components/Input';
+import withLayout from '@/components/withLayout';
 
 const validationSchema = z
   .object({
@@ -44,47 +44,45 @@ const ResetPassword = () => {
     });
   };
   return (
-    <EntryLayout type="login">
-      <div className="flex justify-center items-center">
-        <div className="shadow-md rounded-3xl p-12">
-          <p className="text-lightBlack text-5xl font-medium text-center mb-16">
-            Forgot password
-          </p>
-          <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex justify-center items-center">
+      <div className="shadow-md rounded-3xl p-12">
+        <p className="text-lightBlack text-5xl font-medium text-center mb-16">
+          Forgot password
+        </p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-8">
             <div className="mb-8">
-              <div className="mb-8">
-                <Input
-                  register={{ ...register('password') }}
-                  variant="filled"
-                  placeholder="Enter password"
-                  error={Boolean(errors.password)}
-                  errorText={errors.password?.message}
-                  label="Enter your new password"
-                  isPassword
-                />
-              </div>
               <Input
-                register={{ ...register('confirm_password') }}
+                register={{ ...register('password') }}
                 variant="filled"
-                placeholder="Repeat password"
-                error={Boolean(errors.confirm_password)}
-                errorText={errors.confirm_password?.message}
-                label="Repeat your new password"
+                placeholder="Enter password"
+                error={Boolean(errors.password)}
+                errorText={errors.password?.message}
+                label="Enter your new password"
                 isPassword
               />
             </div>
-            <Button
-              label="Save"
-              type="submit"
-              size="full"
-              rounded="xl"
-              fontSize="md"
+            <Input
+              register={{ ...register('confirm_password') }}
+              variant="filled"
+              placeholder="Repeat password"
+              error={Boolean(errors.confirm_password)}
+              errorText={errors.confirm_password?.message}
+              label="Repeat your new password"
+              isPassword
             />
-          </form>
-        </div>
+          </div>
+          <Button
+            label="Save"
+            type="submit"
+            size="full"
+            rounded="xl"
+            fontSize="md"
+          />
+        </form>
       </div>
-    </EntryLayout>
+    </div>
   );
 };
 
-export default ResetPassword;
+export default withLayout(ResetPassword, 'entry');

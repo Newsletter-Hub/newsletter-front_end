@@ -5,8 +5,13 @@ import { clsx } from 'clsx';
 import GoogleIcon from '@/assets/icons/google';
 
 interface ButtonProps {
-  label: string;
-  variant?: 'primary' | 'secondary' | 'outlined' | 'outlined-primary';
+  label: string | JSX.Element;
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'outlined'
+    | 'outlined-primary'
+    | 'outlined-secondary';
   weight?: 'base' | 'bold';
   fontSize?: 'base' | 'xs' | 'md' | 'sm';
   size?: 'base' | 'md' | 'full';
@@ -29,6 +34,8 @@ const variants = {
     'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack',
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
+  'outlined-secondary':
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-light-grey border-light-grey',
 };
 
 const weights = {
@@ -55,7 +62,7 @@ const socialMedias = {
 };
 
 const heightVariants = {
-  sm: 'h-10',
+  sm: 'h-10 !py-2 !px-4',
   base: 'h-12',
 };
 

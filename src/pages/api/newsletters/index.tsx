@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
 
+import { NewsletterData } from '@/types/newsletters';
+
 interface NewsletterLink {
   link?: string;
 }
@@ -19,6 +21,11 @@ interface Newsletter {
   image?: Blob | string;
   interests?: number[];
   newsletterAuthor?: string;
+}
+
+export interface GetNewsletterResponse {
+  newsletterData?: NewsletterData;
+  error?: string;
 }
 
 export const newsletterVerifyOwnership = async ({
@@ -79,4 +86,22 @@ export const newsletterUpdate = async ({
     }
   );
   return response;
+};
+
+export const getNewsletter = async ({
+  id,
+}: {
+  id: number;
+}): Promise<GetNewsletterResponse> => {
+  try {
+    const newsletterData: NewsletterData = await api
+      .get(`newsletters/${id}`)
+      .json();
+    return { newsletterData };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: 'Failed to get newsletter',
+    };
+  }
 };

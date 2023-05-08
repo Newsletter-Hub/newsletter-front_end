@@ -1,14 +1,10 @@
-import { ReactElement } from 'react';
-
 import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
 import TrendingNewslettersBlock from '@/components/HomePage/TrendingNewslettersBlock';
-import Layout from '@/components/Layout';
+import withLayout from '@/components/withLayout';
 
-import type { NextPageWithLayout } from './_app';
-
-const Home: NextPageWithLayout = () => {
+const Home = () => {
   return (
     <>
       <main>
@@ -23,8 +19,4 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
-};
-
-export default Home;
+export default withLayout(Home);
