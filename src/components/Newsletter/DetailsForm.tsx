@@ -22,31 +22,26 @@ import Button from '../Button';
 import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 
-const validationSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  author: z.string(),
-});
-
-type ValidationSchema = z.infer<typeof validationSchema> & {
-  image: string | File;
-};
+interface NewsletterAddPayload {
+  title?: string;
+  description?: string;
+  author?: string;
+}
 
 const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [suggests, setSuggests] = useState<Interest[]>([]);
+  const [image, setImage] = useState<string | Blob>('');
 
   const autoCompleteRef = useRef(null);
 
   const router = useRouter();
 
-  const { register, handleSubmit, setValue } = useForm<ValidationSchema>({
-    resolver: zodResolver(validationSchema),
-  });
+  const { register, handleSubmit } = useForm<NewsletterAddPayload>();
 
-  const onSubmit: SubmitHandler<ValidationSchema> = () => {
+  const onSubmit: SubmitHandler<NewsletterAddPayload> = () => {
     newsletterVerifyOwnership({ link: payload.link })
       .then(response => {
         if (response && response.ok) {
@@ -56,14 +51,14 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
       .catch(error => console.log(error));
   };
 
-  const onAdd: SubmitHandler<ValidationSchema> = data => {
+  const onAdd: SubmitHandler<NewsletterAddPayload> = data => {
     newsletterUpdate({
       id: payload.id,
       link: payload.link,
       title: data.title,
       newsletterAuthor: data.author,
       description: data.description,
-      image: data.image,
+      image: image,
       interests: tags.map(item => item.id),
     })
       .then(response => {
@@ -115,6 +110,8 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
     setInputValue('');
   };
 
+  const handleSetValue = (value: string | Blob) => setImage(value);
+
   useOnClickOutside(autoCompleteRef, handleClickOutside);
 
   if (!interests) {
@@ -145,10 +142,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
             register={{ ...register('author') }}
             customStyles="w-full"
           />
-          <FileDownloader
-            setValue={file => setValue('image', file)}
-            variant="lg"
-          />
+          <FileDownloader setValue={handleSetValue} variant="lg" />
           <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap">
             {Boolean(tags.length) &&
               tags.map(item => (
