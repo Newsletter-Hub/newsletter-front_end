@@ -1,4 +1,10 @@
+import api from '@/config/ky';
+
 import { Payload } from '@/types/signup';
+
+interface GetUserMePayload {
+  token?: string;
+}
 
 export const updateUser = async ({
   dateBirth,
@@ -33,5 +39,22 @@ export const updateUser = async ({
     return response;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getUserMe = async ({ token }: GetUserMePayload) => {
+  try {
+    const response = await api
+      .get('users', {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to get user' };
   }
 };

@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-import { Inter } from 'next/font/google';
-
 import clsx from 'clsx';
 
 import EyeOffIcon from '@/assets/icons/eyeOffIcon';
 import EyeOnIcon from '@/assets/icons/eyeOn';
 import Search from '@/assets/icons/search';
-
-const inter = Inter({ subsets: ['latin'] });
 
 interface InputProps {
   placeholder?: string;
@@ -53,7 +49,7 @@ const Input = ({
     variants[variant],
     error && 'border-red',
     customStyles,
-    inter.className
+    'font-inter'
   );
   const [value, setValue] = useState('');
   return (

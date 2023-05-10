@@ -26,6 +26,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "ky": "^0.33.3",
     "next": "13.3.0",
+    "next-cookies": "^2.0.3",
     "node-buffer": "^1.0.3",
     "react": "18.2.0",
     "react-datetime": "^3.2.0",

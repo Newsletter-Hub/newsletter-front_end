@@ -4,14 +4,18 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { GetServerSideProps } from 'next';
+import parseCookies from 'next-cookies';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { getUserMe } from '@/pages/api/user';
+
 import { NewsletterData } from '@/types/newsletters';
 
+import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Modal from '@/components/Modal';
@@ -130,15 +134,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
         </h1>
         {newsletterData?.addedByUser && (
           <div className="flex gap-6">
-            <Image
-              src={
-                (newsletterData?.addedByUser?.avatar as string) ||
-                'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
-              }
+            <Avatar
+              src={newsletterData?.addedByUser?.avatar as string}
               alt="avatar"
               width={112}
               height={112}
               className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
+              customStyles="max-h-[112px] min-w-[112px]"
+              username={newsletterData.addedByUser.username}
             />
             <div>
               <div className="flex gap-4 items-center mb-4">
@@ -257,15 +260,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
         <Modal open={isModalOpen} handleClose={handleModalClose}>
           <div>
             <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
-              <Image
-                src={
-                  (newsletterData?.addedByUser?.avatar as string) ||
-                  'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
-                }
+              <Avatar
+                src={newsletterData?.addedByUser?.avatar as string}
                 alt="avatar"
                 width={112}
                 height={112}
                 className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
+                username={newsletterData?.addedByUser?.username}
+                customStyles="max-h-[112px] min-w-[112px]"
               />
               <div className="flex flex-col">
                 <span className="font-medium text-lightBlack text-xl mb-3">
@@ -326,15 +328,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                 } border-light-grey`}
                 key={review.id}
               >
-                <Image
-                  src={
-                    (review.reviewer.avatar as string) ||
-                    'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
-                  }
+                <Avatar
+                  src={review.reviewer.avatar as string}
                   alt="avatar"
                   width={80}
                   height={80}
                   className="rounded-full max-h-[80px] max-w-full object-cover min-w-[80px] mr-[18px]"
+                  username={review.reviewer.username}
+                  customStyles="max-h-[80px] min-w-[80px] mr-[18px]"
                 />
                 <div className="mr-[88px] w-[150px]">
                   <p className="text-lightBlack text-xl">
@@ -392,6 +393,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
     pageSize: 5,
   });
 
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken ? cookies.accessToken : null;
+  const userResponse = await getUserMe({ token } as { token: string });
+
   if (response.error || reviewsResponse.error) {
     return {
       props: {
@@ -405,6 +410,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       newsletterData: response.newsletterData,
       reviews: reviewsResponse.reviews,
+      user: token ? userResponse : null,
     },
   };
 };

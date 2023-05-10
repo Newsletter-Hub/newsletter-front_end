@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
+import { UserMe } from '@/types/user';
 
 import EntryLayout from './EntryLayout';
 import Layout from './Layout';
@@ -13,6 +14,7 @@ interface WithLayoutProps {
   children?: ReactNode;
   interests?: Interest[];
   newsletterData?: NewsletterData;
+  user?: UserMe | null;
 }
 
 interface EntryLayoutConfig {
@@ -27,13 +29,15 @@ const withLayout = (
   const WithLayoutComponent = (props: WithLayoutProps) => {
     const LayoutComponent =
       layout === 'default'
-        ? Layout
+        ? (props: WithLayoutProps) => (
+            <Layout user={props.user}>{props.children}</Layout>
+          )
         : (props: WithLayoutProps) => (
             <EntryLayout {...entryLayoutConfig}>{props.children}</EntryLayout>
           );
 
     return (
-      <LayoutComponent>
+      <LayoutComponent {...props}>
         <WrappedComponent {...props} />
       </LayoutComponent>
     );
