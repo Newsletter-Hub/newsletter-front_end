@@ -7,6 +7,9 @@ interface StarRatingProps {
   value?: number;
   count?: number;
   customStyles?: string;
+  setValue?: (index: number) => void;
+  error?: boolean;
+  errorText?: string;
 }
 
 const StarRating = ({
@@ -14,6 +17,9 @@ const StarRating = ({
   value = 0,
   count = 5,
   customStyles,
+  setValue,
+  error,
+  errorText,
 }: StarRatingProps) => {
   const [rating, setRating] = useState(value);
   const [hover, setHover] = useState(0);
@@ -24,6 +30,9 @@ const StarRating = ({
       return;
     }
     setRating(index);
+    if (setValue) {
+      setValue(index);
+    }
   };
   const handleMouseEnter = (index: number) => {
     if (readonly) {
@@ -39,7 +48,7 @@ const StarRating = ({
     setHover(rating);
   };
   return (
-    <div className={`flex ${customStyles}`}>
+    <div className={`flex ${customStyles ? customStyles : ''} relative`}>
       {[...Array(count)].map((star, index) => {
         index += 1;
         return (
@@ -54,6 +63,11 @@ const StarRating = ({
           />
         );
       })}
+      {error && (
+        <p className="absolute text-sm text-red -bottom-6 whitespace-nowrap">
+          {errorText}
+        </p>
+      )}
     </div>
   );
 };

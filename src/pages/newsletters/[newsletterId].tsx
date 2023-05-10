@@ -1,10 +1,20 @@
+import timeAgo from '@/helpers/timeAgo';
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterData } from '@/types/newsletters';
 
 import Button from '@/components/Button';
+import Input from '@/components/Input';
+import Modal from '@/components/Modal';
 import StarRating from '@/components/StarRating';
 import withLayout from '@/components/withLayout';
 
@@ -15,13 +25,97 @@ import PlusIcon from '@/assets/icons/plus';
 import SubscribeIcon from '@/assets/icons/subscribe';
 
 import { GetNewsletterResponse, getNewsletter } from '../api/newsletters';
+import {
+  GetReviewResponse,
+  ReviewResponse,
+  createReview,
+  getReviews,
+} from '../api/newsletters/reviews';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
+  reviews?: ReviewResponse;
 }
 
-const NewsletterPage = ({ newsletterData }: NewsletterPageProps) => {
-  console.log(newsletterData);
+const validationSchema = z.object({
+  rating: z.number({ required_error: 'Rating is required' }),
+  comment: z.string(),
+});
+
+type ValidationSchema = z.infer<typeof validationSchema>;
+
+const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
+  const [reviewsData, setReviewsData] = useState(reviews);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const router = useRouter();
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    reset,
+  } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
+
+  const onSubmit: SubmitHandler<ValidationSchema> = async ({
+    rating,
+    comment,
+  }) => {
+    if (router.query.newsletterId) {
+      const response = await createReview({
+        rating,
+        comment,
+        newsletterId: +router.query.newsletterId,
+      });
+
+      if (response.error) {
+        console.error(response?.error);
+      } else if (!response?.error) {
+        const reviewsResponse: GetReviewResponse = await getReviews({
+          newsletterId: parseInt(router.query.newsletterId as string),
+          page: 1,
+          pageSize: 5 * page,
+        });
+
+        if (reviewsResponse.error) {
+          console.error(reviewsResponse.error);
+        } else {
+          setIsModalOpen(false);
+          setReviewsData(reviewsResponse.reviews);
+        }
+      }
+    }
+  };
+
+  const loadMoreReviews = async () => {
+    setPage(prevPage => prevPage + 1);
+
+    const reviewsResponse: GetReviewResponse = await getReviews({
+      newsletterId: parseInt(router.query.newsletterId as string),
+      page: 1,
+      pageSize: 5 * (page + 1),
+    });
+
+    if (reviewsResponse.error) {
+      console.error(reviewsResponse.error);
+    } else {
+      setReviewsData(reviewsResponse.reviews);
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    reset();
+  };
+
+  if (!reviewsData) {
+    return <span>Loading...</span>;
+  }
+
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[320px]">
       <div className="!max-w-[1280px]">
@@ -37,7 +131,10 @@ const NewsletterPage = ({ newsletterData }: NewsletterPageProps) => {
         {newsletterData?.addedByUser && (
           <div className="flex gap-6">
             <Image
-              src={newsletterData?.addedByUser?.avatar as string}
+              src={
+                (newsletterData?.addedByUser?.avatar as string) ||
+                'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
+              }
               alt="avatar"
               width={112}
               height={112}
@@ -90,7 +187,10 @@ const NewsletterPage = ({ newsletterData }: NewsletterPageProps) => {
         )}
         {newsletterData?.image ? (
           <Image
-            src={newsletterData.image as string}
+            src={
+              (newsletterData.image as string) ||
+              'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
+            }
             width={1280}
             height={678}
             alt="banner"
@@ -152,37 +252,128 @@ const NewsletterPage = ({ newsletterData }: NewsletterPageProps) => {
           height="sm"
           fontSize="md"
           customStyles="!px-8 mb-8"
+          onClick={handleOpenModal}
         />
-        <div className="mb-8">
-          <div className="flex w-full pb-6 border-b border-light-grey">
-            <Image
-              src={newsletterData?.addedByUser?.avatar as string}
-              alt="avatar"
-              width={80}
-              height={80}
-              className="rounded-full max-h-[80px] max-w-full object-cover min-w-[80px] mr-[18px]"
-            />
-            <div className="mr-[88px]">
-              <p className="text-lightBlack text-xl">Bookbear express</p>
-              <p className="font-inter text-dark-grey text-sm">Torento</p>
-            </div>
-            <div className="w-full">
-              <div className="flex mb-4">
-                <StarRating readonly value={3} customStyles="flex-1" />
-                <span className="text-sm text-grey font-inter">
-                  about 3 hours ago
+        <Modal open={isModalOpen} handleClose={handleModalClose}>
+          <div>
+            <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
+              <Image
+                src={
+                  (newsletterData?.addedByUser?.avatar as string) ||
+                  'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
+                }
+                alt="avatar"
+                width={112}
+                height={112}
+                className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium text-lightBlack text-xl mb-3">
+                  {newsletterData?.newsletterAuthor}
+                </span>
+                <div className="flex items-center mb-3">
+                  <StarRating readonly value={3} customStyles="mr-2" />
+                  <span className="font-inter text-dark-grey text-sm mr-6">
+                    440
+                  </span>
+                  <span className="font-inter text-sm text-dark-grey">
+                    <span className="font-bold">207</span> Followers
+                  </span>
+                </div>
+                <span className="font-inter text-sm text-dark-grey">
+                  I create and curate content for both the blog and our training
+                  courses. He also directs the market research and strategic
+                  planning the site.
                 </span>
               </div>
-              <span className="text-lightBlack text-base font-inter">
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum is that it has a more-or-less
-                normal distribution of letters.
-              </span>
             </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex gap-4 items-center mb-14">
+                <span className="text-lightBlack font-semibold text-lg font-inter">
+                  Your rating
+                </span>
+                <StarRating
+                  error={Boolean(errors.rating)}
+                  errorText={errors.rating?.message}
+                  setValue={(index: number) => setValue('rating', index)}
+                />
+              </div>
+              <Input
+                variant="filled"
+                placeholder="Go ahead, we are listening..."
+                customStyles="w-full mb-9"
+                register={{ ...register('comment') }}
+              />
+              <div className="flex justify-center">
+                <Button
+                  label="Add"
+                  type="submit"
+                  size="full"
+                  customStyles="max-w-[400px]"
+                  rounded="xl"
+                  height="sm"
+                />
+              </div>
+            </form>
           </div>
+        </Modal>
+        <div className="mb-8">
+          {Boolean(reviewsData.reviews.length) &&
+            reviewsData.reviews.map((review, index) => (
+              <div
+                className={`flex w-full py-6 ${
+                  index + 1 < reviewsData.reviews.length && 'border-b'
+                } border-light-grey`}
+                key={review.id}
+              >
+                <Image
+                  src={
+                    (review.reviewer.avatar as string) ||
+                    'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
+                  }
+                  alt="avatar"
+                  width={80}
+                  height={80}
+                  className="rounded-full max-h-[80px] max-w-full object-cover min-w-[80px] mr-[18px]"
+                />
+                <div className="mr-[88px] w-[150px]">
+                  <p className="text-lightBlack text-xl">
+                    {review.reviewer.username}
+                  </p>
+                  <p className="font-inter text-dark-grey text-sm">
+                    {review.reviewer.country}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <div className="flex mb-4">
+                    <StarRating
+                      readonly
+                      value={review.rating}
+                      customStyles="flex-1"
+                    />
+                    <span className="text-sm text-grey font-inter">
+                      {timeAgo(review.createdAt as string)}
+                    </span>
+                  </div>
+                  <span className="text-lightBlack text-base font-inter">
+                    {review.comment}
+                  </span>
+                </div>
+              </div>
+            ))}
         </div>
-        <Button label="See more" variant="outlined-secondary" size="full" />
+        {Boolean(
+          reviewsData.total &&
+            reviewsData?.total > 5 &&
+            reviewsData.reviews.length < reviewsData?.total
+        ) && (
+          <Button
+            label="See more"
+            variant="outlined-secondary"
+            size="full"
+            onClick={loadMoreReviews}
+          />
+        )}
       </div>
     </div>
   );
@@ -190,19 +381,30 @@ const NewsletterPage = ({ newsletterData }: NewsletterPageProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { newsletterId } = context.params as { newsletterId: string };
+
   const response: GetNewsletterResponse = await getNewsletter({
     id: parseInt(newsletterId),
   });
-  if (response.error) {
+
+  const reviewsResponse: GetReviewResponse = await getReviews({
+    newsletterId: parseInt(newsletterId),
+    page: 1,
+    pageSize: 5,
+  });
+
+  if (response.error || reviewsResponse.error) {
     return {
       props: {
         newsletterData: null,
+        reviewsData: null,
       },
     };
   }
+
   return {
     props: {
       newsletterData: response.newsletterData,
+      reviews: reviewsResponse.reviews,
     },
   };
 };

@@ -56,7 +56,7 @@ const BasicInformation = ({
     const formattedStates = State.getStatesOfCountry(getValues().country).map(
       item => {
         return {
-          value: item.isoCode,
+          value: item.name,
           label: item.name,
         };
       }
