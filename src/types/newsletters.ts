@@ -28,4 +28,7 @@ export interface NewsletterData {
   newsletterAuthor?: string;
   interests?: Interest[];
   addedByUser?: User;
+  averageRating: number;
+  amountRatings: number;
+  link: string;
 }

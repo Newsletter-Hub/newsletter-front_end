@@ -24,7 +24,7 @@ import withLayout from '@/components/withLayout';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
-import ListIcon from '@/assets/icons/list';
+// import ListIcon from '@/assets/icons/list';
 import PlusIcon from '@/assets/icons/plus';
 import SubscribeIcon from '@/assets/icons/subscribe';
 
@@ -186,16 +186,18 @@ const NewsletterPage = ({
                   {newsletterData?.newsletterAuthor}
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    label={
-                      <div className="flex items-center justify-center gap-2">
-                        <PlusIcon />
-                        <span className="text-base">Follow</span>
-                      </div>
-                    }
-                    rounded="xl"
-                    height="sm"
-                  />
+                  <Link href={newsletterData.link}>
+                    <Button
+                      label={
+                        <div className="flex items-center justify-center gap-2">
+                          <PlusIcon />
+                          <span className="text-base">Follow</span>
+                        </div>
+                      }
+                      rounded="xl"
+                      height="sm"
+                    />
+                  </Link>
                   <Button
                     label={
                       <div className="flex items-center justify-center gap-2">
@@ -209,9 +211,13 @@ const NewsletterPage = ({
                 </div>
               </div>
               <div className="flex items-center mb-3">
-                <StarRating readonly value={3} customStyles="mr-2" />
+                <StarRating
+                  readonly
+                  value={newsletterData.addedByUser.averageUserRating}
+                  customStyles="mr-2"
+                />
                 <span className="font-inter text-dark-grey text-sm mr-6">
-                  440
+                  {newsletterData.addedByUser.amountUserRatings}
                 </span>
                 <span className="font-inter text-sm text-dark-grey">
                   <span className="font-bold">207</span> Followers
@@ -262,10 +268,12 @@ const NewsletterPage = ({
         </p>
         <div className="flex">
           <div className="flex gap-2 flex-1">
-            <StarRating readonly value={3} />
+            <StarRating readonly value={newsletterData?.averageRating} />
             <span className="font-inter text-sm text-dark-grey">
-              <span className="font-semibold">177 people</span> rated this
-              newsletter
+              <span className="font-semibold">
+                {newsletterData?.amountRatings} people
+              </span>{' '}
+              rated this newsletter
             </span>
           </div>
           <div className="flex gap-10 mb-20">
@@ -286,12 +294,13 @@ const NewsletterPage = ({
                 </div>
               )
             )}
-            <div className="flex gap-2 cursor-pointer">
+            {/* logic on future */}
+            {/* <div className="flex gap-2 cursor-pointer">
               <ListIcon />
               <span className="font-inter text-sm text-dark-grey">
                 Add to list
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
         <h2 className="text-lightBlack text-5xl font-medium mb-8">
@@ -322,9 +331,13 @@ const NewsletterPage = ({
                   {newsletterData?.newsletterAuthor}
                 </span>
                 <div className="flex items-center mb-3">
-                  <StarRating readonly value={3} customStyles="mr-2" />
+                  <StarRating
+                    readonly
+                    value={newsletterData?.addedByUser?.averageUserRating}
+                    customStyles="mr-2"
+                  />
                   <span className="font-inter text-dark-grey text-sm mr-6">
-                    440
+                    {newsletterData?.addedByUser?.amountUserRatings}
                   </span>
                   <span className="font-inter text-sm text-dark-grey">
                     <span className="font-bold">207</span> Followers
