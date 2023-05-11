@@ -38,32 +38,34 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
 
   const { register, handleSubmit } = useForm<NewsletterAddPayload>();
 
-  const onSubmit: SubmitHandler<NewsletterAddPayload> = () => {
-    newsletterVerifyOwnership({ link: payload.link })
-      .then(response => {
-        if (response && response.ok) {
-          router.push('/');
-        }
-      })
-      .catch(error => console.log(error));
+  const onSubmit: SubmitHandler<NewsletterAddPayload> = async () => {
+    try {
+      const response = await newsletterVerifyOwnership({ link: payload.link });
+      if (response && response.id) {
+        router.push(`${response.id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const onAdd: SubmitHandler<NewsletterAddPayload> = data => {
-    newsletterUpdate({
-      id: payload.id,
-      link: payload.link,
-      title: data.title,
-      newsletterAuthor: data.author,
-      description: data.description,
-      image: image,
-      interests: tags.map(item => item.id),
-    })
-      .then(response => {
-        if (response.ok) {
-          router.push('/');
-        }
-      })
-      .catch(error => console.log(error));
+  const onAdd: SubmitHandler<NewsletterAddPayload> = async data => {
+    try {
+      const response = await newsletterUpdate({
+        id: payload.id,
+        link: payload.link,
+        title: data.title,
+        newsletterAuthor: data.author,
+        description: data.description,
+        image: image,
+        interests: tags.map(item => item.id),
+      });
+      if (response && response.id) {
+        router.push(`${response.id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleAddTag = (tag: Interest) => {

@@ -1,5 +1,3 @@
-import { NextResponse } from 'next/server';
-
 import api from '@/config/ky';
 
 import { NewsletterData } from '@/types/newsletters';
@@ -30,7 +28,7 @@ export interface GetNewsletterResponse {
 
 export const newsletterVerifyOwnership = async ({
   link,
-}: NewsletterLink): Promise<NextResponse | undefined> => {
+}: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
   try {
     const response = await api.post('newsletters/verify-ownership', {
       json: { link },
@@ -64,7 +62,7 @@ export const newsletterUpdate = async ({
   newsletterAuthor,
   image,
   interests,
-}: Newsletter) => {
+}: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
   const formData = new FormData();
   link && formData.append('link', link as string);
   title && formData.append('title', title as string);
@@ -85,7 +83,11 @@ export const newsletterUpdate = async ({
       credentials: 'include',
     }
   );
-  return response;
+  if (response.ok) {
+    return await response.json();
+  } else {
+    return undefined;
+  }
 };
 
 export const getNewsletter = async ({
