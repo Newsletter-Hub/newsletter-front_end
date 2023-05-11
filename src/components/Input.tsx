@@ -88,7 +88,13 @@ const Input = ({
             />
           ))}
         {error && (
-          <p className="absolute text-sm text-red -bottom-5">{errorText}</p>
+          <p
+            className={`absolute text-sm text-red ${
+              checkNumberOfSymbols && maxLength ? '-bottom-10' : '-bottom-5'
+            }`}
+          >
+            {errorText}
+          </p>
         )}
       </div>
     </>
