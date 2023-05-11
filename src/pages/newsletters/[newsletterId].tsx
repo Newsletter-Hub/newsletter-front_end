@@ -30,6 +30,11 @@ import SubscribeIcon from '@/assets/icons/subscribe';
 
 import { GetNewsletterResponse, getNewsletter } from '../api/newsletters';
 import {
+  addToBookmark,
+  deleteBookmark,
+  getBookmarkById,
+} from '../api/newsletters/bookmarks';
+import {
   GetReviewResponse,
   ReviewResponse,
   createReview,
@@ -39,6 +44,7 @@ import {
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
   reviews?: ReviewResponse;
+  isBookmark?: 'none' | 'unauthorized' | 'added';
 }
 
 const validationSchema = z.object({
@@ -48,9 +54,14 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
+const NewsletterPage = ({
+  newsletterData,
+  reviews,
+  isBookmark,
+}: NewsletterPageProps) => {
   const [reviewsData, setReviewsData] = useState(reviews);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookmarkState, setBookmarkState] = useState(isBookmark);
   const [page, setPage] = useState(1);
   const router = useRouter();
   const handleOpenModal = () => {
@@ -64,7 +75,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     setValue,
     reset,
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-
+  console.log(bookmarkState);
   const onSubmit: SubmitHandler<ValidationSchema> = async ({
     rating,
     comment,
@@ -91,6 +102,32 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           setIsModalOpen(false);
           setReviewsData(reviewsResponse.reviews);
         }
+      }
+    }
+  };
+
+  const handleAddBookmark = async () => {
+    if (router.query.newsletterId) {
+      const response = await addToBookmark({
+        newsletterId: router.query.newsletterId as string,
+      });
+      if (response.error) {
+        console.error(response?.error);
+      } else if (!response.error) {
+        setBookmarkState('added');
+      }
+    }
+  };
+
+  const handleDeleteBookmark = async () => {
+    if (router.query.newsletterId) {
+      const response = await deleteBookmark({
+        newsletterId: router.query.newsletterId as string,
+      });
+      if (response.error) {
+        console.error(response?.error);
+      } else if (!response.error) {
+        setBookmarkState('none');
       }
     }
   };
@@ -232,12 +269,23 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             </span>
           </div>
           <div className="flex gap-10 mb-20">
-            <div className="flex gap-2 cursor-pointer">
-              <BookmarkIcon />
-              <span className="font-inter text-sm text-dark-grey">
-                Add to bookmarks
-              </span>
-            </div>
+            {bookmarkState === 'none' ? (
+              <div
+                className="flex gap-2 cursor-pointer"
+                onClick={handleAddBookmark}
+              >
+                <BookmarkIcon />
+                <span className="font-inter text-sm text-dark-grey">
+                  Add to bookmarks
+                </span>
+              </div>
+            ) : (
+              bookmarkState !== 'unauthorized' && (
+                <div onClick={handleDeleteBookmark}>
+                  <BookmarkIcon className="fill-primary cursor-pointer" />
+                </div>
+              )
+            )}
             <div className="flex gap-2 cursor-pointer">
               <ListIcon />
               <span className="font-inter text-sm text-dark-grey">
@@ -397,6 +445,17 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const token = cookies.accessToken ? cookies.accessToken : null;
   const userResponse = await getUserMe({ token } as { token: string });
 
+  let isBookmark = 'none';
+
+  if (!token) {
+    isBookmark = 'unauthorized';
+  } else {
+    const bookmarkResponse = await getBookmarkById({ newsletterId, token });
+    if (bookmarkResponse.bookmark) {
+      isBookmark = 'added';
+    }
+  }
+
   if (response.error || reviewsResponse.error) {
     return {
       props: {
@@ -411,6 +470,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       newsletterData: response.newsletterData,
       reviews: reviewsResponse.reviews,
       user: token ? userResponse : null,
+      isBookmark: isBookmark,
     },
   };
 };

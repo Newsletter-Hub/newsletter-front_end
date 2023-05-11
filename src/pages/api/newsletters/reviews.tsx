@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 import api from '@/config/ky';
 
 interface ReviewPayload {
