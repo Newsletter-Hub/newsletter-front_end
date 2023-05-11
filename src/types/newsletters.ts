@@ -30,4 +30,5 @@ export interface NewsletterData {
   addedByUser?: User;
   averageRating: number;
   amountRatings: number;
+  link: string;
 }

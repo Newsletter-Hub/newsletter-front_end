@@ -24,7 +24,7 @@ import withLayout from '@/components/withLayout';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
-import ListIcon from '@/assets/icons/list';
+// import ListIcon from '@/assets/icons/list';
 import PlusIcon from '@/assets/icons/plus';
 import SubscribeIcon from '@/assets/icons/subscribe';
 
@@ -186,16 +186,18 @@ const NewsletterPage = ({
                   {newsletterData?.newsletterAuthor}
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    label={
-                      <div className="flex items-center justify-center gap-2">
-                        <PlusIcon />
-                        <span className="text-base">Follow</span>
-                      </div>
-                    }
-                    rounded="xl"
-                    height="sm"
-                  />
+                  <Link href={newsletterData.link}>
+                    <Button
+                      label={
+                        <div className="flex items-center justify-center gap-2">
+                          <PlusIcon />
+                          <span className="text-base">Follow</span>
+                        </div>
+                      }
+                      rounded="xl"
+                      height="sm"
+                    />
+                  </Link>
                   <Button
                     label={
                       <div className="flex items-center justify-center gap-2">
