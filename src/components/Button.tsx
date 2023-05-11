@@ -28,7 +28,8 @@ interface ButtonProps {
 }
 
 const variants = {
-  primary: 'text-white bg-primary whitespace-nowrap py-10px px-7',
+  primary:
+    'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
   outlined:
     'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack',
