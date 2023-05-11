@@ -292,12 +292,13 @@ const NewsletterPage = ({
                 </div>
               )
             )}
-            <div className="flex gap-2 cursor-pointer">
+            {/* logic on future */}
+            {/* <div className="flex gap-2 cursor-pointer">
               <ListIcon />
               <span className="font-inter text-sm text-dark-grey">
                 Add to list
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
         <h2 className="text-lightBlack text-5xl font-medium mb-8">
