@@ -24,7 +24,6 @@ export const login = async ({ email, password, router }: User) => {
       .post('auth/sign-in', { json: { email, password } })
       .json()
       .then(() => router.push('/'));
-    localStorage.setItem('user', 'true');
     return response;
   } catch (error) {
     console.log(error);
