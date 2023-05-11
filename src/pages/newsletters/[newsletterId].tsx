@@ -328,9 +328,13 @@ const NewsletterPage = ({
                   {newsletterData?.newsletterAuthor}
                 </span>
                 <div className="flex items-center mb-3">
-                  <StarRating readonly value={3} customStyles="mr-2" />
+                  <StarRating
+                    readonly
+                    value={newsletterData?.addedByUser?.averageUserRating}
+                    customStyles="mr-2"
+                  />
                   <span className="font-inter text-dark-grey text-sm mr-6">
-                    440
+                    {newsletterData?.addedByUser?.amountUserRatings}
                   </span>
                   <span className="font-inter text-sm text-dark-grey">
                     <span className="font-bold">207</span> Followers
