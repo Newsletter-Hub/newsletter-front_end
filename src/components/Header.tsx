@@ -28,7 +28,6 @@ interface HeaderProps {
 }
 
 const Header = ({ user }: HeaderProps) => {
-  console.log(user);
   return (
     <div className="shadow-md">
       <div className="bg-white py-4 px-32 flex items-center font-inter">
