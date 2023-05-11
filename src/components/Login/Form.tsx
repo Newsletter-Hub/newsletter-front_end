@@ -46,8 +46,11 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-  const onSubmit: SubmitHandler<ValidationSchema> = ({ email, password }) => {
-    login({ email, password, router });
+  const onSubmit: SubmitHandler<ValidationSchema> = async ({
+    email,
+    password,
+  }) => {
+    await login({ email, password, router });
   };
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });
