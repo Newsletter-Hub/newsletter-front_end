@@ -82,7 +82,7 @@ const Form = () => {
           label="Login"
           size="full"
           rounded="xl"
-          disabled={isErrors}
+          disabled={!isErrors}
           type="submit"
           customStyles="mb-4"
         />
