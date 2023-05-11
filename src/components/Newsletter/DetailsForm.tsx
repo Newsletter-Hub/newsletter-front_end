@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useRouter } from 'next/router';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   newsletterUpdate,
@@ -19,26 +22,51 @@ import Button from '../Button';
 import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 
-interface NewsletterAddPayload {
-  title?: string;
-  description?: string;
-  author?: string;
-}
+const validationSchema = z.object({
+  title: z.string().min(1, { message: 'Title is required field' }),
+  description: z.string().min(1, { message: 'Description is required field' }),
+  author: z.string().min(1, { message: 'Author is required field' }),
+  image: z
+    .union([z.string(), z.unknown()])
+    .refine(
+      value => {
+        return typeof value === 'string' || value instanceof File;
+      },
+      { message: 'Image is a required field' }
+    )
+    .refine(
+      value => {
+        if (typeof value === 'string') {
+          return value.trim() !== '';
+        } else if (value instanceof File) {
+          return value.name !== '';
+        }
+        return false;
+      },
+      { message: 'Image is a required field' }
+    ),
+});
+
+type ValidationSchema = z.infer<typeof validationSchema>;
 
 const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [suggests, setSuggests] = useState<Interest[]>([]);
-  const [image, setImage] = useState<string | Blob>('');
 
   const autoCompleteRef = useRef(null);
 
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<NewsletterAddPayload>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
 
-  const onSubmit: SubmitHandler<NewsletterAddPayload> = async () => {
+  const onSubmit = async () => {
     try {
       const response = await newsletterVerifyOwnership({ link: payload.link });
       if (response && response.id) {
@@ -49,7 +77,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
     }
   };
 
-  const onAdd: SubmitHandler<NewsletterAddPayload> = async data => {
+  const onAdd: SubmitHandler<ValidationSchema> = async data => {
     try {
       const response = await newsletterUpdate({
         id: payload.id,
@@ -57,7 +85,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
         title: data.title,
         newsletterAuthor: data.author,
         description: data.description,
-        image: image,
+        image: data.image as File,
         interests: tags.map(item => item.id),
       });
       if (response && response.id) {
@@ -109,7 +137,9 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
     setInputValue('');
   };
 
-  const handleSetValue = (value: string | Blob) => setImage(value);
+  const handleSetValue = (value: string | File) => {
+    setValue('image', value);
+  };
 
   useOnClickOutside(autoCompleteRef, handleClickOutside);
 
@@ -118,7 +148,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onAdd)}>
       <div className="mb-6">
         <div className="flex flex-col gap-12">
           <Input
@@ -126,6 +156,8 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
             variant="filled"
             register={{ ...register('title') }}
             customStyles="w-full"
+            error={Boolean(errors.title)}
+            errorText={errors.title?.message}
           />
           <Input
             placeholder="Description"
@@ -134,14 +166,23 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
             maxLength={300}
             checkNumberOfSymbols
             customStyles="w-full"
+            error={Boolean(errors.description)}
+            errorText={errors.description?.message}
           />
           <Input
             placeholder="Author"
             variant="filled"
             register={{ ...register('author') }}
             customStyles="w-full"
+            error={Boolean(errors.author)}
+            errorText={errors.author?.message}
           />
-          <FileDownloader setValue={handleSetValue} variant="lg" />
+          <FileDownloader
+            setValue={handleSetValue}
+            variant="lg"
+            error={Boolean(errors.image)}
+            errorText={errors.image?.message}
+          />
           <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap">
             {Boolean(tags.length) &&
               tags.map(item => (
@@ -202,7 +243,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           label="Verify Ownership"
           size="full"
           rounded="xl"
-          type="submit"
+          onClick={onSubmit}
           variant="outlined-primary"
           fontSize="md"
         />
@@ -211,7 +252,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           size="full"
           rounded="xl"
           fontSize="md"
-          onClick={handleSubmit(onAdd)}
+          type="submit"
         />
       </div>
     </form>

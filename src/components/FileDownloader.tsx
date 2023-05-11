@@ -27,7 +27,7 @@ interface FileDownloaderProps {
   payload?: object;
   variant?: 'base' | 'lg';
   error?: boolean;
-  errorMessage?: string;
+  errorText?: string;
 }
 
 const FileDownloader = ({
@@ -36,7 +36,7 @@ const FileDownloader = ({
   payload,
   variant = 'base',
   error,
-  errorMessage,
+  errorText,
 }: FileDownloaderProps) => {
   const user = useContext(UserContext);
   const ref = useRef<HTMLInputElement>(null);
@@ -154,7 +154,7 @@ const FileDownloader = ({
           </div>
           {error && (
             <span className="absolute bottom-0 text-red font-inter text-sm">
-              {errorMessage}
+              {errorText}
             </span>
           )}
         </div>
