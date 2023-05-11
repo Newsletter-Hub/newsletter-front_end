@@ -52,7 +52,6 @@ const Form = () => {
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });
   };
-  const isErrors = Boolean(Object.keys(errors).length);
   return (
     <>
       <form
@@ -82,7 +81,6 @@ const Form = () => {
           label="Login"
           size="full"
           rounded="xl"
-          disabled={!isErrors}
           type="submit"
           customStyles="mb-4"
         />
