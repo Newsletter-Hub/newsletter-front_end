@@ -30,7 +30,7 @@ export interface GetNewsletterResponse {
 
 export const newsletterVerifyOwnership = async ({
   link,
-}: NewsletterLink): Promise<NextResponse | undefined> => {
+}: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
   try {
     const response = await api.post('newsletters/verify-ownership', {
       json: { link },
