@@ -27,7 +27,7 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
       </Head>
       <GoogleOAuthProvider clientId="373284142318-di7t0hm27ac0ll9vtl93l5d5kmlkg67q.apps.googleusercontent.com">
         <div className={alegreya.className}>
-          <div className="flex h-[100vh]">
+          <div className="flex h-[100vh] overflow-hidden">
             <div className="w-[55%] bg-primary-light h-full pt-[64px] pl-[56px]">
               <div className="flex flex-col">
                 <Logo className="mb-[108px]" />
