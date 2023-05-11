@@ -152,6 +152,7 @@ const NewsletterPage = ({
     setIsModalOpen(false);
     reset();
   };
+  const encodedURL = encodeURIComponent(newsletterData?.image as string);
 
   if (!reviewsData) {
     return <span>Loading...</span>;
@@ -170,7 +171,7 @@ const NewsletterPage = ({
           {newsletterData?.title}
         </h1>
         {newsletterData?.addedByUser && (
-          <div className="flex gap-6">
+          <div className="flex gap-6 mb-10">
             <Avatar
               src={newsletterData?.addedByUser?.avatar as string}
               alt="avatar"
@@ -227,10 +228,7 @@ const NewsletterPage = ({
         )}
         {newsletterData?.image ? (
           <Image
-            src={
-              (newsletterData.image as string) ||
-              'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
-            }
+            src={`/api/imageproxy/${encodedURL}` as string}
             width={1280}
             height={678}
             alt="banner"
