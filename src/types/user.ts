@@ -3,6 +3,8 @@ export interface User {
   email?: string;
   username?: string;
   avatar?: string;
+  averageUserRating: number;
+  amountUserRatings: number;
 }
 
 export interface UserMe {

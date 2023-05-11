@@ -209,9 +209,13 @@ const NewsletterPage = ({
                 </div>
               </div>
               <div className="flex items-center mb-3">
-                <StarRating readonly value={3} customStyles="mr-2" />
+                <StarRating
+                  readonly
+                  value={newsletterData.addedByUser.averageUserRating}
+                  customStyles="mr-2"
+                />
                 <span className="font-inter text-dark-grey text-sm mr-6">
-                  440
+                  {newsletterData.addedByUser.amountUserRatings}
                 </span>
                 <span className="font-inter text-sm text-dark-grey">
                   <span className="font-bold">207</span> Followers
@@ -262,10 +266,12 @@ const NewsletterPage = ({
         </p>
         <div className="flex">
           <div className="flex gap-2 flex-1">
-            <StarRating readonly value={3} />
+            <StarRating readonly value={newsletterData?.averageRating} />
             <span className="font-inter text-sm text-dark-grey">
-              <span className="font-semibold">177 people</span> rated this
-              newsletter
+              <span className="font-semibold">
+                {newsletterData?.amountRatings} people
+              </span>{' '}
+              rated this newsletter
             </span>
           </div>
           <div className="flex gap-10 mb-20">
