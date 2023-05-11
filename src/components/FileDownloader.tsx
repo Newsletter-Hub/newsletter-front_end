@@ -26,6 +26,8 @@ interface FileDownloaderProps {
   setPayload?: Dispatch<SetStateAction<Payload>>;
   payload?: object;
   variant?: 'base' | 'lg';
+  error?: boolean;
+  errorMessage?: string;
 }
 
 const FileDownloader = ({
@@ -33,6 +35,8 @@ const FileDownloader = ({
   setPayload,
   payload,
   variant = 'base',
+  error,
+  errorMessage,
 }: FileDownloaderProps) => {
   const user = useContext(UserContext);
   const ref = useRef<HTMLInputElement>(null);
@@ -129,7 +133,9 @@ const FileDownloader = ({
         </>
       ) : (
         <div
-          className="flex flex-col px-11 py-12 bg-primary-light rounded-2xl border border-primary border-dashed justify-center items-center cursor-pointer"
+          className={`flex flex-col px-11 py-12 bg-primary-light rounded-2xl border ${
+            error ? 'border-red' : 'border-primary'
+          } border-dashed justify-center items-center cursor-pointer relative`}
           onClick={e => handleClick(e)}
         >
           <div className="mb-6">
@@ -146,6 +152,11 @@ const FileDownloader = ({
               </p>
             </div>
           </div>
+          {error && (
+            <span className="absolute bottom-0 text-red font-inter text-sm">
+              {errorMessage}
+            </span>
+          )}
         </div>
       )}
     </div>
