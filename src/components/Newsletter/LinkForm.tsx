@@ -1,6 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useRouter } from 'next/router';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterLinkResponse } from '@/pages/api/newsletters';
@@ -29,6 +31,8 @@ const LinkForm = ({
   setStep,
   step,
 }: NewsletterFormProps) => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -36,8 +40,16 @@ const LinkForm = ({
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
-  const onSubmit: SubmitHandler<ValidationSchema> = data => {
-    newsletterVerifyOwnership({ link: data.link });
+  const onSubmit: SubmitHandler<ValidationSchema> = async data => {
+    try {
+      const response = await newsletterVerifyOwnership({ link: data.link });
+      if (response && response.id) {
+        console.log(response);
+        router.push(`${response.id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   const onAdd: SubmitHandler<ValidationSchema> = data => {
     newsletterLink({ link: data.link })

@@ -152,6 +152,7 @@ const NewsletterPage = ({
     setIsModalOpen(false);
     reset();
   };
+  const encodedURL = encodeURIComponent(newsletterData?.image as string);
 
   if (!reviewsData) {
     return <span>Loading...</span>;
@@ -170,7 +171,7 @@ const NewsletterPage = ({
           {newsletterData?.title}
         </h1>
         {newsletterData?.addedByUser && (
-          <div className="flex gap-6">
+          <div className="flex gap-6 mb-10">
             <Avatar
               src={newsletterData?.addedByUser?.avatar as string}
               alt="avatar"
@@ -231,12 +232,9 @@ const NewsletterPage = ({
             </div>
           </div>
         )}
-        {newsletterData?.image ? (
+        {newsletterData?.image && (
           <Image
-            src={
-              (newsletterData.image as string) ||
-              'https://www.flaticon.com/free-icon/profile_3135715?term=avatar&page=1&position=4&origin=tag&related_id=3135715'
-            }
+            src={`/api/imageproxy/${encodedURL}` as string}
             width={1280}
             height={678}
             alt="banner"
@@ -244,28 +242,24 @@ const NewsletterPage = ({
             placeholder="blur"
             blurDataURL={newsletterData.image as string}
           />
-        ) : (
-          <Image
-            src=""
-            width={1280}
-            height={678}
-            alt="banner"
-            className="w-full h-auto mb-6"
-          />
         )}
-        <div className="flex gap-2 mb-10">
-          {newsletterData?.interests?.map(interest => (
-            <span
-              key={interest.id}
-              className="bg-primary/10 text-primary rounded-lg py-2 px-3.5 font-inter text-base"
-            >
-              {interest.interestName}
-            </span>
-          ))}
-        </div>
-        <p className="font-inter text-dark-grey text-lg pb-10 border-b border-light-grey mb-10">
-          {newsletterData?.description}
-        </p>
+        {Boolean(newsletterData?.interests?.length) && (
+          <div className="flex gap-2 mb-10">
+            {newsletterData?.interests?.map(interest => (
+              <span
+                key={interest.id}
+                className="bg-primary/10 text-primary rounded-lg py-2 px-3.5 font-inter text-base"
+              >
+                {interest.interestName}
+              </span>
+            ))}
+          </div>
+        )}
+        {newsletterData?.description && (
+          <p className="font-inter text-dark-grey text-lg pb-10 border-b border-light-grey mb-10">
+            {newsletterData?.description}
+          </p>
+        )}
         <div className="flex">
           <div className="flex gap-2 flex-1">
             <StarRating readonly value={newsletterData?.averageRating} />
