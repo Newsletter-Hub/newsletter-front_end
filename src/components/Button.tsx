@@ -36,7 +36,7 @@ const variants = {
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-light-grey border-light-grey',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey',
 };
 
 const weights = {

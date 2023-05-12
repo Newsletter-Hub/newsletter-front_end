@@ -52,6 +52,7 @@ module.exports = {
       'light-porcelain': '#F4F5F6',
       red: '#FF0000',
       yellow: '#F7B500',
+      blue: '#23459F',
     },
   },
   plugins: [],

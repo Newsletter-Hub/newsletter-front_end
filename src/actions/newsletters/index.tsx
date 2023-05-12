@@ -108,3 +108,23 @@ export const getNewsletter = async ({
     };
   }
 };
+
+export const getNewslettersList = async ({
+  page = 1,
+  pageSize = 5,
+}: {
+  page?: number;
+  pageSize?: number;
+}) => {
+  try {
+    const newslettersListData: NewsletterData[] = await api
+      .get('newsletters', { searchParams: { page, pageSize } })
+      .json();
+    return { newslettersListData };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: 'Failed to get newsletter',
+    };
+  }
+};
