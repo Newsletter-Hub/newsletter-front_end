@@ -22,7 +22,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (setCookieHeader) {
         console.log(setCookieHeader);
-        res.setHeader('Set-Cookie', setCookieHeader);
+        res.setHeader('Set-Cookie', [
+          `accessToken=${setCookieHeader}; Path=/; HttpOnly; SameSite=None; Secure`,
+        ]);
       } else {
         throw new Error('JWT cookie not found in backend response');
       }
