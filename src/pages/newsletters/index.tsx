@@ -76,19 +76,24 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
                 width={224}
                 height={224}
               />
-              <div className="h-[224px]">
+              <div className="h-[224px] w-full">
                 <span
                   className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2
                 "
                 >
                   {newsletter.title}
                 </span>
-                <span className="font-inter text-base text-lightBlack mb-6">
+                <span className="font-inter text-base text-lightBlack mb-6 block">
                   {newsletter.description}
                 </span>
-                <div className="flex mb-6 h-10">
+                <div className="flex mb-6 gap-2">
                   {newsletter.interests?.map(interest => (
-                    <span key={interest.id}>{interest.interestName}</span>
+                    <span
+                      key={interest.id}
+                      className="bg-primary/10 text-primary rounded-lg px-[14px] py-2 text-base font-inter"
+                    >
+                      {interest.interestName}
+                    </span>
                   ))}
                 </div>
                 <div className="flex items-center">
