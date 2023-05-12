@@ -21,10 +21,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const setCookieHeader = backendResponse.headers.get('Set-Cookie');
 
       if (setCookieHeader) {
-        console.log(setCookieHeader);
-        res.setHeader('Set-Cookie', [
-          `accessToken=${setCookieHeader}; Path=/; HttpOnly; SameSite=None; Secure`,
-        ]);
+        const cookies = setCookieHeader
+          .split(',')
+          .map(cookie => cookie.split(';')[0]);
+        const accessToken = cookies.find(cookie =>
+          cookie.startsWith('accessToken')
+        );
+        if (accessToken) {
+          res.setHeader('Set-Cookie', [
+            `accessToken=${
+              accessToken.split('=')[1]
+            }; Path=/; HttpOnly; SameSite=None; Secure`,
+          ]);
+        }
       } else {
         throw new Error('JWT cookie not found in backend response');
       }
