@@ -22,6 +22,7 @@ export interface NewsletterFormProps {
 }
 
 export interface NewsletterData {
+  id?: number;
   title?: string;
   description?: string;
   image?: string;
