@@ -5,37 +5,16 @@ interface SearchProps {
 const Search = ({ className }: SearchProps) => {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 25 24"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
       <path
-        d="M20.5 11C20.5 15.97 16.47 20 11.5 20C6.53 20 2.5 15.97 2.5 11C2.5 6.03 6.53 2 11.5 2"
-        stroke="#292D32"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M19.4304 20.6898C19.9604 22.2898 21.1704 22.4498 22.1004 21.0498C22.9504 19.7698 22.3904 18.7198 20.8504 18.7198C19.7104 18.7098 19.0704 19.5998 19.4304 20.6898Z"
-        stroke="#292D32"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M14.5 5H20.5"
-        stroke="#292D32"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M14.5 8H17.5"
-        stroke="#292D32"
+        d="M18 18L14 14M15.3333 10.6667C15.3333 11.2795 15.2126 11.8863 14.9781 12.4525C14.7436 13.0187 14.3998 13.5332 13.9665 13.9665C13.5332 14.3998 13.0187 14.7436 12.4525 14.9781C11.8863 15.2126 11.2795 15.3333 10.6667 15.3333C10.0538 15.3333 9.447 15.2126 8.88081 14.9781C8.31462 14.7436 7.80018 14.3998 7.36683 13.9665C6.93349 13.5332 6.58975 13.0187 6.35523 12.4525C6.12071 11.8863 6 11.2795 6 10.6667C6 9.42899 6.49167 8.242 7.36683 7.36683C8.242 6.49167 9.42899 6 10.6667 6C11.9043 6 13.0913 6.49167 13.9665 7.36683C14.8417 8.242 15.3333 9.42899 15.3333 10.6667Z"
+        stroke="#253646"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

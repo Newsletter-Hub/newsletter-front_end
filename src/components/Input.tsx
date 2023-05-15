@@ -20,6 +20,8 @@ interface InputProps {
   maxLength?: number;
   checkNumberOfSymbols?: boolean;
   label?: string;
+  wrapperStyles?: string;
+  iconStyles?: string;
 }
 
 const variants = {
@@ -42,6 +44,8 @@ const Input = ({
   maxLength,
   checkNumberOfSymbols,
   label,
+  wrapperStyles,
+  iconStyles,
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -51,6 +55,7 @@ const Input = ({
     customStyles,
     'font-inter'
   );
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'relative flex ');
   const [value, setValue] = useState('');
   return (
     <>
@@ -59,8 +64,7 @@ const Input = ({
           {label}
         </p>
       )}
-      <div className="relative flex">
-        {isSearch && <Search className="absolute right-3 top-2.5" />}
+      <div className={wrapperFormattedStyles}>
         <input
           className={styles}
           placeholder={placeholder}
@@ -70,6 +74,11 @@ const Input = ({
           value={value}
           onChange={e => setValue(e.target.value)}
         />
+        {isSearch && (
+          <Search
+            className={`absolute right-3 top-1.5 ${iconStyles && iconStyles}`}
+          />
+        )}
         {checkNumberOfSymbols && maxLength && (
           <span className="absolute text-xs -bottom-6 left-2 text-light-grey font-inter">
             {value.length}/{maxLength}

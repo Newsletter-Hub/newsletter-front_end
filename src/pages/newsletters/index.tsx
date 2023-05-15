@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import Image from 'next/image';
 
 import { NewsletterData } from '@/types/newsletters';
 
 import Button from '@/components/Button';
+import Input from '@/components/Input';
+import Popover from '@/components/Popover';
 import StarRating from '@/components/StarRating';
 import withLayout from '@/components/withLayout';
 
 import BookmarkIcon from '@/assets/icons/bookmark';
+import CheckIcon from '@/assets/icons/check';
+import FilterIcon from '@/assets/icons/filter';
+import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
 import { getNewslettersList } from '../api/newsletters';
@@ -26,11 +31,36 @@ interface Newsletter {
   newsletters?: NewsletterData[];
 }
 
+interface SortType {
+  label: string;
+  value: string;
+}
+
+const sortTypes: SortType[] = [
+  {
+    label: 'Data added',
+    value: 'added',
+  },
+  {
+    label: 'Number of followers',
+    value: 'followers',
+  },
+  {
+    label: 'Number of bookmarks',
+    value: 'bookmarks',
+  },
+  {
+    label: 'Rating',
+    value: 'rating',
+  },
+];
+
 const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
   const [page, setPage] = useState(1);
+  const [choosedSortType, setChoosedSortType] = useState(3);
   const loadMoreNewsletters = async () => {
     setPage(prevPage => prevPage + 1);
 
@@ -56,8 +86,57 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
-        <div className="flex justify-start items-start mb-10">
-          <h1 className="text-blue text-7xl font-medium">Newsletters List</h1>
+        <h1 className="text-blue text-7xl font-medium mb-10">
+          Newsletters List
+        </h1>
+        <div className="flex mb-10 items-center">
+          <div className="flex-grow">
+            <Input
+              isSearch
+              placeholder="Search Newsletter Hub"
+              wrapperStyles="max-w-[262px]"
+              customStyles="h-[48px]"
+              iconStyles="!top-3"
+            />
+          </div>
+          <div className="flex gap-4">
+            <Button
+              variant="outlined-secondary"
+              label={
+                <span className="flex text-base justify-center px-6 gap-2">
+                  <FilterIcon />
+                  Filters
+                </span>
+              }
+            />
+            <Popover
+              buttonLabel={
+                <span className="flex text-base justify-center items-center px-6 gap-4">
+                  {sortTypes[choosedSortType].label}
+                  <SortIcon />
+                </span>
+              }
+            >
+              <div className="flex flex-col gap-[6px] py-[18px]">
+                {sortTypes.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <div
+                      className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
+                        choosedSortType === index &&
+                        'bg-light-porcelain rounded'
+                      }`}
+                      onClick={() => setChoosedSortType(index)}
+                    >
+                      <span className="flex-1">{item.label}</span>
+                      <div className="w-4">
+                        {index === choosedSortType && <CheckIcon />}
+                      </div>
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            </Popover>
+          </div>
         </div>
         {newslettersData.newsletters.map((newsletter, index) => {
           const imageLink = encodeURIComponent(newsletter.image as string);
