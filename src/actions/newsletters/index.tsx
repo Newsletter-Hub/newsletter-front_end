@@ -1,6 +1,4 @@
-import ky from 'ky';
-
-import api from '@/config/ky';
+import api, { postApi } from '@/config/ky';
 
 import { NewsletterData } from '@/types/newsletters';
 
@@ -32,7 +30,7 @@ export const newsletterVerifyOwnership = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
   try {
-    const response = await ky.post('/api/newsletters/verify-ownership', {
+    const response = await postApi.post('newsletters/verify-ownership', {
       json: { link },
       credentials: 'include',
     });

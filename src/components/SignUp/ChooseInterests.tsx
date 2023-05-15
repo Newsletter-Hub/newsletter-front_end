@@ -32,12 +32,17 @@ const ChooseInterests = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     delete payload.avatarURL;
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(([key, value]) => value !== undefined)
     );
-    updateUser(formattedPayload).then(() => router.push('/'));
+    const response = await updateUser(formattedPayload);
+    if (response && !response.error) {
+      router.push('/');
+    } else {
+      console.error(response?.error);
+    }
   };
   return (
     <>

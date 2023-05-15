@@ -1,9 +1,14 @@
-import api from '@/config/ky';
+import api, { postApi } from '@/config/ky';
 
 import { Payload } from '@/types/signup';
 
 interface GetUserMePayload {
   token?: string;
+}
+
+interface UpdateUserResponse {
+  error?: string;
+  response?: object;
 }
 
 export const updateUser = async ({
@@ -14,7 +19,7 @@ export const updateUser = async ({
   profileType,
   avatar,
   interests,
-}: Payload) => {
+}: Payload): Promise<UpdateUserResponse | undefined> => {
   try {
     const formData = new FormData();
     dateBirth && formData.append('dateOfBirth', dateBirth as string);
@@ -28,17 +33,15 @@ export const updateUser = async ({
         formData.append('interestIds[]', JSON.stringify(interests[i]));
       }
     }
-    const response = await fetch(
-      'https://newsletter-back-quzx.onrender.com/users',
-      {
-        body: formData,
-        method: 'PUT',
-        credentials: 'include',
-      }
-    );
-    return response;
+    const response = await fetch('/api/users', {
+      body: formData,
+      method: 'PUT',
+      credentials: 'include',
+    });
+    return { response };
   } catch (error) {
     console.log(error);
+    return { error: 'Failed to update user' };
   }
 };
 

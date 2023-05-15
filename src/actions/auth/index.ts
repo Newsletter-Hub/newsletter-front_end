@@ -1,8 +1,7 @@
-import ky from 'ky';
-
 import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
 
+import { postApi } from '@/config/ky';
 import api from '@/config/ky';
 
 interface User {
@@ -22,8 +21,8 @@ interface SignupUser extends User {
 
 export const login = async ({ email, password, router }: User) => {
   try {
-    const response = await ky
-      .post('/api/auth/sign-in', {
+    const response = await postApi
+      .post('auth/sign-in', {
         json: { email, password },
       })
       .json()
