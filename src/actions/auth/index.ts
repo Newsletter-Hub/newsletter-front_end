@@ -23,7 +23,9 @@ interface SignupUser extends User {
 export const login = async ({ email, password, router }: User) => {
   try {
     const response = await ky
-      .post('/api/sign-in', { json: { email, password } })
+      .post('/api/auth/sign-in', {
+        json: { email, password },
+      })
       .json()
       .then(() => router.push('/'));
     return response;
