@@ -10,9 +10,8 @@ const CheckIcon = ({ className }: { className?: string }) => {
     >
       <path
         d="M1.0002 8.23249L5.88388 13.1161L15 4"
-        stroke="#253646"
-        stroke-width="1.5"
-        stroke-linecap="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
     </svg>
   );
