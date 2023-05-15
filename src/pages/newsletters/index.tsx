@@ -1,3 +1,5 @@
+import { getNewslettersList } from '@/actions/newsletters';
+import { getInterests } from '@/actions/user/interests';
 import React, { useState } from 'react';
 
 import { Alegreya } from 'next/font/google';
@@ -22,9 +24,6 @@ import CheckIcon from '@/assets/icons/check';
 import FilterIcon from '@/assets/icons/filter';
 import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
-
-import { getNewslettersList } from '../api/newsletters';
-import { getInterests } from '../api/user/interests';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
