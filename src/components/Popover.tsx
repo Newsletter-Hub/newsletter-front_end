@@ -1,7 +1,5 @@
 import * as RadixPopover from '@radix-ui/react-popover';
 
-import Button from './Button';
-
 interface RadixPopoverProps {
   buttonLabel: string | JSX.Element;
   children?: JSX.Element;
