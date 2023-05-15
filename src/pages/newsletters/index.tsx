@@ -76,6 +76,7 @@ const NewslettersPage = ({
   const [page, setPage] = useState(1);
   const [choosedSortType, setChoosedSortType] = useState(3);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [filters, setFilters] = useState({ categories: false });
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
@@ -102,6 +103,7 @@ const NewslettersPage = ({
     'text-lightBlack text-5xl mb-6 text-center',
     alegreya.className
   );
+  console.log(filters);
   if (
     !newslettersListData ||
     !newslettersData ||
@@ -142,7 +144,13 @@ const NewslettersPage = ({
                 <h2 className={modalTitleStyles}>
                   What would you like to filter by?
                 </h2>
-                <Accordion label="Categories">
+                <Accordion
+                  label="Categories"
+                  isOpen={filters.categories}
+                  setIsOpen={value => {
+                    setFilters({ ...filters, categories: value });
+                  }}
+                >
                   <div className="pt-4 pl-9 grid grid-cols-2 gap-4">
                     {interests?.map(interest => (
                       <Checkbox
