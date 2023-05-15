@@ -2,14 +2,9 @@ import ky from 'ky';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const postApi = ky.create({
-  prefixUrl: '/api/',
-  credentials: 'include',
-});
+const isServer = typeof window === 'undefined';
 
-const api = ky.create({
-  prefixUrl: baseUrl,
-  credentials: 'include',
+export const api = ky.create({
+  prefixUrl: isServer ? `${baseUrl}/api/` : '/api/',
 });
-
 export default api;

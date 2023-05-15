@@ -1,4 +1,4 @@
-import api, { postApi } from '@/config/ky';
+import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
 
