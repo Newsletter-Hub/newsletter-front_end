@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 
+import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
 
+import clsx from 'clsx';
+
+import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
 
+import Accordion from '@/components/Accordion';
 import Button from '@/components/Button';
+import Checkbox from '@/components/Checkbox';
 import Input from '@/components/Input';
+import Modal from '@/components/Modal';
 import Popover from '@/components/Popover';
 import StarRating from '@/components/StarRating';
 import withLayout from '@/components/withLayout';
@@ -17,6 +24,9 @@ import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
 import { getNewslettersList } from '../api/newsletters';
+import { getInterests } from '../api/user/interests';
+
+const alegreya = Alegreya({ subsets: ['latin'] });
 
 export interface NewslettersListData {
   total: number;
@@ -25,6 +35,7 @@ export interface NewslettersListData {
 
 interface NewslettersPageProps {
   newslettersListData?: NewslettersListData;
+  interests?: Interest[];
 }
 interface Newsletter {
   total?: number;
@@ -55,12 +66,24 @@ const sortTypes: SortType[] = [
   },
 ];
 
-const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
+const NewslettersPage = ({
+  newslettersListData,
+  interests,
+}: NewslettersPageProps) => {
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
   const [page, setPage] = useState(1);
   const [choosedSortType, setChoosedSortType] = useState(3);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
   const loadMoreNewsletters = async () => {
     setPage(prevPage => prevPage + 1);
 
@@ -75,11 +98,15 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
   };
-
+  const modalTitleStyles = clsx(
+    'text-lightBlack text-5xl mb-6 text-center',
+    alegreya.className
+  );
   if (
     !newslettersListData ||
     !newslettersData ||
-    !newslettersData.newsletters
+    !newslettersData.newsletters ||
+    !interests?.length
   ) {
     return <span>loading..</span>;
   }
@@ -102,6 +129,7 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
           <div className="flex gap-4">
             <Button
               variant="outlined-secondary"
+              onClick={handleOpenModal}
               label={
                 <span className="flex text-base justify-center px-6 gap-2">
                   <FilterIcon />
@@ -109,6 +137,23 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
                 </span>
               }
             />
+            <Modal open={isOpenModal} handleClose={handleCloseModal}>
+              <div>
+                <h2 className={modalTitleStyles}>
+                  What would you like to filter by?
+                </h2>
+                <Accordion label="Categories">
+                  <div className="pt-4 pl-9 grid grid-cols-2 gap-4">
+                    {interests?.map(interest => (
+                      <Checkbox
+                        label={interest.interestName}
+                        key={interest.id}
+                      />
+                    ))}
+                  </div>
+                </Accordion>
+              </div>
+            </Modal>
             <Popover
               buttonLabel={
                 <span className="flex text-base justify-center items-center px-6 gap-4">
@@ -129,7 +174,9 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
                     >
                       <span className="flex-1">{item.label}</span>
                       <div className="w-4">
-                        {index === choosedSortType && <CheckIcon />}
+                        {index === choosedSortType && (
+                          <CheckIcon className="stroke-[#253646]" />
+                        )}
                       </div>
                     </div>
                   </React.Fragment>
@@ -204,7 +251,8 @@ const NewslettersPage = ({ newslettersListData }: NewslettersPageProps) => {
 
 export const getServerSideProps = async () => {
   const newsletterList = await getNewslettersList({ page: 1, pageSize: 6 });
-  if (!newsletterList) {
+  const interests = await getInterests();
+  if (!newsletterList || !interests) {
     return {
       notFound: true,
     };
@@ -212,6 +260,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       newslettersListData: newsletterList.newslettersListData || null,
+      interests: interests,
     },
   };
 };
