@@ -7,7 +7,7 @@ import DetailsForm from '@/components/Newsletter/DetailsForm';
 import LinkForm from '@/components/Newsletter/LinkForm';
 import withLayout from '@/components/withLayout';
 
-import { getInterests } from '../api/user/interests';
+import { getInterests } from '../../actions/user/interests';
 
 interface AddNewsletterProps {
   interests?: Interest[];

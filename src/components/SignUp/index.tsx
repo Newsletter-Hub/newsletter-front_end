@@ -1,3 +1,5 @@
+import { googleAuth } from '@/actions/auth';
+import { signup } from '@/actions/auth';
 import { Dispatch, SetStateAction } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -5,9 +7,6 @@ import { z } from 'zod';
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { googleAuth } from '@/pages/api/auth';
-import { signup } from '@/pages/api/auth';
 
 import { GoogleLogin } from '@react-oauth/google';
 

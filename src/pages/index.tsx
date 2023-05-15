@@ -1,7 +1,7 @@
+import { getUserMe } from '@/actions/user';
+
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
-
-import { getUserMe } from '@/pages/api/user';
 
 import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 import MainBlock from '@/components/HomePage/MainBlock';

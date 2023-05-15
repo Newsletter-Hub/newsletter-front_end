@@ -1,3 +1,4 @@
+import { getUserMe } from '@/actions/user';
 import timeAgo from '@/helpers/timeAgo';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -10,8 +11,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { getUserMe } from '@/pages/api/user';
 
 import { NewsletterData } from '@/types/newsletters';
 
@@ -28,18 +27,21 @@ import BookmarkIcon from '@/assets/icons/bookmark';
 import PlusIcon from '@/assets/icons/plus';
 import SubscribeIcon from '@/assets/icons/subscribe';
 
-import { GetNewsletterResponse, getNewsletter } from '../api/newsletters';
+import {
+  GetNewsletterResponse,
+  getNewsletter,
+} from '../../actions/newsletters';
 import {
   addToBookmark,
   deleteBookmark,
   getBookmarkById,
-} from '../api/newsletters/bookmarks';
+} from '../../actions/newsletters/bookmarks';
 import {
   GetReviewResponse,
   ReviewResponse,
   createReview,
   getReviews,
-} from '../api/newsletters/reviews';
+} from '../../actions/newsletters/reviews';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;

@@ -1,3 +1,4 @@
+import { googleAuth, login } from '@/actions/auth';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -5,8 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { googleAuth, login } from '@/pages/api/auth';
 
 import { GoogleLogin } from '@react-oauth/google';
 

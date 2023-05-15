@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import withLayout from '@/components/withLayout';
 
-import { forgotPassword } from '../api/auth';
+import { forgotPassword } from '../../actions/auth';
 
 const validationSchema = z.object({
   email: z

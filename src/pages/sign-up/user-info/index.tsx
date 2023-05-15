@@ -1,6 +1,5 @@
+import { getInterests } from '@/actions/user/interests';
 import React, { useState } from 'react';
-
-import { getInterests } from '@/pages/api/user/interests';
 
 import { Interest } from '@/types/interests';
 import { Payload } from '@/types/signup';

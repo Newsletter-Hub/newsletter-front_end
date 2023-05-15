@@ -1,11 +1,10 @@
+import { resetPassword } from '@/actions/auth';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { resetPassword } from '@/pages/api/auth';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';

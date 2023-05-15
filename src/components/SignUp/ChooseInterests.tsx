@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
+import { updateUser } from '@/actions/user';
 
-import { updateUser } from '@/pages/api/user';
+import { useRouter } from 'next/router';
 
 import { Interest } from '@/types/interests';
 import { UserInfoStepsProps } from '@/types/signup';

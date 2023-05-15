@@ -1,15 +1,14 @@
+import { NewsletterLinkResponse } from '@/actions/newsletters';
+import {
+  newsletterLink,
+  newsletterVerifyOwnership,
+} from '@/actions/newsletters';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useRouter } from 'next/router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { NewsletterLinkResponse } from '@/pages/api/newsletters';
-import {
-  newsletterLink,
-  newsletterVerifyOwnership,
-} from '@/pages/api/newsletters';
 
 import { NewsletterFormProps } from '@/types/newsletters';
 
