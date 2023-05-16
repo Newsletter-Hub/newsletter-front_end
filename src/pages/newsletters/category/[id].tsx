@@ -1,15 +1,15 @@
 import { getNewslettersList } from '@/actions/newsletters';
 import { getInterests } from '@/actions/user/interests';
-import React, { useEffect, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { useMemo, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import clsx from 'clsx';
-
-import useDebounce from '@/hooks/useDebounce';
 
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
@@ -85,6 +85,8 @@ const NewslettersPage = ({
   newslettersListData,
   interests,
 }: NewslettersPageProps) => {
+  const router = useRouter();
+  const { id } = router.query;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -98,13 +100,23 @@ const NewslettersPage = ({
     rating: false,
   });
   const [filtersPayload, setFiltersPayload] = useState<Filters>({
-    categories: [],
+    categories: id === 'all' ? [] : id ? [+id] : [],
     pricingType: [],
     durationFrom: 1,
     durationTo: 60,
     ratings: [],
   });
   const [filtersChoosed, setFiltersChoosed] = useState(false);
+
+  const filtersCount = useMemo(() => {
+    let count = 0;
+    if (filtersPayload.categories.length > 0) count++;
+    if (filtersPayload.pricingType.length > 0) count++;
+    if (filtersPayload.durationFrom !== 1 || filtersPayload.durationTo !== 60)
+      count++;
+    if (filtersPayload.ratings.length > 0) count++;
+    return count;
+  }, [filtersPayload]);
 
   const [search, setSearch] = useState('');
 
@@ -149,7 +161,7 @@ const NewslettersPage = ({
       durationTo: 60,
       ratings: [],
     });
-    if (filtersChoosed) {
+    if (filtersChoosed || id !== 'all') {
       const newsletterResponse = await getNewslettersList({
         page: 1,
         pageSize: 6,
@@ -170,32 +182,24 @@ const NewslettersPage = ({
     }
   };
 
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedFetchNewsletters = debounce(async (value: string) => {
+    const newsletterResponse = await getNewslettersList({
+      page: 1,
+      pageSize: 6 * (page + 1),
+      order: sortTypes[choosedSortType].value,
+      search: value,
+    });
 
-  useEffect(() => {
-    const fetchNewsletters = async (value: string) => {
-      const newsletterResponse = await getNewslettersList({
-        page: 1,
-        pageSize: 6 * (page + 1),
-        order: sortTypes[choosedSortType].value,
-        orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
-        search: value,
-      });
-
-      if (newsletterResponse.error) {
-        console.error(newsletterResponse.error);
-      } else if (newsletterResponse.newslettersListData) {
-        setNewslettersData(
-          newsletterResponse.newslettersListData as Newsletter
-        );
-      }
-    };
-    fetchNewsletters(debouncedSearch);
-  }, [debouncedSearch]);
+    if (newsletterResponse.error) {
+      console.error(newsletterResponse.error);
+    } else if (newsletterResponse.newslettersListData) {
+      setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
+    }
+  }, 1000);
 
   const handleChangeSearch = (value: string) => {
     setSearch(value);
+    debouncedFetchNewsletters(value);
   };
 
   const applyFilters = async () => {
@@ -243,7 +247,7 @@ const NewslettersPage = ({
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
         <h1 className="text-blue text-7xl font-medium mb-10">Newsletters</h1>
-        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[1000px]">
+        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[800px]">
           <div className="flex-grow">
             <Input
               isSearch
@@ -259,9 +263,19 @@ const NewslettersPage = ({
               variant="outlined-secondary"
               onClick={handleOpenModal}
               label={
-                <span className="flex text-base justify-center px-6 gap-2">
-                  <FilterIcon />
-                  Filters
+                <span
+                  className={`flex text-base justify-center px-6 gap-2 ${
+                    filtersCount && 'text-primary'
+                  }`}
+                >
+                  <FilterIcon
+                    className={`${
+                      filtersCount
+                        ? 'fill-primary stroke-primary'
+                        : 'stroke-grey-chat fill-grey-chat'
+                    }`}
+                  />
+                  Filters {Boolean(filtersCount) && `(${filtersCount})`}
                 </span>
               }
             />

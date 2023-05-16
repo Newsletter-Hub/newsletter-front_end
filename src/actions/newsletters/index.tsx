@@ -158,8 +158,10 @@ export const getNewslettersList = async ({
       });
     }
 
-    if (durationFrom) url += `&durationFrom=${durationFrom}`;
-    if (durationTo) url += `&durationTo=${durationTo}`;
+    if (durationFrom && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationFrom=${durationFrom}`;
+    if (durationTo && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationTo=${durationTo}`;
     if (search) url += `&search=${search}`;
 
     const newslettersListData: NewsletterData[] = await api.get(url).json();
