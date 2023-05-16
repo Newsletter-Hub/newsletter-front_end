@@ -1,11 +1,15 @@
 import { getNewslettersList } from '@/actions/newsletters';
 import { getInterests } from '@/actions/user/interests';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { GetServerSideProps } from 'next';
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import clsx from 'clsx';
+
+import useDebounce from '@/hooks/useDebounce';
 
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
@@ -23,6 +27,7 @@ import withLayout from '@/components/withLayout';
 import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
 import FilterIcon from '@/assets/icons/filter';
+import PlusIcon from '@/assets/icons/plus';
 import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
@@ -58,7 +63,7 @@ interface Filters {
 const sortTypes: SortType[] = [
   {
     label: 'Data added',
-    value: 'added',
+    value: 'date',
   },
   {
     label: 'Number of followers',
@@ -99,6 +104,8 @@ const NewslettersPage = ({
     durationTo: 60,
     ratings: [],
   });
+  const [filtersChoosed, setFiltersChoosed] = useState(false);
+
   const [search, setSearch] = useState('');
 
   const handleOpenModal = () => {
@@ -113,7 +120,8 @@ const NewslettersPage = ({
 
     const newsletterResponse = await getNewslettersList({
       page: 1,
-      pageSize: 6 * page + 1,
+      pageSize: 6 * (page + 1),
+      order: sortTypes[choosedSortType].value,
     });
 
     if (newsletterResponse.error) {
@@ -127,7 +135,7 @@ const NewslettersPage = ({
     alegreya.className
   );
 
-  const handleFiltersReset = () => {
+  const handleFiltersReset = async () => {
     setFilters({
       categories: false,
       pricingType: false,
@@ -141,7 +149,93 @@ const NewslettersPage = ({
       durationTo: 60,
       ratings: [],
     });
+    if (filtersChoosed) {
+      const newsletterResponse = await getNewslettersList({
+        page: 1,
+        pageSize: 6,
+        order: sortTypes[choosedSortType].value,
+        search: search,
+      });
+
+      if (newsletterResponse.error) {
+        console.error(newsletterResponse.error);
+      } else if (newsletterResponse.newslettersListData) {
+        setNewslettersData(
+          newsletterResponse.newslettersListData as Newsletter
+        );
+        handleCloseModal();
+      }
+    } else {
+      handleCloseModal();
+    }
   };
+
+  const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    const fetchNewsletters = async (value: string) => {
+      const newsletterResponse = await getNewslettersList({
+        page: 1,
+        pageSize: 6 * (page + 1),
+        order: sortTypes[choosedSortType].value,
+        orderDirection:
+          sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+        search: value,
+      });
+
+      if (newsletterResponse.error) {
+        console.error(newsletterResponse.error);
+      } else if (newsletterResponse.newslettersListData) {
+        setNewslettersData(
+          newsletterResponse.newslettersListData as Newsletter
+        );
+      }
+    };
+    fetchNewsletters(debouncedSearch);
+  }, [debouncedSearch]);
+
+  const handleChangeSearch = (value: string) => {
+    setSearch(value);
+  };
+
+  const applyFilters = async () => {
+    const newsletterResponse = await getNewslettersList({
+      page: 1,
+      pageSize: 6,
+      order: sortTypes[choosedSortType].value,
+      search,
+      pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
+      ratings: filtersPayload.ratings,
+      categoriesIds: filtersPayload.categories,
+      durationFrom: filtersPayload.durationFrom,
+      durationTo: filtersPayload.durationTo,
+      orderDirection:
+        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+    });
+    if (newsletterResponse.error) {
+      console.error(newsletterResponse.error);
+    } else if (newsletterResponse.newslettersListData) {
+      handleCloseModal();
+      setFiltersChoosed(true);
+      setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
+    }
+  };
+
+  const handleSort = async (value: number) => {
+    setChoosedSortType(value);
+    const newsletterResponse = await getNewslettersList({
+      page: 1,
+      pageSize: 6 * (page + 1),
+      order: sortTypes[value].value,
+      orderDirection: sortTypes[value].value === 'rating' ? 'DESC' : 'ASC',
+    });
+    if (newsletterResponse.error) {
+      console.error(newsletterResponse.error);
+    } else if (newsletterResponse.newslettersListData) {
+      setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
+    }
+  };
+
   if (!interests?.length) {
     return <span>loading..</span>;
   }
@@ -149,7 +243,7 @@ const NewslettersPage = ({
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
         <h1 className="text-blue text-7xl font-medium mb-10">Newsletters</h1>
-        <div className="flex mb-10 items-center">
+        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[1000px]">
           <div className="flex-grow">
             <Input
               isSearch
@@ -157,7 +251,7 @@ const NewslettersPage = ({
               wrapperStyles="max-w-[262px]"
               customStyles="h-[48px]"
               iconStyles="!top-3"
-              onChange={value => setSearch(value)}
+              onChange={handleChangeSearch}
             />
           </div>
           <div className="flex gap-4">
@@ -354,12 +448,17 @@ const NewslettersPage = ({
                 </div>
                 <div className="flex pl-8 justify-between items-center">
                   <span
-                    className="text-base text-lightBlack"
+                    className="text-base text-lightBlack cursor-pointer"
                     onClick={handleFiltersReset}
                   >
                     Clear
                   </span>
-                  <Button label="Apply filters" rounded="xl" fontSize="md" />
+                  <Button
+                    label="Apply filters"
+                    rounded="xl"
+                    fontSize="md"
+                    onClick={applyFilters}
+                  />
                 </div>
               </div>
             </Modal>
@@ -379,7 +478,7 @@ const NewslettersPage = ({
                         choosedSortType === index &&
                         'bg-light-porcelain rounded'
                       }`}
-                      onClick={() => setChoosedSortType(index)}
+                      onClick={() => handleSort(index)}
                     >
                       <span className="flex-1">{item.label}</span>
                       <div className="w-4">
@@ -395,8 +494,10 @@ const NewslettersPage = ({
           </div>
         </div>
         <div>
-          {!newslettersData || !newslettersData.newsletters?.length ? (
-            <span></span>
+          {!newslettersData ||
+          Boolean(!newslettersData.newsletters?.length) ||
+          !newslettersData.newsletters ? (
+            <span>Undefined</span>
           ) : (
             newslettersData.newsletters.map((newsletter, index) => {
               const imageLink = encodeURIComponent(newsletter.image as string);
@@ -443,11 +544,25 @@ const NewslettersPage = ({
                         <BookmarkIcon />
                         <StarIcon className="stroke-lightBlack stroke-[1.5px]" />
                       </div>
-                      <Button
-                        label="Read Newsletter"
-                        rounded="xl"
-                        fontSize="md"
-                      />
+                      <div className="flex gap-2">
+                        <Link href={newsletter.link}>
+                          <Button
+                            label="Read Newsletter"
+                            rounded="xl"
+                            fontSize="md"
+                          />
+                        </Link>
+                        <Button
+                          rounded="xl"
+                          fontSize="md"
+                          label={
+                            <span className="flex items-center gap-2">
+                              <PlusIcon />
+                              Follow
+                            </span>
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -455,8 +570,9 @@ const NewslettersPage = ({
             })
           )}
           {newslettersData &&
-            newslettersData.newsletters?.length &&
+            Boolean(newslettersData.newsletters?.length) &&
             newslettersData.total &&
+            newslettersData.newsletters &&
             newslettersData.newsletters.length < newslettersData.total && (
               <Button
                 label="See more"
@@ -471,8 +587,20 @@ const NewslettersPage = ({
   );
 };
 
-export const getServerSideProps = async () => {
-  const newsletterList = await getNewslettersList({ page: 1, pageSize: 6 });
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { params } = context;
+  const categoryId = params && params.id;
+  const categoriesIds =
+    categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
+      ? [+categoryId]
+      : [];
+  const newsletterList = await getNewslettersList({
+    page: 1,
+    pageSize: 6,
+    order: 'rating',
+    orderDirection: 'DESC',
+    categoriesIds,
+  });
   const interests = await getInterests();
   if (!newsletterList || !interests) {
     return {

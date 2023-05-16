@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { NewslettersListData } from '@/pages/newsletters';
+import { NewslettersListData } from '@/pages/newsletters/category/[id]';
 
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';

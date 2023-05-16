@@ -1,3 +1,6 @@
+import { SearchParamsOption } from 'ky';
+import _ from 'lodash';
+
 import api from '@/config/ky';
 
 import { NewsletterData } from '@/types/newsletters';
@@ -24,6 +27,19 @@ interface Newsletter {
 export interface GetNewsletterResponse {
   newsletterData?: NewsletterData;
   error?: string;
+}
+
+interface GetNewsletterListProps {
+  page: number;
+  pageSize: number;
+  order: string;
+  orderDirection?: string;
+  categoriesIds?: number[] | [];
+  pricingTypes?: string[];
+  durationFrom?: number;
+  durationTo?: number;
+  ratings?: number[];
+  search?: string;
 }
 
 export const newsletterVerifyOwnership = async ({
@@ -112,14 +128,41 @@ export const getNewsletter = async ({
 export const getNewslettersList = async ({
   page = 1,
   pageSize = 5,
-}: {
-  page?: number;
-  pageSize?: number;
-}) => {
+  order,
+  orderDirection = 'ASC',
+  categoriesIds,
+  pricingTypes,
+  durationFrom,
+  durationTo,
+  ratings,
+  search,
+}: GetNewsletterListProps) => {
   try {
-    const newslettersListData: NewsletterData[] = await api
-      .get('newsletters', { searchParams: { page, pageSize } })
-      .json();
+    let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
+
+    if (pricingTypes && pricingTypes.length > 0) {
+      pricingTypes.forEach((type, index) => {
+        url += `&pricingTypes[${index}]=${type}`;
+      });
+    }
+
+    if (categoriesIds && categoriesIds.length > 0) {
+      categoriesIds.forEach((id, index) => {
+        url += `&categoriesIds[${index}]=${id}`;
+      });
+    }
+
+    if (ratings && ratings.length > 0) {
+      ratings.forEach((id, index) => {
+        url += `&ratings[${index}]=${id}`;
+      });
+    }
+
+    if (durationFrom) url += `&durationFrom=${durationFrom}`;
+    if (durationTo) url += `&durationTo=${durationTo}`;
+    if (search) url += `&search=${search}`;
+
+    const newslettersListData: NewsletterData[] = await api.get(url).json();
     return { newslettersListData };
   } catch (error) {
     console.error(error);
