@@ -1,3 +1,6 @@
+import { SearchParamsOption } from 'ky';
+import _ from 'lodash';
+
 import api from '@/config/ky';
 
 import { NewsletterData } from '@/types/newsletters';
@@ -24,6 +27,19 @@ interface Newsletter {
 export interface GetNewsletterResponse {
   newsletterData?: NewsletterData;
   error?: string;
+}
+
+interface GetNewsletterListProps {
+  page: number;
+  pageSize: number;
+  order: string;
+  orderDirection?: string;
+  categoriesIds?: number[] | [];
+  pricingTypes?: string[];
+  durationFrom?: number;
+  durationTo?: number;
+  ratings?: number[];
+  search?: string;
 }
 
 export const newsletterVerifyOwnership = async ({
@@ -101,6 +117,55 @@ export const getNewsletter = async ({
       .get(`newsletters/${id}`)
       .json();
     return { newsletterData };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: 'Failed to get newsletter',
+    };
+  }
+};
+
+export const getNewslettersList = async ({
+  page = 1,
+  pageSize = 5,
+  order,
+  orderDirection = 'ASC',
+  categoriesIds,
+  pricingTypes,
+  durationFrom,
+  durationTo,
+  ratings,
+  search,
+}: GetNewsletterListProps) => {
+  try {
+    let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
+
+    if (pricingTypes && pricingTypes.length > 0) {
+      pricingTypes.forEach((type, index) => {
+        url += `&pricingTypes[${index}]=${type}`;
+      });
+    }
+
+    if (categoriesIds && categoriesIds.length > 0) {
+      categoriesIds.forEach((id, index) => {
+        url += `&categoriesIds[${index}]=${id}`;
+      });
+    }
+
+    if (ratings && ratings.length > 0) {
+      ratings.forEach((id, index) => {
+        url += `&ratings[${index}]=${id}`;
+      });
+    }
+
+    if (durationFrom && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationFrom=${durationFrom}`;
+    if (durationTo && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationTo=${durationTo}`;
+    if (search) url += `&search=${search}`;
+
+    const newslettersListData: NewsletterData[] = await api.get(url).json();
+    return { newslettersListData };
   } catch (error) {
     console.error(error);
     return {

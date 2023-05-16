@@ -3,7 +3,7 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     fontFamily: {
-      alegreya: ['Alegreya', 'Inter', 'ui-sans-serif', 'system-ui'],
+      alegreya: ['Alegreya', 'ui-sans-serif', 'system-ui'],
       inter: ['Inter', 'Alegreya', 'ui-sans-serif', 'system-ui'],
     },
     extend: {
@@ -52,6 +52,7 @@ module.exports = {
       'light-porcelain': '#F4F5F6',
       red: '#FF0000',
       yellow: '#F7B500',
+      blue: '#23459F',
     },
   },
   plugins: [],

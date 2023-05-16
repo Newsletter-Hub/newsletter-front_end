@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
 
+import { NewslettersListData } from '@/pages/newsletters/category/[id]';
+
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
 import { UserMe } from '@/types/user';
@@ -15,6 +17,7 @@ interface WithLayoutProps {
   interests?: Interest[];
   newsletterData?: NewsletterData;
   user?: UserMe | null;
+  newslettersListData?: NewslettersListData;
 }
 
 interface EntryLayoutConfig {

@@ -11,11 +11,12 @@ interface ButtonProps {
     | 'secondary'
     | 'outlined'
     | 'outlined-primary'
-    | 'outlined-secondary';
+    | 'outlined-secondary'
+    | 'porcelain';
   weight?: 'base' | 'bold';
   fontSize?: 'base' | 'xs' | 'md' | 'sm';
   size?: 'base' | 'md' | 'full';
-  rounded?: 'none' | 'md' | 'xl';
+  rounded?: 'none' | 'md' | 'lg' | 'xl';
   uppercase?: boolean;
   bold?: boolean;
   disabled?: boolean;
@@ -36,7 +37,8 @@ const variants = {
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-light-grey border-light-grey',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey',
+  porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
 };
 
 const weights = {
@@ -88,7 +90,9 @@ const Button = ({
     variants[variant],
     weights[weight],
     fontSizes[fontSize],
-    (rounded === 'md' && 'rounded') || (rounded === 'xl' && 'rounded-full'),
+    (rounded === 'md' && 'rounded') ||
+      (rounded === 'xl' && 'rounded-full') ||
+      (rounded === 'lg' && `rounded-${rounded}`),
     uppercase && 'uppercase',
     bold && 'font-bold',
     sizes[size],
