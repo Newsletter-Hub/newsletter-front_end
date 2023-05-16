@@ -22,6 +22,7 @@ interface InputProps {
   label?: string;
   wrapperStyles?: string;
   iconStyles?: string;
+  onChange?: (value: string) => void;
 }
 
 const variants = {
@@ -46,6 +47,7 @@ const Input = ({
   label,
   wrapperStyles,
   iconStyles,
+  onChange,
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -72,7 +74,12 @@ const Input = ({
           type={isPassword ? (isShowPassword ? 'text' : 'password') : type}
           maxLength={maxLength}
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={e => {
+            setValue(e.target.value);
+            if (onChange) {
+              onChange(e.target.value);
+            }
+          }}
         />
         {isSearch && (
           <Search

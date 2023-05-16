@@ -15,9 +15,16 @@ interface AccordionProps {
   children?: JSX.Element;
   isOpen: boolean;
   setIsOpen: (arg: boolean) => void;
+  isSelected?: boolean;
 }
 
-const Accordion = ({ label, children, isOpen, setIsOpen }: AccordionProps) => {
+const Accordion = ({
+  label,
+  children,
+  isOpen,
+  setIsOpen,
+  isSelected,
+}: AccordionProps) => {
   const labelStyles = clsx('flex gap-4 items-center', alegreya.className);
   const accordionRef = useRef<HTMLDivElement | null>(null);
   const handleClick = () => {
@@ -32,9 +39,17 @@ const Accordion = ({ label, children, isOpen, setIsOpen }: AccordionProps) => {
         >
           <p className={labelStyles}>
             <PlusAccordionIcon
-              className={`${isOpen ? 'fill-primary' : 'fill-light-grey'}`}
+              className={`${
+                isOpen || isSelected ? 'fill-primary' : 'fill-light-grey'
+              }`}
             />
-            <span className="text-lightBlack text-xl">{label}</span>
+            <span
+              className={`${
+                isOpen || isSelected ? 'text-primary' : 'text-lightBlack'
+              } text-xl`}
+            >
+              {label}
+            </span>
           </p>
         </RadixAccordion.Trigger>
         <RadixAccordion.Content>{children}</RadixAccordion.Content>
