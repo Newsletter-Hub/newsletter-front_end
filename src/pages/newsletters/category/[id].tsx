@@ -1,7 +1,7 @@
 import { getNewslettersList } from '@/actions/newsletters';
 import { getInterests } from '@/actions/user/interests';
 import { debounce } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { Alegreya } from 'next/font/google';
@@ -182,7 +182,8 @@ const NewslettersPage = ({
     }
   };
 
-  const debouncedFetchNewsletters = debounce(async (value: string) => {
+  const handleChangeSearch = debounce(async (value: string) => {
+    setSearch(value);
     const newsletterResponse = await getNewslettersList({
       page: 1,
       pageSize: 6 * (page + 1),
@@ -195,12 +196,7 @@ const NewslettersPage = ({
     } else if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
-  }, 1000);
-
-  const handleChangeSearch = (value: string) => {
-    setSearch(value);
-    debouncedFetchNewsletters(value);
-  };
+  }, 500);
 
   const applyFilters = async () => {
     const newsletterResponse = await getNewslettersList({
