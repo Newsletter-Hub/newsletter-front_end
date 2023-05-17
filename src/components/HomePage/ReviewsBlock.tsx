@@ -144,32 +144,6 @@ const ReviewsBlock = () => {
           />
         </div>
       </div>
-      <div className="h-full">
-        <h6 className="text-2xl whitespace-nowrap mb-6 mt-4">
-          Reviews for Your Newsletters
-        </h6>
-        <div className="flex flex-col gap-3 items-stretch">
-          {reviewsNewsletters.map((review, index) => (
-            <div
-              className="max-w-[482px] hover:bg-light-porcelain px-7 py-6 rounded-2xl"
-              key={index}
-            >
-              <p className="text-xl">{review.name}</p>
-              <p className="font-inter">{review.city}</p>
-              <div className="mb-6">
-                <Image src={starRating} alt="Star rating" />
-              </div>
-              <p className="mb-6 font-inter">{review.description}</p>
-              <Link
-                href="/"
-                className="text-primary font-bold text-base flex items-center gap-4 font-inter"
-              >
-                See more <ArrowRight />
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

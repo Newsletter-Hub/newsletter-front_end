@@ -55,7 +55,7 @@ const ProfilePicture = ({
           Back
         </span>
         <Button
-          label="Next"
+          label="Next step"
           type="submit"
           customStyles="w-1/2"
           rounded="xl"

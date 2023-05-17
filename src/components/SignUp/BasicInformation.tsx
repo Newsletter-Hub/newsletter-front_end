@@ -119,15 +119,15 @@ const BasicInformation = ({
           )}
         />
       </div>
-      <div className="flex gap-2 w-full">
-        {/* <Button
-          label="Back"
-          customStyles="!w-1/2"
+      <div className="flex items-center justify-center">
+        <Button
+          label="Next step"
+          type="submit"
+          customStyles="max-w-[200px]"
+          size="full"
+          fontSize="md"
           rounded="xl"
-          variant="secondary"
-          onClick={handlePreviousStep}
-        /> */}
-        <Button label="Next" type="submit" customStyles="w-full" rounded="xl" />
+        />
       </div>
     </form>
   );
