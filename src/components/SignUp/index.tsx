@@ -76,7 +76,7 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
     password,
     username,
   }) => {
-    const response = await signup({ email, password, username, router });
+    const response = await signup({ email, password, username });
     if (response) {
       setEmail(email);
     }

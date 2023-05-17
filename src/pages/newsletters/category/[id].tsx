@@ -247,6 +247,7 @@ const NewslettersPage = ({
       pageSize: 6 * (page + 1),
       order: sortTypes[value].value,
       orderDirection: sortTypes[value].value === 'rating' ? 'DESC' : 'ASC',
+      search,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);

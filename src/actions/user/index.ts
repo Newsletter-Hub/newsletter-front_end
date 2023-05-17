@@ -11,6 +11,15 @@ interface UpdateUserResponse {
   response?: object;
 }
 
+interface GetUsersListProps {
+  page: number;
+  pageSize: number;
+  order: string;
+  orderDirection: string;
+  token?: string | null;
+  search?: string;
+}
+
 export const updateUser = async ({
   dateBirth,
   country,
@@ -54,10 +63,33 @@ export const getUserMe = async ({ token }: GetUserMePayload) => {
         },
       })
       .json();
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
     return { error: 'Failed to get user' };
+  }
+};
+
+export const getUsersList = async ({
+  page,
+  pageSize,
+  order,
+  orderDirection,
+  token,
+  search = '',
+}: GetUsersListProps) => {
+  try {
+    const response = await api
+      .get('users/users-list', {
+        searchParams: { page, pageSize, order, orderDirection, search },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    return response;
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to fetch users list' };
   }
 };

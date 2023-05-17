@@ -75,7 +75,6 @@ const NewsletterPage = ({
     setValue,
     reset,
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-  console.log(bookmarkState);
   const onSubmit: SubmitHandler<ValidationSchema> = async ({
     rating,
     comment,
@@ -152,7 +151,6 @@ const NewsletterPage = ({
     setIsModalOpen(false);
     reset();
   };
-  const encodedURL = encodeURIComponent(newsletterData?.image as string);
 
   if (!reviewsData) {
     return <span>Loading...</span>;
@@ -234,7 +232,7 @@ const NewsletterPage = ({
         )}
         {newsletterData?.image && (
           <Image
-            src={`/api/imageproxy/${encodedURL}` as string}
+            src={newsletterData.image}
             width={1280}
             height={678}
             alt="banner"
