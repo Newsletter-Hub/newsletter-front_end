@@ -28,6 +28,7 @@ import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
 import FilterIcon from '@/assets/icons/filter';
 import PlusIcon from '@/assets/icons/plus';
+import SearchResultsIcon from '@/assets/icons/searchResults';
 import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
@@ -166,6 +167,8 @@ const NewslettersPage = ({
         page: 1,
         pageSize: 6,
         order: sortTypes[choosedSortType].value,
+        orderDirection:
+          sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
         search: search,
       });
 
@@ -243,7 +246,7 @@ const NewslettersPage = ({
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
         <h1 className="text-blue text-7xl font-medium mb-10">Newsletters</h1>
-        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[800px]">
+        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px]">
           <div className="flex-grow">
             <Input
               isSearch
@@ -507,7 +510,12 @@ const NewslettersPage = ({
           {!newslettersData ||
           Boolean(!newslettersData.newsletters?.length) ||
           !newslettersData.newsletters ? (
-            <span>Undefined</span>
+            <div className="flex flex-col justify-center items-center pt-16">
+              <SearchResultsIcon />
+              <span className="text-5xl text-lightBlack">
+                Sorry! We couldn’t find anything
+              </span>
+            </div>
           ) : (
             newslettersData.newsletters.map((newsletter, index) => {
               const imageLink = encodeURIComponent(newsletter.image as string);
@@ -531,7 +539,7 @@ const NewslettersPage = ({
                     <span className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2">
                       {newsletter.title}
                     </span>
-                    <span className="font-inter text-base text-lightBlack mb-6 block">
+                    <span className="font-inter text-base text-lightBlack mb-6 block min-w-[700px]">
                       {newsletter.description}
                     </span>
                     <div className="flex mb-6 gap-2">
