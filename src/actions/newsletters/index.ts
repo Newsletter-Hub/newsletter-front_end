@@ -1,6 +1,3 @@
-import { SearchParamsOption } from 'ky';
-import _ from 'lodash';
-
 import api from '@/config/ky';
 
 import { NewsletterData } from '@/types/newsletters';

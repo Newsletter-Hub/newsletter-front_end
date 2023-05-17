@@ -9,3 +9,11 @@
     margin: 0;
   }
 }
+
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: #01aaed !important;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background: #01aaed;
+}
