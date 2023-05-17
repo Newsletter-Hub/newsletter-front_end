@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import React from 'react';
 
 import Link from 'next/link';
@@ -15,19 +16,15 @@ const links = [
   { label: 'Help', href: '/help' },
 ];
 
-interface UserMe {
-  profileType: 'writter' | 'reader';
-  username: string;
-  email: string;
-  avatar?: string;
-  error?: string;
-}
+const Header = () => {
+  const [user, setUser] = React.useState('');
 
-interface HeaderProps {
-  user?: UserMe | null;
-}
-
-const Header = ({ user }: HeaderProps) => {
+  React.useEffect(() => {
+    const cookieUser = Cookies.get('user')
+      ? JSON.parse(Cookies.get('user') as string)
+      : '';
+    setUser(cookieUser);
+  }, []);
   return (
     <div className="shadow-md">
       <div className="bg-white py-4 px-32 flex items-center font-inter">
@@ -46,7 +43,7 @@ const Header = ({ user }: HeaderProps) => {
             );
           })}
         </div>
-        {user?.error || !user ? (
+        {!user ? (
           <div className="flex gap-6 w-full items-center">
             <Link href="/login">Login</Link>
             <Link href="/sign-up">

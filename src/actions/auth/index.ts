@@ -1,4 +1,5 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
+import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 
 import { NextRouter } from 'next/router';
@@ -9,6 +10,7 @@ import api from '@/config/ky';
 interface User {
   email: string;
   password: string;
+  router: NextRouter;
 }
 
 interface GoogleAuth {
@@ -20,14 +22,23 @@ interface SignupUser extends User {
   username: string;
 }
 
-export const login = async ({ email, password }: User) => {
+interface UserResponse {
+  profilyType: string;
+  username: string;
+  avatar: string;
+}
+
+export const login = async ({ email, password, router }: User) => {
   try {
     const response = await api
       .post('auth/sign-in', {
         json: { email, password },
       })
       .json()
-      .then(() => (window.location.href = '/'));
+      .then(res => {
+        Cookies.set('user', JSON.stringify(res), { expires: 1 });
+        router.push('/');
+      });
     return response;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to login');

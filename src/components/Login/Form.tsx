@@ -49,7 +49,7 @@ const Form = () => {
     email,
     password,
   }) => {
-    await login({ email, password });
+    await login({ email, password, router });
   };
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });

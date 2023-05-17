@@ -1,10 +1,8 @@
-import { getUserMe } from '@/actions/user';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { NextPage, NextPageContext } from 'next';
-import parseCookies from 'next-cookies';
+import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 
 import withLayout, { EntryType, LayoutType } from '@/components/withLayout';
@@ -32,29 +30,5 @@ function MyApp({
     </QueryClientProvider>
   );
 }
-
-MyApp.getInitialProps = async ({
-  Component,
-  ctx,
-}: {
-  Component: NextPage;
-  ctx: NextPageContext;
-}) => {
-  let pageProps = {};
-
-  if (typeof Component.getInitialProps === 'function') {
-    pageProps = await Component.getInitialProps(ctx);
-  }
-
-  const cookies = parseCookies(ctx);
-  const token = cookies.accessToken ? cookies.accessToken : null;
-
-  if (token) {
-    const response = await getUserMe({ token });
-    return { pageProps: { ...pageProps, user: response } };
-  }
-
-  return { pageProps: { ...pageProps, user: null } };
-};
 
 export default MyApp;
