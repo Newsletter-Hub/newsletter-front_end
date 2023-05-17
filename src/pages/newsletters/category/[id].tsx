@@ -208,6 +208,11 @@ const NewslettersPage = ({
       pageSize: 6 * (page + 1),
       order: sortTypes[choosedSortType].value,
       search: value,
+      pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
+      ratings: filtersPayload.ratings,
+      categoriesIds: filtersPayload.categories,
+      durationFrom: filtersPayload.durationFrom,
+      durationTo: filtersPayload.durationTo,
     });
 
     if (newsletterResponse.error) {
@@ -248,6 +253,11 @@ const NewslettersPage = ({
       order: sortTypes[value].value,
       orderDirection: sortTypes[value].value === 'rating' ? 'DESC' : 'ASC',
       search,
+      pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
+      ratings: filtersPayload.ratings,
+      categoriesIds: filtersPayload.categories,
+      durationFrom: filtersPayload.durationFrom,
+      durationTo: filtersPayload.durationTo,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -569,7 +579,7 @@ const NewslettersPage = ({
                   } border-b-light-grey`}
                 >
                   <Image
-                    src={`/api/imageproxy/${imageLink}` as string}
+                    src={imageLink as string}
                     className="h-[224px] w-[224px] rounded-[10px] object-cover"
                     alt="newsletter"
                     width={224}
