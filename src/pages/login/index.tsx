@@ -1,5 +1,4 @@
 import Form from '@/components/Login/Form';
-import withLayout from '@/components/withLayout';
 
 const Login = () => {
   return (
@@ -14,4 +13,6 @@ const Login = () => {
   );
 };
 
-export default withLayout(Login, 'entry');
+Login.layout = 'entry';
+
+export default Login;

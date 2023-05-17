@@ -5,7 +5,6 @@ import { AddNewsletterPayload } from '@/types/newsletters';
 
 import DetailsForm from '@/components/Newsletter/DetailsForm';
 import LinkForm from '@/components/Newsletter/LinkForm';
-import withLayout from '@/components/withLayout';
 
 import { getInterests } from '../../actions/user/interests';
 
@@ -63,4 +62,7 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default withLayout(AddNewsletter, 'entry', { type: 'newsletter' });
+AddNewsletter.layout = 'entry';
+AddNewsletter.type = 'newsletter';
+
+export default AddNewsletter;

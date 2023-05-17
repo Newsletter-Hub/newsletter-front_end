@@ -1,7 +1,6 @@
 import { getNewslettersList } from '@/actions/newsletters';
 import { addToBookmark } from '@/actions/newsletters/bookmarks';
 import { createReview } from '@/actions/newsletters/reviews';
-import { getUserMe } from '@/actions/user';
 import { getInterests } from '@/actions/user/interests';
 import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
@@ -9,7 +8,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { GetServerSideProps } from 'next';
-import parseCookies from 'next-cookies';
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,7 +29,6 @@ import Modal from '@/components/Modal';
 import Popover from '@/components/Popover';
 import Slider from '@/components/Slider';
 import StarRating from '@/components/StarRating';
-import withLayout from '@/components/withLayout';
 
 import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
@@ -741,9 +738,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
       ? [+categoryId]
       : [];
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken ? cookies.accessToken : null;
-  const userResponse = await getUserMe({ token } as { token: string });
   const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
@@ -761,9 +755,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       newslettersListData: newsletterList.newslettersListData || null,
       interests: interests,
-      user: token ? userResponse : null,
     },
   };
 };
 
-export default withLayout(NewslettersPage);
+export default NewslettersPage;

@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import withLayout from '@/components/withLayout';
 
 const validationSchema = z
   .object({
@@ -84,4 +83,6 @@ const ResetPassword = () => {
   );
 };
 
-export default withLayout(ResetPassword, 'entry');
+ResetPassword.layout = 'entry';
+
+export default ResetPassword;

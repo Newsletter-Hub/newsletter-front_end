@@ -8,7 +8,6 @@ import BasicInformation from '@/components/SignUp/BasicInformation';
 import ChooseInterests from '@/components/SignUp/ChooseInterests';
 import ProfilePicture from '@/components/SignUp/ProfilePicture';
 import UserType from '@/components/SignUp/UserType';
-import withLayout from '@/components/withLayout';
 
 export const UserContext = React.createContext<Payload>({
   dateBirth: '',
@@ -89,4 +88,7 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default withLayout(SignUpInfo, 'entry', { type: 'signup' });
+SignUpInfo.layout = 'entry';
+SignUpInfo.type = 'signup';
+
+export default SignUpInfo;

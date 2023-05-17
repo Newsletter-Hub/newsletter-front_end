@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import withLayout from '@/components/withLayout';
 
 import { forgotPassword } from '../../actions/auth';
 
@@ -66,4 +65,6 @@ const ForgotPassword = () => {
   );
 };
 
-export default withLayout(ForgotPassword, 'entry');
+ForgotPassword.layout = 'entry';
+
+export default ForgotPassword;

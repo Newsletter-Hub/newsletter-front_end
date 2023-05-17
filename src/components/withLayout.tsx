@@ -9,8 +9,8 @@ import { UserMe } from '@/types/user';
 import EntryLayout from './EntryLayout';
 import Layout from './Layout';
 
-type LayoutType = 'default' | 'entry';
-type EntryType = 'signup' | 'login' | 'newsletter';
+export type LayoutType = 'default' | 'entry';
+export type EntryType = 'signup' | 'login' | 'newsletter';
 
 interface WithLayoutProps {
   children?: ReactNode;

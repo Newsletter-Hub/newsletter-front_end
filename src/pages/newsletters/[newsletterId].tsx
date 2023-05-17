@@ -1,4 +1,3 @@
-import { getUserMe } from '@/actions/user';
 import timeAgo from '@/helpers/timeAgo';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -19,7 +18,6 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Modal from '@/components/Modal';
 import StarRating from '@/components/StarRating';
-import withLayout from '@/components/withLayout';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
@@ -452,7 +450,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const userResponse = await getUserMe({ token } as { token: string });
 
   let isBookmark = 'none';
 
@@ -478,10 +475,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       newsletterData: response.newsletterData,
       reviews: reviewsResponse.reviews,
-      user: token ? userResponse : null,
       isBookmark: isBookmark,
     },
   };
 };
 
-export default withLayout(NewsletterPage);
+export default NewsletterPage;

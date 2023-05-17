@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import SignUpForm from '@/components/SignUp';
-import withLayout from '@/components/withLayout';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -26,4 +25,7 @@ const SignUp = () => {
   );
 };
 
-export default withLayout(SignUp, 'entry', { type: 'signup' });
+SignUp.layout = 'entry';
+SignUp.type = 'signup';
+
+export default SignUp;
