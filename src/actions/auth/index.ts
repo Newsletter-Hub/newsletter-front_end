@@ -1,3 +1,6 @@
+import throwErrorMessage from '@/helpers/throwErrorMessage';
+import { HTTPError } from 'ky';
+
 import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
 
@@ -6,7 +9,6 @@ import api from '@/config/ky';
 interface User {
   email: string;
   password: string;
-  router: NextRouter;
 }
 
 interface GoogleAuth {
@@ -18,17 +20,17 @@ interface SignupUser extends User {
   username: string;
 }
 
-export const login = async ({ email, password, router }: User) => {
+export const login = async ({ email, password }: User) => {
   try {
     const response = await api
       .post('auth/sign-in', {
         json: { email, password },
       })
       .json()
-      .then(() => router.push('/'));
+      .then(() => (window.location.href = '/'));
     return response;
   } catch (error) {
-    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to login');
   }
 };
 
