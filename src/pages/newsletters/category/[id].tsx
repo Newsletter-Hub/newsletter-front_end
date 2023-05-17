@@ -1,7 +1,11 @@
 import { getNewslettersList } from '@/actions/newsletters';
+import { addToBookmark } from '@/actions/newsletters/bookmarks';
+import { createReview } from '@/actions/newsletters/reviews';
 import { getInterests } from '@/actions/user/interests';
 import { debounce } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { GetServerSideProps } from 'next';
 import { Alegreya } from 'next/font/google';
@@ -9,12 +13,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import clsx from 'clsx';
 
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
 
 import Accordion from '@/components/Accordion';
+import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
 import Input from '@/components/Input';
@@ -61,6 +68,13 @@ interface Filters {
   ratings: number[];
 }
 
+const validationSchema = z.object({
+  rating: z.number({ required_error: 'Rating is required' }),
+  comment: z.string(),
+});
+
+type ValidationSchema = z.infer<typeof validationSchema>;
+
 const sortTypes: SortType[] = [
   {
     label: 'Data added',
@@ -94,6 +108,9 @@ const NewslettersPage = ({
   const [page, setPage] = useState(1);
   const [choosedSortType, setChoosedSortType] = useState(3);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenReviewModal, setIsOpenReviewModal] = useState<boolean | number>(
+    false
+  );
   const [filters, setFilters] = useState({
     categories: false,
     pricingType: false,
@@ -236,6 +253,29 @@ const NewslettersPage = ({
       console.error(newsletterResponse.error);
     } else if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
+    }
+  };
+  const handleAddBookmark = async (id: string) => {
+    await addToBookmark({ newsletterId: id });
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
+  const onSubmit: SubmitHandler<ValidationSchema> = async ({
+    rating,
+    comment,
+  }) => {
+    if (isOpenReviewModal) {
+      await createReview({
+        rating,
+        comment,
+        newsletterId: isOpenReviewModal as number,
+      });
+      setIsOpenReviewModal(false);
     }
   };
 
@@ -559,8 +599,95 @@ const NewslettersPage = ({
                         customStyles="flex-1"
                       />
                       <div className="flex gap-6 mr-10">
-                        <BookmarkIcon />
-                        <StarIcon className="stroke-lightBlack stroke-[1.5px]" />
+                        <div
+                          onClick={() =>
+                            handleAddBookmark(String(newsletter.id))
+                          }
+                        >
+                          <BookmarkIcon className="cursor-pointer" />
+                        </div>
+                        <div
+                          onClick={() =>
+                            setIsOpenReviewModal(newsletter.id as number)
+                          }
+                        >
+                          <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
+                        </div>
+                        <Modal
+                          open={Boolean(isOpenReviewModal === newsletter.id)}
+                          handleClose={() => setIsOpenReviewModal(false)}
+                        >
+                          <div>
+                            <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
+                              <Avatar
+                                src={newsletter?.addedByUser?.avatar as string}
+                                alt="avatar"
+                                width={112}
+                                height={112}
+                                className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
+                                username={newsletter?.addedByUser?.username}
+                                customStyles="max-h-[112px] min-w-[112px]"
+                              />
+                              <div className="flex flex-col">
+                                <span className="font-medium text-lightBlack text-xl mb-3">
+                                  {newsletter?.newsletterAuthor}
+                                </span>
+                                <div className="flex items-center mb-3">
+                                  <StarRating
+                                    readonly
+                                    value={
+                                      newsletter?.addedByUser?.averageUserRating
+                                    }
+                                    customStyles="mr-2"
+                                  />
+                                  <span className="font-inter text-dark-grey text-sm mr-6">
+                                    {newsletter?.addedByUser?.amountUserRatings}
+                                  </span>
+                                  <span className="font-inter text-sm text-dark-grey">
+                                    <span className="font-bold">207</span>{' '}
+                                    Followers
+                                  </span>
+                                </div>
+                                <span className="font-inter text-sm text-dark-grey">
+                                  I create and curate content for both the blog
+                                  and our training courses. He also directs the
+                                  market research and strategic planning the
+                                  site.
+                                </span>
+                              </div>
+                            </div>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                              <div className="flex gap-4 items-center mb-14">
+                                <span className="text-lightBlack font-semibold text-lg font-inter">
+                                  Your rating
+                                </span>
+                                <StarRating
+                                  error={Boolean(errors.rating)}
+                                  errorText={errors.rating?.message}
+                                  setValue={(index: number) =>
+                                    setValue('rating', index)
+                                  }
+                                />
+                              </div>
+                              <Input
+                                variant="filled"
+                                placeholder="Go ahead, we are listening..."
+                                customStyles="w-full mb-9"
+                                register={{ ...register('comment') }}
+                              />
+                              <div className="flex justify-center">
+                                <Button
+                                  label="Add"
+                                  type="submit"
+                                  size="full"
+                                  customStyles="max-w-[400px]"
+                                  rounded="xl"
+                                  height="sm"
+                                />
+                              </div>
+                            </form>
+                          </div>
+                        </Modal>
                       </div>
                       <div className="flex gap-2">
                         <Link href={newsletter.link}>

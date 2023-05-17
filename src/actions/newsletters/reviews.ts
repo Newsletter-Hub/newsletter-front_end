@@ -1,3 +1,7 @@
+import throwErrorMessage from '@/helpers/throwErrorMessage';
+import { HTTPError } from 'ky';
+import { toast } from 'react-toastify';
+
 import api from '@/config/ky';
 
 interface ReviewPayload {
@@ -57,9 +61,12 @@ export const createReview = async ({
     const response = await api.post('reviews', {
       json: payload,
     });
+    if (response) {
+      toast.success('Thanks for your review!');
+    }
     return response.json();
   } catch (error) {
-    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to create review');
     return {
       error: 'Failed to create reviews',
     };

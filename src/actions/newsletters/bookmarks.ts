@@ -1,3 +1,7 @@
+import throwErrorMessage from '@/helpers/throwErrorMessage';
+import { HTTPError } from 'ky';
+import { toast } from 'react-toastify';
+
 import api from '@/config/ky';
 
 interface BookmarkWithIdPayload {
@@ -43,9 +47,12 @@ export const addToBookmark = async ({
     const response = await api
       .post('bookmarks', { json: { newsletterId } })
       .json();
+    if (response) {
+      toast.success('Succesfully added to bookmark');
+    }
     return { bookmark: response as object };
   } catch (error) {
-    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to add bookmark');
     return { error: 'Failed to add bookmark' };
   }
 };

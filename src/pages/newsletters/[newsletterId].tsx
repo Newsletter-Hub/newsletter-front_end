@@ -28,14 +28,14 @@ import PlusIcon from '@/assets/icons/plus';
 import SubscribeIcon from '@/assets/icons/subscribe';
 
 import {
-  GetNewsletterResponse,
-  getNewsletter,
-} from '../../actions/newsletters';
-import {
   addToBookmark,
   deleteBookmark,
   getBookmarkById,
 } from '../../actions/newsletters/bookmarks';
+import {
+  GetNewsletterResponse,
+  getNewsletter,
+} from '../../actions/newsletters/index';
 import {
   GetReviewResponse,
   ReviewResponse,
