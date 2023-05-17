@@ -212,12 +212,12 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
               {showAutoComplete &&
                 (suggests.length ? (
                   <div
-                    className="absolute shadow-md bg-white top-6 w-full max-h-24 overflow-scroll"
+                    className="absolute shadow-md bg-white top-6 w-full max-h-28 overflow-scroll pl-4"
                     ref={autoCompleteRef}
                   >
                     {suggests.map(item => (
                       <p
-                        className="w-full border-b-grey border-b text-grey last:border-b-0"
+                        className="w-full bg-white font-inter text-dark-blue text-base hover:outline-none focus:outline-none py-2 cursor-pointer"
                         key={item.id}
                         onClick={() => handleAddTag(item)}
                       >
