@@ -568,7 +568,6 @@ const NewslettersPage = ({
             </div>
           ) : (
             newslettersData.newsletters.map((newsletter, index) => {
-              const imageLink = encodeURIComponent(newsletter.image as string);
               return (
                 <div
                   key={newsletter.id}
@@ -579,7 +578,7 @@ const NewslettersPage = ({
                   } border-b-light-grey`}
                 >
                   <Image
-                    src={imageLink as string}
+                    src={newsletter.image || ''}
                     className="h-[224px] w-[224px] rounded-[10px] object-cover"
                     alt="newsletter"
                     width={224}

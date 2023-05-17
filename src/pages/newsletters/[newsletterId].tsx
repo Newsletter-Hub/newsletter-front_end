@@ -232,7 +232,7 @@ const NewsletterPage = ({
         )}
         {newsletterData?.image && (
           <Image
-            src={newsletterData.image}
+            src={newsletterData.image || ''}
             width={1280}
             height={678}
             alt="banner"
