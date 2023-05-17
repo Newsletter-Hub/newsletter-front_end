@@ -58,7 +58,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
     setSearch(value);
     const usersListResponse = await getUsersList({
       page: 1,
-      pageSize: 6 * (page + 1),
+      pageSize: 6 * page,
       order: sortTypes[choosedSortType].value,
       orderDirection: 'ASC',
       search: value,
@@ -72,7 +72,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
     setChoosedSortType(value);
     const usersListResponse = await getUsersList({
       page: 1,
-      pageSize: 6 * (page + 1),
+      pageSize: 6 * page,
       order: sortTypes[value].value,
       orderDirection: 'ASC',
       search,

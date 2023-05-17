@@ -205,7 +205,7 @@ const NewslettersPage = ({
     setSearch(value);
     const newsletterResponse = await getNewslettersList({
       page: 1,
-      pageSize: 6 * (page + 1),
+      pageSize: 6 * page,
       order: sortTypes[choosedSortType].value,
       search: value,
       pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
@@ -213,6 +213,8 @@ const NewslettersPage = ({
       categoriesIds: filtersPayload.categories,
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
+      orderDirection:
+        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
     });
 
     if (newsletterResponse.error) {
@@ -249,7 +251,7 @@ const NewslettersPage = ({
     setChoosedSortType(value);
     const newsletterResponse = await getNewslettersList({
       page: 1,
-      pageSize: 6 * (page + 1),
+      pageSize: 6 * page,
       order: sortTypes[value].value,
       orderDirection: sortTypes[value].value === 'rating' ? 'DESC' : 'ASC',
       search,
