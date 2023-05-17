@@ -46,7 +46,7 @@ const ChooseInterests = ({
   };
   return (
     <>
-      <div className="flex w-[600px] flex-wrap h-[500px] mb-12">
+      <div className="flex w-[600px] flex-wrap h-[400px] mb-12">
         {interests ? (
           interests.map(item => (
             <Button
@@ -61,28 +61,26 @@ const ChooseInterests = ({
                 payload.interests?.length &&
                   payload.interests?.includes(item.id)
               )}
+              variant="primary-selected"
             />
           ))
         ) : (
           <span>Loading..</span>
         )}
       </div>
-      <div className="flex gap-2 w-full">
-        <Button
-          label="Back"
-          customStyles="w-full"
-          rounded="xl"
-          variant="secondary"
+      <div className="flex justify-between items-center w-full">
+        <span
+          className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
           onClick={handlePreviousStep}
-          fontSize="md"
-        />
+        >
+          Back
+        </span>
         <Button
-          label="Save"
-          type="submit"
-          customStyles="w-full"
+          label="Finish"
+          onClick={handleSubmit}
+          customStyles="w-1/2"
           rounded="xl"
           fontSize="md"
-          onClick={handleSubmit}
         />
       </div>
     </>

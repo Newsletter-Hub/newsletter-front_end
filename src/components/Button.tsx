@@ -8,6 +8,7 @@ interface ButtonProps {
   label: string | JSX.Element;
   variant?:
     | 'primary'
+    | 'primary-selected'
     | 'secondary'
     | 'outlined'
     | 'outlined-primary'
@@ -31,6 +32,8 @@ interface ButtonProps {
 const variants = {
   primary:
     'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center',
+  'primary-selected':
+    'text-primary bg-primary-light whitespace-nowrap py-10px px-7 flex justify-center items-center',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
   outlined:
     'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack',

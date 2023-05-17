@@ -47,19 +47,17 @@ const ProfilePicture = ({
         setPayload={setPayload}
         payload={payload}
       />
-      <div className="flex gap-2 w-full">
-        <Button
-          label="Back"
-          customStyles="w-full"
-          rounded="xl"
-          variant="secondary"
+      <div className="flex justify-between items-center w-full">
+        <span
+          className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
           onClick={handlePreviousStep}
-          fontSize="md"
-        />
+        >
+          Back
+        </span>
         <Button
           label="Next"
           type="submit"
-          customStyles="w-full"
+          customStyles="w-1/2"
           rounded="xl"
           fontSize="md"
         />

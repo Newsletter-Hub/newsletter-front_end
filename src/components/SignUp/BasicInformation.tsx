@@ -74,7 +74,9 @@ const BasicInformation = ({
     });
   return (
     <form className="max-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
-      <p className="text-xs text-grey border-b w-fit mb-3">Birth information</p>
+      <p className="text-xs text-dark-blue mb-3 pl-4 font-inter font-semibold">
+        Birth information
+      </p>
       <Controller
         control={control}
         name="dateBirth"
@@ -82,7 +84,7 @@ const BasicInformation = ({
           <Datetime
             timeFormat={false}
             dateFormat="DD-MM-yyyy"
-            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-lightBlack"
+            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-dark-blue font-inter [&>input]:pl-4 [&>input]:placeholder:text-dark-grey"
             inputProps={{ placeholder: 'Date of birth' }}
             onChange={onChange}
             value={value}
