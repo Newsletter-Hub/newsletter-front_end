@@ -1,0 +1,63 @@
+import { getCategories } from '@/actions/user/interests';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
+interface Category {
+  id: number;
+  name: string;
+  newsletterCount: number;
+}
+
+interface CategoriesProps {
+  categories: Category[];
+}
+
+const Categories = ({ categories }: CategoriesProps) => {
+  return (
+    <div className="px-[17%] pt-20">
+      <h1 className="text-dark-blue text-7xl font-medium mb-10">Categories</h1>
+      <div className="flex flex-wrap -m-2">
+        {categories.map(category => (
+          <Link
+            href={`categories/${category.id}`}
+            key={category.id}
+            className="w-1/4 p-2"
+          >
+            <div>
+              <Image
+                src="https://i.imgur.com/mVqGqRM.jpeg"
+                alt="category"
+                width={302}
+                height={204}
+              />
+              <div className="bg-light-porcelain p-4 rounded-b-lg">
+                <p className="text-dark-blue font-semibold font-inter text-lg mb-1">
+                  {category.name}
+                </p>
+                <p className="text-dark-grey font-inter text-sm">
+                  {category.newsletterCount} Newsletter
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const getServerSideProps = async () => {
+  const categories = await getCategories();
+  if (!categories) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    props: {
+      categories: categories,
+    },
+  };
+};
+export default Categories;

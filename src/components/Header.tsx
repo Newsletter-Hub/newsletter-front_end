@@ -9,8 +9,8 @@ import Button from './Button';
 import Input from './Input';
 
 const links = [
-  { label: 'Newsletters', href: '/newsletters/category/all' },
-  { label: 'Categories', href: '/categories' },
+  { label: 'Newsletters', href: '/newsletters/categories/all' },
+  { label: 'Categories', href: '/newsletters/categories' },
   { label: 'About', href: '/about' },
   { label: 'Help', href: '/help' },
 ];
