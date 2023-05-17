@@ -3,6 +3,8 @@ import React from 'react';
 
 import Link from 'next/link';
 
+import { UserMe } from '@/types/user';
+
 import Logo from '@/assets/images/logo';
 
 import Avatar from './Avatar';
@@ -17,7 +19,7 @@ const links = [
 ];
 
 const Header = () => {
-  const [user, setUser] = React.useState('');
+  const [user, setUser] = React.useState<UserMe | ''>('');
 
   React.useEffect(() => {
     const cookieUser = Cookies.get('user')

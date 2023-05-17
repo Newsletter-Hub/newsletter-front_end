@@ -22,12 +22,6 @@ interface SignupUser extends User {
   username: string;
 }
 
-interface UserResponse {
-  profilyType: string;
-  username: string;
-  avatar: string;
-}
-
 export const login = async ({ email, password, router }: User) => {
   try {
     const response = await api
