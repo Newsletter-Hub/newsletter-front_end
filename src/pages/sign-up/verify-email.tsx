@@ -1,3 +1,5 @@
+import { getServerSideProps } from '@/helpers/authGetServerSideProps';
+
 const VerifyEmail = () => {
   return (
     <div className="flex justify-center items-center h-[100vh]">
@@ -5,5 +7,7 @@ const VerifyEmail = () => {
     </div>
   );
 };
+
+export { getServerSideProps };
 
 export default VerifyEmail;

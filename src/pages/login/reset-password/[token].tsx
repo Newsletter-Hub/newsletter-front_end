@@ -1,4 +1,5 @@
 import { resetPassword } from '@/actions/auth';
+import { getServerSideProps } from '@/helpers/authGetServerSideProps';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -84,5 +85,7 @@ const ResetPassword = () => {
 };
 
 ResetPassword.layout = 'entry';
+
+export { getServerSideProps };
 
 export default ResetPassword;

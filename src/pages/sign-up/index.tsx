@@ -1,3 +1,4 @@
+import { getServerSideProps } from '@/helpers/authGetServerSideProps';
 import React, { useState } from 'react';
 
 import SignUpForm from '@/components/SignUp';
@@ -27,5 +28,7 @@ const SignUp = () => {
 
 SignUp.layout = 'entry';
 SignUp.type = 'signup';
+
+export { getServerSideProps };
 
 export default SignUp;

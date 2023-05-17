@@ -1,3 +1,5 @@
+import { getServerSideProps } from '@/helpers/authGetServerSideProps';
+
 import Form from '@/components/Login/Form';
 
 const Login = () => {
@@ -14,5 +16,7 @@ const Login = () => {
 };
 
 Login.layout = 'entry';
+
+export { getServerSideProps };
 
 export default Login;
