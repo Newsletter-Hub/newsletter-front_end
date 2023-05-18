@@ -1,17 +1,20 @@
 import * as RadixPopover from '@radix-ui/react-popover';
 
 interface RadixPopoverProps {
-  buttonLabel: string | JSX.Element;
+  triggerContent?: string | JSX.Element;
+  triggerStyles?: string;
   children?: JSX.Element;
 }
 
-const Popover = ({ buttonLabel, children }: RadixPopoverProps) => {
+const Popover = ({
+  triggerContent,
+  triggerStyles = 'bg-porcelain font-inter rounded-lg text-lightBlack',
+  children,
+}: RadixPopoverProps) => {
   return (
     <RadixPopover.Root>
       <RadixPopover.Trigger asChild>
-        <button className="bg-porcelain font-inter text-base rounded-lg text-lightBlack">
-          {buttonLabel}
-        </button>
+        <button className={triggerStyles}>{triggerContent}</button>
       </RadixPopover.Trigger>
       <RadixPopover.Portal>
         <RadixPopover.Content className="bg-white shadow-md rounded-2xl mt-2">
