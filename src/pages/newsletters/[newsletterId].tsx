@@ -161,7 +161,10 @@ const NewsletterPage = ({
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[320px]">
       <div className="!max-w-[1280px]">
-        <Link href="/" className="flex items-center gap-[18px] mb-[52px]">
+        <Link
+          href="/newsletters/categories/all"
+          className="flex items-center gap-[18px] mb-[52px]"
+        >
           <ArrowLeft />
           <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg">
             Back to all newsletters
@@ -260,17 +263,39 @@ const NewsletterPage = ({
             {newsletterData?.description}
           </p>
         )}
-        <div className="flex">
-          <div className="flex gap-2 flex-1">
-            <StarRating readonly value={newsletterData?.averageRating} />
-            <span className="font-inter text-sm text-dark-grey">
-              <span className="font-semibold">
-                {newsletterData?.amountRatings} people
-              </span>{' '}
-              rated this newsletter
-            </span>
+        <div className="flex justify-between font-inter items-center mb-20">
+          <div className="flex gap-6 items-center">
+            {newsletterData?.averageDuration && (
+              <>
+                <p className="text-sm text-dark-grey">
+                  <span className="font-semibold">
+                    {newsletterData?.averageDuration} min
+                  </span>{' '}
+                  read
+                </p>
+                <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              </>
+            )}
+            {newsletterData?.pricing && (
+              <>
+                <span className="text-sm text-dark-grey font-semibold">
+                  {newsletterData.pricing.charAt(0).toUpperCase() +
+                    newsletterData.pricing.slice(1)}
+                </span>
+                <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              </>
+            )}
+            <div className="flex gap-2 items-center">
+              <StarRating readonly value={newsletterData?.averageRating} />
+              <span className="font-inter text-sm text-dark-grey">
+                <span className="font-semibold">
+                  {newsletterData?.amountRatings} people
+                </span>{' '}
+                rated this newsletter
+              </span>
+            </div>
           </div>
-          <div className="flex gap-10 mb-20">
+          <div className="flex gap-10">
             <div
               className="flex gap-2 cursor-pointer"
               onClick={handleBookmarkClick}

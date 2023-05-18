@@ -17,6 +17,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import clsx from 'clsx';
 
+import { format, parseISO } from 'date-fns';
+
 import { Interest } from '@/types/interests';
 import { NewsletterData } from '@/types/newsletters';
 
@@ -579,14 +581,51 @@ const NewslettersPage = ({
                     'border-b'
                   } border-b-light-grey`}
                 >
-                  <Image
-                    src={newsletter.image || ''}
-                    className="h-[224px] w-[224px] rounded-[10px] object-cover"
-                    alt="newsletter"
-                    width={224}
-                    height={224}
-                  />
-                  <div className="h-[224px] w-full">
+                  <div className="min-w-[224px]">
+                    <Image
+                      src={newsletter.image || ''}
+                      className="h-[224px] w-[224px] rounded-[10px] object-cover"
+                      alt="newsletter"
+                      width={224}
+                      height={224}
+                    />
+                  </div>
+                  <div className="w-full flex flex-col justify-between">
+                    <div className="flex mb-4 font-inter justify-between items-center">
+                      <div className="flex gap-2 items-center">
+                        <Avatar
+                          src={newsletter.addedByUser?.avatar}
+                          width={40}
+                          height={40}
+                          alt="author avatar"
+                          username={newsletter.newsletterAuthor}
+                          className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
+                        />
+                        <span className="text-sm text-dark-blue">
+                          {newsletter.newsletterAuthor}
+                        </span>
+                      </div>
+                      <div className="flex gap-6 items-center">
+                        {newsletter.averageDuration && (
+                          <>
+                            <p className="text-sm text-dark-grey">
+                              <span className="font-semibold">
+                                {newsletter.averageDuration} min&nbsp;
+                              </span>
+                              read
+                            </p>
+                            <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                          </>
+                        )}
+                        <span className="text-sm text-dark-grey font-semibold">
+                          {newsletter.pricing.charAt(0).toUpperCase() +
+                            newsletter.pricing.slice(1)}
+                        </span>
+                        <span className="text-sm text-grey">
+                          {format(parseISO(newsletter.createdAt), 'dd.MM.yyyy')}
+                        </span>
+                      </div>
+                    </div>
                     <span className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2">
                       {newsletter.title}
                     </span>

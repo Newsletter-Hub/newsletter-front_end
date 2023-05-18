@@ -32,6 +32,9 @@ export interface NewsletterData {
   averageRating: number;
   amountRatings: number;
   link: string;
+  averageDuration: number;
+  pricing: string;
+  createdAt: string;
 }
 
 export interface Reviewer {
