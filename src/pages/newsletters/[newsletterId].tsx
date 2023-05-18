@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterData } from '@/types/newsletters';
+import { GetReviewResponse, ReviewResponse } from '@/types/newsletters';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -34,12 +35,7 @@ import {
   GetNewsletterResponse,
   getNewsletter,
 } from '../../actions/newsletters/index';
-import {
-  GetReviewResponse,
-  ReviewResponse,
-  createReview,
-  getReviews,
-} from '../../actions/newsletters/reviews';
+import { createReview, getReviews } from '../../actions/newsletters/reviews';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
