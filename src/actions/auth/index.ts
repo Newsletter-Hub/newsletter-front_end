@@ -44,7 +44,10 @@ export const googleAuth = async ({ token, router }: GoogleAuth) => {
     const response = await api
       .post('auth/google', { json: { token } })
       .json()
-      .then(() => router.push('/'));
+      .then(res => {
+        Cookies.set('user', JSON.stringify(res), { expires: 1 });
+        router.push('/');
+      });
     return response;
   } catch (error) {
     console.log(error);

@@ -80,7 +80,7 @@ export const getUsersList = async ({
 }: GetUsersListProps) => {
   try {
     const response = await api
-      .get('users/users-list', {
+      .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
         headers: {
           Cookie: `accessToken=${token}`,

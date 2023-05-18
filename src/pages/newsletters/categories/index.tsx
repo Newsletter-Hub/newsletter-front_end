@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 interface Category {
   id: number;
-  name: string;
+  interestName: string;
   newsletterCount: number;
+  image: string;
 }
 
 interface CategoriesProps {
@@ -26,14 +27,14 @@ const Categories = ({ categories }: CategoriesProps) => {
           >
             <div>
               <Image
-                src="https://i.imgur.com/mVqGqRM.jpeg"
+                src={category.image}
                 alt="category"
                 width={302}
                 height={204}
               />
               <div className="bg-light-porcelain p-4 rounded-b-lg">
                 <p className="text-dark-blue font-semibold font-inter text-lg mb-1">
-                  {category.name}
+                  {category.interestName}
                 </p>
                 <p className="text-dark-grey font-inter text-sm">
                   {category.newsletterCount} Newsletter
