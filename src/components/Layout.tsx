@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Alegreya } from 'next/font/google';
 import Head from 'next/head';

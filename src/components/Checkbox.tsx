@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 
 import CheckIcon from '@/assets/icons/check';
