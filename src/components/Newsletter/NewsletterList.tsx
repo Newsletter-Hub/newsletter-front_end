@@ -352,8 +352,8 @@ const NewslettersList = ({
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
-        <h1 className="text-blue text-7xl font-medium mb-10">
-          {type === 'newsletter' ? 'Newsletters' : 'Bookmark'}
+        <h1 className="text-dark-blue text-7xl font-medium mb-10">
+          {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
         </h1>
         <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px]">
           <div className="flex-grow">
