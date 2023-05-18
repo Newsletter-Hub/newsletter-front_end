@@ -1,13 +1,14 @@
-import { getNewslettersList } from '@/actions/newsletters';
+import { getBookmarksList } from '@/actions/newsletters/bookmarks';
 import { getInterests } from '@/actions/user/interests';
 import React from 'react';
 
 import { GetServerSideProps } from 'next';
+import parseCookies from 'next-cookies';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
 
-const NewslettersPage = ({
+const BookmarksPage = ({
   newslettersListData,
   interests,
 }: NewslettersPageProps) => {
@@ -15,8 +16,8 @@ const NewslettersPage = ({
     <NewslettersList
       newslettersListData={newslettersListData}
       interests={interests}
-      getNewslettersList={getNewslettersList}
-      type="newsletter"
+      getNewslettersList={getBookmarksList}
+      type="bookmark"
     />
   );
 };
@@ -28,25 +29,28 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
       ? [+categoryId]
       : [];
-  const newsletterList = await getNewslettersList({
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken ? cookies.accessToken : null;
+  const bookmarkList = await getBookmarksList({
     page: 1,
     pageSize: 6,
     order: 'rating',
     orderDirection: 'DESC',
     categoriesIds,
+    token,
   });
   const interests = await getInterests();
-  if (!newsletterList || !interests) {
+  if (!bookmarkList || !interests) {
     return {
       notFound: true,
     };
   }
   return {
     props: {
-      newslettersListData: newsletterList.newslettersListData || null,
+      newslettersListData: bookmarkList.newslettersListData || null,
       interests: interests,
     },
   };
 };
 
-export default NewslettersPage;
+export default BookmarksPage;

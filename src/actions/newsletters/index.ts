@@ -26,7 +26,7 @@ export interface GetNewsletterResponse {
   error?: string;
 }
 
-interface GetNewsletterListProps {
+export interface GetNewsletterListProps {
   page: number;
   pageSize: number;
   order: string;

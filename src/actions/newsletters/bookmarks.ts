@@ -4,6 +4,14 @@ import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
+import { NewsletterData } from '@/types/newsletters';
+
+import { GetNewsletterListProps } from '.';
+
+export interface GetBookmarkListProps extends GetNewsletterListProps {
+  token?: string | null;
+}
+
 interface BookmarkWithIdPayload {
   newsletterId: string;
   token?: string;
@@ -62,9 +70,62 @@ export const deleteBookmark = async ({
 }: BookmarkWithIdPayload): Promise<DeleteBookmarkResponse> => {
   try {
     const response = await api.delete(`bookmarks/${newsletterId}`).json();
+    toast.success('Bookmark is succesfully deleted');
     return { isDeleted: response as string };
   } catch (error) {
-    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to delete bookmark');
     return { error: 'Failed to delete bookmark' };
+  }
+};
+
+export const getBookmarksList = async ({
+  page = 1,
+  pageSize = 5,
+  order,
+  orderDirection = 'ASC',
+  categoriesIds,
+  pricingTypes,
+  durationFrom,
+  durationTo,
+  ratings,
+  search,
+  token,
+}: GetBookmarkListProps) => {
+  try {
+    let url = `newsletters/newsletters-in-bookmarks?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
+
+    if (pricingTypes && pricingTypes.length > 0) {
+      pricingTypes.forEach((type, index) => {
+        url += `&pricingTypes[${index}]=${type}`;
+      });
+    }
+
+    if (categoriesIds && categoriesIds.length > 0) {
+      categoriesIds.forEach((id, index) => {
+        url += `&categoriesIds[${index}]=${id}`;
+      });
+    }
+
+    if (ratings && ratings.length > 0) {
+      ratings.forEach((id, index) => {
+        url += `&ratings[${index}]=${id}`;
+      });
+    }
+
+    if (durationFrom && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationFrom=${durationFrom}`;
+    if (durationTo && (durationFrom !== 1 || durationTo !== 60))
+      url += `&durationTo=${durationTo}`;
+    if (search) url += `&search=${search}`;
+
+    const newslettersListData: NewsletterData[] = await api
+      .get(url, { headers: { Cookie: `accessToken=${token}` } })
+      .json();
+    return { newslettersListData };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: 'Failed to get newsletter',
+    };
   }
 };
