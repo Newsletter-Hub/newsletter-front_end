@@ -8,3 +8,12 @@ export const getInterests = async () => {
     console.log(error);
   }
 };
+
+export const getCategories = async () => {
+  try {
+    const response = await api.get('interests/categories-list').json();
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
