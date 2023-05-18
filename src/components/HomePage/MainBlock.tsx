@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import Button from '@/components/Button';
 
-import homeImage from '@/assets/images/homeImage.svg';
+import HomeImage from '@/assets/images/homeImage';
 
 const MainBlock = () => {
   return (
@@ -15,15 +16,11 @@ const MainBlock = () => {
           Rate, review, and browse newsletters that you, your friends, and the
           world are subscribed to.
         </p>
-        <Button label="Create your profile now" rounded="xl" fontSize="md" />
+        <Link href="/sign-up">
+          <Button label="Create your profile now" rounded="xl" fontSize="md" />
+        </Link>
       </div>
-      <Image
-        alt="home_image"
-        src={homeImage}
-        placeholder="blur"
-        blurDataURL="src/assets/images/homeImage.svg"
-        width={450}
-      />
+      <HomeImage />
     </div>
   );
 };
