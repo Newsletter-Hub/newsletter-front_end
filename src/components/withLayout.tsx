@@ -32,9 +32,7 @@ const withLayout = (
   const WithLayoutComponent = (props: WithLayoutProps) => {
     const LayoutComponent =
       layout === 'default'
-        ? (props: WithLayoutProps) => (
-            <Layout user={props.user}>{props.children}</Layout>
-          )
+        ? (props: WithLayoutProps) => <Layout>{props.children}</Layout>
         : (props: WithLayoutProps) => (
             <EntryLayout {...entryLayoutConfig}>{props.children}</EntryLayout>
           );

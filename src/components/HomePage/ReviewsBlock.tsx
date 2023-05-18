@@ -1,148 +1,96 @@
+import { getReviews } from '@/actions/newsletters/reviews';
+import timeAgo from '@/helpers/timeAgo';
+import { useState } from 'react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
-import ArrowRight from '@/assets/icons/arrowRight';
-import HeartIcon from '@/assets/icons/heart';
-import PlusIcon from '@/assets/icons/plus';
-import StarIcon from '@/assets/icons/star';
-import starRating from '@/assets/images/star-rating.svg';
+import { ReviewResponse } from '@/types/newsletters';
 
 import Button from '../Button';
+import StarRating from '../StarRating';
 
-const latestReviews = [
-  {
-    image:
-      'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000',
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 5,
-    time: 'about 3 hours ago',
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    image:
-      'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000',
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 4,
-    time: 'about 3 hours ago',
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    image:
-      'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000',
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 1,
-    time: 'about 3 hours ago',
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    image:
-      'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000',
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 2,
-    time: 'about 3 hours ago',
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    image:
-      'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000',
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 3,
-    time: 'about 3 hours ago',
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-];
+interface ReviewsBlockProps {
+  reviewData: ReviewResponse;
+}
 
-const reviewsNewsletters = [
-  {
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 2,
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 2,
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-  {
-    name: 'bookbear express',
-    city: 'Torento',
-    ratingCount: 2,
-    description:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.The point of using Lorem Ipsum is that it has a more-or-lessnormal distribution of letters. Read Newletter',
-  },
-];
+const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
+  const [reviewsInfo, setReviewsInfo] = useState<ReviewResponse>(reviewData);
+  const [page, setPage] = useState(1);
+  const loadMore = async () => {
+    setPage(prevPage => prevPage + 1);
 
-const ReviewsBlock = () => {
+    const response = await getReviews({
+      page: 1,
+      pageSize: 5 * (page + 1),
+    });
+
+    if (response.reviews) {
+      setReviewsInfo(response.reviews);
+    }
+  };
+  if (!reviewsInfo) {
+    return <span>Failed to get reviews</span>;
+  }
   return (
-    <div className="flex gap-6 mb-24">
-      <div>
-        <h4 className="text-5xl">Latest reviews</h4>
-        <div className="pl-12 pt-12 pb-24 pr-16">
-          <div className="mb-10">
-            {latestReviews.map((review, index) => (
-              <div
-                className="flex border-b border-light-grey pb-3 pt-2.5"
-                key={index}
-              >
+    <div className="mb-24">
+      <div className="flex flex-col">
+        <h4 className="text-5xl text-dark-blue">Latest reviews</h4>
+        <div className="mb-10">
+          {reviewsInfo.reviews.map((review, index) => (
+            <div
+              className={`${
+                index + 1 !== reviewData.reviews.length && 'border-b'
+              } border-light-grey py-8 w-full`}
+              key={review.id}
+            >
+              <div className="flex items-center">
                 <Image
-                  src={review.image}
+                  src={review.reviewer.avatar}
                   alt="latest"
-                  width={64}
-                  height={64}
-                  className="rounded mr-8 max-h-16"
+                  width={96}
+                  height={96}
+                  className="rounded mr-8 max-h-[96px]"
                 />
                 <div className="mr-24 min-w-[200px]">
-                  <p className="text-xl text-lightBlack">{review.name}</p>
-                  <p className="text-base text-dark-grey font-inter">
-                    {review.city}
+                  <p className="text-xl text-dark-blue">
+                    {review.reviewer.username}
                   </p>
-                  <Image src={starRating} alt="Star rating" />
+                  <p className="text-base text-dark-grey font-inter mb-2">
+                    {review.reviewer.country}
+                  </p>
+                  <StarRating
+                    readonly
+                    value={review.rating}
+                    customStyles="mb-2"
+                  />
                   <p className="text-xs text-grey-chat font-inter">
-                    {review.time}
+                    {timeAgo(review.createdAt)}
                   </p>
                 </div>
-                <div>
-                  <div className="text-base max-w-[600px] mb-7 font-inter">
-                    {review.description}
-                  </div>
-                  <div className="flex justify-end gap-6 items-center">
-                    <HeartIcon />
-                    <StarIcon />
-                    <PlusIcon />
-                    <Button
-                      label="Read Newletter"
-                      rounded="md"
-                      bold
-                      uppercase
-                      fontSize="xs"
-                    />
-                  </div>
-                </div>
+                <p className="text-base mb-8 font-inter text-dark-blue">
+                  {review.comment}
+                </p>
               </div>
-            ))}
-          </div>
+              <Link
+                href={`newsletters/${review.newsletter.id}`}
+                className="flex justify-end items-end w-full"
+              >
+                <Button label="Read Newsletter" rounded="xl" fontSize="md" />
+              </Link>
+            </div>
+          ))}
+        </div>
+        {reviewsInfo.nextPage && (
           <Button
             label="See More"
-            variant="secondary"
+            variant="outlined-secondary"
             size="full"
-            rounded="md"
+            rounded="xl"
             bold
+            onClick={loadMore}
           />
-        </div>
+        )}
       </div>
     </div>
   );

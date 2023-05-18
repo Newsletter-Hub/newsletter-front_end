@@ -33,3 +33,30 @@ export interface NewsletterData {
   amountRatings: number;
   link: string;
 }
+
+export interface Reviewer {
+  username: string;
+  avatar: string;
+  country: string;
+}
+
+export interface Review {
+  reviewer: Reviewer;
+  newsletter: NewsletterData;
+  createdAt: string;
+  id: number;
+  comment: string;
+  rating: number;
+}
+
+export interface ReviewResponse {
+  reviews: Review[];
+  total?: number;
+  lastPage?: number;
+  nextPage?: number;
+}
+
+export interface GetReviewResponse {
+  reviews?: ReviewResponse;
+  error?: string;
+}

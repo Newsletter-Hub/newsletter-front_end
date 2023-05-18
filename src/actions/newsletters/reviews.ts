@@ -4,35 +4,13 @@ import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
+import { GetReviewResponse } from '@/types/newsletters';
+import { ReviewResponse } from '@/types/newsletters';
+
 interface ReviewPayload {
   comment?: string;
   rating: number;
   newsletterId: number;
-}
-
-interface Reviewer {
-  username?: string;
-  country?: string;
-  avatar?: string;
-}
-
-export interface Review {
-  rating?: number;
-  reviewer: Reviewer;
-  comment?: string;
-  id?: number;
-  createdAt?: string;
-}
-
-export interface ReviewResponse {
-  reviews: Review[];
-  total?: number;
-  lastPage?: number;
-}
-
-export interface GetReviewResponse {
-  reviews?: ReviewResponse;
-  error?: string;
 }
 
 interface CreateReviewResponse {
@@ -42,7 +20,7 @@ interface CreateReviewResponse {
 interface GetReviewsQuery {
   page: number;
   pageSize: number;
-  newsletterId: number;
+  newsletterId?: number;
 }
 
 export const createReview = async ({
@@ -79,13 +57,20 @@ export const getReviews = async ({
   pageSize = 5,
 }: GetReviewsQuery): Promise<GetReviewResponse> => {
   try {
+    const searchParams: {
+      page: number;
+      pageSize: number;
+      newsletterId?: number;
+    } = {
+      page,
+      pageSize,
+    };
+    if (newsletterId) {
+      searchParams.newsletterId = newsletterId;
+    }
     const reviews: ReviewResponse = await api
       .get(`reviews`, {
-        searchParams: {
-          newsletterId,
-          page,
-          pageSize,
-        },
+        searchParams,
       })
       .json();
     return { reviews };
