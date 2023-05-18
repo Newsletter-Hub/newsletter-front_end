@@ -127,6 +127,12 @@ const NewsletterPage = ({
     }
   };
 
+  const handleBookmarkClick = () => {
+    bookmarkState === 'none'
+      ? handleAddBookmark()
+      : bookmarkState !== 'unauthorized' && handleDeleteBookmark();
+  };
+
   const loadMoreReviews = async () => {
     setPage(prevPage => prevPage + 1);
 
@@ -265,23 +271,17 @@ const NewsletterPage = ({
             </span>
           </div>
           <div className="flex gap-10 mb-20">
-            {bookmarkState === 'none' ? (
-              <div
-                className="flex gap-2 cursor-pointer"
-                onClick={handleAddBookmark}
-              >
-                <BookmarkIcon />
-                <span className="font-inter text-sm text-dark-grey">
-                  Add to bookmarks
-                </span>
-              </div>
-            ) : (
-              bookmarkState !== 'unauthorized' && (
-                <div onClick={handleDeleteBookmark}>
-                  <BookmarkIcon className="fill-primary cursor-pointer" />
-                </div>
-              )
-            )}
+            <div
+              className="flex gap-2 cursor-pointer"
+              onClick={handleBookmarkClick}
+            >
+              <BookmarkIcon
+                className={`${bookmarkState === 'added' && 'fill-dark-blue'}`}
+              />
+              <span className="font-inter text-sm text-dark-grey">
+                {bookmarkState === 'added' ? 'Bookmarked' : 'Add to bookmarks'}
+              </span>
+            </div>
             {/* logic on future */}
             {/* <div className="flex gap-2 cursor-pointer">
               <ListIcon />

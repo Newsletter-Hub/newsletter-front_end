@@ -109,7 +109,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
             onChange={handleChangeSearch}
           />
           <Popover
-            buttonLabel={
+            triggerContent={
               <span className="flex text-base justify-center items-center px-6 py-3 gap-4">
                 {sortTypes[choosedSortType].label}
                 <SortIcon />
