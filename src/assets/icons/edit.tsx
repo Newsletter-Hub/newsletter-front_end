@@ -10,8 +10,8 @@ const EditIcon = () => {
       <path
         d="M3 16.32V21H7.70379L21 7.698L16.3039 3L3 16.32Z"
         stroke="#253646"
-        stroke-width="1.5"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
       />
     </svg>
   );

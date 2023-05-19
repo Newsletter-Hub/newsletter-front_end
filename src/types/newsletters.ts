@@ -37,6 +37,16 @@ export interface NewsletterData {
   createdAt: string;
 }
 
+export interface Newsletter {
+  total?: number;
+  newsletters?: NewsletterData[];
+}
+
+export interface NewslettersListData {
+  total: number;
+  newsletters: NewsletterData[];
+}
+
 export interface Reviewer {
   username: string;
   avatar: string;

@@ -103,7 +103,7 @@ const Header = () => {
                   My profile
                 </Link>
                 <Link
-                  href="/bookmarks"
+                  href="/profile/bookmarks"
                   className="flex gap-3 items-center text-dark-blue text-base p-2"
                 >
                   <div className="w-6 h-6">

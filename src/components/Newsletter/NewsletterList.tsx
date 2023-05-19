@@ -22,7 +22,11 @@ import clsx from 'clsx';
 import { format, parseISO } from 'date-fns';
 
 import { Interest } from '@/types/interests';
-import { NewsletterData } from '@/types/newsletters';
+import {
+  Newsletter,
+  NewsletterData,
+  NewslettersListData,
+} from '@/types/newsletters';
 
 import Accordion from '@/components/Accordion';
 import Avatar from '@/components/Avatar';
@@ -44,11 +48,6 @@ import StarIcon from '@/assets/icons/star';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
-export interface NewslettersListData {
-  total: number;
-  newsletters: NewsletterData[];
-}
-
 interface NewsletterResponse {
   newslettersListData?: NewsletterData[];
   error?: string;
@@ -63,11 +62,11 @@ export interface NewslettersPageProps {
   interests?: Interest[];
   getNewslettersList: GetNewslettersListType;
   type: 'bookmark' | 'newsletter';
-}
-
-interface Newsletter {
-  total?: number;
-  newsletters?: NewsletterData[];
+  isSeparated?: boolean;
+  isRated?: boolean;
+  isAuthor?: boolean;
+  isFollowEnable?: boolean;
+  isNewsletterFollowed?: boolean;
 }
 
 interface SortType {
@@ -116,6 +115,11 @@ const NewslettersList = ({
   interests,
   getNewslettersList,
   type,
+  isSeparated = true,
+  isRated = true,
+  isAuthor = true,
+  isFollowEnable = true,
+  isNewsletterFollowed = false,
 }: NewslettersPageProps) => {
   const router = useRouter();
   const { id } = router.query;
@@ -346,280 +350,302 @@ const NewslettersList = ({
     }
   };
 
-  if (!interests?.length) {
+  if (interests && !interests?.length) {
     return <span>loading..</span>;
   }
   return (
-    <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
+    <div
+      className={`flex justify-center items-center flex-col ${
+        isSeparated && 'pt-20 px-[17%]'
+      }`}
+    >
       <div className="max-w-[1280px]">
-        <h1 className="text-dark-blue text-7xl font-medium mb-10">
-          {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
-        </h1>
-        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px]">
-          <div className="flex-grow">
-            <Input
-              isSearch
-              placeholder="Search Newsletter Hub"
-              wrapperStyles="max-w-[262px]"
-              customStyles="h-[48px]"
-              iconStyles="!top-3"
-              onChange={handleChangeSearch}
-            />
-          </div>
-          <div className="flex gap-4">
-            <Button
-              variant="outlined-secondary"
-              onClick={handleOpenModal}
-              label={
-                <span
-                  className={`flex text-base justify-center px-6 gap-2 ${
-                    filtersCount && 'text-primary'
-                  }`}
-                >
-                  <FilterIcon
-                    className={`${
-                      filtersCount
-                        ? 'fill-primary stroke-primary'
-                        : 'stroke-grey-chat fill-grey-chat'
-                    }`}
-                  />
-                  Filters {Boolean(filtersCount) && `(${filtersCount})`}
-                </span>
-              }
-            />
-            <Modal open={isOpenModal} handleClose={handleCloseModal}>
-              <div>
-                <h2 className={modalTitleStyles}>
-                  What would you like to filter by?
-                </h2>
-                <div className="flex flex-col gap-9 mb-9">
-                  <Accordion
-                    label="Categories"
-                    isSelected={Boolean(filtersPayload.categories.length)}
-                    isOpen={filters.categories}
-                    setIsOpen={value => {
-                      setFilters({ ...filters, categories: value });
-                    }}
-                  >
-                    <div className="pt-4 pl-9 grid grid-cols-2 gap-4">
-                      {interests?.map(interest => (
-                        <Checkbox
-                          label={interest.interestName}
-                          key={interest.id}
-                          setChecked={value => {
-                            if (value) {
-                              setFiltersPayload({
-                                ...filtersPayload,
-                                categories: [
-                                  ...filtersPayload.categories,
-                                  interest.id,
-                                ],
-                              });
-                            } else {
-                              setFiltersPayload({
-                                ...filtersPayload,
-                                categories: filtersPayload.categories.filter(
-                                  item => item !== interest.id
-                                ),
-                              });
-                            }
-                          }}
-                          checked={filtersPayload.categories.includes(
-                            interest.id
-                          )}
-                        />
-                      ))}
-                    </div>
-                  </Accordion>
-                  <Accordion
-                    label="Pricing type"
-                    isOpen={filters.pricingType}
-                    isSelected={Boolean(filtersPayload.pricingType.length)}
-                    setIsOpen={value => {
-                      setFilters({ ...filters, pricingType: value });
-                    }}
-                  >
-                    <div className="pt-4 pl-9 flex flex-col gap-2">
-                      <Checkbox
-                        label="Free"
-                        setChecked={value => {
-                          if (value) {
-                            setFiltersPayload({
-                              ...filtersPayload,
-                              pricingType: [
-                                ...filtersPayload.pricingType,
-                                'Free',
-                              ],
-                            });
-                          } else {
-                            setFiltersPayload({
-                              ...filtersPayload,
-                              pricingType: filtersPayload.pricingType.filter(
-                                item => item !== 'Free'
-                              ),
-                            });
-                          }
-                        }}
-                        checked={filtersPayload.pricingType.includes('Free')}
-                      />
-                      <Checkbox
-                        label="Paid"
-                        setChecked={value => {
-                          if (value) {
-                            setFiltersPayload({
-                              ...filtersPayload,
-                              pricingType: [
-                                ...filtersPayload.pricingType,
-                                'Paid',
-                              ],
-                            });
-                          } else {
-                            setFiltersPayload({
-                              ...filtersPayload,
-                              pricingType: filtersPayload.pricingType.filter(
-                                item => item !== 'Paid'
-                              ),
-                            });
-                          }
-                        }}
-                        checked={filtersPayload.pricingType.includes('Paid')}
-                      />
-                    </div>
-                  </Accordion>
-                  <Accordion
-                    label="Duration"
-                    isOpen={filters.duration}
-                    isSelected={Boolean(
-                      filtersPayload.durationFrom !== 1 ||
-                        filtersPayload.durationTo !== 60
-                    )}
-                    setIsOpen={value => {
-                      setFilters({ ...filters, duration: value });
-                    }}
-                  >
-                    <div className="pl-9">
-                      <div className="pt-[18px] mb-2">
-                        <Slider
-                          min={1}
-                          max={60}
-                          from={filtersPayload.durationFrom}
-                          to={filtersPayload.durationTo}
-                          step={1}
-                          values={[
-                            filtersPayload.durationFrom,
-                            filtersPayload.durationTo,
-                          ]}
-                          setValues={values =>
-                            setFiltersPayload({
-                              ...filtersPayload,
-                              durationFrom: values[0],
-                              durationTo: values[1],
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="flex justify-between">
-                        <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
-                          from&nbsp;
-                          <span className="font-semibold">
-                            {filtersPayload.durationFrom} minute
-                          </span>
-                        </p>
-                        <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
-                          to&nbsp;
-                          <span className="font-semibold">
-                            {filtersPayload.durationTo} minute
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </Accordion>
-                  <Accordion
-                    label="Rating"
-                    isOpen={filters.rating}
-                    isSelected={Boolean(filtersPayload.ratings.length)}
-                    setIsOpen={value => {
-                      setFilters({ ...filters, rating: value });
-                    }}
-                  >
-                    <div className="flex flex-col gap-[10px] pt-4 pl-9">
-                      {ratings.map(rating => (
-                        <Checkbox
-                          key={rating}
-                          label={<StarRating value={rating} readonly />}
-                          setChecked={value => {
-                            if (value) {
-                              setFiltersPayload({
-                                ...filtersPayload,
-                                ratings: [...filtersPayload.ratings, rating],
-                              });
-                            } else {
-                              setFiltersPayload({
-                                ...filtersPayload,
-                                ratings: filtersPayload.ratings.filter(
-                                  item => item !== rating
-                                ),
-                              });
-                            }
-                          }}
-                          checked={filtersPayload.ratings.includes(rating)}
-                        />
-                      ))}
-                    </div>
-                  </Accordion>
-                </div>
-                <div className="flex pl-8 justify-between items-center">
-                  <span
-                    className="text-base text-lightBlack cursor-pointer"
-                    onClick={handleFiltersReset}
-                  >
-                    Clear
-                  </span>
-                  <Button
-                    label="Apply filters"
-                    rounded="xl"
-                    fontSize="md"
-                    onClick={applyFilters}
-                  />
-                </div>
+        {isSeparated && (
+          <>
+            <h1 className="text-dark-blue text-7xl font-medium mb-10">
+              {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
+            </h1>
+            <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px]">
+              <div className="flex-grow">
+                <Input
+                  isSearch
+                  placeholder="Search Newsletter Hub"
+                  wrapperStyles="max-w-[262px]"
+                  customStyles="h-[48px]"
+                  iconStyles="!top-3"
+                  onChange={handleChangeSearch}
+                />
               </div>
-            </Modal>
-            <Popover
-              triggerContent={
-                <span className="flex text-base justify-center items-center px-6 gap-4">
-                  {sortTypes[choosedSortType].label}
-                  <SortIcon />
-                </span>
-              }
-            >
-              <div className="flex flex-col gap-[6px] py-[18px]">
-                {sortTypes.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <div
-                      className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
-                        choosedSortType === index &&
-                        'bg-light-porcelain rounded'
+              <div className="flex gap-4">
+                <Button
+                  variant="outlined-secondary"
+                  onClick={handleOpenModal}
+                  label={
+                    <span
+                      className={`flex text-base justify-center px-6 gap-2 ${
+                        filtersCount && 'text-primary'
                       }`}
-                      onClick={() => handleSort(index)}
                     >
-                      <span className="flex-1">{item.label}</span>
-                      <div className="w-4">
-                        {index === choosedSortType && (
-                          <CheckIcon className="stroke-[#253646]" />
+                      <FilterIcon
+                        className={`${
+                          filtersCount
+                            ? 'fill-primary stroke-primary'
+                            : 'stroke-grey-chat fill-grey-chat'
+                        }`}
+                      />
+                      Filters {Boolean(filtersCount) && `(${filtersCount})`}
+                    </span>
+                  }
+                />
+                <Modal open={isOpenModal} handleClose={handleCloseModal}>
+                  <div>
+                    <h2 className={modalTitleStyles}>
+                      What would you like to filter by?
+                    </h2>
+                    <div className="flex flex-col gap-9 mb-9">
+                      <Accordion
+                        label="Categories"
+                        isSelected={Boolean(filtersPayload.categories.length)}
+                        isOpen={filters.categories}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, categories: value });
+                        }}
+                      >
+                        <div className="pt-4 pl-9 grid grid-cols-2 gap-4">
+                          {interests?.map(interest => (
+                            <Checkbox
+                              label={interest.interestName}
+                              key={interest.id}
+                              setChecked={value => {
+                                if (value) {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    categories: [
+                                      ...filtersPayload.categories,
+                                      interest.id,
+                                    ],
+                                  });
+                                } else {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    categories:
+                                      filtersPayload.categories.filter(
+                                        item => item !== interest.id
+                                      ),
+                                  });
+                                }
+                              }}
+                              checked={filtersPayload.categories.includes(
+                                interest.id
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </Accordion>
+                      <Accordion
+                        label="Pricing type"
+                        isOpen={filters.pricingType}
+                        isSelected={Boolean(filtersPayload.pricingType.length)}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, pricingType: value });
+                        }}
+                      >
+                        <div className="pt-4 pl-9 flex flex-col gap-2">
+                          <Checkbox
+                            label="Free"
+                            setChecked={value => {
+                              if (value) {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType: [
+                                    ...filtersPayload.pricingType,
+                                    'Free',
+                                  ],
+                                });
+                              } else {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType:
+                                    filtersPayload.pricingType.filter(
+                                      item => item !== 'Free'
+                                    ),
+                                });
+                              }
+                            }}
+                            checked={filtersPayload.pricingType.includes(
+                              'Free'
+                            )}
+                          />
+                          <Checkbox
+                            label="Paid"
+                            setChecked={value => {
+                              if (value) {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType: [
+                                    ...filtersPayload.pricingType,
+                                    'Paid',
+                                  ],
+                                });
+                              } else {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType:
+                                    filtersPayload.pricingType.filter(
+                                      item => item !== 'Paid'
+                                    ),
+                                });
+                              }
+                            }}
+                            checked={filtersPayload.pricingType.includes(
+                              'Paid'
+                            )}
+                          />
+                        </div>
+                      </Accordion>
+                      <Accordion
+                        label="Duration"
+                        isOpen={filters.duration}
+                        isSelected={Boolean(
+                          filtersPayload.durationFrom !== 1 ||
+                            filtersPayload.durationTo !== 60
                         )}
-                      </div>
+                        setIsOpen={value => {
+                          setFilters({ ...filters, duration: value });
+                        }}
+                      >
+                        <div className="pl-9">
+                          <div className="pt-[18px] mb-2">
+                            <Slider
+                              min={1}
+                              max={60}
+                              from={filtersPayload.durationFrom}
+                              to={filtersPayload.durationTo}
+                              step={1}
+                              values={[
+                                filtersPayload.durationFrom,
+                                filtersPayload.durationTo,
+                              ]}
+                              setValues={values =>
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  durationFrom: values[0],
+                                  durationTo: values[1],
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
+                              from&nbsp;
+                              <span className="font-semibold">
+                                {filtersPayload.durationFrom} minute
+                              </span>
+                            </p>
+                            <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
+                              to&nbsp;
+                              <span className="font-semibold">
+                                {filtersPayload.durationTo} minute
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </Accordion>
+                      <Accordion
+                        label="Rating"
+                        isOpen={filters.rating}
+                        isSelected={Boolean(filtersPayload.ratings.length)}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, rating: value });
+                        }}
+                      >
+                        <div className="flex flex-col gap-[10px] pt-4 pl-9">
+                          {ratings.map(rating => (
+                            <Checkbox
+                              key={rating}
+                              label={<StarRating value={rating} readonly />}
+                              setChecked={value => {
+                                if (value) {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    ratings: [
+                                      ...filtersPayload.ratings,
+                                      rating,
+                                    ],
+                                  });
+                                } else {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    ratings: filtersPayload.ratings.filter(
+                                      item => item !== rating
+                                    ),
+                                  });
+                                }
+                              }}
+                              checked={filtersPayload.ratings.includes(rating)}
+                            />
+                          ))}
+                        </div>
+                      </Accordion>
                     </div>
-                  </React.Fragment>
-                ))}
+                    <div className="flex pl-8 justify-between items-center">
+                      <span
+                        className="text-base text-lightBlack cursor-pointer"
+                        onClick={handleFiltersReset}
+                      >
+                        Clear
+                      </span>
+                      <Button
+                        label="Apply filters"
+                        rounded="xl"
+                        fontSize="md"
+                        onClick={applyFilters}
+                      />
+                    </div>
+                  </div>
+                </Modal>
+                <Popover
+                  triggerContent={
+                    <span className="flex text-base justify-center items-center px-6 gap-4">
+                      {sortTypes[choosedSortType].label}
+                      <SortIcon />
+                    </span>
+                  }
+                >
+                  <div className="flex flex-col gap-[6px] py-[18px]">
+                    {sortTypes.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <div
+                          className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
+                            choosedSortType === index &&
+                            'bg-light-porcelain rounded'
+                          }`}
+                          onClick={() => handleSort(index)}
+                        >
+                          <span className="flex-1">{item.label}</span>
+                          <div className="w-4">
+                            {index === choosedSortType && (
+                              <CheckIcon className="stroke-[#253646]" />
+                            )}
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </Popover>
               </div>
-            </Popover>
-          </div>
-        </div>
+            </div>
+          </>
+        )}
         <div>
           {!newslettersData ||
           Boolean(!newslettersData.newsletters?.length) ||
           !newslettersData.newsletters ? (
-            <div className="flex flex-col justify-center items-center pt-16">
+            <div
+              className={`flex flex-col justify-center items-center ${
+                isSeparated && 'pt-16'
+              }`}
+            >
               <SearchResultsIcon />
               <span className="text-5xl text-lightBlack">
                 Sorry! We couldn’t find anything
@@ -646,20 +672,26 @@ const NewslettersList = ({
                     />
                   </div>
                   <div className="w-full flex flex-col justify-between">
-                    <div className="flex mb-4 font-inter justify-between items-center">
-                      <div className="flex gap-2 items-center">
-                        <Avatar
-                          src={newsletter.addedByUser?.avatar}
-                          width={40}
-                          height={40}
-                          alt="author avatar"
-                          username={newsletter.newsletterAuthor}
-                          className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
-                        />
-                        <span className="text-sm text-dark-blue">
-                          {newsletter.newsletterAuthor}
-                        </span>
-                      </div>
+                    <div
+                      className={`flex mb-4 font-inter ${
+                        isAuthor ? 'justify-between' : 'justify-end'
+                      } items-center`}
+                    >
+                      {isAuthor && (
+                        <div className="flex gap-2 items-center">
+                          <Avatar
+                            src={newsletter.addedByUser?.avatar}
+                            width={40}
+                            height={40}
+                            alt="author avatar"
+                            username={newsletter.newsletterAuthor}
+                            className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
+                          />
+                          <span className="text-sm text-dark-blue">
+                            {newsletter.newsletterAuthor}
+                          </span>
+                        </div>
+                      )}
                       <div className="flex gap-6 items-center">
                         {newsletter.averageDuration && (
                           <>
@@ -684,7 +716,7 @@ const NewslettersList = ({
                     <span className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2">
                       {newsletter.title}
                     </span>
-                    <span className="font-inter text-base text-lightBlack mb-6 block min-w-[700px]">
+                    <span className="font-inter text-base text-lightBlack mb-6 block">
                       {newsletter.description}
                     </span>
                     <div className="flex mb-6 gap-2">
@@ -703,7 +735,7 @@ const NewslettersList = ({
                         value={newsletter.averageRating}
                         customStyles="flex-1"
                       />
-                      <div className="flex gap-6 mr-10">
+                      <div className={`flex ${isRated && 'gap-6'} mr-10`}>
                         <div
                           onClick={() =>
                             handleClickBookmark(String(newsletter.id))
@@ -715,13 +747,15 @@ const NewslettersList = ({
                             }`}
                           />
                         </div>
-                        <div
-                          onClick={() =>
-                            setIsOpenReviewModal(newsletter.id as number)
-                          }
-                        >
-                          <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
-                        </div>
+                        {isRated && (
+                          <div
+                            onClick={() =>
+                              setIsOpenReviewModal(newsletter.id as number)
+                            }
+                          >
+                            <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
+                          </div>
+                        )}
                         <Modal
                           open={Boolean(isOpenReviewModal === newsletter.id)}
                           handleClose={() => setIsOpenReviewModal(false)}
@@ -806,16 +840,28 @@ const NewslettersList = ({
                             fontSize="md"
                           />
                         </Link>
-                        <Button
-                          rounded="xl"
-                          fontSize="md"
-                          label={
-                            <span className="flex items-center gap-2">
-                              <PlusIcon />
-                              Follow
-                            </span>
-                          }
-                        />
+                        {isFollowEnable && (
+                          <Button
+                            rounded="xl"
+                            fontSize="md"
+                            variant={
+                              isNewsletterFollowed
+                                ? 'outlined-secondary'
+                                : 'primary'
+                            }
+                            customStyles="pl-8 pr-6"
+                            label={
+                              isNewsletterFollowed ? (
+                                'Following'
+                              ) : (
+                                <span className="flex items-center gap-2">
+                                  <PlusIcon />
+                                  Follow
+                                </span>
+                              )
+                            }
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
