@@ -12,7 +12,7 @@ const throwErrorMessage = (error: HTTPError, defaultMessage: string) => {
         toast.error(defaultMessage);
       });
   } else {
-    toast(defaultMessage);
+    toast.error(defaultMessage);
   }
 };
 
