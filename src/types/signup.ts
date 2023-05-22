@@ -9,6 +9,7 @@ export interface Payload {
   avatar?: Blob | string;
   avatarURL?: string | ArrayBuffer;
   interests?: number[];
+  type?: 'signup' | 'update' | 'interests';
 }
 
 export interface UserInfoStepsProps {

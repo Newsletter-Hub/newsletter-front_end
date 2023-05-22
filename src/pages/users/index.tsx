@@ -105,7 +105,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
             wrapperStyles="max-w-[262px]"
             customStyles="h-[48px]"
             iconStyles="!top-3"
-            onChange={handleChangeSearch}
+            onChange={e => handleChangeSearch(e.target.value)}
           />
           <Popover
             triggerContent={

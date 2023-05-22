@@ -22,7 +22,7 @@ interface InputProps {
   label?: string;
   wrapperStyles?: string;
   iconStyles?: string;
-  onChange?: (value: string) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
 }
 
@@ -79,7 +79,7 @@ const Input = ({
           onChange={e => {
             setValue(e.target.value);
             if (onChange) {
-              onChange(e.target.value);
+              onChange(e);
             }
           }}
         />

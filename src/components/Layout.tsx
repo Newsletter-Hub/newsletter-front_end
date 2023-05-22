@@ -14,7 +14,6 @@ interface LayoutProps {
 const alegreya = Alegreya({ subsets: ['latin'] });
 
 const Layout = ({ children, isFooter }: LayoutProps) => {
-  console.log(isFooter);
   return (
     <>
       <Head>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import Datetime from 'react-datetime';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -13,31 +13,70 @@ import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 import Select, { Option } from '../Select';
 
+export interface EditProfilePayload {
+  avatar: string;
+  country: string;
+  state: string;
+  dateOfBirth: string;
+  username: string;
+  email: string;
+  profileType: 'reader' | 'writter';
+}
 interface EditProps {
   user: UserMe;
+  onSubmit: (data: EditProfilePayload) => void;
+  setIsDirty: (value: boolean) => void;
 }
 
-const Edit = ({ user }: EditProps) => {
+const Edit = forwardRef(({ user, onSubmit, setIsDirty }: EditProps, ref) => {
   const [profileType, setProfileType] = useState(user.profileType);
   const [states, setStates] = useState<Option[]>([]);
   const {
-    register,
     handleSubmit,
-    formState: { errors },
     control,
     setValue,
     getValues,
     watch,
-  } = useForm();
+    reset,
+    register,
+    formState: { isDirty },
+  } = useForm({
+    defaultValues: {
+      avatar: user.avatar,
+      country: user.country,
+      state: user.state,
+      dateOfBirth: user.dateOfBirth,
+      username: user.username,
+      email: user.email,
+      profileType: user.profileType,
+    },
+  });
+
+  useImperativeHandle(ref, () => ({
+    resetForm: () => reset(),
+    submitForm: () => handleSubmit(onSubmit)(),
+  }));
 
   const watchCountry = watch('country');
 
   const handleChooseAvatar = (value: File | string) => {
-    setValue('avatar', value);
+    setValue('avatar', value as string);
   };
 
+  const countries = Country.getAllCountries()
+    .filter(item => COUNTRIES.includes(item.name))
+    .map(item => {
+      return {
+        value: item.name,
+        label: `${item.flag} ${item.name}`,
+      };
+    });
+
   useEffect(() => {
-    const formattedStates = State.getStatesOfCountry(getValues().country).map(
+    const choosedCountry = Country.getAllCountries().find(
+      item => item.name === getValues().country
+    )?.isoCode;
+    const formattedStates = State.getStatesOfCountry(choosedCountry).map(
       item => {
         return {
           value: item.name,
@@ -48,14 +87,10 @@ const Edit = ({ user }: EditProps) => {
     setStates(formattedStates);
   }, [watchCountry, getValues]);
 
-  const countries = Country.getAllCountries()
-    .filter(item => COUNTRIES.includes(item.name))
-    .map(item => {
-      return {
-        value: item.isoCode,
-        label: `${item.flag} ${item.name}`,
-      };
-    });
+  useEffect(() => {
+    setIsDirty(isDirty);
+  }, [getValues, isDirty, setIsDirty]);
+
   return (
     <div className="pt-10">
       <h3 className="text-xl text-dark-blue font-medium mb-8">Edit profile</h3>
@@ -84,13 +119,21 @@ const Edit = ({ user }: EditProps) => {
             label="Reader"
             selected={profileType === 'reader'}
             rounded="xl"
-            onClick={() => setProfileType('reader')}
+            onClick={e => {
+              e.preventDefault();
+              setValue('profileType', 'reader');
+              setProfileType('reader');
+            }}
           />
           <Button
             label="Writter"
             selected={profileType === 'writter'}
             rounded="xl"
-            onClick={() => setProfileType('writter')}
+            onClick={e => {
+              e.preventDefault();
+              setValue('profileType', 'writter');
+              setProfileType('writter');
+            }}
           />
         </div>
         <div className="max-w-[676px] mb-[76px]">
@@ -98,21 +141,33 @@ const Edit = ({ user }: EditProps) => {
             Personal information
           </p>
           <div className="flex mb-12 max-w-[676px] overflow-hidden gap-6">
-            <Input
-              label="Enter your name"
-              variant="filled"
-              placeholder="Enter your name"
-              defaultValue={user.username}
-              wrapperStyles="w-1/2"
-              register={{ ...register('username') }}
+            <Controller
+              control={control}
+              name="username"
+              render={({ field }) => (
+                <Input
+                  label="Enter your name"
+                  variant="filled"
+                  placeholder="Enter your name"
+                  defaultValue={field.value}
+                  wrapperStyles="w-1/2"
+                  onChange={e => field.onChange(e.target.value)}
+                />
+              )}
             />
-            <Input
-              label="Enter your email address"
-              variant="filled"
-              placeholder="Enter your email address"
-              defaultValue={user.email}
-              wrapperStyles="w-1/2"
-              register={{ ...register('email') }}
+            <Controller
+              control={control}
+              name="email"
+              render={({ field }) => (
+                <Input
+                  label="Enter your email address"
+                  variant="filled"
+                  placeholder="Enter your email address"
+                  defaultValue={field.value}
+                  wrapperStyles="w-1/2"
+                  onChange={e => field.onChange(e.target.value)}
+                />
+              )}
             />
           </div>
           <Input
@@ -127,7 +182,7 @@ const Edit = ({ user }: EditProps) => {
           </p>
           <Controller
             control={control}
-            name="dateBirth"
+            name="dateOfBirth"
             render={({ field: { onChange, value } }) => (
               <Datetime
                 timeFormat={false}
@@ -176,6 +231,8 @@ const Edit = ({ user }: EditProps) => {
       </form>
     </div>
   );
-};
+});
+
+Edit.displayName = 'Edit';
 
 export default Edit;

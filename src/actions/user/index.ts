@@ -1,14 +1,22 @@
+import { toast } from 'react-toastify';
+
 import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
+import { UserMe } from '@/types/user';
 
 interface GetUserMePayload {
   token?: string | null;
 }
 
+interface GetUserMeResponse {
+  response?: UserMe;
+  error?: string;
+}
+
 interface UpdateUserResponse {
   error?: string;
-  response?: object;
+  response?: UserMe;
 }
 
 interface GetUsersListProps {
@@ -27,6 +35,7 @@ export const updateUser = async ({
   profileType,
   avatar,
   interests,
+  type = 'signup',
 }: Payload): Promise<UpdateUserResponse | undefined> => {
   try {
     const formData = new FormData();
@@ -45,7 +54,16 @@ export const updateUser = async ({
       body: formData,
       method: 'PUT',
       credentials: 'include',
-    });
+    }).then(res => res.json());
+    if (response) {
+      toast.success(
+        type === 'signup'
+          ? 'User succesfully created'
+          : type === 'update'
+          ? 'Your info succesfully updated'
+          : 'Your interests succesfully updated'
+      );
+    }
     return { response };
   } catch (error) {
     console.log(error);
@@ -53,16 +71,17 @@ export const updateUser = async ({
   }
 };
 
-export const getUserMe = async ({ token }: GetUserMePayload) => {
+export const getUserMe = async ({
+  token,
+}: GetUserMePayload): Promise<GetUserMeResponse> => {
   try {
-    const response = await api
+    const headers = token ? { Cookie: `accessToken=${token}` } : undefined;
+    const response: UserMe = await api
       .get('users', {
-        headers: {
-          Cookie: `accessToken=${token}`,
-        },
+        headers,
       })
       .json();
-    return response;
+    return { response };
   } catch (error) {
     console.log(error);
     return { error: 'Failed to get user' };

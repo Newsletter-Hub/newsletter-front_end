@@ -52,8 +52,20 @@ const BasicInformation = ({
     setPage(page + 1);
   };
 
+  const countries = Country.getAllCountries()
+    .filter(item => COUNTRIES.includes(item.name))
+    .map(item => {
+      return {
+        value: item.name,
+        label: `${item.flag} ${item.name}`,
+      };
+    });
+
   useEffect(() => {
-    const formattedStates = State.getStatesOfCountry(getValues().country).map(
+    const choosedCountry = Country.getAllCountries().find(
+      item => item.name === getValues().country
+    )?.isoCode;
+    const formattedStates = State.getStatesOfCountry(choosedCountry).map(
       item => {
         return {
           value: item.name,
@@ -63,15 +75,6 @@ const BasicInformation = ({
     );
     setStates(formattedStates);
   }, [watchCountry, getValues]);
-
-  const countries = Country.getAllCountries()
-    .filter(item => COUNTRIES.includes(item.name))
-    .map(item => {
-      return {
-        value: item.isoCode,
-        label: `${item.flag} ${item.name}`,
-      };
-    });
   return (
     <form className="max-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
       <p className="text-xs text-dark-blue mb-3 pl-4 font-inter font-semibold">
