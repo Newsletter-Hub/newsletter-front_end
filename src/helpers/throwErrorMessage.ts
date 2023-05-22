@@ -9,10 +9,10 @@ const throwErrorMessage = (error: HTTPError, defaultMessage: string) => {
         toast.error(errorMessage.message || defaultMessage);
       })
       .catch(() => {
-        toast(defaultMessage);
+        toast.error(defaultMessage);
       });
   } else {
-    toast(defaultMessage);
+    toast.error(defaultMessage);
   }
 };
 

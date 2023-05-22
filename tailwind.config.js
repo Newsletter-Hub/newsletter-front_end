@@ -12,6 +12,7 @@ module.exports = {
       },
       backgroundImage: {
         getStarted: "url('../assets/images/getStartedBackground.png')",
+        profile: "url('../assets/images/userPageBg.jpg')",
       },
       boxShadow: {
         md: '0px 4px 60px rgba(0,0,0,0.1)',
