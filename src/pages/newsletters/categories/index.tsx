@@ -16,7 +16,7 @@ interface CategoriesProps {
 
 const Categories = ({ categories }: CategoriesProps) => {
   return (
-    <div className="px-[17%] pt-20">
+    <div className="px-[10%] pt-20">
       <h1 className="text-dark-blue text-7xl font-medium mb-10">Categories</h1>
       <div className="flex flex-wrap -m-2">
         {categories.map(category => (
@@ -31,9 +31,10 @@ const Categories = ({ categories }: CategoriesProps) => {
                 alt="category"
                 width={302}
                 height={204}
+                className="rounded-t-lg min-h-[204px] object-cover"
               />
               <div className="bg-light-porcelain p-4 rounded-b-lg">
-                <p className="text-dark-blue font-semibold font-inter text-lg mb-1">
+                <p className="text-dark-blue font-semibold font-inter text-lg mb-1 xl:whitespace-nowrap">
                   {category.interestName}
                 </p>
                 <p className="text-dark-grey font-inter text-sm">
