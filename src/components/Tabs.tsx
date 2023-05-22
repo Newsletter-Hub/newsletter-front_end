@@ -11,9 +11,10 @@ interface Tab {
 interface TabsComponentProps {
   tabs: Tab[];
   className?: string;
+  handleChange?: (value: string) => void;
 }
 
-const Tabs = ({ tabs, className }: TabsComponentProps) => {
+const Tabs = ({ tabs, className, handleChange }: TabsComponentProps) => {
   const [activeTab, setActiveTab] = useState(tabs[0]?.value);
   const ref = useRef<HTMLDivElement>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({});
@@ -35,11 +36,18 @@ const Tabs = ({ tabs, className }: TabsComponentProps) => {
     }
   }, [activeTab]);
 
+  const handleValueChange = (value: string) => {
+    setActiveTab(value);
+    if (handleChange) {
+      handleChange(value);
+    }
+  };
+
   return (
     <Root
       className={className}
       defaultValue={tabs[0]?.value}
-      onValueChange={value => setActiveTab(value)}
+      onValueChange={handleValueChange}
     >
       <List
         className="relative flex gap-12 border-b border-porcelain"
