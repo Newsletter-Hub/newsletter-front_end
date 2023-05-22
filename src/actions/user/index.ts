@@ -16,7 +16,6 @@ interface GetUsersListProps {
   pageSize: number;
   order: string;
   orderDirection: string;
-  token?: string | null;
   search?: string;
 }
 
@@ -75,16 +74,12 @@ export const getUsersList = async ({
   pageSize,
   order,
   orderDirection,
-  token,
   search = '',
 }: GetUsersListProps) => {
   try {
     const response = await api
       .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
-        headers: {
-          Cookie: `accessToken=${token}`,
-        },
       })
       .json();
     return response;

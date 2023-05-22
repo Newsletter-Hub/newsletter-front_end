@@ -3,7 +3,6 @@ import { debounce } from 'lodash';
 import React, { useState } from 'react';
 
 import { GetServerSideProps } from 'next';
-import parseCookies from 'next-cookies';
 
 import { SortType } from '@/types/sorting';
 
@@ -202,15 +201,12 @@ const UsersList = ({ usersList }: UsersListProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken ? cookies.accessToken : null;
+export const getServerSideProps: GetServerSideProps = async () => {
   const usersList = await getUsersList({
     page: 1,
     pageSize: 9,
     order: 'dataJoined',
     orderDirection: 'ASC',
-    token,
   });
   return {
     props: {
