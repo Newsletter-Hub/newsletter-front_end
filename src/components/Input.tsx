@@ -23,6 +23,7 @@ interface InputProps {
   wrapperStyles?: string;
   iconStyles?: string;
   onChange?: (value: string) => void;
+  defaultValue?: string;
 }
 
 const variants = {
@@ -48,6 +49,7 @@ const Input = ({
   wrapperStyles,
   iconStyles,
   onChange,
+  defaultValue,
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -57,16 +59,16 @@ const Input = ({
     customStyles,
     'font-inter'
   );
-  const wrapperFormattedStyles = clsx(wrapperStyles, 'relative flex ');
-  const [value, setValue] = useState('');
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
+  const [value, setValue] = useState(defaultValue || '');
   return (
-    <>
+    <div className={wrapperFormattedStyles}>
       {label && (
         <p className="font-inter font-semibold text-lightBlack text-xs mb-2 pl-2">
           {label}
         </p>
       )}
-      <div className={wrapperFormattedStyles}>
+      <div className="relative flex">
         <input
           className={styles}
           placeholder={placeholder}
@@ -113,7 +115,7 @@ const Input = ({
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

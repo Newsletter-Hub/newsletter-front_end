@@ -28,6 +28,7 @@ interface FileDownloaderProps {
   variant?: 'base' | 'lg';
   error?: boolean;
   errorText?: string;
+  defaultValue?: string;
 }
 
 const FileDownloader = ({
@@ -37,13 +38,14 @@ const FileDownloader = ({
   variant = 'base',
   error,
   errorText,
+  defaultValue,
 }: FileDownloaderProps) => {
   const user = useContext(UserContext);
   const ref = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<Blob | string>('');
   const [fileDataURL, setFileDataURL] = useState<
     StaticImageData | string | ArrayBuffer
-  >(user.avatarURL || fileDownloaderImage);
+  >(user.avatarURL || defaultValue || fileDownloaderImage);
 
   const handleClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
     e.preventDefault();
@@ -94,7 +96,7 @@ const FileDownloader = ({
               width={105}
               height={104}
               alt="file downloader"
-              className="rounded-xl object-contain w-auto h-auto max-w-[105px] max-h-[104px]"
+              className="rounded-full object-contain w-auto h-auto max-w-[105px] max-h-[104px] border-2 border-primary"
             />
             <div className="flex justify-end -mt-8">
               <Image

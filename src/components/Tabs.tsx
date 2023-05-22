@@ -51,7 +51,7 @@ const Tabs = ({ tabs, className }: TabsComponentProps) => {
             key={tab.value}
             className="relative z-10 text-dark-blue font-inter font-semibold"
           >
-            <span className="mb-2">{tab.title}</span>
+            <span className="mb-[6px]">{tab.title}</span>
           </Trigger>
         ))}
         <div

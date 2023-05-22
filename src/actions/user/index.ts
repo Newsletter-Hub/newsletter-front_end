@@ -3,7 +3,7 @@ import api from '@/config/ky';
 import { Payload } from '@/types/signup';
 
 interface GetUserMePayload {
-  token?: string;
+  token?: string | null;
 }
 
 interface UpdateUserResponse {

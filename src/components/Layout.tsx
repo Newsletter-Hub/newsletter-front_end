@@ -8,11 +8,13 @@ import Header from './Header';
 
 interface LayoutProps {
   children: ReactNode;
+  isFooter?: boolean;
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, isFooter }: LayoutProps) => {
+  console.log(isFooter);
   return (
     <>
       <Head>
@@ -22,7 +24,7 @@ const Layout = ({ children }: LayoutProps) => {
       <div className={alegreya.className}>
         <Header />
         {children}
-        <Footer />
+        {isFooter && <Footer />}
       </div>
     </>
   );

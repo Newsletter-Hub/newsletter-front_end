@@ -17,6 +17,7 @@ interface SelectProps {
   placeholder?: string;
   value?: string;
   onChange?: () => void;
+  wrapperStyles?: string;
 }
 
 const Select = ({
@@ -26,9 +27,10 @@ const Select = ({
   placeholder,
   value,
   onChange,
+  wrapperStyles,
 }: SelectProps) => {
   return (
-    <div>
+    <div className={wrapperStyles}>
       <RadixSelect.Root value={value} onValueChange={onChange}>
         <RadixSelect.Trigger
           className="border-b-2 outline-none border-grey w-full text-sm text-dark-grey text-start pb-2 inline-flex items-center justify-between font-inter pr-5 pl-4"
