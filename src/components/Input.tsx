@@ -96,12 +96,12 @@ const Input = ({
         {isPassword &&
           (isShowPassword ? (
             <EyeOnIcon
-              className="absolute right-3 top-2.5 cursor-pointer"
+              className="absolute right-3 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ) : (
             <EyeOffIcon
-              className="absolute right-3 top-2.5 cursor-pointer"
+              className="absolute right-3 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ))}

@@ -12,10 +12,18 @@ interface CreateReviewModalProps {
   children: JSX.Element;
   open: boolean;
   handleClose: () => void;
+  size?: 'base' | 'sm' | 'md';
 }
 
-const Modal = ({ children, open, handleClose }: CreateReviewModalProps) => {
+const Modal = ({
+  children,
+  open,
+  handleClose,
+  size = 'base',
+}: CreateReviewModalProps) => {
   const dialogRef = useRef(null);
+  const maxWidth =
+    size === 'base' ? '632px' : size === 'sm' ? '496px' : '572px';
   useOnClickOutside(dialogRef, handleClose);
   return (
     <div>
@@ -23,7 +31,7 @@ const Modal = ({ children, open, handleClose }: CreateReviewModalProps) => {
         <Dialog.Portal>
           <Dialog.Overlay className="bg-black/10 data-[state=open]:animate-overlayShow fixed inset-0">
             <Dialog.Content
-              className={`${styles['hide-scrollbar']} data-[state=open]:animate-contentShow top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[632px] translate-x-[-50%] translate-y-[-50%] bg-white p-10 shadow-md rounded-3xl focus:outline-none relative overflow-scroll`}
+              className={`${styles['hide-scrollbar']} data-[state=open]:animate-contentShow top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[${maxWidth}] translate-x-[-50%] translate-y-[-50%] bg-white p-10 shadow-md rounded-3xl focus:outline-none relative overflow-scroll`}
               ref={dialogRef}
             >
               {children}

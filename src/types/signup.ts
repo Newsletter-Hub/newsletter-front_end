@@ -10,6 +10,7 @@ export interface Payload {
   avatarURL?: string | ArrayBuffer;
   interests?: number[];
   type?: 'signup' | 'update' | 'interests';
+  description?: string;
 }
 
 export interface UserInfoStepsProps {

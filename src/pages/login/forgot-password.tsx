@@ -68,6 +68,4 @@ const ForgotPassword = () => {
 
 ForgotPassword.layout = 'entry';
 
-export { getServerSideProps };
-
 export default ForgotPassword;

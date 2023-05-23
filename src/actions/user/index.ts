@@ -36,6 +36,7 @@ export const updateUser = async ({
   avatar,
   interests,
   type = 'signup',
+  description,
 }: Payload): Promise<UpdateUserResponse | undefined> => {
   try {
     const formData = new FormData();
@@ -44,6 +45,7 @@ export const updateUser = async ({
     state && formData.append('state', state as string);
     username && formData.append('username', username as string);
     profileType && formData.append('profileType', profileType as string);
+    description && formData.append('description', description as string);
     avatar && formData.append('avatar', avatar as Blob);
     if (interests?.length) {
       for (let i = 0; i < interests.length; i++) {

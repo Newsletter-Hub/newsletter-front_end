@@ -25,8 +25,11 @@ interface EditRefType {
 }
 
 const Settings = ({ userMe, interests }: SettingsProps) => {
-  const [interestsPayload, setInterestsPayload] = useState(userMe.interests);
   const [user, setUser] = useState(userMe);
+  const [isVerifyEmailModalOpen, setIsVerifyEmailModalOpen] = useState(false);
+  const [interestsPayload, setInterestsPayload] = useState(
+    userMe?.interests || []
+  );
   const [isDirty, setIsDirty] = useState(false);
   const editRef = useRef<EditRefType | null>(null);
 
@@ -47,6 +50,9 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       interests: user.interests && user.interests.map(item => item.id),
       type: 'update',
     });
+    if (data.email) {
+      setIsVerifyEmailModalOpen(true);
+    }
     if (result?.response) {
       const user = await getUserMe({ token: null });
       if (user.response) {
@@ -81,6 +87,19 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
     }
   };
 
+  const [activeTab, setActiveTab] = useState('edit');
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setIsDirty(false);
+    if (value === 'edit') {
+      setInterestsPayload(user.interests);
+    }
+  };
+
+  if (!user) {
+    return <span>Loading...</span>;
+  }
   const tabs = [
     {
       title: 'Edit profile',
@@ -91,6 +110,8 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
           onSubmit={onEditSubmit}
           ref={editRef}
           setIsDirty={setIsDirty}
+          isVerifyEmailModalOpen={isVerifyEmailModalOpen}
+          setIsVerifyEmailModalOpen={setIsVerifyEmailModalOpen}
         />
       ),
     },
@@ -106,15 +127,6 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       ),
     },
   ];
-
-  const [activeTab, setActiveTab] = useState(tabs[0].value);
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    setIsDirty(false);
-    if (value === 'edit') {
-      setInterestsPayload(user.interests);
-    }
-  };
   return (
     <div>
       <div className="pt-[72px] px-[17%]">

@@ -18,4 +18,5 @@ export interface UserMe {
   dateOfBirth: string;
   country: string;
   state: string;
+  description?: string;
 }
