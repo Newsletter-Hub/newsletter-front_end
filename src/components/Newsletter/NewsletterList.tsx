@@ -157,7 +157,7 @@ const NewslettersList = ({
     return count;
   }, [filtersPayload]);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState((router.query.search as string) || '');
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
@@ -374,6 +374,7 @@ const NewslettersList = ({
                   customStyles="h-[48px]"
                   iconStyles="!top-3"
                   onChange={e => handleChangeSearch(e.target.value)}
+                  defaultValue={(router.query.search as string) || ''}
                 />
               </div>
               <div className="flex gap-4">
