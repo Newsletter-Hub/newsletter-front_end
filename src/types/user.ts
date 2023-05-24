@@ -7,6 +7,7 @@ export interface User {
   avatar?: string;
   averageUserRating: number;
   amountUserRatings: number;
+  description?: string;
 }
 
 export interface UserMe {

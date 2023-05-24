@@ -1,6 +1,16 @@
+import {
+  GlobalSearchPayload,
+  GlobalSearchResponse,
+  search,
+} from '@/actions/global';
 import Cookies from 'js-cookie';
-import React from 'react';
+import { debounce } from 'lodash';
+import React, { useRef, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useOnClickOutside } from 'usehooks-ts';
 
+import { Alegreya } from 'next/font/google';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { UserMe } from '@/types/user';
@@ -9,6 +19,7 @@ import ArrowDownIcon from '@/assets/icons/arrowDown';
 import BookmarkIcon from '@/assets/icons/bookmark';
 import LogoutIcon from '@/assets/icons/logout';
 import ProfileIcon from '@/assets/icons/profile';
+import SearchResultsIcon from '@/assets/icons/searchResults';
 import SettingsIcon from '@/assets/icons/settings';
 import Logo from '@/assets/images/logo';
 
@@ -24,9 +35,29 @@ const links = [
   { label: 'Help', href: '/help' },
 ];
 
-const Header = () => {
-  const [user, setUser] = React.useState<UserMe | ''>('');
+const alegreya = Alegreya({ subsets: ['latin'] });
 
+const Header = () => {
+  const [user, setUser] = useState<UserMe | ''>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResult, setShowSearchResults] = useState(false);
+  const searchResultRef = useRef(null);
+  const searchPayload: GlobalSearchPayload = { search: searchTerm };
+
+  const { data, isLoading, isError, error } = useQuery<
+    GlobalSearchResponse | undefined,
+    Error
+  >(['globalSearch', searchPayload], () => search(searchPayload), {
+    enabled: true,
+  });
+
+  const handleChangeSearch = debounce((value: string) => {
+    setSearchTerm(value);
+  }, 500);
+
+  const handleClickOutside = () => {
+    setShowSearchResults(false);
+  };
   React.useEffect(() => {
     const cookieUser = Cookies.get('user')
       ? JSON.parse(Cookies.get('user') as string)
@@ -38,6 +69,9 @@ const Header = () => {
     Cookies.remove('token');
     setUser('');
   };
+  useOnClickOutside(searchResultRef, handleClickOutside);
+  console.log(data);
+
   return (
     <div className="shadow-md py-4">
       <div className="bg-white flex items-center justify-center font-inter gap-24 w-full">
@@ -49,7 +83,117 @@ const Header = () => {
             return (
               <React.Fragment key={index}>
                 {index === 2 && (
-                  <Input placeholder="Search Newsletter Hub" isSearch />
+                  <div
+                    ref={searchResultRef}
+                    className="relative"
+                    onClick={() => setShowSearchResults(true)}
+                  >
+                    <Input
+                      placeholder="Search Newsletter Hub"
+                      isSearch
+                      onChange={e => handleChangeSearch(e.target.value)}
+                      customStyles="lg:min-w-[400px]"
+                    />
+                    {showSearchResult && data && (
+                      <div className="bg-white absolute w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2">
+                        {Boolean(data?.newsletters?.length) && (
+                          <div>
+                            <div className="flex justify-between items-center">
+                              <span
+                                className={`${alegreya.className} text-dark-blue font-medium text-xl`}
+                              >
+                                Newsletters
+                              </span>
+                              <Link
+                                href={`/newsletters/categories/all?search=${searchTerm}`}
+                                className="text-sm border-b border-b-dark-grey font-semibold"
+                              >
+                                View all Newsletter results
+                              </Link>
+                            </div>
+                            <div>
+                              {data.newsletters.map(item => (
+                                <Link
+                                  href={`/newsletters/${item.id}`}
+                                  key={item.id}
+                                  className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
+                                >
+                                  <Image
+                                    src={(item?.image as string) || ''}
+                                    width={48}
+                                    height={48}
+                                    alt="Newsletter image"
+                                    className="rounded-[10px] w-12 h-12 object-cover"
+                                  />
+                                  <div>
+                                    <p className="text-dark-blue text-xs font-semibold">
+                                      {item.newsletterAuthor}
+                                    </p>
+                                    <p className="text-dark-blue font-semibold text-base">
+                                      {item.title}
+                                    </p>
+                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden max-w-[300px] text-ellipsis">
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {Boolean(data?.users?.length) && (
+                          <div>
+                            <div className="flex justify-between items-center">
+                              <span
+                                className={`${alegreya.className} text-dark-blue font-medium text-xl`}
+                              >
+                                Users
+                              </span>
+                              <Link
+                                href={`/users?search=${searchTerm}`}
+                                className="text-sm border-b border-b-dark-grey font-semibold"
+                              >
+                                View all User results
+                              </Link>
+                            </div>
+                            <div>
+                              {data.users.map(item => (
+                                <Link
+                                  href={`/users/${item.id}`}
+                                  key={item.id}
+                                  className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
+                                >
+                                  <Image
+                                    src={(item?.avatar as string) || ''}
+                                    width={48}
+                                    height={48}
+                                    alt="Newsletter image"
+                                    className="rounded-[10px] w-12 h-12 object-cover"
+                                  />
+                                  <div>
+                                    <p className="text-dark-blue font-semibold text-base">
+                                      {item.username}
+                                    </p>
+                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden max-w-[300px] text-ellipsis">
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {!data.users.length && !data.newsletters.length && (
+                          <div className="flex flex-col items-center text-center">
+                            <SearchResultsIcon />
+                            <span className="text-2xl text-dark-blue">
+                              Sorry! We couldn’t find anything
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 )}
                 <Link href={link.href}>{link.label}</Link>
               </React.Fragment>

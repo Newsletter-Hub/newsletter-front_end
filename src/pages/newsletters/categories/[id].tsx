@@ -24,6 +24,7 @@ const NewslettersPage = ({
 export const getServerSideProps: GetServerSideProps = async context => {
   const { params } = context;
   const categoryId = params && params.id;
+  const search = (context.query && (context.query.search as string)) || '';
   const categoriesIds =
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
       ? [+categoryId]
@@ -34,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     order: 'rating',
     orderDirection: 'DESC',
     categoriesIds,
+    search,
   });
   const interests = await getInterests();
   if (!newsletterList || !interests) {

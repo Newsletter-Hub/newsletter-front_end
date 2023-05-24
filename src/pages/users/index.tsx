@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import React, { useState } from 'react';
 
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 
 import { SortType } from '@/types/sorting';
 
@@ -48,10 +49,11 @@ interface UsersListProps {
 }
 
 const UsersList = ({ usersList }: UsersListProps) => {
+  const router = useRouter();
   const [choosedSortType, setChoosedSortType] = useState(0);
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState(usersList);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState((router.query.search as string) || '');
 
   const handleChangeSearch = debounce(async (value: string) => {
     setSearch(value);
@@ -106,6 +108,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
             customStyles="h-[48px]"
             iconStyles="!top-3"
             onChange={e => handleChangeSearch(e.target.value)}
+            defaultValue={(router.query.search as string) || ''}
           />
           <Popover
             triggerContent={
@@ -201,12 +204,14 @@ const UsersList = ({ usersList }: UsersListProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async context => {
+  const search = (context.query.search as string) || '';
   const usersList = await getUsersList({
     page: 1,
     pageSize: 9,
     order: 'dataJoined',
     orderDirection: 'ASC',
+    search,
   });
   return {
     props: {
