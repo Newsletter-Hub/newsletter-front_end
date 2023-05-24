@@ -22,7 +22,8 @@ interface InputProps {
   label?: string;
   wrapperStyles?: string;
   iconStyles?: string;
-  onChange?: (value: string) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string;
 }
 
 const variants = {
@@ -48,6 +49,7 @@ const Input = ({
   wrapperStyles,
   iconStyles,
   onChange,
+  defaultValue,
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -57,16 +59,16 @@ const Input = ({
     customStyles,
     'font-inter'
   );
-  const wrapperFormattedStyles = clsx(wrapperStyles, 'relative flex ');
-  const [value, setValue] = useState('');
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
+  const [value, setValue] = useState(defaultValue || '');
   return (
-    <>
+    <div className={wrapperFormattedStyles}>
       {label && (
         <p className="font-inter font-semibold text-lightBlack text-xs mb-2 pl-2">
           {label}
         </p>
       )}
-      <div className={wrapperFormattedStyles}>
+      <div className="relative flex">
         <input
           className={styles}
           placeholder={placeholder}
@@ -77,7 +79,7 @@ const Input = ({
           onChange={e => {
             setValue(e.target.value);
             if (onChange) {
-              onChange(e.target.value);
+              onChange(e);
             }
           }}
         />
@@ -94,12 +96,12 @@ const Input = ({
         {isPassword &&
           (isShowPassword ? (
             <EyeOnIcon
-              className="absolute right-3 top-2.5 cursor-pointer"
+              className="absolute right-3 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ) : (
             <EyeOffIcon
-              className="absolute right-3 top-2.5 cursor-pointer"
+              className="absolute right-3 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ))}
@@ -113,7 +115,7 @@ const Input = ({
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

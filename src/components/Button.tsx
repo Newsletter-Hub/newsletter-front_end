@@ -84,7 +84,7 @@ const Button = ({
   disabled,
   socialMedia = 'none',
   customStyles,
-  type,
+  type = 'button',
   selected,
   onClick,
   height = 'base',

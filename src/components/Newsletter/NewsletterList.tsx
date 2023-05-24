@@ -182,7 +182,7 @@ const NewslettersList = ({
     }
   };
   const modalTitleStyles = clsx(
-    'text-lightBlack text-5xl mb-6 text-center',
+    'text-dark-blue text-5xl mb-6 text-center',
     alegreya.className
   );
 
@@ -373,7 +373,7 @@ const NewslettersList = ({
                   wrapperStyles="max-w-[262px]"
                   customStyles="h-[48px]"
                   iconStyles="!top-3"
-                  onChange={handleChangeSearch}
+                  onChange={e => handleChangeSearch(e.target.value)}
                 />
               </div>
               <div className="flex gap-4">

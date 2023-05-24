@@ -1,3 +1,5 @@
+import { Interest } from './interests';
+
 export interface User {
   id?: number;
   email?: string;
@@ -8,8 +10,13 @@ export interface User {
 }
 
 export interface UserMe {
-  profileType: 'writter' | 'reader';
-  username: string;
   email: string;
-  avatar?: string;
+  username: string;
+  interests: Interest[];
+  profileType: 'reader' | 'writter';
+  avatar: string;
+  dateOfBirth: string;
+  country: string;
+  state: string;
+  description?: string;
 }

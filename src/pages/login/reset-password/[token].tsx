@@ -86,6 +86,4 @@ const ResetPassword = () => {
 
 ResetPassword.layout = 'entry';
 
-export { getServerSideProps };
-
 export default ResetPassword;

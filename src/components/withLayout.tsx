@@ -11,6 +11,9 @@ export type EntryType = 'signup' | 'login' | 'newsletter';
 interface WithLayoutProps {
   children?: ReactNode;
   user?: UserMe | null;
+  layoutProps?: {
+    isFooter?: boolean;
+  };
 }
 
 interface EntryLayoutConfig {
@@ -23,9 +26,12 @@ const withLayout = (
   entryLayoutConfig?: EntryLayoutConfig
 ) => {
   const WithLayoutComponent = (props: WithLayoutProps) => {
+    const isFooter = props.layoutProps?.isFooter !== false;
     const LayoutComponent =
       layout === 'default'
-        ? (props: WithLayoutProps) => <Layout>{props.children}</Layout>
+        ? (props: WithLayoutProps) => (
+            <Layout isFooter={isFooter}>{props.children}</Layout>
+          )
         : (props: WithLayoutProps) => (
             <EntryLayout {...entryLayoutConfig}>{props.children}</EntryLayout>
           );
