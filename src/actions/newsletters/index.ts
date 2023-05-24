@@ -40,6 +40,11 @@ export interface GetNewsletterListProps {
   authorId?: number;
 }
 
+interface FollowPayload {
+  entityId: number;
+  entityType: 'Newsletter' | 'User';
+}
+
 export const newsletterVerifyOwnership = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
@@ -171,5 +176,18 @@ export const getNewslettersList = async ({
     return {
       error: 'Failed to get newsletter',
     };
+  }
+};
+
+export const follow = async ({ entityId, entityType }: FollowPayload) => {
+  try {
+    const response = await api.post('subscriptions', {
+      json: { entityId, entityType },
+    });
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
