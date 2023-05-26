@@ -1,6 +1,7 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
 import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
+import ky from 'ky';
 
 import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
@@ -14,6 +15,10 @@ interface User {
   password: string;
   router: NextRouter;
   setUser: (user: UserMe) => void;
+}
+
+interface LogOutPayload {
+  setUser: (user: UserMe | null) => void;
 }
 
 interface GoogleAuth {
@@ -144,5 +149,16 @@ export const changePassword = async ({
     return response;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to change password');
+  }
+};
+
+export const logout = ({ setUser }: LogOutPayload) => {
+  try {
+    ky.post('/api/logout', { credentials: 'include' }).then(() => {
+      Cookies.remove('user');
+      setUser(null);
+    });
+  } catch (error) {
+    console.error(error);
   }
 };

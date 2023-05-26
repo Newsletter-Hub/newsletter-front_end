@@ -1,3 +1,4 @@
+import { logout } from '@/actions/auth';
 import {
   GlobalSearchPayload,
   GlobalSearchResponse,
@@ -59,11 +60,6 @@ const Header = () => {
     setShowSearchResults(false);
   };
 
-  const logout = () => {
-    Cookies.remove('user');
-    Cookies.remove('token');
-    setUser(null);
-  };
   useOnClickOutside(searchResultRef, handleClickOutside);
   return (
     <div className="shadow-md py-4">
@@ -261,7 +257,7 @@ const Header = () => {
                 </Link>
                 <span
                   className="flex gap-3 items-center text-dark-blue text-base p-2 mb-1 cursor-pointer"
-                  onClick={logout}
+                  onClick={() => logout({ setUser })}
                 >
                   <div className="w-6 h-6">
                     <LogoutIcon />

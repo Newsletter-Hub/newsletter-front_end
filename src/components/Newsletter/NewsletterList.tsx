@@ -5,6 +5,7 @@ import {
   deleteBookmark,
 } from '@/actions/newsletters/bookmarks';
 import { createReview } from '@/actions/newsletters/reviews';
+import { useUser } from '@/contexts/UserContext';
 import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -121,6 +122,7 @@ const NewslettersList = ({
   isFollowEnable = true,
   isNewsletterFollowed = false,
 }: NewslettersPageProps) => {
+  const { user, setUser } = useUser();
   const router = useRouter();
   const { id } = router.query;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
@@ -323,10 +325,14 @@ const NewslettersList = ({
   };
 
   const handleClickBookmark = (id: string) => {
-    if (type === 'bookmark') {
-      handleDeleteBookmark(id);
-    } else if (type === 'newsletter') {
-      handleAddBookmark(id);
+    if (user) {
+      if (type === 'bookmark') {
+        handleDeleteBookmark(id);
+      } else if (type === 'newsletter') {
+        handleAddBookmark(id);
+      }
+    } else {
+      router.push('/sign-up');
     }
   };
 
@@ -714,9 +720,12 @@ const NewslettersList = ({
                         </span>
                       </div>
                     </div>
-                    <span className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2">
+                    <Link
+                      href={`/newsletters/${newsletter.id}`}
+                      className="block max-w-[150px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 hover:text-primary cursor-pointer"
+                    >
                       {newsletter.title}
-                    </span>
+                    </Link>
                     <span className="font-inter text-base text-lightBlack mb-6 block">
                       {newsletter.description}
                     </span>
@@ -750,9 +759,13 @@ const NewslettersList = ({
                         </div>
                         {isRated && (
                           <div
-                            onClick={() =>
-                              setIsOpenReviewModal(newsletter.id as number)
-                            }
+                            onClick={() => {
+                              if (user) {
+                                setIsOpenReviewModal(newsletter.id as number);
+                              } else {
+                                router.push('/sign-up');
+                              }
+                            }}
                           >
                             <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
                           </div>

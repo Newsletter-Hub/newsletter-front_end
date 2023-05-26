@@ -1,3 +1,4 @@
+import { useUser } from '@/contexts/UserContext';
 import timeAgo from '@/helpers/timeAgo';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -59,9 +60,14 @@ const NewsletterPage = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookmarkState, setBookmarkState] = useState(isBookmark);
   const [page, setPage] = useState(1);
+  const { user } = useUser();
   const router = useRouter();
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    if (user) {
+      setIsModalOpen(true);
+    } else {
+      router.push('/sign-up');
+    }
   };
 
   const {
@@ -128,9 +134,11 @@ const NewsletterPage = ({
   };
 
   const handleBookmarkClick = () => {
-    bookmarkState === 'none'
-      ? handleAddBookmark()
-      : bookmarkState !== 'unauthorized' && handleDeleteBookmark();
+    if (user) {
+      bookmarkState === 'none' ? handleAddBookmark() : handleDeleteBookmark();
+    } else {
+      router.push('/sign-up');
+    }
   };
 
   const loadMoreReviews = async () => {
