@@ -1,4 +1,5 @@
 import { googleAuth, login } from '@/actions/auth';
+import { useUser } from '@/contexts/UserContext';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -40,6 +41,7 @@ const fields: Fields = [
 
 const Form = () => {
   const router = useRouter();
+  const { setUser } = useUser();
   const {
     register,
     handleSubmit,
@@ -49,7 +51,7 @@ const Form = () => {
     email,
     password,
   }) => {
-    await login({ email, password, router });
+    await login({ email, password, router, setUser });
   };
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router });

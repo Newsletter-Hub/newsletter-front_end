@@ -7,10 +7,13 @@ import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
 
+import { UserMe } from '@/types/user';
+
 interface User {
   email: string;
   password: string;
   router: NextRouter;
+  setUser: (user: UserMe) => void;
 }
 
 interface GoogleAuth {
@@ -32,7 +35,7 @@ interface ChangePasswordPayload {
   newPassword: string;
 }
 
-export const login = async ({ email, password, router }: User) => {
+export const login = async ({ email, password, router, setUser }: User) => {
   try {
     const response = await api
       .post('auth/sign-in', {
@@ -41,6 +44,8 @@ export const login = async ({ email, password, router }: User) => {
       .json()
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
+        setUser(res as UserMe);
+        console.log(res);
         router.push('/');
       });
     return response;

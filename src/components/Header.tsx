@@ -3,6 +3,7 @@ import {
   GlobalSearchResponse,
   search,
 } from '@/actions/global';
+import { useUser } from '@/contexts/UserContext';
 import Cookies from 'js-cookie';
 import { debounce } from 'lodash';
 import React, { useRef, useState } from 'react';
@@ -12,8 +13,6 @@ import { useOnClickOutside } from 'usehooks-ts';
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
-
-import { UserMe } from '@/types/user';
 
 import ArrowDownIcon from '@/assets/icons/arrowDown';
 import BookmarkIcon from '@/assets/icons/bookmark';
@@ -38,18 +37,19 @@ const links = [
 const alegreya = Alegreya({ subsets: ['latin'] });
 
 const Header = () => {
-  const [user, setUser] = useState<UserMe | ''>('');
+  const { user, setUser } = useUser();
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResult, setShowSearchResults] = useState(false);
   const searchResultRef = useRef(null);
   const searchPayload: GlobalSearchPayload = { search: searchTerm };
 
-  const { data, isLoading, isError, error } = useQuery<
-    GlobalSearchResponse | undefined,
-    Error
-  >(['globalSearch', searchPayload], () => search(searchPayload), {
-    enabled: true,
-  });
+  const { data } = useQuery<GlobalSearchResponse | undefined, Error>(
+    ['globalSearch', searchPayload],
+    () => search(searchPayload),
+    {
+      enabled: true,
+    }
+  );
 
   const handleChangeSearch = debounce((value: string) => {
     setSearchTerm(value);
@@ -58,20 +58,13 @@ const Header = () => {
   const handleClickOutside = () => {
     setShowSearchResults(false);
   };
-  React.useEffect(() => {
-    const cookieUser = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : '';
-    setUser(cookieUser);
-  }, []);
+
   const logout = () => {
     Cookies.remove('user');
     Cookies.remove('token');
-    setUser('');
+    setUser(null);
   };
   useOnClickOutside(searchResultRef, handleClickOutside);
-  console.log(data);
-
   return (
     <div className="shadow-md py-4">
       <div className="bg-white flex items-center justify-center font-inter gap-24 w-full">

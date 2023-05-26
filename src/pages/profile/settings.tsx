@@ -1,9 +1,11 @@
 import { getUserMe, updateUser } from '@/actions/user';
 import { getInterests } from '@/actions/user/interests';
-import { useRef, useState } from 'react';
+import { useUser } from '@/contexts/UserContext';
+import { useEffect, useRef, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
+import { useRouter } from 'next/router';
 
 import format from 'date-fns/format';
 
@@ -17,7 +19,6 @@ import ProfileInterests from '@/components/Profile/Interests';
 import Tabs from '@/components/Tabs';
 
 interface SettingsProps {
-  userMe: UserMe;
   interests: Interest[];
 }
 
@@ -26,11 +27,12 @@ interface EditRefType {
   submitForm: () => void;
 }
 
-const Settings = ({ userMe, interests }: SettingsProps) => {
-  const [user, setUser] = useState(userMe);
+const Settings = ({ interests }: SettingsProps) => {
+  const router = useRouter();
+  const { user, setUser } = useUser();
   const [isVerifyEmailModalOpen, setIsVerifyEmailModalOpen] = useState(false);
   const [interestsPayload, setInterestsPayload] = useState(
-    userMe?.interests || []
+    user?.interests || []
   );
   const [isDirty, setIsDirty] = useState(false);
   const editRef = useRef<EditRefType | null>(null);
@@ -49,14 +51,14 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
   const onEditSubmit = async (data: EditProfilePayload) => {
     const date = new Date(data.dateOfBirth as string);
     const formattedUser = {
-      avatar: user.avatar,
-      country: user.country,
-      state: user.state,
-      dateOfBirth: user.dateOfBirth,
-      username: user.username,
-      email: user.email,
-      profileType: user.profileType,
-      description: user.description,
+      avatar: user?.avatar,
+      country: user?.country,
+      state: user?.state,
+      dateOfBirth: user?.dateOfBirth,
+      username: user?.username,
+      email: user?.email,
+      profileType: user?.profileType,
+      description: user?.description,
     };
     const changedFields = Object.keys(formattedUser).filter(
       key =>
@@ -66,11 +68,11 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
     if (!(changedFields.length === 1 && changedFields.includes('email'))) {
       const result = await updateUser({
         ...data,
-        interests: user.interests && user.interests.map(item => item.id),
+        interests: user?.interests && user.interests.map(item => item.id),
         type: 'update',
         dateBirth: data.dateOfBirth && format(date, 'yyyy-MM-dd'),
       });
-      if (data.email !== user.email) {
+      if (data.email !== user?.email) {
         setIsVerifyEmailModalOpen(true);
       }
       if (result?.response) {
@@ -89,8 +91,8 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       if (editRef.current) {
         editRef.current.resetForm();
       }
-    } else {
-      setInterestsPayload(user.interests);
+    } else if (user) {
+      setInterestsPayload(user?.interests);
     }
   };
 
@@ -119,21 +121,17 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     setIsDirty(false);
-    if (value === 'edit') {
+    if (value === 'edit' && user) {
       setInterestsPayload(user.interests);
     }
   };
-
-  if (!user) {
-    return <span>Loading...</span>;
-  }
   const tabs = [
     {
       title: 'Edit profile',
       value: 'edit',
       content: (
         <Edit
-          user={user}
+          user={user as UserMe}
           onSubmit={onEditSubmit}
           ref={editRef}
           setIsDirty={setIsDirty}
@@ -154,7 +152,16 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       ),
     },
   ];
-  console.log(isDirty, 'here');
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user, router]);
+
+  if (!user) {
+    return <span>Loading...</span>;
+  }
   return (
     <div>
       <div className="pt-[72px] px-[17%]">
@@ -179,7 +186,7 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
             activeTab === 'edit'
               ? !isDirty
               : JSON.stringify(interestsPayload) ===
-                JSON.stringify(user.interests)
+                JSON.stringify(user?.interests)
           }
         />
       </div>
@@ -190,19 +197,18 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
 export const getServerSideProps: GetServerSideProps = async context => {
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const user = await getUserMe({ token });
-  const interests = await getInterests();
-  if (user.error) {
+  if (!token) {
     return {
-      props: {
-        notFound: true,
+      redirect: {
+        destination: '/',
+        permanent: false,
       },
     };
   }
+  const interests = await getInterests();
   return {
     props: {
       layoutProps: { isFooter: false },
-      userMe: user.response,
       interests: interests || null,
     },
   };
