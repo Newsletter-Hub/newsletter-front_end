@@ -15,7 +15,6 @@ interface UserProviderProps {
 }
 
 export const UserProvider = ({ children, defaultUser }: UserProviderProps) => {
-  console.log(defaultUser);
   const [user, setUser] = useState<UserMe | null>(defaultUser || null);
 
   return (
