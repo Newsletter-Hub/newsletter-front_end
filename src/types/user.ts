@@ -11,6 +11,7 @@ export interface User {
 }
 
 export interface UserMe {
+  id?: string;
   email: string;
   username: string;
   interests: Interest[];
@@ -21,4 +22,6 @@ export interface UserMe {
   state: string;
   description?: string;
   googleId: number | null;
+  amountUserFollowers: number;
+  amountUserFollowing: number;
 }

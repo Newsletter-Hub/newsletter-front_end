@@ -70,16 +70,12 @@ const UserPage = ({
             </p>
           )}
           <p className="text-center max-w-[512px] font-inter text-dark-grey text-sm mb-8">
-            I’m passionate about sharing valuable information and insights with
-            your readers. I understand the importance of staying up-to-date on
-            the latest trends and developments in business field and have a keen
-            ability to distill complex concepts into easily digestible pieces of
-            content.
+            {user.description}
           </p>
           <div className="flex gap-6 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
-            <span>677K+ Followers</span>
+            <span>{user.amountUserFollowers} Followers</span>
             <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-            <span>170 Following</span>
+            <span>{user.amountUserFollowing} Following</span>
           </div>
           {isProfile && (
             <div className="flex gap-8 items-center mb-[88px]">

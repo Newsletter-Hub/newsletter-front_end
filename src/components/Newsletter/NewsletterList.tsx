@@ -122,7 +122,7 @@ const NewslettersList = ({
   isFollowEnable = true,
   isNewsletterFollowed = false,
 }: NewslettersPageProps) => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const router = useRouter();
   const { id } = router.query;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
@@ -175,6 +175,7 @@ const NewslettersList = ({
       page: 1,
       pageSize: 6 * (page + 1),
       order: sortTypes[choosedSortType].value,
+      authorId: user?.id ? +user?.id : undefined,
     });
 
     if (newsletterResponse.error) {
@@ -883,18 +884,14 @@ const NewslettersList = ({
               );
             })
           )}
-          {newslettersData &&
-            Boolean(newslettersData.newsletters?.length) &&
-            newslettersData.total &&
-            newslettersData.newsletters &&
-            newslettersData.newsletters.length < newslettersData.total && (
-              <Button
-                label="See more"
-                variant="outlined-secondary"
-                size="full"
-                onClick={loadMoreNewsletters}
-              />
-            )}
+          {newslettersData && Boolean(newslettersData.nextPage) && (
+            <Button
+              label="See more"
+              variant="outlined-secondary"
+              size="full"
+              onClick={loadMoreNewsletters}
+            />
+          )}
         </div>
       </div>
     </div>

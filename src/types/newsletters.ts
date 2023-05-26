@@ -40,6 +40,7 @@ export interface NewsletterData {
 export interface Newsletter {
   total?: number;
   newsletters?: NewsletterData[];
+  nextPage?: number;
 }
 
 export interface NewslettersListData {

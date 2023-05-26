@@ -37,6 +37,7 @@ export interface GetNewsletterListProps {
   durationTo?: number;
   ratings?: number[];
   search?: string;
+  authorId?: number;
 }
 
 export const newsletterVerifyOwnership = async ({
@@ -133,6 +134,7 @@ export const getNewslettersList = async ({
   durationTo,
   ratings,
   search,
+  authorId,
 }: GetNewsletterListProps) => {
   try {
     let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
@@ -160,6 +162,7 @@ export const getNewslettersList = async ({
     if (durationTo && (durationFrom !== 1 || durationTo !== 60))
       url += `&durationTo=${durationTo}`;
     if (search) url += `&search=${search}`;
+    if (authorId) url += `&authorId=${authorId}`;
 
     const newslettersListData: NewsletterData[] = await api.get(url).json();
     return { newslettersListData };
