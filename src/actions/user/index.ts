@@ -77,15 +77,15 @@ export const getUserMe = async ({
   token,
 }: GetUserMePayload): Promise<GetUserMeResponse> => {
   try {
-    const headers = token ? { Cookie: `accessToken=${token}` } : undefined;
+    const headers = token ? { Cookie: `accessToken=${token}` } : {};
     const response: UserMe = await api
       .get('users', {
         headers,
+        credentials: 'include',
       })
       .json();
     return { response };
   } catch (error) {
-    console.log(error);
     return { error: 'Failed to get user' };
   }
 };

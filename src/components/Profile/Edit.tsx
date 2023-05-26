@@ -8,6 +8,9 @@ import {
 } from 'react';
 import Datetime from 'react-datetime';
 import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { COUNTRIES } from '@/config/constants';
 
@@ -31,6 +34,18 @@ export interface EditProfilePayload {
   email: string;
   profileType: 'reader' | 'writter';
 }
+
+const validationSchema = z.object({
+  avatar: z.any().optional(),
+  country: z.string().nullable().optional(),
+  state: z.string().nullable().optional(),
+  dateOfBirth: z.any().optional(),
+  username: z.string().optional(),
+  email: z.string().email('Email need to be valid').optional(),
+  profileType: z.enum(['reader', 'writter']).optional(),
+  description: z.string().nullable().optional(),
+});
+
 interface EditProps {
   user: UserMe;
   onSubmit: (data: EditProfilePayload) => void;
@@ -65,11 +80,10 @@ const Edit = forwardRef(
     const {
       handleSubmit,
       control,
-      setValue,
       getValues,
       watch,
       reset,
-      formState: { isDirty },
+      formState: { isDirty, errors },
     } = useForm({
       defaultValues: {
         avatar: user.avatar,
@@ -81,18 +95,20 @@ const Edit = forwardRef(
         profileType: user.profileType,
         description: user.description,
       },
+      resolver: zodResolver(validationSchema),
     });
-
+    const watchAll = watch();
     useImperativeHandle(ref, () => ({
       resetForm: () => reset(),
-      submitForm: () => handleSubmit(onSubmit)(),
+      submitForm: () => {
+        handleSubmit(data => {
+          onSubmit(data);
+          reset(data, { keepValues: true });
+        })();
+      },
     }));
 
     const watchCountry = watch('country');
-
-    const handleChooseAvatar = (value: File | string) => {
-      setValue('avatar', value as string);
-    };
 
     const countries = Country.getAllCountries()
       .filter(item => COUNTRIES.includes(item.name))
@@ -117,15 +133,14 @@ const Edit = forwardRef(
       );
       setStates(formattedStates);
     }, [watchCountry, getValues]);
-
     useEffect(() => {
       setIsDirty(isDirty);
-    }, [getValues, isDirty, setIsDirty]);
+    }, [watchAll, isDirty, setIsDirty]);
 
     const handleCloseVerifyEmailModal = () => {
       setIsVerifyEmailModalOpen(false);
     };
-
+    console.log(errors);
     return (
       <div className="pt-10">
         <h3 className="text-xl text-dark-blue font-medium mb-8">
@@ -136,9 +151,15 @@ const Edit = forwardRef(
             Your profile PIC
           </p>
           <div className="flex items-center gap-6 mb-10">
-            <FileDownloader
-              setValue={handleChooseAvatar}
-              defaultValue={user.avatar}
+            <Controller
+              name="avatar"
+              control={control}
+              render={({ field }) => (
+                <FileDownloader
+                  setValue={e => field.onChange(e)}
+                  defaultValue={user.avatar}
+                />
+              )}
             />
             <div>
               <span className="text-grey text-sm">
@@ -197,12 +218,15 @@ const Edit = forwardRef(
                 name="email"
                 render={({ field }) => (
                   <Input
+                    disabled={Boolean(user.googleId)}
                     label="Enter your email address"
                     variant="filled"
                     placeholder="Enter your email address"
                     defaultValue={field.value}
                     wrapperStyles="w-1/2"
                     onChange={e => field.onChange(e.target.value)}
+                    error={Boolean(errors.email)}
+                    errorText={errors.email?.message}
                   />
                 )}
               />
@@ -275,16 +299,20 @@ const Edit = forwardRef(
               />
             </div>
           </div>
-          <p
-            onClick={handleOpenChangePasswordModal}
-            className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21"
-          >
-            Change password
-          </p>
-          <ChangePasswordModal
-            open={isChangePasswordModalOpen}
-            handleClose={handleCloseChangePasswordModal}
-          />
+          {!user.googleId && (
+            <>
+              <p
+                onClick={handleOpenChangePasswordModal}
+                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21"
+              >
+                Change password
+              </p>
+              <ChangePasswordModal
+                open={isChangePasswordModalOpen}
+                handleClose={handleCloseChangePasswordModal}
+              />
+            </>
+          )}
         </form>
       </div>
     );

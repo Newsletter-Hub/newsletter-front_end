@@ -20,4 +20,5 @@ export interface UserMe {
   country: string;
   state: string;
   description?: string;
+  googleId: number | null;
 }
