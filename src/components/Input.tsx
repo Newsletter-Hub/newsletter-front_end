@@ -24,13 +24,14 @@ interface InputProps {
   iconStyles?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
+  disabled?: boolean;
 }
 
 const variants = {
   outlined:
     'bg-porcelain border-0 outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm',
   filled:
-    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey',
+    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-light-grey disabled:bg-white',
 };
 
 const Input = ({
@@ -48,6 +49,7 @@ const Input = ({
   label,
   wrapperStyles,
   iconStyles,
+  disabled,
   onChange,
   defaultValue,
 }: InputProps) => {
@@ -70,6 +72,7 @@ const Input = ({
       )}
       <div className="relative flex">
         <input
+          disabled={disabled}
           className={styles}
           placeholder={placeholder}
           {...register}

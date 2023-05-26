@@ -1,3 +1,4 @@
+import { changePassword } from '@/actions/auth';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
 
@@ -45,8 +46,14 @@ const ChangePasswordModal = ({ open, handleClose }: ModalProps) => {
     handleSubmit,
     formState: { errors },
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-  const onSubmit: SubmitHandler<ValidationSchema> = data => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ValidationSchema> = async data => {
+    const response = await changePassword({
+      password: data.old_password,
+      newPassword: data.password,
+    });
+    if (response?.ok) {
+      handleClose();
+    }
   };
   const modalTitleStyles = clsx(
     'text-dark-blue text-5xl mb-9 font-medium',

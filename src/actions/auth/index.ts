@@ -22,6 +22,16 @@ interface SignupUser extends User {
   username: string;
 }
 
+interface ChangeEmailPayload {
+  password: string;
+  newEmail: string;
+}
+
+interface ChangePasswordPayload {
+  password: string;
+  newPassword: string;
+}
+
 export const login = async ({ email, password, router }: User) => {
   try {
     const response = await api
@@ -101,5 +111,33 @@ export const resetPassword = async ({
     return response.json();
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const changeEmail = async ({
+  password,
+  newEmail,
+}: ChangeEmailPayload) => {
+  try {
+    const response = await api.put('auth/change-email', {
+      json: { newEmail, password },
+    });
+    return response;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to change email');
+  }
+};
+
+export const changePassword = async ({
+  password,
+  newPassword,
+}: ChangePasswordPayload) => {
+  try {
+    const response = await api.put('auth/change-password', {
+      json: { newPassword, password },
+    });
+    return response;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to change password');
   }
 };

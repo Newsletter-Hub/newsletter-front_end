@@ -5,6 +5,8 @@ import { useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
+import format from 'date-fns/format';
+
 import { Interest } from '@/types/interests';
 import { UserMe } from '@/types/user';
 
@@ -45,19 +47,40 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
   };
 
   const onEditSubmit = async (data: EditProfilePayload) => {
-    const result = await updateUser({
-      ...data,
-      interests: user.interests && user.interests.map(item => item.id),
-      type: 'update',
-    });
-    if (data.email) {
-      setIsVerifyEmailModalOpen(true);
-    }
-    if (result?.response) {
-      const user = await getUserMe({ token: null });
-      if (user.response) {
-        setUser(user.response as UserMe);
+    const date = new Date(data.dateOfBirth as string);
+    const formattedUser = {
+      avatar: user.avatar,
+      country: user.country,
+      state: user.state,
+      dateOfBirth: user.dateOfBirth,
+      username: user.username,
+      email: user.email,
+      profileType: user.profileType,
+      description: user.description,
+    };
+    const changedFields = Object.keys(formattedUser).filter(
+      key =>
+        formattedUser[key as keyof typeof formattedUser] !==
+        data[key as keyof typeof data]
+    );
+    if (!(changedFields.length === 1 && changedFields.includes('email'))) {
+      const result = await updateUser({
+        ...data,
+        interests: user.interests && user.interests.map(item => item.id),
+        type: 'update',
+        dateBirth: data.dateOfBirth && format(date, 'yyyy-MM-dd'),
+      });
+      if (data.email !== user.email) {
+        setIsVerifyEmailModalOpen(true);
       }
+      if (result?.response) {
+        const user = await getUserMe({ token: null });
+        if (user.response) {
+          setUser(user.response as UserMe);
+        }
+      }
+    } else {
+      setIsVerifyEmailModalOpen(true);
     }
   };
 
@@ -83,6 +106,10 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       });
       if (user?.response) {
         setInterestsPayload(user.response.interests);
+        const getUser = await getUserMe({ token: null });
+        if (getUser.response) {
+          setUser(getUser.response as UserMe);
+        }
       }
     }
   };
@@ -127,6 +154,7 @@ const Settings = ({ userMe, interests }: SettingsProps) => {
       ),
     },
   ];
+  console.log(isDirty, 'here');
   return (
     <div>
       <div className="pt-[72px] px-[17%]">
