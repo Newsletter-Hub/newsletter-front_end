@@ -2,6 +2,13 @@
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
+    screens: {
+      xs: '375px',
+      sm: '425px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1440px',
+    },
     fontFamily: {
       alegreya: ['Alegreya', 'ui-sans-serif', 'system-ui'],
       inter: ['Inter', 'Alegreya', 'ui-sans-serif', 'system-ui'],

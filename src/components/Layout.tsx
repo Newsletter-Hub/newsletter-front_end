@@ -20,7 +20,7 @@ const Layout = ({ children, isFooter }: LayoutProps) => {
         <title>Newsletter Hub</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className={alegreya.className}>
+      <div className={`${alegreya.className} overflow-x-hidden`}>
         <Header />
         {children}
         {isFooter && <Footer />}
