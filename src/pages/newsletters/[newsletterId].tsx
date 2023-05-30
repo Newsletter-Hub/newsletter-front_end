@@ -20,6 +20,7 @@ import { UserMe } from '@/types/user';
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Loading from '@/components/Loading';
 import Modal from '@/components/Modal';
 import StarRating from '@/components/StarRating';
 
@@ -193,7 +194,7 @@ const NewsletterPage = ({
   };
 
   if (!reviewsData || !newsletter) {
-    return <span>Loading...</span>;
+    return <Loading />;
   }
 
   return (

@@ -13,6 +13,7 @@ import { Interest } from '@/types/interests';
 import { UserMe } from '@/types/user';
 
 import Button from '@/components/Button';
+import Loading from '@/components/Loading';
 import Edit from '@/components/Profile/Edit';
 import { EditProfilePayload } from '@/components/Profile/Edit';
 import ProfileInterests from '@/components/Profile/Interests';
@@ -160,7 +161,7 @@ const Settings = ({ interests }: SettingsProps) => {
   }, [user, router]);
 
   if (!user) {
-    return <span>Loading...</span>;
+    return <Loading />;
   }
   return (
     <div>

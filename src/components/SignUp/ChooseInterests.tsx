@@ -7,6 +7,7 @@ import { Interest } from '@/types/interests';
 import { UserInfoStepsProps } from '@/types/signup';
 
 import Button from '../Button';
+import Loading from '../Loading';
 
 const ChooseInterests = ({
   payload,
@@ -62,7 +63,7 @@ const ChooseInterests = ({
             />
           ))
         ) : (
-          <span>Loading..</span>
+          <Loading />
         )}
       </div>
       <div className="flex justify-between items-center w-full">

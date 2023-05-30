@@ -20,6 +20,7 @@ import CrossIcon from '@/assets/icons/cross';
 import Button from '../Button';
 import FileDownloader from '../FileDownloader';
 import Input from '../Input';
+import Loading from '../Loading';
 
 const validationSchema = z.object({
   title: z.string().min(1, { message: 'Title is required field' }),
@@ -143,7 +144,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   useOnClickOutside(autoCompleteRef, handleClickOutside);
 
   if (!interests) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   return (
