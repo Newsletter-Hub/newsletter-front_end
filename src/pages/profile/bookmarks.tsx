@@ -5,6 +5,8 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
+import { UserMe } from '@/types/user';
+
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
 
@@ -31,6 +33,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       : [];
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
+  const user: UserMe = cookies.user;
   const bookmarkList = await getBookmarksList({
     page: 1,
     pageSize: 6,
@@ -38,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     orderDirection: 'DESC',
     categoriesIds,
     token,
+    myId: user && user.id ? +user.id : undefined,
   });
   const interests = await getInterests();
   if (!bookmarkList || !interests) {

@@ -1,4 +1,8 @@
-import { GetNewsletterListProps } from '@/actions/newsletters';
+import {
+  GetNewsletterListProps,
+  follow,
+  unfollow,
+} from '@/actions/newsletters';
 import {
   GetBookmarkListProps,
   addToBookmark,
@@ -6,6 +10,7 @@ import {
 } from '@/actions/newsletters/bookmarks';
 import { createReview } from '@/actions/newsletters/reviews';
 import { useUser } from '@/contexts/UserContext';
+import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -23,11 +28,7 @@ import clsx from 'clsx';
 import { format, parseISO } from 'date-fns';
 
 import { Interest } from '@/types/interests';
-import {
-  Newsletter,
-  NewsletterData,
-  NewslettersListData,
-} from '@/types/newsletters';
+import { Newsletter, NewslettersListData } from '@/types/newsletters';
 
 import Accordion from '@/components/Accordion';
 import Avatar from '@/components/Avatar';
@@ -50,7 +51,7 @@ import StarIcon from '@/assets/icons/star';
 const alegreya = Alegreya({ subsets: ['latin'] });
 
 interface NewsletterResponse {
-  newslettersListData?: NewsletterData[];
+  newslettersListData?: NewslettersListData;
   error?: string;
 }
 
@@ -68,6 +69,7 @@ export interface NewslettersPageProps {
   isAuthor?: boolean;
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
+  isUser?: boolean;
 }
 
 interface SortType {
@@ -121,10 +123,13 @@ const NewslettersList = ({
   isAuthor = true,
   isFollowEnable = true,
   isNewsletterFollowed = false,
+  isUser = false,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const { id } = router.query;
+  const { id, userId } = router.query;
+  const authorId =
+    user?.id && isUser ? +user?.id : userId ? (+userId as number) : undefined;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -175,7 +180,9 @@ const NewslettersList = ({
       page: 1,
       pageSize: 6 * (page + 1),
       order: sortTypes[choosedSortType].value,
-      authorId: user?.id ? +user?.id : undefined,
+      authorId,
+      orderDirection:
+        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
     });
 
     if (newsletterResponse.error) {
@@ -211,6 +218,7 @@ const NewslettersList = ({
         orderDirection:
           sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
         search: search,
+        authorId,
       });
 
       if (newsletterResponse.error) {
@@ -240,6 +248,7 @@ const NewslettersList = ({
       durationTo: filtersPayload.durationTo,
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+      authorId,
     });
 
     if (newsletterResponse.error) {
@@ -262,6 +271,7 @@ const NewslettersList = ({
       durationTo: filtersPayload.durationTo,
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+      authorId,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -285,6 +295,7 @@ const NewslettersList = ({
       categoriesIds: filtersPayload.categories,
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
+      authorId,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -316,6 +327,7 @@ const NewslettersList = ({
         categoriesIds: filtersPayload.categories,
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
+        authorId,
       });
       if (bookmarksResponse.error) {
         console.error(bookmarksResponse.error);
@@ -354,6 +366,65 @@ const NewslettersList = ({
         newsletterId: isOpenReviewModal as number,
       });
       setIsOpenReviewModal(false);
+    }
+  };
+
+  const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
+    if (!user) {
+      router.push('/sign-up');
+    } else {
+      if (followed) {
+        const response = await unfollow({ entityId, entityType: 'Newsletter' });
+        if (response?.ok) {
+          const response = await getNewslettersList({
+            page: 1,
+            pageSize: 6 * page,
+            order: sortTypes[choosedSortType].value,
+            orderDirection:
+              sortTypes[choosedSortType].value === 'rating' ||
+              sortTypes[choosedSortType].value === 'data'
+                ? 'DESC'
+                : 'ASC',
+            search,
+            pricingTypes: filtersPayload.pricingType.map(item =>
+              item.toLowerCase()
+            ),
+            ratings: filtersPayload.ratings,
+            categoriesIds: filtersPayload.categories,
+            durationFrom: filtersPayload.durationFrom,
+            durationTo: filtersPayload.durationTo,
+            authorId,
+          });
+          if (response.newslettersListData) {
+            setNewslettersData(response.newslettersListData as Newsletter);
+          }
+        }
+      } else {
+        const response = await follow({ entityId, entityType: 'Newsletter' });
+        if (response?.ok) {
+          const response = await getNewslettersList({
+            page: 1,
+            pageSize: 6 * page,
+            order: sortTypes[choosedSortType].value,
+            orderDirection:
+              sortTypes[choosedSortType].value === 'rating' ||
+              sortTypes[choosedSortType].value === 'data'
+                ? 'DESC'
+                : 'ASC',
+            search,
+            pricingTypes: filtersPayload.pricingType.map(item =>
+              item.toLowerCase()
+            ),
+            ratings: filtersPayload.ratings,
+            categoriesIds: filtersPayload.categories,
+            durationFrom: filtersPayload.durationFrom,
+            durationTo: filtersPayload.durationTo,
+          });
+          if (response) {
+            setNewslettersData(response.newslettersListData as Newsletter);
+          }
+        }
+      }
     }
   };
 
@@ -677,6 +748,7 @@ const NewslettersList = ({
                       alt="newsletter"
                       width={224}
                       height={224}
+                      priority
                     />
                   </div>
                   <div className="w-full flex flex-col justify-between">
@@ -859,14 +931,19 @@ const NewslettersList = ({
                           <Button
                             rounded="xl"
                             fontSize="md"
+                            onClick={() =>
+                              handleFollow({
+                                entityId: newsletter.id,
+                                followed: newsletter.followed,
+                              })
+                            }
                             variant={
-                              isNewsletterFollowed
+                              isNewsletterFollowed || newsletter.followed
                                 ? 'outlined-secondary'
                                 : 'primary'
                             }
-                            customStyles="pl-8 pr-6"
                             label={
-                              isNewsletterFollowed ? (
+                              isNewsletterFollowed || newsletter.followed ? (
                                 'Following'
                               ) : (
                                 <span className="flex items-center gap-2">

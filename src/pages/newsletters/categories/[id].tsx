@@ -4,6 +4,8 @@ import React from 'react';
 
 import { GetServerSideProps } from 'next';
 
+import { UserMe } from '@/types/user';
+
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
 
@@ -22,7 +24,8 @@ const NewslettersPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { params } = context;
+  const { params, req } = context;
+  const user: UserMe = JSON.parse(req.cookies.user as string);
   const categoryId = params && params.id;
   const search = (context.query && (context.query.search as string)) || '';
   const categoriesIds =
@@ -36,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     orderDirection: 'DESC',
     categoriesIds,
     search,
+    myId: user && user.id ? +user.id : undefined,
   });
   const interests = await getInterests();
   if (!newsletterList || !interests) {

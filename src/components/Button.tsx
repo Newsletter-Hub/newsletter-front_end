@@ -40,7 +40,7 @@ const variants = {
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7',
   porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
 };
 

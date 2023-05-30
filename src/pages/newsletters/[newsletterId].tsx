@@ -1,5 +1,6 @@
 import { useUser } from '@/contexts/UserContext';
 import timeAgo from '@/helpers/timeAgo';
+import { FollowingPayload } from '@/types';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -14,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterData } from '@/types/newsletters';
 import { GetReviewResponse, ReviewResponse } from '@/types/newsletters';
+import { UserMe } from '@/types/user';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -25,7 +27,6 @@ import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
 // import ListIcon from '@/assets/icons/list';
 import PlusIcon from '@/assets/icons/plus';
-import SubscribeIcon from '@/assets/icons/subscribe';
 
 import {
   addToBookmark,
@@ -34,7 +35,9 @@ import {
 } from '../../actions/newsletters/bookmarks';
 import {
   GetNewsletterResponse,
+  follow,
   getNewsletter,
+  unfollow,
 } from '../../actions/newsletters/index';
 import { createReview, getReviews } from '../../actions/newsletters/reviews';
 
@@ -56,6 +59,7 @@ const NewsletterPage = ({
   reviews,
   isBookmark,
 }: NewsletterPageProps) => {
+  const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookmarkState, setBookmarkState] = useState(isBookmark);
@@ -141,6 +145,32 @@ const NewsletterPage = ({
     }
   };
 
+  const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
+    if (!user) {
+      router.push('/sign-up');
+    } else {
+      if (followed) {
+        const response = await unfollow({ entityId, entityType: 'Newsletter' });
+        if (response?.ok) {
+          const response = await getNewsletter({
+            id: entityId,
+          });
+          if (response.newsletterData) {
+            setNewsletter(response.newsletterData);
+          }
+        }
+      } else {
+        const response = await follow({ entityId, entityType: 'Newsletter' });
+        if (response?.ok) {
+          const response = await getNewsletter({ id: entityId });
+          if (response.newsletterData) {
+            setNewsletter(response.newsletterData);
+          }
+        }
+      }
+    }
+  };
+
   const loadMoreReviews = async () => {
     setPage(prevPage => prevPage + 1);
 
@@ -162,7 +192,7 @@ const NewsletterPage = ({
     reset();
   };
 
-  if (!reviewsData) {
+  if (!reviewsData || !newsletter) {
     return <span>Loading...</span>;
   }
 
@@ -179,57 +209,33 @@ const NewsletterPage = ({
           </span>
         </Link>
         <h1 className="text-lightBlack text-7xl font-medium mb-10">
-          {newsletterData?.title}
+          {newsletter?.title}
         </h1>
-        {newsletterData?.addedByUser && (
+        {newsletter?.addedByUser && (
           <div className="flex gap-6 mb-10">
             <Avatar
-              src={newsletterData?.addedByUser?.avatar as string}
+              src={newsletter?.addedByUser?.avatar as string}
               alt="avatar"
               width={112}
               height={112}
               className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
               customStyles="max-h-[112px] min-w-[112px]"
-              username={newsletterData.addedByUser.username}
+              username={newsletter.addedByUser.username}
             />
             <div>
               <div className="flex gap-4 items-center mb-4">
                 <span className="font-medium text-lightBlack text-xl">
-                  {newsletterData?.newsletterAuthor}
+                  {newsletter?.newsletterAuthor}
                 </span>
-                <div className="flex gap-2">
-                  <Link href={newsletterData.link}>
-                    <Button
-                      label={
-                        <div className="flex items-center justify-center gap-2">
-                          <PlusIcon />
-                          <span className="text-base">Follow</span>
-                        </div>
-                      }
-                      rounded="xl"
-                      height="sm"
-                    />
-                  </Link>
-                  <Button
-                    label={
-                      <div className="flex items-center justify-center gap-2">
-                        <SubscribeIcon />
-                        <span className="text-base">Subscribe</span>
-                      </div>
-                    }
-                    rounded="xl"
-                    height="sm"
-                  />
-                </div>
               </div>
               <div className="flex items-center mb-3">
                 <StarRating
                   readonly
-                  value={newsletterData.addedByUser.averageUserRating}
+                  value={newsletter.addedByUser.averageUserRating}
                   customStyles="mr-2"
                 />
                 <span className="font-inter text-dark-grey text-sm mr-6">
-                  {newsletterData.addedByUser.amountUserRatings}
+                  {newsletter.addedByUser.amountUserRatings}
                 </span>
                 <span className="font-inter text-sm text-dark-grey">
                   <span className="font-bold">207</span> Followers
@@ -243,20 +249,20 @@ const NewsletterPage = ({
             </div>
           </div>
         )}
-        {newsletterData?.image && (
+        {newsletter?.image && (
           <Image
-            src={newsletterData.image || ''}
+            src={newsletter.image || ''}
             width={1280}
             height={678}
             alt="banner"
             className="w-full h-auto mb-6"
             placeholder="blur"
-            blurDataURL={newsletterData.image as string}
+            blurDataURL={newsletter.image as string}
           />
         )}
-        {Boolean(newsletterData?.interests?.length) && (
+        {Boolean(newsletter?.interests?.length) && (
           <div className="flex gap-2 mb-10">
-            {newsletterData?.interests?.map(interest => (
+            {newsletter?.interests?.map(interest => (
               <span
                 key={interest.id}
                 className="bg-primary/10 text-primary rounded-lg py-2 px-3.5 font-inter text-base"
@@ -266,38 +272,72 @@ const NewsletterPage = ({
             ))}
           </div>
         )}
-        {newsletterData?.description && (
-          <p className="font-inter text-dark-grey text-lg pb-10 border-b border-light-grey mb-10">
-            {newsletterData?.description}
+        {newsletter?.description && (
+          <p className="font-inter text-dark-grey text-lg mb-10">
+            {newsletter?.description}
           </p>
         )}
+        <div className="flex gap-2 pb-10 border-b border-light-grey mb-10">
+          {newsletter?.link && (
+            <Link href={newsletter.link}>
+              <Button
+                label="Read newsletter"
+                rounded="xl"
+                height="sm"
+                fontSize="md"
+              />
+            </Link>
+          )}
+          <Button
+            rounded="xl"
+            fontSize="md"
+            height="sm"
+            onClick={() =>
+              handleFollow({
+                entityId: newsletter.id,
+                followed: newsletter.followed,
+              })
+            }
+            variant={newsletter.followed ? 'outlined-secondary' : 'primary'}
+            label={
+              newsletter.followed ? (
+                'Following'
+              ) : (
+                <span className="flex items-center gap-2">
+                  <PlusIcon />
+                  Follow
+                </span>
+              )
+            }
+          />
+        </div>
         <div className="flex justify-between font-inter items-center mb-20">
           <div className="flex gap-6 items-center">
-            {newsletterData?.averageDuration && (
+            {newsletter?.averageDuration && (
               <>
                 <p className="text-sm text-dark-grey">
                   <span className="font-semibold">
-                    {newsletterData?.averageDuration} min
+                    {newsletter?.averageDuration} min
                   </span>{' '}
                   read
                 </p>
                 <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
               </>
             )}
-            {newsletterData?.pricing && (
+            {newsletter?.pricing && (
               <>
                 <span className="text-sm text-dark-grey font-semibold">
-                  {newsletterData.pricing.charAt(0).toUpperCase() +
-                    newsletterData.pricing.slice(1)}
+                  {newsletter.pricing.charAt(0).toUpperCase() +
+                    newsletter.pricing.slice(1)}
                 </span>
                 <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
               </>
             )}
             <div className="flex gap-2 items-center">
-              <StarRating readonly value={newsletterData?.averageRating} />
+              <StarRating readonly value={newsletter?.averageRating} />
               <span className="font-inter text-sm text-dark-grey">
                 <span className="font-semibold">
-                  {newsletterData?.amountRatings} people
+                  {newsletter?.amountRatings} people
                 </span>{' '}
                 rated this newsletter
               </span>
@@ -339,26 +379,26 @@ const NewsletterPage = ({
           <div>
             <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
               <Avatar
-                src={newsletterData?.addedByUser?.avatar as string}
+                src={newsletter?.addedByUser?.avatar as string}
                 alt="avatar"
                 width={112}
                 height={112}
                 className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-                username={newsletterData?.addedByUser?.username}
+                username={newsletter?.addedByUser?.username}
                 customStyles="max-h-[112px] min-w-[112px]"
               />
               <div className="flex flex-col">
                 <span className="font-medium text-lightBlack text-xl mb-3">
-                  {newsletterData?.newsletterAuthor}
+                  {newsletter?.newsletterAuthor}
                 </span>
                 <div className="flex items-center mb-3">
                   <StarRating
                     readonly
-                    value={newsletterData?.addedByUser?.averageUserRating}
+                    value={newsletter?.addedByUser?.averageUserRating}
                     customStyles="mr-2"
                   />
                   <span className="font-inter text-dark-grey text-sm mr-6">
-                    {newsletterData?.addedByUser?.amountUserRatings}
+                    {newsletter?.addedByUser?.amountUserRatings}
                   </span>
                   <span className="font-inter text-sm text-dark-grey">
                     <span className="font-bold">207</span> Followers
@@ -464,9 +504,10 @@ const NewsletterPage = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { newsletterId } = context.params as { newsletterId: string };
-
+  const user: UserMe = JSON.parse(context.req.cookies.user as string);
   const response: GetNewsletterResponse = await getNewsletter({
     id: parseInt(newsletterId),
+    myId: user && user.id ? +user.id : undefined,
   });
 
   const reviewsResponse: GetReviewResponse = await getReviews({
@@ -488,7 +529,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       isBookmark = 'added';
     }
   }
-
   if (response.error || reviewsResponse.error) {
     return {
       props: {

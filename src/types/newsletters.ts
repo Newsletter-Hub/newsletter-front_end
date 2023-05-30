@@ -22,7 +22,7 @@ export interface NewsletterFormProps {
 }
 
 export interface NewsletterData {
-  id?: number;
+  id: number;
   title?: string;
   description?: string;
   image?: string;
@@ -35,6 +35,8 @@ export interface NewsletterData {
   averageDuration: number;
   pricing: string;
   createdAt: string;
+  followed: boolean;
+  followersIds: number[];
 }
 
 export interface Newsletter {
