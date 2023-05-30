@@ -49,7 +49,9 @@ export const login = async ({ email, password, router, setUser }: User) => {
       .json()
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
-        setUser(res as UserMe);
+        if (setUser) {
+          setUser(res as UserMe);
+        }
         console.log(res);
         router.push('/');
       });
