@@ -63,17 +63,22 @@ export const updateUser = async ({
       method: 'PUT',
       credentials: 'include',
     });
-    if (response.ok) {
-      toast.success(
-        type === 'signup'
-          ? 'User succesfully created'
-          : type === 'update'
-          ? 'Your info succesfully updated'
-          : 'Your interests succesfully updated'
-      );
-      const res = await response.json();
-      return { response: res };
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    const res = await response.json();
+
+    toast.success(
+      type === 'signup'
+        ? 'User successfully created'
+        : type === 'update'
+        ? 'Your info successfully updated'
+        : 'Your interests successfully updated'
+    );
+
+    return { response: res };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to update user');
     return { error: 'Failed to update user' };
