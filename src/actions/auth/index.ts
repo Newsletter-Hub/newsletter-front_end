@@ -52,7 +52,6 @@ export const login = async ({ email, password, router, setUser }: User) => {
         if (setUser) {
           setUser(res as UserMe);
         }
-        console.log(res);
         router.push('/');
       });
     return response;

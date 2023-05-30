@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { NextRouter } from 'next/router';
+
+import { UserMe } from './user';
+
 export interface Payload {
   dateBirth?: string;
   country?: string;
@@ -11,6 +15,8 @@ export interface Payload {
   interests?: number[];
   type?: 'signup' | 'update' | 'interests';
   description?: string;
+  router?: NextRouter;
+  setUser?: (user: UserMe | null) => void;
 }
 
 export interface UserInfoStepsProps {

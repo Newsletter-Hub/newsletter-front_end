@@ -1,4 +1,5 @@
 import { updateUser } from '@/actions/user';
+import { useUser } from '@/contexts/UserContext';
 
 import { useRouter } from 'next/router';
 
@@ -15,6 +16,7 @@ const ChooseInterests = ({
   interests,
 }: UserInfoStepsProps & { interests?: Interest[] }) => {
   const router = useRouter();
+  const { setUser } = useUser();
 
   const handlePreviousStep = () => setPage(page - 1);
   const handleInterestClick = (id: number) => {
@@ -37,12 +39,7 @@ const ChooseInterests = ({
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(([key, value]) => value !== undefined)
     );
-    const response = await updateUser(formattedPayload);
-    if (response && !response.error) {
-      router.push('/');
-    } else {
-      console.error(response?.error);
-    }
+    await updateUser({ ...formattedPayload, router, setUser });
   };
   return (
     <>

@@ -43,6 +43,8 @@ export const updateUser = async ({
   interests,
   type = 'signup',
   description,
+  router,
+  setUser,
 }: Payload): Promise<UpdateUserResponse | undefined> => {
   try {
     const formData = new FormData();
@@ -64,21 +66,28 @@ export const updateUser = async ({
       credentials: 'include',
     });
 
-    if (!response.ok) {
+    if (response.ok) {
+      const res = await response.json();
+      Cookies.set('user', JSON.stringify(res), { expires: 1 });
+      if (setUser) {
+        setUser(res as UserMe);
+      }
+      if (router) {
+        router.push('/');
+      }
+
+      toast.success(
+        type === 'signup'
+          ? 'User successfully created'
+          : type === 'update'
+          ? 'Your info successfully updated'
+          : 'Your interests successfully updated'
+      );
+
+      return { response: res };
+    } else {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    const res = await response.json();
-
-    toast.success(
-      type === 'signup'
-        ? 'User successfully created'
-        : type === 'update'
-        ? 'Your info successfully updated'
-        : 'Your interests successfully updated'
-    );
-
-    return { response: res };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to update user');
     return { error: 'Failed to update user' };
