@@ -62,6 +62,7 @@ export const newsletterVerifyOwnership = async ({
     });
     return response.json();
   } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to verify ownership');
     console.log(error);
   }
 };
@@ -73,10 +74,9 @@ export const newsletterLink = async ({
     const response = await api.post('newsletters', { json: { link } });
     if (response.ok) {
       return await response.json();
-    } else {
-      return undefined;
     }
   } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to add newsletter');
     console.log(error);
   }
 };
@@ -90,29 +90,35 @@ export const newsletterUpdate = async ({
   image,
   interests,
 }: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
-  const formData = new FormData();
-  link && formData.append('link', link as string);
-  title && formData.append('title', title as string);
-  description && formData.append('description', description as string);
-  newsletterAuthor &&
-    formData.append('newsletterAuthor', newsletterAuthor as string);
-  image && formData.append('image', image as Blob);
-  if (interests?.length) {
-    for (let i = 0; i < interests.length; i++) {
-      formData.append('interestIds[]', JSON.stringify(interests[i]));
+  try {
+    const formData = new FormData();
+    link && formData.append('link', link as string);
+    title && formData.append('title', title as string);
+    description && formData.append('description', description as string);
+    newsletterAuthor &&
+      formData.append('newsletterAuthor', newsletterAuthor as string);
+    image && formData.append('image', image as Blob);
+    if (interests?.length) {
+      for (let i = 0; i < interests.length; i++) {
+        formData.append('interestIds[]', JSON.stringify(interests[i]));
+      }
     }
-  }
-  const response = await fetch(
-    `https://newsletter-back-quzx.onrender.com/newsletters/${id}`,
-    {
-      body: formData,
-      method: 'PUT',
-      credentials: 'include',
+    const response = await fetch(
+      `https://newsletter-back-quzx.onrender.com/newsletters/${id}`,
+      {
+        body: formData,
+        method: 'PUT',
+        credentials: 'include',
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  );
-  if (response.ok) {
-    return await response.json();
-  } else {
+
+    const res = await response.json();
+    return res;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to update newsletter');
     return undefined;
   }
 };
