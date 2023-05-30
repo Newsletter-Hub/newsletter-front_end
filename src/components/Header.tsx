@@ -5,7 +5,6 @@ import {
   search,
 } from '@/actions/global';
 import { useUser } from '@/contexts/UserContext';
-import Cookies from 'js-cookie';
 import { debounce } from 'lodash';
 import React, { useRef, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -26,13 +25,13 @@ import Logo from '@/assets/images/logo';
 import Avatar from './Avatar';
 import Button from './Button';
 import Input from './Input';
+import BurgerMenu from './Mobile/BurgerMenu';
 import Popover from './Popover';
 
 const links = [
   { label: 'Newsletters', href: '/newsletters/categories/all' },
   { label: 'Categories', href: '/newsletters/categories' },
   { label: 'Users', href: '/users' },
-  { label: 'Help', href: '/help' },
 ];
 
 const alegreya = Alegreya({ subsets: ['latin'] });
@@ -63,11 +62,11 @@ const Header = () => {
   useOnClickOutside(searchResultRef, handleClickOutside);
   return (
     <div className="shadow-md py-4">
-      <div className="bg-white flex items-center justify-center font-inter gap-24 w-full">
-        <div>
-          <Logo />
+      <div className="bg-white flex items-center lg:justify-center justify-between font-inter xl:gap-24 lg:gap-10 w-full px-2 lg:px-0">
+        <div className="hidden lg:block">
+          <Logo className="max-w-200px" />
         </div>
-        <div className="flex gap-12 text-lg items-center">
+        <div className="flex xl:gap-12 lg:gap-5 text-lg items-center">
           {links.map((link, index) => {
             return (
               <React.Fragment key={index}>
@@ -81,21 +80,21 @@ const Header = () => {
                       placeholder="Search Newsletter Hub"
                       isSearch
                       onChange={e => handleChangeSearch(e.target.value)}
-                      customStyles="lg:min-w-[400px]"
+                      customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px]"
                     />
                     {showSearchResult && data && (
-                      <div className="bg-white absolute w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2">
+                      <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw]">
                         {Boolean(data?.newsletters?.length) && (
                           <div>
                             <div className="flex justify-between items-center">
                               <span
-                                className={`${alegreya.className} text-dark-blue font-medium text-xl`}
+                                className={`${alegreya.className} text-dark-blue font-medium xl:text-xl text-md`}
                               >
                                 Newsletters
                               </span>
                               <Link
                                 href={`/newsletters/categories/all?search=${searchTerm}`}
-                                className="text-sm border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
                               >
                                 View all Newsletter results
                               </Link>
@@ -121,7 +120,7 @@ const Header = () => {
                                     <p className="text-dark-blue font-semibold text-base">
                                       {item.title}
                                     </p>
-                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden max-w-[300px] text-ellipsis">
+                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden xs:max-w-[275px] sm:max-w-[300px] md:max-w-[350px] max-w-[200px] lg:max-w-[200px] text-ellipsis">
                                       {item.description}
                                     </p>
                                   </div>
@@ -134,13 +133,13 @@ const Header = () => {
                           <div>
                             <div className="flex justify-between items-center">
                               <span
-                                className={`${alegreya.className} text-dark-blue font-medium text-xl`}
+                                className={`${alegreya.className} text-dark-blue font-medium xl:text-xl text-md`}
                               >
                                 Users
                               </span>
                               <Link
                                 href={`/users?search=${searchTerm}`}
-                                className="text-sm border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
                               >
                                 View all User results
                               </Link>
@@ -184,13 +183,110 @@ const Header = () => {
                     )}
                   </div>
                 )}
-                <Link href={link.href}>{link.label}</Link>
+                <Link href={link.href} className="hidden lg:block">
+                  {link.label}
+                </Link>
               </React.Fragment>
             );
           })}
         </div>
+        <div className="lg:hidden">
+          <BurgerMenu>
+            {!user ? (
+              <div>
+                <div className="flex flex-col gap-3 border-b border-b-light-grey pb-3 mb-3">
+                  {links.map(link => (
+                    <Link href={link.href} key={link.href}>
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+                <div className="flex items-center w-full justify-between">
+                  <Link href="/login">Login</Link>
+                  <Link href="/sign-up">
+                    <Button label="Sign up" fontSize="base" rounded="xl" />
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="flex mb-3 items-center">
+                  <Avatar
+                    alt="avatar"
+                    width={48}
+                    height={48}
+                    username={user.username}
+                    customStyles="p-3"
+                    src={user.avatar}
+                    className="rounded-full max-h-[48px] border-2 border-primary mr-2"
+                  />
+                  <div>
+                    <span className="text-lg whitespace-nowrap block overflow-hidden text-ellipsis font-semibold text-lightBlack">
+                      {user.username}
+                    </span>
+                    <span className="text-grey-chat text-sm">
+                      (
+                      {user.profileType.charAt(0).toUpperCase() +
+                        user.profileType.slice(1)}
+                      )
+                    </span>
+                  </div>
+                </div>
+                <div className="mb-3 border-b border-b-porcelain">
+                  <div className="pb-2 border-b border-b-porcelain">
+                    <Link
+                      href="/profile"
+                      className="flex gap-2 items-center text-dark-blue text-sm p-2 mb-1"
+                    >
+                      <div className="w-6 h-6">
+                        <ProfileIcon className="!w-5" />
+                      </div>
+                      My profile
+                    </Link>
+                    <Link
+                      href="/profile/bookmarks"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2"
+                    >
+                      <div className="w-6 h-6">
+                        <BookmarkIcon className="!w-4" />
+                      </div>
+                      Bookmarks
+                    </Link>
+                  </div>
+                  <div className="pt-2">
+                    <Link
+                      href="/profile/settings"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1"
+                    >
+                      <div className="w-6 h-6">
+                        <SettingsIcon className="!w-5" />
+                      </div>
+                      Account settings
+                    </Link>
+                    <span
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer"
+                      onClick={() => logout({ setUser })}
+                    >
+                      <div className="w-6 h-6">
+                        <LogoutIcon className="!w-5" />
+                      </div>
+                      Logout
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {links.map(link => (
+                    <Link href={link.href} key={link.href}>
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </BurgerMenu>
+        </div>
         {!user ? (
-          <div className="flex gap-6 items-center">
+          <div className="lg:flex gap-6 items-center hidden">
             <Link href="/login">Login</Link>
             <Link href="/sign-up">
               <Button label="Sign up" fontSize="base" rounded="xl" />
@@ -198,15 +294,18 @@ const Header = () => {
           </div>
         ) : (
           <Popover
-            triggerStyles=""
+            triggerStyles="hidden lg:flex"
             triggerContent={
-              <div className="flex items-center">
+              <div className="lg:flex items-center">
                 <div className="max-w-[80px] text-right mr-3">
                   <span className="text-lg whitespace-nowrap block overflow-hidden text-ellipsis font-semibold text-lightBlack">
                     {user.username}
                   </span>
                   <span className="text-grey-chat text-sm">
-                    ({user.profileType})
+                    (
+                    {user.profileType.charAt(0).toUpperCase() +
+                      user.profileType.slice(1)}
+                    )
                   </span>
                 </div>
                 <Avatar

@@ -35,7 +35,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
   return (
     <div className="mb-24">
       <div className="flex flex-col">
-        <h4 className="text-5xl text-dark-blue">Latest reviews</h4>
+        <h4 className="md:text-5xl text-dark-blue text-2xl">Latest reviews</h4>
         <div className="mb-10">
           {reviewsInfo.reviews.map((review, index) => (
             <div
@@ -52,31 +52,38 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                   height={96}
                   className="rounded mr-8 max-h-[96px]"
                 />
-                <div className="mr-24 min-w-[200px]">
-                  <p className="text-xl text-dark-blue">
-                    {review.reviewer.username}
-                  </p>
-                  <p className="text-base text-dark-grey font-inter mb-2">
-                    {review.reviewer.country}
-                  </p>
-                  <StarRating
-                    readonly
-                    value={review.rating}
-                    customStyles="mb-2"
-                  />
-                  <p className="text-xs text-grey-chat font-inter">
-                    {timeAgo(review.createdAt)}
+                <div className="flex md:items-center flex-col md:flex-row">
+                  <div className="mr-24 min-w-[200px]">
+                    <p className="text-xl text-dark-blue">
+                      {review.reviewer.username}
+                    </p>
+                    <p className="text-base text-dark-grey font-inter mb-2">
+                      {review.reviewer.country}
+                    </p>
+                    <StarRating
+                      readonly
+                      value={review.rating}
+                      customStyles="mb-2"
+                    />
+                    <p className="text-xs text-grey-chat font-inter">
+                      {timeAgo(review.createdAt)}
+                    </p>
+                  </div>
+                  <p className="md:text-base mb-8 font-inter text-dark-blue text-sm block max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis">
+                    {review.comment}
                   </p>
                 </div>
-                <p className="text-base mb-8 font-inter text-dark-blue">
-                  {review.comment}
-                </p>
               </div>
               <Link
                 href={`newsletters/${review.newsletter.id}`}
                 className="flex justify-end items-end w-full"
               >
-                <Button label="Read Newsletter" rounded="xl" fontSize="md" />
+                <Button
+                  label="Read Newsletter"
+                  rounded="xl"
+                  fontSize="md"
+                  customStyles="w-full md:w-fit"
+                />
               </Link>
             </div>
           ))}

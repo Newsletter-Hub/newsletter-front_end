@@ -14,7 +14,7 @@ const Home = ({ reviewData }: HomeProps) => {
   return (
     <>
       <main>
-        <div className="px-32 pt-32">
+        <div className="lg:px-[17%] lg:pt-32 pt-16 px-[5%]">
           <MainBlock />
           <ReviewsBlock reviewData={reviewData} />
         </div>
