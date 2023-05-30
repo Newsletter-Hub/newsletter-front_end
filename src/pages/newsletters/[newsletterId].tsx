@@ -384,8 +384,8 @@ const NewsletterPage = ({
                 width={112}
                 height={112}
                 className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-                username={newsletter?.addedByUser?.username}
                 customStyles="max-h-[112px] min-w-[112px]"
+                username={newsletter?.addedByUser?.username}
               />
               <div className="flex flex-col">
                 <span className="font-medium text-lightBlack text-xl mb-3">

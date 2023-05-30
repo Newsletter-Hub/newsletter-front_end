@@ -34,7 +34,7 @@ const Avatar = ({
         />
       ) : (
         <div
-          style={{ width, height }}
+          style={{ width, height, minWidth: width }}
           className={`bg-primary flex items-center justify-center rounded-full text-white ${customStyles}`}
         >
           <span
