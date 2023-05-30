@@ -58,7 +58,6 @@ const Header = () => {
   const handleClickOutside = () => {
     setShowSearchResults(false);
   };
-
   useOnClickOutside(searchResultRef, handleClickOutside);
   return (
     <div className="shadow-md py-4">

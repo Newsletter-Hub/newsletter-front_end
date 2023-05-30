@@ -13,6 +13,7 @@ import Tabs from '../Tabs';
 
 interface UserPageProps {
   newslettersListData: NewslettersListData;
+  followingNewsletterListData?: NewslettersListData;
   user: UserMe;
   isProfile?: boolean;
 }
@@ -20,6 +21,7 @@ interface UserPageProps {
 const UserPage = ({
   user,
   newslettersListData,
+  followingNewsletterListData,
   isProfile = true,
 }: UserPageProps) => {
   const tabs = [
@@ -32,6 +34,7 @@ const UserPage = ({
         <UserNewsletters
           newslettersListData={newslettersListData}
           isProfile={isProfile}
+          user={user}
         />
       ),
     },
@@ -40,7 +43,7 @@ const UserPage = ({
       value: 'followngNewsletters',
       content: (
         <FollowingNewsletters
-          newslettersListData={newslettersListData}
+          newslettersListData={followingNewsletterListData}
           isProfile={isProfile}
         />
       ),
@@ -57,6 +60,7 @@ const UserPage = ({
             alt="User avatar"
             className="rounded-full min-h-[252px] object-cover border-[7px] border-primary mb-8"
             username={user.username}
+            size="xl"
           />
           <h1 className="text-dark-blue text-5xl font-medium">
             {user.username}

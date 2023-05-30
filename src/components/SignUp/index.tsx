@@ -81,7 +81,6 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
       setEmail(email);
     }
   };
-  const isErrors = Boolean(Object.keys(errors).length);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -103,7 +102,6 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
         uppercase
         size="full"
         rounded="xl"
-        disabled={isErrors}
         type="submit"
       />
       <GoogleLogin

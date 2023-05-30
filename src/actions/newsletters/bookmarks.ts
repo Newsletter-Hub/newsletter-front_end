@@ -5,17 +5,9 @@ import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
-import {
-  Newsletter,
-  NewsletterData,
-  NewslettersListData,
-} from '@/types/newsletters';
+import { NewslettersListData } from '@/types/newsletters';
 
 import { GetNewsletterListProps } from '.';
-
-export interface GetBookmarkListProps extends GetNewsletterListProps {
-  token?: string | null;
-}
 
 interface BookmarkWithIdPayload {
   newsletterId: string;
@@ -96,7 +88,7 @@ export const getBookmarksList = async ({
   search,
   token,
   myId,
-}: GetBookmarkListProps) => {
+}: GetNewsletterListProps) => {
   try {
     const user = Cookies.get('user')
       ? JSON.parse(Cookies.get('user') as string)

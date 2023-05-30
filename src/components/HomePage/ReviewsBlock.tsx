@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 import { ReviewResponse } from '@/types/newsletters';
 
+import Avatar from '../Avatar';
 import Button from '../Button';
 import StarRating from '../StarRating';
 
@@ -45,12 +46,14 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
               key={review.id}
             >
               <div className="flex items-center">
-                <Image
+                <Avatar
                   src={review.reviewer.avatar}
                   alt="latest"
                   width={96}
                   height={96}
-                  className="rounded mr-8 max-h-[96px]"
+                  customStyles="mr-8 max-h-[96px]"
+                  className="rounded-full mr-8 max-h-[96px]"
+                  username={review.reviewer.username}
                 />
                 <div className="flex md:items-center flex-col md:flex-row">
                   <div className="mr-24 min-w-[200px]">

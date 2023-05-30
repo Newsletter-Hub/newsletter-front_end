@@ -25,7 +25,9 @@ const NewslettersPage = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { params, req } = context;
-  const user: UserMe = JSON.parse(req.cookies.user as string);
+  const user: UserMe = req.cookies.user
+    ? JSON.parse(req.cookies.user as string)
+    : undefined;
   const categoryId = params && params.id;
   const search = (context.query && (context.query.search as string)) || '';
   const categoriesIds =

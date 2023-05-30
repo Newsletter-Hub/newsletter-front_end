@@ -1,4 +1,6 @@
+import throwErrorMessage from '@/helpers/throwErrorMessage';
 import Cookies from 'js-cookie';
+import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
 import { UserList } from '@/pages/users';
@@ -60,8 +62,8 @@ export const updateUser = async ({
       body: formData,
       method: 'PUT',
       credentials: 'include',
-    }).then(res => res.json());
-    if (response) {
+    });
+    if (response.ok) {
       toast.success(
         type === 'signup'
           ? 'User succesfully created'
@@ -69,10 +71,11 @@ export const updateUser = async ({
           ? 'Your info succesfully updated'
           : 'Your interests succesfully updated'
       );
+      const res = await response.json();
+      return { response: res };
     }
-    return { response };
   } catch (error) {
-    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to update user');
     return { error: 'Failed to update user' };
   }
 };
