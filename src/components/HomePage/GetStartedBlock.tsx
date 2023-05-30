@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import ContactUs from '@/assets/images/contactUs';
 
 import Button from '../Button';
@@ -10,12 +12,14 @@ const GetStartedBlock = () => {
           <div className="w-full md:w-fit flex flex-col items-center gap-3 px-2 md:block">
             <p className="text-4xl">Ready to get started?</p>
             <p className="text-base md:mb-12">Sign up or contact us</p>
-            <Button
-              label="Sign up"
-              rounded="xl"
-              fontSize="md"
-              customStyles="w-full md:w-fit"
-            />
+            <Link href="/sign-up">
+              <Button
+                label="Sign up"
+                rounded="xl"
+                fontSize="md"
+                customStyles="w-full md:w-fit"
+              />
+            </Link>
           </div>
           <div></div>
         </div>
