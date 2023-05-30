@@ -150,8 +150,9 @@ const Header = () => {
                                   key={item.id}
                                   className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
                                 >
-                                  <Image
-                                    src={(item?.avatar as string) || ''}
+                                  <Avatar
+                                    src={item?.avatar}
+                                    username={item.username}
                                     width={48}
                                     height={48}
                                     alt="Newsletter image"
