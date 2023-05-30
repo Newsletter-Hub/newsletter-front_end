@@ -1,6 +1,10 @@
+import throwErrorMessage from '@/helpers/throwErrorMessage';
+import Cookies from 'js-cookie';
+import { HTTPError } from 'ky';
+
 import api from '@/config/ky';
 
-import { NewsletterData } from '@/types/newsletters';
+import { NewsletterData, NewslettersListData } from '@/types/newsletters';
 
 interface NewsletterLink {
   link?: string;
@@ -38,6 +42,12 @@ export interface GetNewsletterListProps {
   ratings?: number[];
   search?: string;
   authorId?: number;
+  myId?: number;
+}
+
+export interface FollowPayload {
+  entityId: number;
+  entityType: 'Newsletter' | 'User';
 }
 
 export const newsletterVerifyOwnership = async ({
@@ -107,16 +117,26 @@ export const newsletterUpdate = async ({
 
 export const getNewsletter = async ({
   id,
+  myId,
 }: {
   id: number;
+  myId?: number;
 }): Promise<GetNewsletterResponse> => {
+  const user = Cookies.get('user')
+    ? JSON.parse(Cookies.get('user') as string)
+    : undefined;
+
   try {
     const newsletterData: NewsletterData = await api
       .get(`newsletters/${id}`)
       .json();
+    newsletterData.followed = newsletterData.followersIds.includes(
+      myId || user.id
+    );
+    console.log(newsletterData);
     return { newsletterData };
   } catch (error) {
-    console.error(error);
+    throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
     return {
       error: 'Failed to get newsletter',
     };
@@ -135,8 +155,12 @@ export const getNewslettersList = async ({
   ratings,
   search,
   authorId,
+  myId,
 }: GetNewsletterListProps) => {
   try {
+    const user = Cookies.get('user')
+      ? JSON.parse(Cookies.get('user') as string)
+      : undefined;
     let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
@@ -164,12 +188,44 @@ export const getNewslettersList = async ({
     if (search) url += `&search=${search}`;
     if (authorId) url += `&authorId=${authorId}`;
 
-    const newslettersListData: NewsletterData[] = await api.get(url).json();
+    const newslettersListData: NewslettersListData = await api.get(url).json();
+    const userId = user ? user.id : myId;
+    if (authorId || userId) {
+      newslettersListData.newsletters.forEach(newsletter => {
+        if (newsletter.followersIds.includes(authorId || (userId as number))) {
+          newsletter.followed = true;
+        }
+      });
+    }
     return { newslettersListData };
   } catch (error) {
     console.error(error);
     return {
       error: 'Failed to get newsletter',
     };
+  }
+};
+
+export const follow = async ({ entityId, entityType }: FollowPayload) => {
+  try {
+    const response = await api.post('subscriptions', {
+      json: { entityId, entityType },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    throwErrorMessage(error as HTTPError, `Failed to follow ${entityType}`);
+  }
+};
+
+export const unfollow = async ({ entityId, entityType }: FollowPayload) => {
+  try {
+    const response = await api.delete('subscriptions', {
+      searchParams: { entityId, entityType },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    throwErrorMessage(error as HTTPError, `Failed to delete ${entityType}`);
   }
 };

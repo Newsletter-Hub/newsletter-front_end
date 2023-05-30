@@ -1,4 +1,7 @@
+import { follow, unfollow } from '@/actions/newsletters';
 import { getUsersList } from '@/actions/user';
+import { useUser } from '@/contexts/UserContext';
+import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
 import React, { useState } from 'react';
 
@@ -6,6 +9,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { SortType } from '@/types/sorting';
+import { UserMe } from '@/types/user';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -36,19 +40,22 @@ interface User {
   id: number;
   avatar: string;
   username: string;
+  followersIds: number[];
+  followed: boolean;
 }
 
-interface UsersList {
+export interface UserList {
   users: User[];
   total: number;
   nextPage: number;
 }
 
 interface UsersListProps {
-  usersList: UsersList;
+  usersList: UserList;
 }
 
 const UsersList = ({ usersList }: UsersListProps) => {
+  const { user } = useUser();
   const router = useRouter();
   const [choosedSortType, setChoosedSortType] = useState(0);
   const [page, setPage] = useState(1);
@@ -61,11 +68,12 @@ const UsersList = ({ usersList }: UsersListProps) => {
       page: 1,
       pageSize: 6 * page,
       order: sortTypes[choosedSortType].value,
-      orderDirection: 'ASC',
+      orderDirection:
+        sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
       search: value,
     });
     if (usersListResponse) {
-      setUsersData(usersListResponse as UsersList);
+      setUsersData(usersListResponse as UserList);
     }
   }, 500);
 
@@ -75,11 +83,11 @@ const UsersList = ({ usersList }: UsersListProps) => {
       page: 1,
       pageSize: 6 * page,
       order: sortTypes[value].value,
-      orderDirection: 'ASC',
+      orderDirection: sortTypes[value].value === 'dataJoined' ? 'DESC' : 'ASC',
       search,
     });
     if (usersListResponse) {
-      setUsersData(usersListResponse as UsersList);
+      setUsersData(usersListResponse as UserList);
     }
   };
   const loadMoreUsers = async () => {
@@ -89,11 +97,52 @@ const UsersList = ({ usersList }: UsersListProps) => {
       page: 1,
       pageSize: 9 * (page + 1),
       order: sortTypes[choosedSortType].value,
-      orderDirection: 'ASC',
+      orderDirection:
+        sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
     });
 
     if (usersListResponse) {
-      setUsersData(usersListResponse as UsersList);
+      setUsersData(usersListResponse as UserList);
+    }
+  };
+
+  const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
+    if (!user) {
+      router.push('/sign-up');
+    } else {
+      if (followed) {
+        const response = await unfollow({ entityId, entityType: 'User' });
+        if (response?.ok) {
+          const usersListResponse = await getUsersList({
+            page: 1,
+            pageSize: 9 * (page + 1),
+            order: sortTypes[choosedSortType].value,
+            orderDirection:
+              sortTypes[choosedSortType].value === 'dataJoined'
+                ? 'DESC'
+                : 'ASC',
+          });
+          if (usersListResponse) {
+            setUsersData(usersListResponse as UserList);
+          }
+        }
+      } else {
+        const response = await follow({ entityId, entityType: 'User' });
+        if (response?.ok) {
+          const usersListResponse = await getUsersList({
+            page: 1,
+            pageSize: 9 * (page + 1),
+            order: sortTypes[choosedSortType].value,
+            orderDirection:
+              sortTypes[choosedSortType].value === 'dataJoined'
+                ? 'DESC'
+                : 'ASC',
+          });
+          if (usersListResponse) {
+            setUsersData(usersListResponse as UserList);
+          }
+        }
+      }
     }
   };
   return (
@@ -170,14 +219,25 @@ const UsersList = ({ usersList }: UsersListProps) => {
                     </span>
                   </div>
                   <Button
-                    label={
-                      <span className="flex gap-2 items-center text-base">
-                        <PlusIcon />
-                        Follow
-                      </span>
-                    }
                     rounded="xl"
-                    fontSize="base"
+                    fontSize="md"
+                    onClick={() =>
+                      handleFollow({
+                        entityId: item.id,
+                        followed: item.followed,
+                      })
+                    }
+                    variant={item.followed ? 'outlined-secondary' : 'primary'}
+                    label={
+                      item.followed ? (
+                        'Following'
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <PlusIcon />
+                          Follow
+                        </span>
+                      )
+                    }
                   />
                 </div>
               ))}
@@ -206,12 +266,14 @@ const UsersList = ({ usersList }: UsersListProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const search = (context.query.search as string) || '';
+  const user: UserMe = JSON.parse(context.req.cookies.user as string);
   const usersList = await getUsersList({
     page: 1,
     pageSize: 9,
     order: 'dataJoined',
-    orderDirection: 'ASC',
+    orderDirection: 'DESC',
     search,
+    myId: user && user.id ? +user.id : undefined,
   });
   return {
     props: {

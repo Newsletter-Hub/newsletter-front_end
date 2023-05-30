@@ -46,6 +46,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   let user = null;
   if (token) {
     user = await getUserMe({ token });
+    console.log(user);
   }
 
   return { user: user?.response };

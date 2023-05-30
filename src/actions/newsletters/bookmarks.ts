@@ -1,10 +1,15 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
+import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
-import { NewsletterData } from '@/types/newsletters';
+import {
+  Newsletter,
+  NewsletterData,
+  NewslettersListData,
+} from '@/types/newsletters';
 
 import { GetNewsletterListProps } from '.';
 
@@ -90,8 +95,12 @@ export const getBookmarksList = async ({
   ratings,
   search,
   token,
+  myId,
 }: GetBookmarkListProps) => {
   try {
+    const user = Cookies.get('user')
+      ? JSON.parse(Cookies.get('user') as string)
+      : undefined;
     let url = `newsletters/newsletters-in-bookmarks?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
@@ -118,9 +127,17 @@ export const getBookmarksList = async ({
       url += `&durationTo=${durationTo}`;
     if (search) url += `&search=${search}`;
 
-    const newslettersListData: NewsletterData[] = await api
+    const newslettersListData: NewslettersListData = await api
       .get(url, { headers: { Cookie: `accessToken=${token}` } })
       .json();
+    const userId = user ? user.id : myId;
+    if (userId) {
+      newslettersListData.newsletters.forEach(newsletter => {
+        if (newsletter.followersIds.includes(userId as number)) {
+          newsletter.followed = true;
+        }
+      });
+    }
     return { newslettersListData };
   } catch (error) {
     console.error(error);

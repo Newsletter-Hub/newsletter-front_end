@@ -1,4 +1,7 @@
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+
+import { UserList } from '@/pages/users';
 
 import api from '@/config/ky';
 
@@ -25,6 +28,7 @@ interface GetUsersListProps {
   order: string;
   orderDirection: string;
   search?: string;
+  myId?: number;
 }
 
 export const updateUser = async ({
@@ -96,13 +100,25 @@ export const getUsersList = async ({
   order,
   orderDirection,
   search = '',
+  myId,
 }: GetUsersListProps) => {
   try {
-    const response = await api
+    const user = Cookies.get('user')
+      ? JSON.parse(Cookies.get('user') as string)
+      : undefined;
+    const response: UserList = await api
       .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
       })
       .json();
+    const userId = user ? user.id : myId;
+    if (userId) {
+      response.users.forEach(user => {
+        if (user.followersIds.includes(userId as number)) {
+          user.followed = true;
+        }
+      });
+    }
     return response;
   } catch (error) {
     console.log(error);
