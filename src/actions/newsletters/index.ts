@@ -124,17 +124,19 @@ export const getNewsletter = async ({
   id: number;
   myId?: number;
 }): Promise<GetNewsletterResponse> => {
-  const user = Cookies.get('user')
-    ? JSON.parse(Cookies.get('user') as string)
-    : undefined;
-
   try {
+    const user = Cookies.get('user')
+      ? JSON.parse(Cookies.get('user') as string)
+      : undefined;
     const newsletterData: NewsletterData = await api
       .get(`newsletters/${id}`)
       .json();
-    newsletterData.followed = newsletterData.followersIds.includes(
-      myId || user.id
-    );
+    console.log(newsletterData, 'here');
+    if (myId || (user && user.id)) {
+      newsletterData.followed = newsletterData.followersIds.includes(
+        myId || user.id
+      );
+    }
     return { newsletterData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
