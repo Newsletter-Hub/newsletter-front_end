@@ -732,7 +732,9 @@ const NewslettersList = ({
                 >
                   <div className="min-w-[224px]">
                     <Image
-                      src={newsletter.image || ''}
+                      src={
+                        newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
+                      }
                       className="h-[224px] w-[224px] rounded-[10px] object-cover"
                       alt="newsletter"
                       width={224}
