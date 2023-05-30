@@ -33,7 +33,7 @@ const Categories = ({ categories }: CategoriesProps) => {
                 height={204}
                 className="rounded-t-lg min-h-[204px] object-cover"
               />
-              <div className="bg-light-porcelain p-4 rounded-b-lg">
+              <div className="bg-light-porcelain p-4 rounded-b-lg max-w-[302px]">
                 <p className="text-dark-blue font-semibold font-inter text-lg mb-1 xl:whitespace-nowrap">
                   {category.interestName}
                 </p>
