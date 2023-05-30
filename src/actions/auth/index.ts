@@ -14,7 +14,7 @@ interface User {
   email: string;
   password: string;
   router: NextRouter;
-  setUser: (user: UserMe) => void;
+  setUser?: (user: UserMe) => void;
 }
 
 interface LogOutPayload {
