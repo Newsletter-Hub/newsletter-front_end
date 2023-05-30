@@ -3,18 +3,14 @@ import {
   follow,
   unfollow,
 } from '@/actions/newsletters';
-import {
-  GetBookmarkListProps,
-  addToBookmark,
-  deleteBookmark,
-} from '@/actions/newsletters/bookmarks';
+import { addToBookmark, deleteBookmark } from '@/actions/newsletters/bookmarks';
 import { createReview } from '@/actions/newsletters/reviews';
 import { useUser } from '@/contexts/UserContext';
 import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { number, z } from 'zod';
 
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
@@ -56,7 +52,7 @@ interface NewsletterResponse {
 }
 
 type GetNewslettersListType = (
-  props: GetNewsletterListProps | GetBookmarkListProps
+  props: GetNewsletterListProps
 ) => Promise<NewsletterResponse>;
 
 export interface NewslettersPageProps {
@@ -69,7 +65,7 @@ export interface NewslettersPageProps {
   isAuthor?: boolean;
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
-  isUser?: boolean;
+  authorId?: number;
 }
 
 interface SortType {
@@ -123,13 +119,11 @@ const NewslettersList = ({
   isAuthor = true,
   isFollowEnable = true,
   isNewsletterFollowed = false,
-  isUser = false,
+  authorId,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
   const { id, userId } = router.query;
-  const authorId =
-    user?.id && isUser ? +user?.id : userId ? (+userId as number) : undefined;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -180,9 +174,10 @@ const NewslettersList = ({
       page: 1,
       pageSize: 6 * (page + 1),
       order: sortTypes[choosedSortType].value,
-      authorId,
+      authorId: authorId || (userId ? +userId : undefined),
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+      entity: 'Newsletter',
     });
 
     if (newsletterResponse.error) {
@@ -218,7 +213,6 @@ const NewslettersList = ({
         orderDirection:
           sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
         search: search,
-        authorId,
       });
 
       if (newsletterResponse.error) {
@@ -248,7 +242,6 @@ const NewslettersList = ({
       durationTo: filtersPayload.durationTo,
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
-      authorId,
     });
 
     if (newsletterResponse.error) {
@@ -271,7 +264,6 @@ const NewslettersList = ({
       durationTo: filtersPayload.durationTo,
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
-      authorId,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -295,7 +287,6 @@ const NewslettersList = ({
       categoriesIds: filtersPayload.categories,
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
-      authorId,
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -327,7 +318,6 @@ const NewslettersList = ({
         categoriesIds: filtersPayload.categories,
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
-        authorId,
       });
       if (bookmarksResponse.error) {
         console.error(bookmarksResponse.error);
@@ -393,7 +383,6 @@ const NewslettersList = ({
             categoriesIds: filtersPayload.categories,
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
-            authorId,
           });
           if (response.newslettersListData) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -437,7 +426,7 @@ const NewslettersList = ({
         isSeparated && 'pt-20 px-[17%]'
       }`}
     >
-      <div className="max-w-[1280px]">
+      <div className="max-w-[1280px] min-w-[950px]">
         {isSeparated && (
           <>
             <h1 className="text-dark-blue text-7xl font-medium mb-10">

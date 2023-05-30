@@ -504,7 +504,9 @@ const NewsletterPage = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { newsletterId } = context.params as { newsletterId: string };
-  const user: UserMe = JSON.parse(context.req.cookies.user as string);
+  const user: UserMe = context.req.cookies.user
+    ? JSON.parse(context.req.cookies.user as string)
+    : undefined;
   const response: GetNewsletterResponse = await getNewsletter({
     id: parseInt(newsletterId),
     myId: user && user.id ? +user.id : undefined,

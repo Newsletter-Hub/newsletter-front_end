@@ -31,9 +31,9 @@ export interface GetNewsletterResponse {
 }
 
 export interface GetNewsletterListProps {
-  page: number;
-  pageSize: number;
-  order: string;
+  page?: number;
+  pageSize?: number;
+  order?: string;
   orderDirection?: string;
   categoriesIds?: number[] | [];
   pricingTypes?: string[];
@@ -43,6 +43,8 @@ export interface GetNewsletterListProps {
   search?: string;
   authorId?: number;
   myId?: number;
+  entity?: 'Newsletter' | 'User';
+  token?: string | null;
 }
 
 export interface FollowPayload {
@@ -133,7 +135,6 @@ export const getNewsletter = async ({
     newsletterData.followed = newsletterData.followersIds.includes(
       myId || user.id
     );
-    console.log(newsletterData);
     return { newsletterData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
@@ -197,6 +198,32 @@ export const getNewslettersList = async ({
         }
       });
     }
+    return { newslettersListData };
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
+    return {
+      error: 'Failed to get newsletters',
+    };
+  }
+};
+
+export const getMySubscriptions = async ({
+  entity = 'Newsletter',
+  page,
+  pageSize,
+  token,
+}: GetNewsletterListProps) => {
+  try {
+    const searchParams =
+      entity && page && pageSize ? { entity, page, pageSize } : undefined;
+    const newslettersListData: NewslettersListData = await api
+      .get('subscriptions/my-subscriptions', {
+        searchParams,
+        headers: { Cookie: `accessToken=${token}` },
+      })
+      .json();
+    newslettersListData.newsletters.forEach(item => (item.followed = true));
+
     return { newslettersListData };
   } catch (error) {
     console.error(error);

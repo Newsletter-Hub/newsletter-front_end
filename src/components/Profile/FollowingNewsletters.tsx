@@ -1,11 +1,11 @@
-import { getNewslettersList } from '@/actions/newsletters';
+import { getMySubscriptions } from '@/actions/newsletters';
 
 import { NewslettersListData } from '@/types/newsletters';
 
 import NewslettersList from '../Newsletter/NewsletterList';
 
 interface UserNewslettersProps {
-  newslettersListData: NewslettersListData;
+  newslettersListData?: NewslettersListData;
   isProfile?: boolean;
 }
 
@@ -20,7 +20,7 @@ const FollowingNewsletters = ({
       </h3>
       <NewslettersList
         newslettersListData={newslettersListData}
-        getNewslettersList={getNewslettersList}
+        getNewslettersList={getMySubscriptions}
         isSeparated={false}
         isRated={true}
         isAuthor={true}

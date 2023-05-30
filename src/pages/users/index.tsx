@@ -266,7 +266,9 @@ const UsersList = ({ usersList }: UsersListProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const search = (context.query.search as string) || '';
-  const user: UserMe = JSON.parse(context.req.cookies.user as string);
+  const user: UserMe = context.req.cookies.user
+    ? JSON.parse(context.req.cookies.user as string)
+    : undefined;
   const usersList = await getUsersList({
     page: 1,
     pageSize: 9,

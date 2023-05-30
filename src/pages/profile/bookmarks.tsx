@@ -33,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
       : [];
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const user: UserMe = JSON.parse(context.req.cookies.user as string);
+  const user: UserMe = context.req.cookies.user
+    ? JSON.parse(context.req.cookies.user as string)
+    : undefined;
   const bookmarkList = await getBookmarksList({
     page: 1,
     pageSize: 6,
