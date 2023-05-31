@@ -6,26 +6,5 @@
   "singleQuote": true,
   "trailingComma": "es5",
   "bracketSpacing": true,
-  "arrowParens": "avoid",
-  "importOrder": [
-    "next",
-    "^next/(.*)$",
-    "^@hookform/(.*)$",
-    "clsx",
-    "^@/pages/api/(.*)$",
-    "^@/pages/(.*)$",
-    "^@/config/(.*)$",
-    "^@/hooks/(.*)$",
-    "country-state-city",
-    "date-fns",
-    "^@/types/(.*)$",
-    "^@react-oauth/(.*)$",
-    "@radix-ui/(.*)$",
-    "^@/components/(.*)$",
-    "^@/assets/(.*)$",
-    "^[./]",
-    "@/styles/(.*)$"
-  ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "arrowParens": "avoid"
 }
