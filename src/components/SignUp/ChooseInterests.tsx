@@ -1,3 +1,4 @@
+import { signUpSetCookie } from '@/actions/auth';
 import { updateUser } from '@/actions/user';
 import { useUser } from '@/contexts/UserContext';
 
@@ -18,6 +19,7 @@ const ChooseInterests = ({
 }: UserInfoStepsProps & { interests?: Interest[] }) => {
   const router = useRouter();
   const { setUser } = useUser();
+  const { accessToken } = router.query;
 
   const handlePreviousStep = () => setPage(page - 1);
   const handleInterestClick = (id: number) => {
@@ -40,7 +42,16 @@ const ChooseInterests = ({
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(([key, value]) => value !== undefined)
     );
-    await updateUser({ ...formattedPayload, router, setUser });
+    const res = await signUpSetCookie({
+      accessToken: accessToken as string,
+    });
+    if (res) {
+      updateUser({
+        ...formattedPayload,
+        router,
+        setUser,
+      });
+    }
   };
   return (
     <>

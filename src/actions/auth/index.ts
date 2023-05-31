@@ -163,3 +163,19 @@ export const logout = ({ setUser }: LogOutPayload) => {
     console.error(error);
   }
 };
+
+export const signUpSetCookie = async ({
+  accessToken,
+}: {
+  accessToken: string;
+}) => {
+  try {
+    const response = await api.post('auth/set-cookie', {
+      json: { accessToken },
+    });
+    return response.json();
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Invalid access token');
+    console.log(error);
+  }
+};

@@ -19,7 +19,7 @@ const UserNewsletters = ({
   isProfile,
   user,
 }: UserNewslettersProps) => {
-  const userId = user.id ? +user.id : undefined;
+  const userId = user && user.id ? +user.id : undefined;
   return (
     <div className="pt-8 max-w-[1280px]">
       <h3 className="text-dark-blue text-5xl font-medium mb-8">

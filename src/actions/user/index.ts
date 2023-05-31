@@ -60,14 +60,12 @@ export const updateUser = async ({
         formData.append('interestIds[]', JSON.stringify(interests[i]));
       }
     }
-    const response = await fetch('/api/users', {
+    const response = await api.put('users', {
       body: formData,
-      method: 'PUT',
-      credentials: 'include',
     });
 
     if (response.ok) {
-      const res = await response.json();
+      const res: UserMe = await response.json();
       Cookies.set('user', JSON.stringify(res), { expires: 1 });
       if (setUser) {
         setUser(res as UserMe);
@@ -89,6 +87,7 @@ export const updateUser = async ({
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   } catch (error) {
+    console.log(error);
     throwErrorMessage(error as HTTPError, 'Failed to update user');
     return { error: 'Failed to update user' };
   }
