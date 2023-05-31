@@ -1,8 +1,10 @@
-import { Notification } from '@/types/user';
-import Avatar from './Avatar';
 import Link from 'next/link';
 
-const Notification = ({ ...notification }: Notification) => {
+import { Notification as NotificationType } from '@/types/user';
+
+import Avatar from './Avatar';
+
+const Notification = ({ ...notification }: NotificationType) => {
   return (
     <div className="flex py-4 items-center gap-8 font-inter">
       <Avatar
