@@ -14,6 +14,10 @@ interface GetUserMePayload {
   token?: string | null;
 }
 
+interface GetUserByIdPayload extends GetUserMePayload {
+  userId?: number;
+}
+
 interface GetUserMeResponse {
   response?: UserMe;
   error?: string;
@@ -100,6 +104,24 @@ export const getUserMe = async ({
     const headers = token ? { Cookie: `accessToken=${token}` } : {};
     const response: UserMe = await api
       .get('users', {
+        headers,
+        credentials: 'include',
+      })
+      .json();
+    return { response };
+  } catch (error) {
+    return { error: 'Failed to get user' };
+  }
+};
+
+export const getUserById = async ({
+  token,
+  userId,
+}: GetUserByIdPayload): Promise<GetUserMeResponse> => {
+  try {
+    const headers = token ? { Cookie: `accessToken=${token}` } : {};
+    const response: UserMe = await api
+      .get(`users/public-user/${userId}`, {
         headers,
         credentials: 'include',
       })

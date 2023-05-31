@@ -7,21 +7,35 @@ import StarRating from './StarRating';
 import Button from './Button';
 import PlusIcon from '@/assets/icons/plus';
 
-const Notification = ({ ...notification }: NotificationType) => {
+interface NotificationProps {
+  notification: NotificationType;
+  isProfile?: boolean;
+  isLast: boolean;
+}
+
+const Notification = ({
+  notification,
+  isProfile,
+  isLast,
+}: NotificationProps) => {
   const userState =
     notification.notificationAuthorId ===
-    notification.notificationRecipientId ? (
+      notification.notificationRecipientId && isProfile ? (
       'You'
     ) : (
       <Link
-        href={`users/${notification.notificationAuthorId}`}
+        href={`/users/${notification.notificationAuthorId}`}
         className="hover:text-primary"
       >
         {notification.notificationAuthor?.username}
       </Link>
     );
   return (
-    <div className="flex py-4 items-center gap-8 font-inter">
+    <div
+      className={`flex py-4 items-center gap-8 font-inter ${
+        !isLast && 'border-b border-b-light-grey'
+      }`}
+    >
       <Avatar
         src={notification.notificationAuthor?.avatar}
         width={48}
@@ -37,7 +51,7 @@ const Notification = ({ ...notification }: NotificationType) => {
             </div>
             <span>created the &nbsp;</span>
             <Link
-              href={`newsletters/${notification.entity?.id}`}
+              href={`/newsletters/${notification.entity?.id}`}
               className="text-primary font-semibold block max-w-[550px] whitespace-nowrap overflow-hidden text-ellipsis"
             >
               {'title' in notification.entity && notification.entity.title}
@@ -59,7 +73,7 @@ const Notification = ({ ...notification }: NotificationType) => {
               &nbsp;
             </span>
             <Link
-              href={`newsletters/${notification.entity?.id}`}
+              href={`/newsletters/${notification.entity?.id}`}
               className="text-primary font-semibold block max-w-[550px] whitespace-nowrap overflow-hidden text-ellipsis"
             >
               {'newsletter' in notification.entity &&
@@ -87,7 +101,7 @@ const Notification = ({ ...notification }: NotificationType) => {
             <span className="text-base text-dark-grey">
               started following you
             </span>
-            <Link href={`users/${notification.notificationAuthorId}`}>
+            <Link href={`/users/${notification.notificationAuthorId}`}>
               <Button
                 rounded="xl"
                 label={
@@ -107,10 +121,10 @@ const Notification = ({ ...notification }: NotificationType) => {
               {userState}
             </div>
             <span className="text-base text-dark-grey">
-              started following your
+              started following {isProfile && 'your'}
             </span>
             <Link
-              href={`newsletters/${notification.entity?.id}`}
+              href={`/newsletters/${notification.entity?.id}`}
               className="text-primary font-semibold block max-w-[550px] whitespace-nowrap overflow-hidden text-ellipsis"
             >
               {'title' in notification.entity && notification.entity.title}

@@ -202,9 +202,13 @@ export const getNewslettersList = async ({
 
     const newslettersListData: NewslettersListData = await api.get(url).json();
     const userId = user ? user.id : myId;
-    if (authorId || userId) {
+    if (userId || authorId) {
       newslettersListData.newsletters.forEach(newsletter => {
-        if (newsletter.followersIds.includes(authorId || (userId as number))) {
+        if (
+          newsletter.followersIds.includes(
+            (userId as number) || (authorId as number)
+          )
+        ) {
           newsletter.followed = true;
         }
       });
