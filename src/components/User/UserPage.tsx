@@ -1,3 +1,5 @@
+import { NotificationData } from '@/actions/user/notifications';
+
 import Link from 'next/link';
 
 import { NewslettersListData } from '@/types/newsletters';
@@ -7,6 +9,7 @@ import BookmarkIcon from '@/assets/icons/bookmark';
 import EditIcon from '@/assets/icons/edit';
 
 import Avatar from '../Avatar';
+import Notification from '../Notification';
 import FollowingNewsletters from '../Profile/FollowingNewsletters';
 import UserNewsletters from '../Profile/UserNewsletters';
 import Tabs from '../Tabs';
@@ -16,6 +19,7 @@ interface UserPageProps {
   followingNewsletterListData?: NewslettersListData;
   user: UserMe;
   isProfile?: boolean;
+  notificationsData: NotificationData;
 }
 
 const UserPage = ({
@@ -23,6 +27,7 @@ const UserPage = ({
   newslettersListData,
   followingNewsletterListData,
   isProfile = true,
+  notificationsData,
 }: UserPageProps) => {
   const tabs = [
     {
@@ -49,6 +54,7 @@ const UserPage = ({
       ),
     },
   ];
+  console.log(notificationsData);
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
       {user && (
@@ -109,6 +115,20 @@ const UserPage = ({
         <h3 className="font-medium text-5xl text-dark-blue mb-10">
           Recent Activities
         </h3>
+        {!notificationsData.total ? (
+          <div></div>
+        ) : (
+          <div className="flex flex-col gap-6">
+            {notificationsData.notifications.map(notification => (
+              <Notification
+                key={notification.id}
+                notificationAuthor={notification.notificationAuthor}
+                notificationType={notification.notificationType}
+                entity={notification.entity}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
