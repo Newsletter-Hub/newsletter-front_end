@@ -54,7 +54,7 @@ const Form = () => {
     await login({ email, password, router, setUser });
   };
   const onGoogleLogin = (token: string) => {
-    googleAuth({ token, router });
+    googleAuth({ token, router, setUser });
   };
   return (
     <>

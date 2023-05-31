@@ -24,6 +24,7 @@ interface LogOutPayload {
 interface GoogleAuth {
   token: string;
   router: NextRouter;
+  setUser?: (user: UserMe) => void;
 }
 
 interface SignupUser extends User {
@@ -60,7 +61,7 @@ export const login = async ({ email, password, router, setUser }: User) => {
   }
 };
 
-export const googleAuth = async ({ token, router }: GoogleAuth) => {
+export const googleAuth = async ({ token, router, setUser }: GoogleAuth) => {
   try {
     const response = await api
       .post('auth/google', { json: { token } })
@@ -68,6 +69,9 @@ export const googleAuth = async ({ token, router }: GoogleAuth) => {
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
         router.push('/');
+        if (setUser) {
+          setUser(res as UserMe);
+        }
       });
     return response;
   } catch (error) {
