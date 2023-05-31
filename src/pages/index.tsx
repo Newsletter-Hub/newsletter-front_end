@@ -1,22 +1,41 @@
-import Head from 'next/head';
-import type { NextPageWithLayout } from './_app';
-import { ReactElement } from 'react';
-import Layout from '@/components/Layout';
+import { getReviews } from '@/actions/newsletters/reviews';
 
-const Home: NextPageWithLayout = () => {
+import { Review } from '@/types/newsletters';
+
+import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
+import MainBlock from '@/components/HomePage/MainBlock';
+import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
+
+interface HomeProps {
+  reviewData: { reviews: Review[]; nextPage: number; total: number };
+}
+
+const Home = ({ reviewData }: HomeProps) => {
   return (
     <>
-      <Head>
-        <title>Newsletter Hub</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <main></main>
+      <main>
+        <div className="lg:px-[17%] lg:pt-32 pt-16 px-[5%]">
+          <MainBlock />
+          <ReviewsBlock reviewData={reviewData} />
+        </div>
+        <GetStartedBlock />
+      </main>
     </>
   );
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+export const getServerSideProps = async () => {
+  const reviewData = await getReviews({ page: 1, pageSize: 5 });
+  if (!reviewData) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    props: {
+      reviewData: reviewData.reviews || null,
+    },
+  };
 };
 
 export default Home;

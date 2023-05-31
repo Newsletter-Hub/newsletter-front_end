@@ -1,0 +1,27 @@
+import { Interest } from './interests';
+
+export interface User {
+  id?: number;
+  email?: string;
+  username?: string;
+  avatar?: string;
+  averageUserRating: number;
+  amountUserRatings: number;
+  description?: string;
+}
+
+export interface UserMe {
+  id?: string;
+  email: string;
+  username: string;
+  interests: Interest[];
+  profileType: 'reader' | 'writter';
+  avatar: string;
+  dateOfBirth: string;
+  country: string;
+  state: string;
+  description?: string;
+  googleId: number | null;
+  amountUserFollowers: number;
+  amountUserFollowing: number;
+}

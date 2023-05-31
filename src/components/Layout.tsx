@@ -1,16 +1,31 @@
-import type { ReactElement } from 'react';
+import { ReactNode } from 'react';
+
+import { Alegreya } from 'next/font/google';
+import Head from 'next/head';
+
+import Footer from './Footer';
 import Header from './Header';
 
 interface LayoutProps {
-  children: ReactElement;
+  children: ReactNode;
+  isFooter?: boolean;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const alegreya = Alegreya({ subsets: ['latin'] });
+
+const Layout = ({ children, isFooter }: LayoutProps) => {
   return (
-    <div>
-      <Header />
-      {children}
-    </div>
+    <>
+      <Head>
+        <title>Newsletter Hub</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <div className={`${alegreya.className} overflow-x-hidden`}>
+        <Header />
+        {children}
+        {isFooter && <Footer />}
+      </div>
+    </>
   );
 };
 
