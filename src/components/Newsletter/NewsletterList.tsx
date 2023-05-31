@@ -68,6 +68,7 @@ export interface NewslettersPageProps {
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
   authorId?: number;
+  defaultSortType?: 'date' | 'rating';
 }
 
 interface SortType {
@@ -122,6 +123,7 @@ const NewslettersList = ({
   isFollowEnable = true,
   isNewsletterFollowed = false,
   authorId,
+  defaultSortType = 'rating',
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
@@ -130,7 +132,9 @@ const NewslettersList = ({
     newslettersListData as Newsletter
   );
   const [page, setPage] = useState(1);
-  const [choosedSortType, setChoosedSortType] = useState(3);
+  const [choosedSortType, setChoosedSortType] = useState(
+    sortTypes.findIndex(item => (item.value = defaultSortType))
+  );
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenReviewModal, setIsOpenReviewModal] = useState<boolean | number>(
     false
@@ -178,7 +182,10 @@ const NewslettersList = ({
       order: sortTypes[choosedSortType].value,
       authorId: authorId || (userId ? +userId : undefined),
       orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+        sortTypes[choosedSortType].value === 'rating' ||
+        sortTypes[choosedSortType].value === 'date'
+          ? 'DESC'
+          : 'ASC',
       entity: 'Newsletter',
     });
 
@@ -213,7 +220,10 @@ const NewslettersList = ({
         pageSize: 6,
         order: sortTypes[choosedSortType].value,
         orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+          sortTypes[choosedSortType].value === 'rating' ||
+          sortTypes[choosedSortType].value === 'date'
+            ? 'DESC'
+            : 'ASC',
         search: search,
       });
 
@@ -243,7 +253,10 @@ const NewslettersList = ({
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
       orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+        sortTypes[choosedSortType].value === 'rating' ||
+        sortTypes[choosedSortType].value === 'date'
+          ? 'DESC'
+          : 'ASC',
     });
 
     if (newsletterResponse.error) {
@@ -265,7 +278,10 @@ const NewslettersList = ({
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
       orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ? 'DESC' : 'ASC',
+        sortTypes[choosedSortType].value === 'rating' ||
+        sortTypes[choosedSortType].value === 'date'
+          ? 'DESC'
+          : 'ASC',
     });
     if (newsletterResponse.error) {
       console.error(newsletterResponse.error);
@@ -284,7 +300,7 @@ const NewslettersList = ({
       order: sortTypes[value].value,
       orderDirection:
         sortTypes[choosedSortType].value === 'rating' ||
-        sortTypes[choosedSortType].value === 'data'
+        sortTypes[choosedSortType].value === 'date'
           ? 'DESC'
           : 'ASC',
       search,
@@ -313,7 +329,7 @@ const NewslettersList = ({
         order: sortTypes[choosedSortType].value,
         orderDirection:
           sortTypes[choosedSortType].value === 'rating' ||
-          sortTypes[choosedSortType].value === 'data'
+          sortTypes[choosedSortType].value === 'date'
             ? 'DESC'
             : 'ASC',
         search,
@@ -378,7 +394,7 @@ const NewslettersList = ({
             order: sortTypes[choosedSortType].value,
             orderDirection:
               sortTypes[choosedSortType].value === 'rating' ||
-              sortTypes[choosedSortType].value === 'data'
+              sortTypes[choosedSortType].value === 'date'
                 ? 'DESC'
                 : 'ASC',
             search,
@@ -389,6 +405,7 @@ const NewslettersList = ({
             categoriesIds: filtersPayload.categories,
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
+            authorId: authorId || (userId ? +userId : undefined),
           });
           if (response.newslettersListData) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -403,7 +420,7 @@ const NewslettersList = ({
             order: sortTypes[choosedSortType].value,
             orderDirection:
               sortTypes[choosedSortType].value === 'rating' ||
-              sortTypes[choosedSortType].value === 'data'
+              sortTypes[choosedSortType].value === 'date'
                 ? 'DESC'
                 : 'ASC',
             search,
@@ -414,6 +431,7 @@ const NewslettersList = ({
             categoriesIds: filtersPayload.categories,
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
+            authorId: authorId || (userId ? +userId : undefined),
           });
           if (response) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -776,7 +794,7 @@ const NewslettersList = ({
                             className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
                           />
                           <Link
-                            href={`users/${newsletter.addedByUser?.id}`}
+                            href={`/users/${newsletter.addedByUser?.id}`}
                             className="text-sm text-dark-blue hover:text-primary"
                           >
                             {newsletter.addedByUser?.username}

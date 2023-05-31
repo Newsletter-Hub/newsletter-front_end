@@ -41,7 +41,7 @@ const UserPage = ({
     const response = await getNotifications({
       page: 1,
       pageSize: 5 * (page + 1),
-      isOwnAccount: true,
+      isOwnAccount: isProfile,
       notificationRecipientId,
     });
 
@@ -51,9 +51,7 @@ const UserPage = ({
   };
   const tabs = [
     {
-      title: `${
-        isProfile ? 'Your Newsletters' : `${user.username} Newsletters`
-      }`,
+      title: 'Your Newsletters',
       value: 'userNewsletters',
       content: (
         <UserNewsletters
@@ -128,24 +126,31 @@ const UserPage = ({
         </>
       )}
       <div className="max-w-[1280px] px-[10%] w-full">
-        <div className="mb-[88px]">
-          <Tabs tabs={tabs} />
-        </div>
-        {notificationsInfo.total && (
+        {isProfile ? (
+          <div className="mb-[88px]">
+            <Tabs tabs={tabs} />
+          </div>
+        ) : (
+          <UserNewsletters
+            newslettersListData={newslettersListData}
+            isProfile={isProfile}
+            user={user}
+          />
+        )}
+        {Boolean(notificationsInfo.total) && (
           <>
             <h3 className="font-medium text-5xl text-dark-blue mb-10">
               Recent Activities
             </h3>
             <div className="flex flex-col gap-6">
-              {notificationsInfo.notifications.map(notification => (
+              {notificationsInfo.notifications.map((notification, index) => (
                 <Notification
+                  isProfile={isProfile}
                   key={notification.id}
-                  notificationAuthor={notification.notificationAuthor}
-                  notificationType={notification.notificationType}
-                  entity={notification.entity}
-                  entityType={notification.entityType}
-                  notificationAuthorId={notification.notificationAuthorId}
-                  notificationRecipientId={notification.notificationRecipientId}
+                  notification={notification}
+                  isLast={Boolean(
+                    notificationsInfo.notifications.length === index + 1
+                  )}
                 />
               ))}
               {notificationsInfo.nextPage && (

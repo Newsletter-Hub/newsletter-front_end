@@ -23,16 +23,18 @@ const UserNewsletters = ({
   return (
     <div className="pt-8 max-w-[1280px]">
       <h3 className="text-dark-blue text-5xl font-medium mb-8">
-        Your Newsletters
+        {isProfile ? 'Your Newsletters' : `${user.username} Newsletters`}
       </h3>
-      <Link href="/newsletters/add">
-        <Button
-          label="Add a Newsletter"
-          rounded="xl"
-          fontSize="md"
-          customStyles="mb-8"
-        />
-      </Link>
+      {isProfile && (
+        <Link href="/newsletters/add">
+          <Button
+            label="Add a Newsletter"
+            rounded="xl"
+            fontSize="md"
+            customStyles="mb-8"
+          />
+        </Link>
+      )}
       <div>
         <NewslettersList
           newslettersListData={newslettersListData}
@@ -43,6 +45,7 @@ const UserNewsletters = ({
           isFollowEnable={!isProfile}
           type="newsletter"
           authorId={userId}
+          defaultSortType="date"
         />
       </div>
     </div>
