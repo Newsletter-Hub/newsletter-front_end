@@ -3,26 +3,19 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 
 import clsx from 'clsx';
 
-import EyeOffIcon from '@/assets/icons/eyeOffIcon';
-import EyeOnIcon from '@/assets/icons/eyeOn';
-import Search from '@/assets/icons/search';
-
-interface InputProps {
+interface TextAreaProps {
   placeholder?: string;
   register?: UseFormRegisterReturn;
-  isSearch?: boolean;
-  isPassword?: boolean;
   variant?: 'outlined' | 'filled';
   error?: boolean;
   errorText?: string;
   customStyles?: string;
-  type?: 'input' | 'number';
   maxLength?: number;
   checkNumberOfSymbols?: boolean;
   label?: string;
   wrapperStyles?: string;
   iconStyles?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   defaultValue?: string;
   disabled?: boolean;
 }
@@ -34,32 +27,26 @@ const variants = {
     'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
 };
 
-const Input = ({
+const TextArea = ({
   placeholder,
   register,
-  isSearch = false,
-  isPassword = false,
   variant = 'outlined',
   error,
   errorText,
   customStyles,
-  type = 'input',
   maxLength,
   checkNumberOfSymbols,
   label,
   wrapperStyles,
-  iconStyles,
   disabled,
   onChange,
   defaultValue,
-}: InputProps) => {
-  const [isShowPassword, setIsShowPassword] = useState(false);
-  const handleShowPassword = () => setIsShowPassword(!isShowPassword);
+}: TextAreaProps) => {
   const styles = clsx(
     variants[variant],
     error && 'border-red',
     customStyles,
-    'font-inter'
+    'font-inter resize-none'
   );
   const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
   const [value, setValue] = useState(defaultValue || '');
@@ -71,12 +58,11 @@ const Input = ({
         </p>
       )}
       <div className="relative flex">
-        <input
+        <textarea
           disabled={disabled}
           className={styles}
           placeholder={placeholder}
           {...register}
-          type={isPassword ? (isShowPassword ? 'text' : 'password') : type}
           maxLength={maxLength}
           value={value}
           onChange={e => {
@@ -86,28 +72,11 @@ const Input = ({
             }
           }}
         />
-        {isSearch && (
-          <Search
-            className={`absolute right-3 top-1.5 ${iconStyles && iconStyles}`}
-          />
-        )}
         {checkNumberOfSymbols && maxLength && (
-          <span className="absolute text-xs -bottom-6 left-2 text-light-grey font-inter">
+          <span className="absolute text-xs -bottom-6 right-2 text-light-grey font-inter">
             {value.length}/{maxLength}
           </span>
         )}
-        {isPassword &&
-          (isShowPassword ? (
-            <EyeOnIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
-              onClick={handleShowPassword}
-            />
-          ) : (
-            <EyeOffIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
-              onClick={handleShowPassword}
-            />
-          ))}
         {error && (
           <p
             className={`absolute text-sm text-red ${
@@ -122,4 +91,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default TextArea;
