@@ -82,7 +82,7 @@ const Notification = ({ ...notification }: NotificationType) => {
         notification.entity && (
           <div className="flex gap-4 items-center">
             <div className="text-dark-blue font-semibold text-base">
-              {userState} 
+              {userState}
             </div>
             <span className="text-base text-dark-grey">
               started following you
