@@ -106,7 +106,10 @@ const Header = () => {
                                   className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
                                 >
                                   <Image
-                                    src={(item?.image as string) || ''}
+                                    src={
+                                      (item?.image as string) ||
+                                      'https://i.imgur.com/kZMNj7Q.jpeg'
+                                    }
                                     width={48}
                                     height={48}
                                     alt="Newsletter image"
