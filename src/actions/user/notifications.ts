@@ -8,7 +8,7 @@ import { Notification } from '@/types/user';
 interface GetNotificationsPayload {
   notificationRecipientId?: number;
   isOwnAccount: boolean;
-  token: string | null;
+  token?: string | null;
   page: number;
   pageSize: number;
 }

@@ -1,4 +1,5 @@
 import { NotificationData } from '@/actions/user/notifications';
+import Button from '../Button';
 
 import Link from 'next/link';
 
@@ -13,6 +14,8 @@ import Notification from '../Notification';
 import FollowingNewsletters from '../Profile/FollowingNewsletters';
 import UserNewsletters from '../Profile/UserNewsletters';
 import Tabs from '../Tabs';
+import { useState } from 'react';
+import { getNotifications } from '@/actions/user/notifications';
 
 interface UserPageProps {
   newslettersListData: NewslettersListData;
@@ -29,6 +32,23 @@ const UserPage = ({
   isProfile = true,
   notificationsData,
 }: UserPageProps) => {
+  const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
+  const [page, setPage] = useState(1);
+  const notificationRecipientId = user.id ? +user.id : undefined;
+  const loadMore = async () => {
+    setPage(prevPage => prevPage + 1);
+
+    const response = await getNotifications({
+      page: 1,
+      pageSize: 5 * (page + 1),
+      isOwnAccount: true,
+      notificationRecipientId,
+    });
+
+    if (response.notificationsData) {
+      setNotificationsInfo(response.notificationsData);
+    }
+  };
   const tabs = [
     {
       title: `${
@@ -54,7 +74,6 @@ const UserPage = ({
       ),
     },
   ];
-  console.log(notificationsData);
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
       {user && (
@@ -112,22 +131,35 @@ const UserPage = ({
         <div className="mb-[88px]">
           <Tabs tabs={tabs} />
         </div>
-        <h3 className="font-medium text-5xl text-dark-blue mb-10">
-          Recent Activities
-        </h3>
-        {!notificationsData.total ? (
-          <div></div>
-        ) : (
-          <div className="flex flex-col gap-6">
-            {notificationsData.notifications.map(notification => (
-              <Notification
-                key={notification.id}
-                notificationAuthor={notification.notificationAuthor}
-                notificationType={notification.notificationType}
-                entity={notification.entity}
-              />
-            ))}
-          </div>
+        {notificationsInfo.total && (
+          <>
+            <h3 className="font-medium text-5xl text-dark-blue mb-10">
+              Recent Activities
+            </h3>
+            <div className="flex flex-col gap-6">
+              {notificationsInfo.notifications.map(notification => (
+                <Notification
+                  key={notification.id}
+                  notificationAuthor={notification.notificationAuthor}
+                  notificationType={notification.notificationType}
+                  entity={notification.entity}
+                  entityType={notification.entityType}
+                  notificationAuthorId={notification.notificationAuthorId}
+                  notificationRecipientId={notification.notificationRecipientId}
+                />
+              ))}
+              {notificationsInfo.nextPage && (
+                <Button
+                  label="See More"
+                  variant="outlined-secondary"
+                  size="full"
+                  rounded="xl"
+                  bold
+                  onClick={loadMore}
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
