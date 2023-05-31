@@ -40,7 +40,7 @@ const validationSchema = z.object({
   country: z.string().nullable().optional(),
   state: z.string().nullable().optional(),
   dateOfBirth: z.any().optional(),
-  username: z.string().optional(),
+  username: z.string().nullable().optional(),
   email: z.string().email('Email need to be valid').optional(),
   profileType: z.enum(['reader', 'writter']).optional(),
   description: z.string().nullable().optional(),
