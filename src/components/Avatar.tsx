@@ -30,7 +30,7 @@ const Avatar = ({
           width={width}
           height={height}
           alt={alt}
-          className={className}
+          className={`${className} rounded-full`}
         />
       ) : (
         <div

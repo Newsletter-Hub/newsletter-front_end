@@ -33,6 +33,7 @@
     "js-cookie": "^3.0.5",
     "ky": "^0.33.3",
     "ky-universal": "^0.11.0",
+    "lodash": "^4.17.21",
     "next": "13.3.0",
     "next-cookies": "^2.0.3",
     "node-buffer": "^1.0.3",
@@ -47,7 +48,6 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash": "^4.14.194",
     "@types/react-star-rating-component": "^1.4.1",

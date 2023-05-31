@@ -1,4 +1,5 @@
 import { Interest } from './interests';
+import { NewsletterData, Review } from './newsletters';
 
 export interface User {
   id?: number;
@@ -24,4 +25,20 @@ export interface UserMe {
   googleId: number | null;
   amountUserFollowers: number;
   amountUserFollowing: number;
+}
+
+export interface Notification {
+  id?: number;
+  entityId?: number;
+  entityType?: 'newsletter' | 'user';
+  notificationType?:
+    | 'newNewsletter'
+    | 'newReview'
+    | 'subscriptionToUser'
+    | 'subscriptionToNewsletter';
+  notificationRecipientId?: number;
+  notificationAuthorId?: number;
+  notificationAuthor?: UserMe;
+  entity?: UserMe | Review | NewsletterData;
+  createdAt?: string;
 }
