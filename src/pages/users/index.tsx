@@ -20,6 +20,7 @@ import CheckIcon from '@/assets/icons/check';
 import PlusIcon from '@/assets/icons/plus';
 import SearchResultsIcon from '@/assets/icons/searchResults';
 import SortIcon from '@/assets/icons/sort';
+import Link from 'next/link';
 
 const sortTypes: SortType[] = [
   {
@@ -209,9 +210,12 @@ const UsersList = ({ usersList }: UsersListProps) => {
                     customStyles="h-[112px] min-w-[112px]"
                   />
                   <div className="flex flex-col gap-3">
-                    <span className="text-lightBlack text-xl font-medium">
+                    <Link
+                      href={`/users/${item.id}`}
+                      className="text-lightBlack text-xl font-medium hover:text-primary"
+                    >
                       {item.username}
-                    </span>
+                    </Link>
                     <span className="font-inter text-sm text-dark-grey whitespace-nowrap max-w-[700px] overflow-hidden text-ellipsis">
                       I create and curate content for both the blog and our
                       training courses. He also directs the market research and
