@@ -72,7 +72,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                       {timeAgo(review.createdAt)}
                     </p>
                   </div>
-                  <p className="md:text-base mb-8 font-inter text-dark-blue text-sm block max-w-[150px] whitespace-nowrap overflow-hidden text-ellipsis">
+                  <p className="md:text-base mb-8 font-inter text-dark-blue text-sm block max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis lg:max-w-[600px] lg:whitespace-normal lg:overflow-auto">
                     {review.comment}
                   </p>
                 </div>
