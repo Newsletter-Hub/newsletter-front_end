@@ -26,13 +26,16 @@ const Categories = ({ categories }: CategoriesProps) => {
             className="w-1/4 p-2"
           >
             <div>
-              <Image
-                src={category.image}
-                alt="category"
-                width={302}
-                height={204}
-                className="rounded-t-lg min-h-[204px] object-cover"
-              />
+              <div className="h-fit">
+                <Image
+                  src={category.image}
+                  alt="category"
+                  width={302}
+                  height={204}
+                  className="rounded-t-lg object-cover"
+                  priority
+                />
+              </div>
               <div className="bg-light-porcelain p-4 rounded-b-lg max-w-[302px]">
                 <p className="text-dark-blue font-semibold font-inter text-lg mb-1 xl:whitespace-nowrap">
                   {category.interestName}
