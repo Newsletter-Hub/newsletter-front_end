@@ -1,8 +1,5 @@
-import { NewsletterLinkResponse } from '@/actions/newsletters';
-import {
-  newsletterLink,
-  newsletterVerifyOwnership,
-} from '@/actions/newsletters';
+import { newsletterVerifyOwnership } from '@/actions/newsletters';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -31,6 +28,7 @@ const LinkForm = ({
   step,
 }: NewsletterFormProps) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -40,28 +38,32 @@ const LinkForm = ({
     resolver: zodResolver(validationSchema),
   });
   const onSubmit: SubmitHandler<ValidationSchema> = async data => {
+    setLoading(true);
     try {
       const response = await newsletterVerifyOwnership({ link: data.link });
       if (response && response.id) {
-        console.log(response);
-        router.push(`${response.id}`);
+        setStep(step + 1);
+        setPayload({
+          ...payload,
+          id: response.id,
+          link: response.link,
+          title: response.title,
+          description: response.description,
+          image: response.image,
+        });
       }
-    } catch (error) {
-      console.error(error);
+    } finally {
+      setLoading(false);
     }
-  };
-  const onAdd: SubmitHandler<ValidationSchema> = data => {
-    newsletterLink({ link: data.link })
-      .then((response: NewsletterLinkResponse | undefined) => {
-        if (response) {
-          setStep(step + 1);
-          setPayload({ ...payload, id: response.id, link: response.link });
-        }
-      })
-      .catch(error => console.error(error));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
+        To add a newsletter, you should include a link to the homepage of the
+        newsletter. Remember to insert the full URL with &quot;https://&quot;
+        and &quot;.com&quot; in order to properly add your newsletters. Please
+        ensure the grammar and formatting are correct when adding the URLs.
+      </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
         Link a Newsletter
       </p>
@@ -74,23 +76,14 @@ const LinkForm = ({
           errorText={errors.link?.message}
         />
       </div>
-      <div className="flex w-full gap-4">
-        <Button
-          label="Verify Ownership"
-          size="full"
-          rounded="xl"
-          type="submit"
-          variant="outlined-primary"
-          fontSize="md"
-        />
-        <Button
-          label="Add"
-          size="full"
-          rounded="xl"
-          fontSize="md"
-          onClick={handleSubmit(onAdd)}
-        />
-      </div>
+      <Button
+        label={loading ? 'Loading...' : 'Add'}
+        size="full"
+        rounded="xl"
+        fontSize="md"
+        type="submit"
+        disabled={loading}
+      />
     </form>
   );
 };

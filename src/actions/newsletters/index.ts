@@ -13,6 +13,9 @@ interface NewsletterLink {
 export interface NewsletterLinkResponse {
   id: number;
   link?: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
 interface Newsletter {
@@ -23,6 +26,8 @@ interface Newsletter {
   image?: Blob | string;
   interests?: number[];
   newsletterAuthor?: string;
+  averageDuration: string;
+  pricingType: 'free' | 'paid';
 }
 
 export interface GetNewsletterResponse {
@@ -89,6 +94,8 @@ export const newsletterUpdate = async ({
   newsletterAuthor,
   image,
   interests,
+  averageDuration,
+  pricingType,
 }: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
   try {
     const formData = new FormData();
@@ -97,25 +104,21 @@ export const newsletterUpdate = async ({
     description && formData.append('description', description as string);
     newsletterAuthor &&
       formData.append('newsletterAuthor', newsletterAuthor as string);
+    averageDuration &&
+      formData.append('averageDuration', averageDuration as string);
+    pricingType && formData.append('pricingType', pricingType as string);
     image && formData.append('image', image as Blob);
     if (interests?.length) {
       for (let i = 0; i < interests.length; i++) {
         formData.append('interestIds[]', JSON.stringify(interests[i]));
       }
     }
-    const response = await fetch(
-      `https://newsletter-back-quzx.onrender.com/newsletters/${id}`,
-      {
-        body: formData,
-        method: 'PUT',
-        credentials: 'include',
-      }
-    );
+    const response = await api.put(`newsletters/${id}`, { body: formData });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const res = await response.json();
+    const res = (await response.json()) as NewsletterLinkResponse;
     return res;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to update newsletter');

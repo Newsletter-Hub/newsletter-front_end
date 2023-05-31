@@ -282,7 +282,11 @@ const NewslettersList = ({
       page: 1,
       pageSize: 6 * page,
       order: sortTypes[value].value,
-      orderDirection: sortTypes[value].value === 'rating' ? 'DESC' : 'ASC',
+      orderDirection:
+        sortTypes[choosedSortType].value === 'rating' ||
+        sortTypes[choosedSortType].value === 'data'
+          ? 'DESC'
+          : 'ASC',
       search,
       pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
       ratings: filtersPayload.ratings,
@@ -593,20 +597,20 @@ const NewslettersList = ({
                               <Slider
                                 min={1}
                                 max={60}
-                                from={filtersPayload.durationFrom}
-                                to={filtersPayload.durationTo}
                                 step={1}
                                 values={[
                                   filtersPayload.durationFrom,
                                   filtersPayload.durationTo,
                                 ]}
-                                setValues={values =>
-                                  setFiltersPayload({
-                                    ...filtersPayload,
-                                    durationFrom: values[0],
-                                    durationTo: values[1],
-                                  })
-                                }
+                                setValues={values => {
+                                  if (Array.isArray(values)) {
+                                    setFiltersPayload({
+                                      ...filtersPayload,
+                                      durationFrom: values[0],
+                                      durationTo: values[1],
+                                    });
+                                  }
+                                }}
                               />
                             </div>
                             <div className="flex justify-between">
@@ -768,12 +772,15 @@ const NewslettersList = ({
                             width={40}
                             height={40}
                             alt="author avatar"
-                            username={newsletter.newsletterAuthor}
+                            username={newsletter.addedByUser?.username}
                             className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
                           />
-                          <span className="text-sm text-dark-blue">
-                            {newsletter.newsletterAuthor}
-                          </span>
+                          <Link
+                            href={`users/${newsletter.addedByUser?.id}`}
+                            className="text-sm text-dark-blue hover:text-primary"
+                          >
+                            {newsletter.addedByUser?.username}
+                          </Link>
                         </div>
                       )}
                       <div className="flex gap-6 items-center">

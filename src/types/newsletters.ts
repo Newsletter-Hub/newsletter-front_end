@@ -8,7 +8,7 @@ export interface AddNewsletterPayload {
   title?: string;
   description?: string;
   author?: string;
-  image?: File | string;
+  image?: string;
   topics: [];
   id?: number;
 }
