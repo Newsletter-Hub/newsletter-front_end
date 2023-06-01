@@ -196,7 +196,7 @@ const NewslettersList = ({
     }
   };
   const modalTitleStyles = clsx(
-    'text-dark-blue text-5xl mb-6 text-center',
+    'text-dark-blue md:text-5xl text-2xl mb-6 text-center',
     alegreya.className
   );
 
@@ -447,28 +447,30 @@ const NewslettersList = ({
         isSeparated && 'pt-20 lg:px-[17%] px-[3%]'
       }`}
     >
-      <div className="max-w-[1280px] lg:min-w-[950px] min-w-[400px]">
+      <div className="max-w-[1280px] lg:min-w-[950px] min-w-[300px]">
         {isSeparated && (
           <>
-            <h1 className="text-dark-blue text-7xl font-medium mb-10">
+            <h1 className="text-dark-blue md:text-7xl text-4xl font-medium mb-10">
               {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
             </h1>
-            <div className="flex mb-10 items-center justify-between md:min-w-[735px] lg:min-w-[950px]">
+            <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[950px] flex-col md:flex-row gap-2 md:gap-0">
               <div className="lg:flex-grow">
                 <Input
                   isSearch
                   placeholder="Search Newsletter Hub"
-                  wrapperStyles="max-w-[262px]"
-                  customStyles="h-[48px]"
+                  wrapperStyles="md:max-w-[262px]"
+                  customStyles="h-[48px] w-full"
                   iconStyles="!top-3"
                   onChange={e => handleChangeSearch(e.target.value)}
                   defaultValue={(router.query.search as string) || ''}
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex md:gap-4 md:w-fit w-full gap-2">
                 <Button
                   variant="outlined-secondary"
                   onClick={handleOpenModal}
+                  height="base"
+                  customStyles="w-1/2 max-w-[150px]"
                   label={
                     <span
                       className={`flex text-base justify-center px-6 gap-2 ${
@@ -505,7 +507,7 @@ const NewslettersList = ({
                             setFilters({ ...filters, categories: value });
                           }}
                         >
-                          <div className="pt-4 pl-9 grid grid-cols-2 gap-4">
+                          <div className="pt-4 pl-9 grid md:grid-cols-2 gap-4">
                             {interests?.map(interest => (
                               <Checkbox
                                 label={interest.interestName}
@@ -610,7 +612,7 @@ const NewslettersList = ({
                             setFilters({ ...filters, duration: value });
                           }}
                         >
-                          <div className="pl-9">
+                          <div className="md:pl-9">
                             <div className="pt-[18px] mb-2">
                               <Slider
                                 min={1}
@@ -632,13 +634,13 @@ const NewslettersList = ({
                               />
                             </div>
                             <div className="flex justify-between">
-                              <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
+                              <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
                                 from&nbsp;
                                 <span className="font-semibold">
                                   {filtersPayload.durationFrom} minute
                                 </span>
                               </p>
-                              <p className="text-lightBlack pl-4 pr-[43px] py-2 border-b-2 border-grey">
+                              <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
                                 to&nbsp;
                                 <span className="font-semibold">
                                   {filtersPayload.durationTo} minute
@@ -686,7 +688,7 @@ const NewslettersList = ({
                           </div>
                         </Accordion>
                       </div>
-                      <div className="flex pl-8 justify-between items-center">
+                      <div className="flex md:pl-8 justify-between items-center">
                         <span
                           className="text-base text-lightBlack cursor-pointer"
                           onClick={handleFiltersReset}
@@ -697,6 +699,7 @@ const NewslettersList = ({
                           label="Apply filters"
                           rounded="xl"
                           fontSize="md"
+                          customStyles="text-sm md:text-base"
                           onClick={applyFilters}
                         />
                       </div>
@@ -708,8 +711,9 @@ const NewslettersList = ({
                   )}
                 </Modal>
                 <Popover
+                  triggerStyles="bg-porcelain font-inter rounded-lg text-lightBlack w-1/2"
                   triggerContent={
-                    <span className="flex text-base justify-center items-center px-6 gap-4">
+                    <span className="flex md:text-base justify-center items-center px-6 md:gap-4 h-12 text-sm">
                       {sortTypes[choosedSortType].label}
                       <SortIcon />
                     </span>
@@ -759,7 +763,7 @@ const NewslettersList = ({
               return (
                 <div
                   key={newsletter.id}
-                  className={`flex mb-8 gap-8 pb-8 ${
+                  className={`md:flex mb-8 gap-8 pb-8 flex-col md:flex-row hidden ${
                     newslettersData.newsletters &&
                     index + 1 !== newslettersData.newsletters.length &&
                     'border-b'
@@ -770,7 +774,7 @@ const NewslettersList = ({
                       src={
                         newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
                       }
-                      className="lg:h-[224px] lg:w-[224px] h-[122px] w-[112px] rounded-[10px] object-cover"
+                      className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full"
                       alt="newsletter"
                       width={224}
                       height={224}
@@ -779,9 +783,9 @@ const NewslettersList = ({
                   </div>
                   <div className="w-full flex flex-col justify-between">
                     <div
-                      className={`flex mb-4 font-inter ${
+                      className={`flex flex-col md:flex-row mb-4 font-inter ${
                         isAuthor ? 'justify-between' : 'justify-end'
-                      } items-center`}
+                      } md:items-center`}
                     >
                       {isAuthor && (
                         <div className="flex gap-2 items-center">
