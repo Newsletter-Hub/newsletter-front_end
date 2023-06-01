@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
-    order: 'rating',
+    order: 'date',
     orderDirection: 'DESC',
     categoriesIds,
     authorId,
