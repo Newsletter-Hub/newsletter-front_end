@@ -26,14 +26,16 @@ const UserNewsletters = ({
         {isProfile ? 'Your Newsletters' : `${user.username} Newsletters`}
       </h3>
       {isProfile && (
-        <Link href="/newsletters/add">
-          <Button
-            label="Add a Newsletter"
-            rounded="xl"
-            fontSize="md"
-            customStyles="mb-8"
-          />
-        </Link>
+        <div className="w-fit">
+          <Link href="/newsletters/add">
+            <Button
+              label="Add a Newsletter"
+              rounded="xl"
+              fontSize="md"
+              customStyles="mb-8"
+            />
+          </Link>
+        </div>
       )}
       <div>
         <NewslettersList
