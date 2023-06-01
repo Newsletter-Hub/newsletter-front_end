@@ -16,14 +16,14 @@ interface CategoriesProps {
 
 const Categories = ({ categories }: CategoriesProps) => {
   return (
-    <div className="px-[10%] pt-20">
+    <div className="md:px-[10%] px-[5%] pt-20">
       <h1 className="text-dark-blue text-7xl font-medium mb-10">Categories</h1>
       <div className="flex flex-wrap -m-2">
         {categories.map(category => (
           <Link
             href={`categories/${category.id}`}
             key={category.id}
-            className="w-1/4 p-2"
+            className="md:w-1/4 w-1/2 p-2"
           >
             <div>
               <div className="h-fit">
@@ -36,8 +36,8 @@ const Categories = ({ categories }: CategoriesProps) => {
                   priority
                 />
               </div>
-              <div className="bg-light-porcelain p-4 rounded-b-lg max-w-[302px]">
-                <p className="text-dark-blue font-semibold font-inter text-lg mb-1 xl:whitespace-nowrap">
+              <div className="bg-light-porcelain p-4 rounded-b-lg max-w-[302px] min-h-[108px] xl:min-h-0">
+                <p className="text-dark-blue font-semibold font-inter xl:text-lg text-base mb-1 xl:whitespace-nowrap">
                   {category.interestName}
                 </p>
                 <p className="text-dark-grey font-inter text-sm">
