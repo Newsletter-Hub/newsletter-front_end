@@ -444,17 +444,17 @@ const NewslettersList = ({
   return (
     <div
       className={`flex justify-center items-center flex-col ${
-        isSeparated && 'pt-20 px-[17%]'
+        isSeparated && 'pt-20 lg:px-[17%] px-[3%]'
       }`}
     >
-      <div className="max-w-[1280px] min-w-[950px]">
+      <div className="max-w-[1280px] lg:min-w-[950px] min-w-[400px]">
         {isSeparated && (
           <>
             <h1 className="text-dark-blue text-7xl font-medium mb-10">
               {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
             </h1>
-            <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px]">
-              <div className="flex-grow">
+            <div className="flex mb-10 items-center justify-between md:min-w-[735px] lg:min-w-[950px]">
+              <div className="lg:flex-grow">
                 <Input
                   isSearch
                   placeholder="Search Newsletter Hub"
@@ -765,12 +765,12 @@ const NewslettersList = ({
                     'border-b'
                   } border-b-light-grey`}
                 >
-                  <div className="min-w-[224px]">
+                  <div className="lg:min-w-[224px] min-w-[112px]">
                     <Image
                       src={
                         newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
                       }
-                      className="h-[224px] w-[224px] rounded-[10px] object-cover"
+                      className="lg:h-[224px] lg:w-[224px] h-[122px] w-[112px] rounded-[10px] object-cover"
                       alt="newsletter"
                       width={224}
                       height={224}
