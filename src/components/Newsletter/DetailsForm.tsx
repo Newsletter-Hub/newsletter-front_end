@@ -163,12 +163,13 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                   className={`outline-none w-full`}
                   value={inputValue}
                   onChange={e => setInputValue(e.target.value)}
+                  onClick={() => setShowAutoComplete(true)}
                 />
               )}
               {showAutoComplete &&
                 (suggests.length ? (
                   <div
-                    className="absolute shadow-md bg-white top-6 w-full max-h-28 overflow-scroll pl-4"
+                    className="absolute shadow-md bg-white top-6 w-full max-h-48 overflow-scroll pl-4 z-10"
                     ref={autoCompleteRef}
                   >
                     {suggests.map(item => (
