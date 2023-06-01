@@ -24,10 +24,7 @@ const Notification = ({
       notification.notificationRecipientId && isProfile ? (
       'You'
     ) : (
-      <Link
-        href={`/users/${notification.notificationAuthorId}`}
-        className="hover:text-primary"
-      >
+      <Link href={`/users/${notification.notificationAuthorId}`}>
         {notification.notificationAuthor?.username}
       </Link>
     );

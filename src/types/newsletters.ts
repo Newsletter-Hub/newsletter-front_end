@@ -54,6 +54,7 @@ export interface Reviewer {
   username: string;
   avatar: string;
   country: string;
+  id: number;
 }
 
 export interface Review {

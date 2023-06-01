@@ -10,7 +10,7 @@ import { NewslettersListData } from '@/types/newsletters';
 import { GetNewsletterListProps } from '.';
 
 interface BookmarkWithIdPayload {
-  newsletterId: string;
+  newsletterId: string | number;
   token?: string;
 }
 

@@ -212,7 +212,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
                   <div className="flex flex-col gap-3">
                     <Link
                       href={`/users/${item.id}`}
-                      className="text-lightBlack text-xl font-medium hover:text-primary"
+                      className="text-lightBlack text-xl font-medium"
                     >
                       {item.username}
                     </Link>

@@ -79,7 +79,7 @@ const Header = () => {
                       placeholder="Search Newsletter Hub"
                       isSearch
                       onChange={e => handleChangeSearch(e.target.value)}
-                      customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px]"
+                      customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px] focus:border-primary focus:border"
                     />
                     {showSearchResult && data && (
                       <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw]">
@@ -93,7 +93,7 @@ const Header = () => {
                               </span>
                               <Link
                                 href={`/newsletters/categories/all?search=${searchTerm}`}
-                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold hover:border-b-primary"
                               >
                                 View all Newsletter results
                               </Link>
@@ -141,7 +141,7 @@ const Header = () => {
                               </span>
                               <Link
                                 href={`/users?search=${searchTerm}`}
-                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold hover:border-b-primary"
                               >
                                 View all User results
                               </Link>

@@ -795,7 +795,7 @@ const NewslettersList = ({
                           />
                           <Link
                             href={`/users/${newsletter.addedByUser?.id}`}
-                            className="text-sm text-dark-blue hover:text-primary"
+                            className="text-sm text-dark-blue"
                           >
                             {newsletter.addedByUser?.username}
                           </Link>
@@ -824,7 +824,7 @@ const NewslettersList = ({
                     </div>
                     <Link
                       href={`/newsletters/${newsletter.id}`}
-                      className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 hover:text-primary cursor-pointer"
+                      className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
                     >
                       {newsletter.title}
                     </Link>
