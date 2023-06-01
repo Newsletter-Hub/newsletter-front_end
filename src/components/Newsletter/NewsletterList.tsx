@@ -133,7 +133,7 @@ const NewslettersList = ({
   );
   const [page, setPage] = useState(1);
   const [choosedSortType, setChoosedSortType] = useState(
-    sortTypes.findIndex(item => (item.value = defaultSortType))
+    sortTypes.findIndex(item => item.value === defaultSortType)
   );
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenReviewModal, setIsOpenReviewModal] = useState<boolean | number>(
