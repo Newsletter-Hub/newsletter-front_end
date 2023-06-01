@@ -3,8 +3,10 @@ import Link from 'next/link';
 import Button from '@/components/Button';
 
 import HomeImage from '@/assets/images/homeImage';
+import { useUser } from '@/contexts/UserContext';
 
 const MainBlock = () => {
+  const { user } = useUser();
   return (
     <div className="flex items-center mb-20 text-center md:text-start flex-col justify-center md:flex-row md:justify-between">
       <div className="max-w-3xl">
@@ -15,14 +17,16 @@ const MainBlock = () => {
           Rate, review, and browse newsletters that you, your friends, and the
           world are subscribed to.
         </p>
-        <Link href="/sign-up">
-          <Button
-            label="Create your profile now"
-            rounded="xl"
-            fontSize="md"
-            customStyles="w-full md:w-fit"
-          />
-        </Link>
+        {!user && (
+          <Link href="/sign-up">
+            <Button
+              label="Create your profile now"
+              rounded="xl"
+              fontSize="md"
+              customStyles="w-full md:w-fit"
+            />
+          </Link>
+        )}
       </div>
       <HomeImage className="!w-300px hidden md:block" />
     </div>

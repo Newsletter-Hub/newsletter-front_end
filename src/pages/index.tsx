@@ -12,15 +12,13 @@ interface HomeProps {
 
 const Home = ({ reviewData }: HomeProps) => {
   return (
-    <>
-      <main>
-        <div className="lg:px-[17%] lg:pt-32 pt-16 px-[5%]">
-          <MainBlock />
-          <ReviewsBlock reviewData={reviewData} />
-        </div>
-        <GetStartedBlock />
-      </main>
-    </>
+    <main>
+      <div className="lg:pt-[88px] pt-16 max-w-[1280px] mx-auto px-4">
+        <MainBlock />
+        <ReviewsBlock reviewData={reviewData} />
+      </div>
+      <GetStartedBlock />
+    </main>
   );
 };
 
