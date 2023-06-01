@@ -87,7 +87,8 @@ const ChooseInterests = ({
         <Button
           label="Finish"
           onClick={handleSubmit}
-          customStyles="w-1/2"
+          customStyles="max-w-[200px]"
+          size="full"
           rounded="xl"
           fontSize="md"
         />
