@@ -11,15 +11,22 @@ interface RadioGroupOption {
 interface RadioGroupProps {
   options: RadioGroupOption[];
   defaultValue: string;
+  setValue?: (value: string) => void;
 }
 
-const RadioGroup = ({ options, defaultValue }: RadioGroupProps) => {
+const RadioGroup = ({ options, defaultValue, setValue }: RadioGroupProps) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue);
+  const handleChange = (value: string) => {
+    setSelectedValue(value);
+    if (setValue) {
+      setValue(value);
+    }
+  };
   return (
     <RadixRadioGroup.Root
       className="flex gap-9"
       defaultValue={defaultValue}
-      onValueChange={setSelectedValue}
+      onValueChange={handleChange}
     >
       {options.map(option => (
         <div className="flex items-center" key={option.id}>

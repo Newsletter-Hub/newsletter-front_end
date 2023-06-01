@@ -106,7 +106,7 @@ export const newsletterUpdate = async ({
       formData.append('newsletterAuthor', newsletterAuthor as string);
     averageDuration &&
       formData.append('averageDuration', averageDuration as string);
-    pricingType && formData.append('pricingType', pricingType as string);
+    pricingType && formData.append('pricing', pricingType as string);
     image && formData.append('image', image as Blob);
     if (interests?.length) {
       for (let i = 0; i < interests.length; i++) {

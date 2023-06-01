@@ -196,7 +196,7 @@ const NewsletterPage = ({
   if (!reviewsData || !newsletter) {
     return <Loading />;
   }
-
+  console.log(newsletter);
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[320px]">
       <div className="!max-w-[1280px]">
@@ -239,14 +239,17 @@ const NewsletterPage = ({
                   {newsletter.addedByUser.amountUserRatings}
                 </span>
                 <span className="font-inter text-sm text-dark-grey">
-                  <span className="font-bold">207</span> Followers
+                  <span className="font-bold">
+                    {newsletter.addedByUser.amountUserFollowers}
+                  </span>{' '}
+                  Followers
                 </span>
               </div>
-              <span className="font-inter text-sm text-dark-grey mb-10">
-                I create and curate content for both the blog and our training
-                courses. He also directs the market research and strategic
-                planning the site.
-              </span>
+              {newsletter.addedByUser.description && (
+                <span className="font-inter text-sm text-dark-grey mb-10">
+                  {newsletter.addedByUser.description}
+                </span>
+              )}
             </div>
           </div>
         )}

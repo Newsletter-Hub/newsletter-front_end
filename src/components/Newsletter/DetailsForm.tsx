@@ -104,7 +104,6 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   };
 
   useOnClickOutside(autoCompleteRef, handleClickOutside);
-
   if (!interests) {
     return <Loading />;
   }
@@ -201,6 +200,9 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                 { label: 'Free', value: 'free', id: '1' },
                 { label: 'Paid', value: 'paid', id: '2' },
               ]}
+              setValue={(value: string) =>
+                setPricingType(value as 'free' | 'paid')
+              }
             />
           </div>
           <div>

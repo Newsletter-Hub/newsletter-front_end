@@ -9,6 +9,7 @@ export interface User {
   averageUserRating: number;
   amountUserRatings: number;
   description?: string;
+  amountUserFollowers: number;
 }
 
 export interface UserMe {

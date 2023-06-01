@@ -43,6 +43,7 @@ interface User {
   username: string;
   followersIds: number[];
   followed: boolean;
+  description: string;
 }
 
 export interface UserList {
@@ -146,6 +147,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
       }
     }
   };
+  console.log(usersData);
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
@@ -195,32 +197,34 @@ const UsersList = ({ usersList }: UsersListProps) => {
               {usersData.users.map((item, index) => (
                 <div
                   key={item.id}
-                  className={`flex gap-8 items-center pb-8 ${
+                  className={`flex items-center justify-between pb-8 ${
                     usersData.users.length !== index + 1 &&
                     'border-b border-light-grey'
                   }`}
                 >
-                  <Avatar
-                    src={item.avatar}
-                    alt="User avatar"
-                    width={112}
-                    height={112}
-                    username={item.username}
-                    className="rounded-full max-h-[112px] min-w-[112px]"
-                    customStyles="h-[112px] min-w-[112px]"
-                  />
-                  <div className="flex flex-col gap-3">
-                    <Link
-                      href={`/users/${item.id}`}
-                      className="text-lightBlack text-xl font-medium"
-                    >
-                      {item.username}
-                    </Link>
-                    <span className="font-inter text-sm text-dark-grey whitespace-nowrap max-w-[700px] overflow-hidden text-ellipsis">
-                      I create and curate content for both the blog and our
-                      training courses. He also directs the market research and
-                      strategic planning the site.
-                    </span>
+                  <div className="flex gap-8 items-center">
+                    <Avatar
+                      src={item.avatar}
+                      alt="User avatar"
+                      width={112}
+                      height={112}
+                      username={item.username}
+                      className="rounded-full max-h-[112px] min-w-[112px]"
+                      customStyles="h-[112px] min-w-[112px]"
+                    />
+                    <div className="flex flex-col gap-3">
+                      <Link
+                        href={`/users/${item.id}`}
+                        className="text-lightBlack text-xl font-medium"
+                      >
+                        {item.username}
+                      </Link>
+                      {item.description && (
+                        <span className="font-inter text-sm text-dark-grey whitespace-nowrap max-w-[700px] overflow-hidden text-ellipsis">
+                          {item.description}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <Button
                     rounded="xl"
