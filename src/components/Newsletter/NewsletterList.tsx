@@ -935,7 +935,7 @@ const NewslettersList = ({
                               <Input
                                 variant="filled"
                                 placeholder="Go ahead, we are listening..."
-                                customStyles="w-full mb-9"
+                                customStyles="!w-full mb-9"
                                 register={{ ...register('comment') }}
                               />
                               <div className="flex justify-center">
