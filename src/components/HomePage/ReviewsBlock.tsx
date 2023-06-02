@@ -205,7 +205,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                             <Input
                               variant="filled"
                               placeholder="Go ahead, we are listening..."
-                              customStyles="w-full mb-9"
+                              customStyles="mb-9 !w-full"
                               register={{ ...register('comment') }}
                             />
                             <div className="flex justify-center">
