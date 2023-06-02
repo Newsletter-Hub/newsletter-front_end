@@ -59,9 +59,9 @@ const Input = ({
     variants[variant],
     error && 'border-red',
     customStyles,
-    'font-inter'
+    'font-inter w-full'
   );
-  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col w-full');
   const [value, setValue] = useState(defaultValue || '');
   return (
     <div className={wrapperFormattedStyles}>

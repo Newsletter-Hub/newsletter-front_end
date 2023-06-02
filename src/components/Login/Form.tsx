@@ -62,7 +62,7 @@ const Form = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col items-center"
       >
-        <div className="mb-8 gap-12 flex flex-col">
+        <div className="mb-8 gap-12 flex flex-col w-full">
           {fields.map(field => (
             <Input
               register={{ ...register(field.name) }}

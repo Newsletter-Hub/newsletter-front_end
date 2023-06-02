@@ -12,6 +12,8 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import Button from '../Button';
 import Input from '../Input';
+import { useWindowSize } from 'usehooks-ts';
+import Link from 'next/link';
 
 const validationSchema = z
   .object({
@@ -81,10 +83,22 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
       setEmail(email);
     }
   };
+  const { width } = useWindowSize();
+  const googleButtonWidth = () => {
+    if (width) {
+      if (width >= 320 && width < 375) {
+        return '300';
+      } else if (width >= 375 && width < 768) {
+        return '360';
+      }
+      return '400';
+    }
+    return '400';
+  };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-7 items-center"
+      className="flex flex-col gap-7 items-center w-full"
     >
       {fields.map(field => (
         <Input
@@ -97,12 +111,18 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
           isPassword={field.isPassword}
         />
       ))}
+      <p className="font-inter text-sm text-dark-blue lg:hidden">
+        Already have an account?{' '}
+        <Link href="/login" className="font-semibold">
+          Login
+        </Link>
+      </p>
       <Button
-        label="Confirm email"
-        uppercase
+        label="Signup"
         size="full"
         rounded="xl"
         type="submit"
+        customStyles="lg:max-w-none sm:max-w-[370px] md:max-w-[400px]"
       />
       <GoogleLogin
         onSuccess={({ credential }) => onGoogleLogin(credential as string)}
@@ -111,7 +131,7 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
         auto_select={false}
         shape="circle"
         size="large"
-        width="400"
+        width={googleButtonWidth()}
       />
     </form>
   );

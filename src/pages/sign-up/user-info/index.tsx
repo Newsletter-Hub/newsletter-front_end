@@ -64,7 +64,7 @@ const SignUpInfo = ({ interests }: SignUpInfoProps) => {
   ];
   return (
     <UserContext.Provider value={payload}>
-      <div className="shadow-md p-12 rounded-3xl">
+      <div className="md:shadow-md md:p-12 rounded-3xl mt-4 md:mt-0">
         <p className="text-center mb-[2px] font-medium">Step {page + 1}/4</p>
         <p className="text-3xl text-dark-blue font-semibold text-center mb-12">
           {titles[page]}

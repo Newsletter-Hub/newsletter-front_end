@@ -28,7 +28,7 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
       <GoogleOAuthProvider clientId="373284142318-di7t0hm27ac0ll9vtl93l5d5kmlkg67q.apps.googleusercontent.com">
         <div className={alegreya.className}>
           <div className="flex h-[100vh] overflow-hidden">
-            <div className="w-[55%] bg-primary-light h-full pt-[64px] pl-[56px] hidden lg:block">
+            <div className="w-[55%] bg-primary-light h-full pt-[64px] xl:px-[56px] hidden lg:block lg:px-3">
               <div className="flex flex-col">
                 <Logo className="mb-[108px]" />
               </div>
@@ -77,8 +77,13 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
                 )}
               </div>
             </div>
-            <div className="w-full justify-center flex">
-              <div className="flex items-center">{children}</div>
+            <div className="h-full w-full">
+              <div className="w-full justify-center flex flex-col h-full items-center md:gap-6 px-3">
+                <Logo className="lg:hidden" />
+                <div className="flex items-center w-full md:w-fit justify-center">
+                  {children}
+                </div>
+              </div>
             </div>
           </div>
         </div>
