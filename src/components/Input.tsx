@@ -31,7 +31,7 @@ const variants = {
   outlined:
     'bg-porcelain outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm border border-porcelain',
   filled:
-    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
+    'border-b-2 outline-none border-grey lg:w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
 };
 
 const Input = ({

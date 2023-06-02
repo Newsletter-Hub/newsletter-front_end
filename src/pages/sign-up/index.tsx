@@ -6,7 +6,9 @@ import SignUpForm from '@/components/SignUp';
 const SignUp = () => {
   const [email, setEmail] = useState('');
   return (
-    <div className={`shadow-md pt-20 px-16 pb-16 ${email && 'max-w-[496px]'}`}>
+    <div
+      className={`shadow-md pt-20 lg:px-16 pb-16 ${email && 'max-w-[496px]'}`}
+    >
       <p
         className={`text-3xl text-lightBlack font-semibold text-center ${
           email ? 'mb-6' : 'mb-12'
