@@ -55,7 +55,7 @@ const ChooseInterests = ({
   };
   return (
     <>
-      <div className="flex w-[600px] flex-wrap h-[400px] mb-12">
+      <div className="flex md:w-[600px] flex-wrap h-[400px] mb-12 overflow-scroll md:overflow-visible">
         {interests ? (
           interests.map(item => (
             <Button
@@ -77,7 +77,7 @@ const ChooseInterests = ({
           <Loading />
         )}
       </div>
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-center w-full px-3 md:px-0">
         <span
           className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
           onClick={handlePreviousStep}

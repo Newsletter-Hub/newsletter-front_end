@@ -40,7 +40,7 @@ const ProfilePicture = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-[400px] flex flex-col gap-10"
+      className="sm:w-[400px] flex flex-col gap-10 px-3"
     >
       <FileDownloader
         setValue={handleSetValue}

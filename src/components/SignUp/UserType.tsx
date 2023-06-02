@@ -62,15 +62,15 @@ const UserType = ({
 
   return (
     <form
-      className="w-[400px] flex flex-col gap-10"
+      className="sm:w-[400px] flex flex-col gap-10 w-[300px] xs:w-[350px]"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="relative">
-        <div className="flex gap-5 w-full">
+        <div className="flex gap-5 w-full flex-col items-center md:flex-row">
           {userTypes.map(item => (
             <Button
               label={item.label}
-              customStyles="w-full"
+              customStyles="md:w-full w-[192px]"
               rounded="xl"
               selected={type === item.value}
               fontSize="md"

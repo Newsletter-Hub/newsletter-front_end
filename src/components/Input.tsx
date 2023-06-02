@@ -31,7 +31,7 @@ const variants = {
   outlined:
     'bg-porcelain outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm border border-porcelain',
   filled:
-    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
+    'border-b-2 outline-none border-grey lg:w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
 };
 
 const Input = ({
@@ -59,9 +59,9 @@ const Input = ({
     variants[variant],
     error && 'border-red',
     customStyles,
-    'font-inter'
+    'font-inter w-full'
   );
-  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col w-full');
   const [value, setValue] = useState(defaultValue || '');
   return (
     <div className={wrapperFormattedStyles}>
@@ -99,12 +99,12 @@ const Input = ({
         {isPassword &&
           (isShowPassword ? (
             <EyeOnIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
+              className="absolute right-5 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ) : (
             <EyeOffIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
+              className="absolute right-5 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ))}

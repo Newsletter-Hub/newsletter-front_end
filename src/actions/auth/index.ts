@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server';
 import api from '@/config/ky';
 
 import { UserMe } from '@/types/user';
+import { toast } from 'react-toastify';
 
 interface User {
   email: string;
@@ -90,6 +91,7 @@ export const signup = async ({
     });
     return response.json();
   } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to create user');
     console.log(error);
   }
 };
@@ -180,6 +182,21 @@ export const signUpSetCookie = async ({
     return response.json();
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Invalid access token');
+    console.log(error);
+  }
+};
+
+export const resendVerifyEmail = async ({ email }: { email: string }) => {
+  try {
+    const response = await api.post('auth/resend-email-confirmation-link', {
+      json: { email },
+    });
+    if (response.ok) {
+      toast.success('New verification email was sended');
+    }
+    return response.json();
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Invalid email');
     console.log(error);
   }
 };
