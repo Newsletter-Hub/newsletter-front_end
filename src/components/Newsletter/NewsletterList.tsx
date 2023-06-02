@@ -763,7 +763,7 @@ const NewslettersList = ({
               return (
                 <div
                   key={newsletter.id}
-                  className={`md:flex mb-8 gap-8 pb-8 flex-col md:flex-row hidden ${
+                  className={`md:flex mb-8 gap-8 pb-8 flex-col md:flex-row ${
                     newslettersData.newsletters &&
                     index + 1 !== newslettersData.newsletters.length &&
                     'border-b'
