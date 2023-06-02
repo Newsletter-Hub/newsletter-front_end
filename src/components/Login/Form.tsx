@@ -12,6 +12,7 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import Button from '../Button';
 import Input from '../Input';
+import { useWindowSize } from 'usehooks-ts';
 
 const validationSchema = z.object({
   email: z
@@ -56,6 +57,18 @@ const Form = () => {
   const onGoogleLogin = (token: string) => {
     googleAuth({ token, router, setUser });
   };
+  const { width } = useWindowSize();
+  const googleButtonWidth = () => {
+    if (width) {
+      if (width >= 320 && width < 375) {
+        return '300';
+      } else if (width >= 375 && width < 768) {
+        return '360';
+      }
+      return '400';
+    }
+    return '400';
+  };
   return (
     <>
       <form
@@ -81,6 +94,12 @@ const Form = () => {
         >
           Forgot password?
         </Link>
+        <p className="font-inter text-sm text-dark-blue lg:hidden mb-4">
+          Don’t have an account?{' '}
+          <Link href="/sign-up" className="font-semibold">
+            Signup
+          </Link>
+        </p>
         <Button
           label="Login"
           size="full"
@@ -97,7 +116,7 @@ const Form = () => {
           auto_select={false}
           shape="circle"
           size="large"
-          width="400"
+          width={googleButtonWidth()}
         />
       </div>
     </>

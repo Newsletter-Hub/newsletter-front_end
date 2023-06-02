@@ -16,8 +16,8 @@ const SignUp = () => {
       } w-full`}
     >
       <p
-        className={`text-3xl text-lightBlack font-semibold text-center ${
-          email ? 'mb-6' : 'mb-12'
+        className={`text-lightBlack font-semibold text-center ${
+          email ? 'mb-6 text-3xl md:text-5xl' : 'mb-12 text-5xl'
         }`}
       >
         {email ? 'Verify your Email' : 'Sign up'}
