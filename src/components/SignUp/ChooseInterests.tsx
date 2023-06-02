@@ -55,7 +55,7 @@ const ChooseInterests = ({
   };
   return (
     <>
-      <div className="flex md:w-[600px] flex-wrap h-[400px] mb-12 overflow-scroll md:overflow-visible">
+      <div className="flex md:w-[600px] flex-wrap h-[400px] mb-12 overflow-scroll md:overflow-visible interests-container">
         {interests ? (
           interests.map(item => (
             <Button
