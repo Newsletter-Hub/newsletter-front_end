@@ -11,7 +11,7 @@ const SignUp = () => {
   };
   return (
     <div
-      className={`md:shadow-md rounded-3xl pt-20 lg:px-12 px-2 md:px-6 pb-16 ${
+      className={`md:shadow-md rounded-3xl lg:pt-20 pt-6 lg:px-12 px-2 md:px-6 pb-16 ${
         email && 'max-w-[496px]'
       } w-full`}
     >

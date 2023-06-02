@@ -117,13 +117,7 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
           Login
         </Link>
       </p>
-      <Button
-        label="Signup"
-        size="full"
-        rounded="xl"
-        type="submit"
-        customStyles="lg:max-w-none sm:max-w-[370px] md:max-w-[400px]"
-      />
+      <Button label="Signup" size="full" rounded="xl" type="submit" />
       <GoogleLogin
         onSuccess={({ credential }) => onGoogleLogin(credential as string)}
         theme="filled_black"
