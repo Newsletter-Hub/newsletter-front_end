@@ -65,12 +65,24 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
     comment,
   }) => {
     if (isOpenReviewModal) {
-      await createReview({
+      const response = await createReview({
         rating,
         comment,
         newsletterId: isOpenReviewModal as number,
       });
-      setIsOpenReviewModal(false);
+      if (!response.error) {
+        const response = await getReviews({
+          page: 1,
+          pageSize: 5 * (page + 1),
+        });
+
+        if (response.reviews) {
+          setReviewsInfo(response.reviews);
+          setIsOpenReviewModal(false);
+        }
+      } else {
+        setIsOpenReviewModal(false);
+      }
     }
   };
   if (!reviewsInfo) {
@@ -119,7 +131,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                       {timeAgo(review.createdAt)}
                     </p>
                   </div>
-                  <p className="md:text-base mb-8 font-inter text-dark-blue text-sm block max-w-[160px] xs:max-w-[230px] sm:max-w-[280px] whitespace-nowrap overflow-hidden text-ellipsis lg:max-w-[600px] lg:whitespace-normal lg:overflow-auto">
+                  <p className="md:text-base mb-8 pt-1 font-inter text-dark-blue text-sm block max-w-[160px] xs:max-w-[230px] sm:max-w-[280px] whitespace-nowrap overflow-hidden text-ellipsis lg:max-w-[600px] lg:whitespace-normal lg:overflow-auto">
                     {review.comment}
                   </p>
                 </div>
