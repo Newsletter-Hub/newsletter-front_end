@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { GoogleLogin } from '@react-oauth/google';
+import { useMutation } from 'react-query';
 
 import Button from '../Button';
 import Input from '../Input';
@@ -43,6 +44,8 @@ const fields: Fields = [
 const Form = () => {
   const router = useRouter();
   const { setUser } = useUser();
+  const loginMutation = useMutation(login);
+  const googleAuthMutation = useMutation(googleAuth);
   const {
     register,
     handleSubmit,
@@ -52,10 +55,10 @@ const Form = () => {
     email,
     password,
   }) => {
-    await login({ email, password, router, setUser });
+    loginMutation.mutate({ email, password, router, setUser });
   };
   const onGoogleLogin = (token: string) => {
-    googleAuth({ token, router, setUser });
+    googleAuthMutation.mutate({ token, router, setUser });
   };
   const { width } = useWindowSize();
   const googleButtonWidth = () => {
@@ -106,6 +109,7 @@ const Form = () => {
           rounded="xl"
           type="submit"
           customStyles="mb-4"
+          loading={loginMutation.isLoading || googleAuthMutation.isLoading}
         />
       </form>
       <div>

@@ -132,7 +132,7 @@ export const getBookmarksList = async ({
     }
     return { newslettersListData };
   } catch (error) {
-    console.error(error);
+    throwErrorMessage(error as HTTPError, 'Failed to get bookmarks');
     return {
       error: 'Failed to get newsletter',
     };

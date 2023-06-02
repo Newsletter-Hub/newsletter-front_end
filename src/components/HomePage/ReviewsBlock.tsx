@@ -19,6 +19,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import Input from '../Input';
+import { useMutation } from 'react-query';
 
 interface ReviewsBlockProps {
   reviewData: ReviewResponse;
@@ -58,14 +59,15 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
-
+  const reviewMutation = useMutation(createReview);
   const onSubmit: SubmitHandler<ValidationSchema> = async ({
     rating,
     comment,
   }) => {
     if (isOpenReviewModal) {
-      const response = await createReview({
+      const response = await reviewMutation.mutateAsync({
         rating,
         comment,
         newsletterId: isOpenReviewModal as number,
@@ -79,9 +81,11 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
         if (response.reviews) {
           setReviewsInfo(response.reviews);
           setIsOpenReviewModal(false);
+          reset();
         }
       } else {
         setIsOpenReviewModal(false);
+        reset();
       }
     }
   };
@@ -228,6 +232,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                                 customStyles="max-w-[400px]"
                                 rounded="xl"
                                 height="sm"
+                                loading={reviewMutation.isLoading}
                               />
                             </div>
                           </form>
