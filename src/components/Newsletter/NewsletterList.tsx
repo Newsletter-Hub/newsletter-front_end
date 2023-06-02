@@ -10,7 +10,8 @@ import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { number, z } from 'zod';
+import { z } from 'zod';
+import { useQuery } from 'react-query';
 
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
@@ -45,6 +46,7 @@ import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
 import Loading from '../Loading';
+import { useMutation } from 'react-query';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -153,6 +155,7 @@ const NewslettersList = ({
     ratings: [],
   });
   const [filtersChoosed, setFiltersChoosed] = useState(false);
+  const [filtersLoading, setFiltersLoading] = useState(false);
 
   const filtersCount = useMemo(() => {
     let count = 0;
@@ -189,9 +192,7 @@ const NewslettersList = ({
       entity: 'Newsletter',
     });
 
-    if (newsletterResponse.error) {
-      console.error(newsletterResponse.error);
-    } else if (newsletterResponse.newslettersListData) {
+    if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
   };
@@ -201,6 +202,7 @@ const NewslettersList = ({
   );
 
   const handleFiltersReset = async () => {
+    setFiltersLoading(true);
     setFilters({
       categories: false,
       pricingType: false,
@@ -225,18 +227,16 @@ const NewslettersList = ({
             ? 'DESC'
             : 'ASC',
         search: search,
+      }).finally(() => {
+        setFiltersLoading(false);
+        handleCloseModal();
       });
 
-      if (newsletterResponse.error) {
-        console.error(newsletterResponse.error);
-      } else if (newsletterResponse.newslettersListData) {
+      if (newsletterResponse.newslettersListData) {
         setNewslettersData(
           newsletterResponse.newslettersListData as Newsletter
         );
-        handleCloseModal();
       }
-    } else {
-      handleCloseModal();
     }
   };
 
@@ -259,14 +259,13 @@ const NewslettersList = ({
           : 'ASC',
     });
 
-    if (newsletterResponse.error) {
-      console.error(newsletterResponse.error);
-    } else if (newsletterResponse.newslettersListData) {
+    if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
   }, 500);
 
   const applyFilters = async () => {
+    setFiltersLoading(true);
     const newsletterResponse = await getNewslettersList({
       page: 1,
       pageSize: 6,
@@ -282,10 +281,8 @@ const NewslettersList = ({
         sortTypes[choosedSortType].value === 'date'
           ? 'DESC'
           : 'ASC',
-    });
-    if (newsletterResponse.error) {
-      console.error(newsletterResponse.error);
-    } else if (newsletterResponse.newslettersListData) {
+    }).finally(() => setFiltersLoading(false));
+    if (newsletterResponse.newslettersListData) {
       handleCloseModal();
       setFiltersChoosed(true);
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
@@ -299,8 +296,7 @@ const NewslettersList = ({
       pageSize: 6 * page,
       order: sortTypes[value].value,
       orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ||
-        sortTypes[choosedSortType].value === 'date'
+        sortTypes[value].value === 'rating' || sortTypes[value].value === 'date'
           ? 'DESC'
           : 'ASC',
       search,
@@ -310,9 +306,7 @@ const NewslettersList = ({
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
     });
-    if (newsletterResponse.error) {
-      console.error(newsletterResponse.error);
-    } else if (newsletterResponse.newslettersListData) {
+    if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
   };
@@ -341,9 +335,7 @@ const NewslettersList = ({
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
       });
-      if (bookmarksResponse.error) {
-        console.error(bookmarksResponse.error);
-      } else if (bookmarksResponse.newslettersListData) {
+      if (bookmarksResponse.newslettersListData) {
         setNewslettersData(bookmarksResponse.newslettersListData as Newsletter);
       }
     }
@@ -360,7 +352,7 @@ const NewslettersList = ({
       router.push('/sign-up');
     }
   };
-
+  const reviewMutation = useMutation(createReview);
   const {
     register,
     handleSubmit,
@@ -372,12 +364,13 @@ const NewslettersList = ({
     comment,
   }) => {
     if (isOpenReviewModal) {
-      await createReview({
-        rating,
-        comment,
-        newsletterId: isOpenReviewModal as number,
-      });
-      setIsOpenReviewModal(false);
+      reviewMutation
+        .mutateAsync({
+          rating,
+          comment,
+          newsletterId: isOpenReviewModal as number,
+        })
+        .finally(() => setIsOpenReviewModal(false));
     }
   };
 
@@ -473,7 +466,7 @@ const NewslettersList = ({
                   customStyles="w-1/2 max-w-[150px]"
                   label={
                     <span
-                      className={`flex text-base justify-center px-6 gap-2 ${
+                      className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
                         filtersCount && 'text-primary'
                       }`}
                     >
@@ -699,8 +692,9 @@ const NewslettersList = ({
                           label="Apply filters"
                           rounded="xl"
                           fontSize="md"
-                          customStyles="text-sm md:text-base"
+                          customStyles="text-sm md:text-base min-w-[155px]"
                           onClick={applyFilters}
+                          loading={filtersLoading}
                         />
                       </div>
                     </div>
@@ -946,6 +940,7 @@ const NewslettersList = ({
                                   customStyles="max-w-[400px]"
                                   rounded="xl"
                                   height="sm"
+                                  loading={reviewMutation.isLoading}
                                 />
                               </div>
                             </form>

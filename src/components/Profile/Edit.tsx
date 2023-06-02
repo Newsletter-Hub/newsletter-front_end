@@ -140,7 +140,6 @@ const Edit = forwardRef(
     const handleCloseVerifyEmailModal = () => {
       setIsVerifyEmailModalOpen(false);
     };
-    console.log(errors);
     return (
       <div className="pt-10">
         <h3 className="text-xl text-dark-blue font-medium mb-8">

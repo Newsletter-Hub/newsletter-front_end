@@ -41,6 +41,7 @@ import {
   unfollow,
 } from '../../actions/newsletters/index';
 import { createReview, getReviews } from '../../actions/newsletters/reviews';
+import { useMutation } from 'react-query';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -74,7 +75,7 @@ const NewsletterPage = ({
       router.push('/sign-up');
     }
   };
-
+  const reviewMutation = useMutation(createReview);
   const {
     register,
     handleSubmit,
@@ -87,15 +88,13 @@ const NewsletterPage = ({
     comment,
   }) => {
     if (router.query.newsletterId) {
-      const response = await createReview({
+      const response = await reviewMutation.mutateAsync({
         rating,
         comment,
         newsletterId: +router.query.newsletterId,
       });
 
-      if (response.error) {
-        console.error(response?.error);
-      } else if (!response?.error) {
+      if (!response?.error) {
         const reviewsResponse: GetReviewResponse = await getReviews({
           newsletterId: parseInt(router.query.newsletterId as string),
           page: 1,
@@ -108,6 +107,8 @@ const NewsletterPage = ({
           setIsModalOpen(false);
           setReviewsData(reviewsResponse.reviews);
         }
+      } else {
+        setIsModalOpen(false);
       }
     }
   };
@@ -440,6 +441,7 @@ const NewsletterPage = ({
                   customStyles="max-w-[400px]"
                   rounded="xl"
                   height="sm"
+                  loading={reviewMutation.isLoading}
                 />
               </div>
             </form>

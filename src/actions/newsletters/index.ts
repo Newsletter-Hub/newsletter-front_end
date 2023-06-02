@@ -5,6 +5,8 @@ import { HTTPError } from 'ky';
 import api from '@/config/ky';
 
 import { NewsletterData, NewslettersListData } from '@/types/newsletters';
+import { toast } from 'react-toastify';
+import { NextRouter } from 'next/router';
 
 interface NewsletterLink {
   link?: string;
@@ -28,6 +30,7 @@ interface Newsletter {
   newsletterAuthor?: string;
   averageDuration: string;
   pricingType: 'free' | 'paid';
+  router?: NextRouter;
 }
 
 export interface GetNewsletterResponse {
@@ -67,7 +70,7 @@ export const newsletterVerifyOwnership = async ({
     });
     return response.json();
   } catch (error) {
-    throwErrorMessage(error as HTTPError, 'Failed to verify ownership');
+    throwErrorMessage(error as HTTPError, 'Failed to add newsletter');
     console.log(error);
   }
 };
@@ -96,6 +99,7 @@ export const newsletterUpdate = async ({
   interests,
   averageDuration,
   pricingType,
+  router,
 }: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
   try {
     const formData = new FormData();
@@ -117,8 +121,13 @@ export const newsletterUpdate = async ({
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
     const res = (await response.json()) as NewsletterLinkResponse;
+    if (response.ok) {
+      toast.success('Newsletter succesfully added');
+      if (router) {
+        router.push(`/newsletters/${res.id}`);
+      }
+    }
     return res;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to update newsletter');

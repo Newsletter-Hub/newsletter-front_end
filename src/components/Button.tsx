@@ -3,6 +3,7 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 import GoogleIcon from '@/assets/icons/google';
+import LoadingButton from './LoadingButton';
 
 interface ButtonProps {
   label: string | JSX.Element;
@@ -27,6 +28,7 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   height?: 'sm' | 'base';
+  loading?: boolean;
 }
 
 const variants = {
@@ -88,6 +90,7 @@ const Button = ({
   selected,
   onClick,
   height = 'base',
+  loading,
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -111,7 +114,7 @@ const Button = ({
   return (
     <button
       className={styles}
-      disabled={disabled}
+      disabled={loading || disabled}
       type={type}
       onClick={onClick}
     >
@@ -119,6 +122,8 @@ const Button = ({
         <span className="flex justify-center items-center gap-3 py-1">
           <GoogleIcon /> {label}
         </span>
+      ) : loading ? (
+        <LoadingButton />
       ) : (
         label
       )}

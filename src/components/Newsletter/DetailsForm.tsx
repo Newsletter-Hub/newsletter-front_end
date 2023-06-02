@@ -13,6 +13,7 @@ import { Interest } from '@/types/interests';
 import { NewsletterFormProps } from '@/types/newsletters';
 
 import CrossIcon from '@/assets/icons/cross';
+import { useMutation } from 'react-query';
 
 import Button from '../Button';
 import Input from '../Input';
@@ -29,6 +30,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
   const [averageDuration, setAverageDuration] = useState<number>(1);
   const autoCompleteRef = useRef(null);
+  const newsletterMutation = useMutation(newsletterUpdate);
 
   const router = useRouter();
 
@@ -46,20 +48,14 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   // };
 
   const onAdd = async () => {
-    try {
-      const response = await newsletterUpdate({
-        id: payload.id,
-        link: payload.link,
-        interests: tags.map(item => item.id),
-        averageDuration: String(averageDuration),
-        pricingType,
-      });
-      if (response && response.id) {
-        router.push(`${response.id}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    newsletterMutation.mutate({
+      id: payload.id,
+      link: payload.link,
+      interests: tags.map(item => item.id),
+      averageDuration: String(averageDuration),
+      pricingType,
+      router,
+    });
   };
 
   const handleAddTag = (tag: Interest) => {
@@ -236,6 +232,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           fontSize="md"
           type="submit"
           customStyles="max-w-[400px]"
+          loading={newsletterMutation.isLoading}
         />
       </div>
     </form>

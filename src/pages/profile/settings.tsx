@@ -37,6 +37,7 @@ const Settings = ({ interests }: SettingsProps) => {
   );
   const [isDirty, setIsDirty] = useState(false);
   const editRef = useRef<EditRefType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInterestClick = (item: Interest) => {
     if (interestsPayload.some(interest => interest.id === item.id)) {
@@ -67,20 +68,26 @@ const Settings = ({ interests }: SettingsProps) => {
         data[key as keyof typeof data]
     );
     if (!(changedFields.length === 1 && changedFields.includes('email'))) {
-      const result = await updateUser({
+      setIsLoading(true);
+      await updateUser({
         ...data,
         interests: user?.interests && user.interests.map(item => item.id),
         type: 'update',
         dateBirth: data.dateOfBirth && format(date, 'yyyy-MM-dd'),
-      });
+      })
+        .then(async res => {
+          if (res) {
+            const user = await getUserMe({ token: null });
+            if (user.response) {
+              setUser(user.response as UserMe);
+            }
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
       if (data.email !== user?.email) {
         setIsVerifyEmailModalOpen(true);
-      }
-      if (result?.response) {
-        const user = await getUserMe({ token: null });
-        if (user.response) {
-          setUser(user.response as UserMe);
-        }
       }
     } else {
       setIsVerifyEmailModalOpen(true);
@@ -103,10 +110,11 @@ const Settings = ({ interests }: SettingsProps) => {
         editRef.current.submitForm();
       }
     } else {
+      setIsLoading(true);
       const user = await updateUser({
         interests: interestsPayload.map(item => item.id),
         type: 'interests',
-      });
+      }).finally(() => setIsLoading(false));
       if (user?.response) {
         setInterestsPayload(user.response.interests);
         const getUser = await getUserMe({ token: null });
@@ -183,6 +191,7 @@ const Settings = ({ interests }: SettingsProps) => {
           rounded="xl"
           customStyles="max-w-[101px]"
           onClick={onSubmit}
+          loading={isLoading}
           disabled={
             activeTab === 'edit'
               ? !isDirty

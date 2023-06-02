@@ -1,9 +1,8 @@
 import { newsletterVerifyOwnership } from '@/actions/newsletters';
-import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -27,9 +26,6 @@ const LinkForm = ({
   setStep,
   step,
 }: NewsletterFormProps) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -37,23 +33,19 @@ const LinkForm = ({
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
+  const mutation = useMutation(newsletterVerifyOwnership);
   const onSubmit: SubmitHandler<ValidationSchema> = async data => {
-    setLoading(true);
-    try {
-      const response = await newsletterVerifyOwnership({ link: data.link });
-      if (response && response.id) {
-        setStep(step + 1);
-        setPayload({
-          ...payload,
-          id: response.id,
-          link: response.link,
-          title: response.title,
-          description: response.description,
-          image: response.image,
-        });
-      }
-    } finally {
-      setLoading(false);
+    const response = await mutation.mutateAsync({ link: data.link });
+    if (response && response.id) {
+      setStep(step + 1);
+      setPayload({
+        ...payload,
+        id: response.id,
+        link: response.link,
+        title: response.title,
+        description: response.description,
+        image: response.image,
+      });
     }
   };
   return (
@@ -77,12 +69,12 @@ const LinkForm = ({
         />
       </div>
       <Button
-        label={loading ? 'Loading...' : 'Add'}
+        label="Add"
         size="full"
         rounded="xl"
         fontSize="md"
         type="submit"
-        disabled={loading}
+        loading={mutation.isLoading}
       />
     </form>
   );
