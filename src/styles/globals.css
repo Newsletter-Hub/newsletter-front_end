@@ -21,17 +21,18 @@
   background: #01aaed;
 }
 
-.interests-container {
-  position: relative;
-}
-
-.interests-container::after {
-  content: '';
-  display: block;
-  position: sticky;
-  bottom: 0;
-  height: 10px;
-  width: 100%;
-  background: linear-gradient(to top, white, transparent);
-  pointer-events: none;
+@media (max-width: 767px) {
+  .interests-container {
+    position: relative;
+  }
+  .interests-container::after {
+    content: '';
+    display: block;
+    position: sticky;
+    bottom: 0;
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to top, white, transparent);
+    pointer-events: none;
+  }
 }
