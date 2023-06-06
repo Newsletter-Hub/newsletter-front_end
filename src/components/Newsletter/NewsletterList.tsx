@@ -515,7 +515,7 @@ const NewslettersList = ({
                   variant="outlined-secondary"
                   onClick={handleOpenModal}
                   height="base"
-                  customStyles="md:w-full"
+                  customStyles="w-full md:max-w-[200px]"
                   label={
                     <span
                       className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
@@ -761,7 +761,7 @@ const NewslettersList = ({
                   )}
                 </Modal>
                 <Popover
-                  customTriggerStyles="w-[200px]"
+                  customTriggerStyles="md:w-[200px]"
                   triggerContent={
                     <div className="flex items-center justify-center md:gap-4 h-12">
                       <span className="whitespace-nowrap text-sm">
@@ -827,7 +827,7 @@ const NewslettersList = ({
                         src={
                           newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
                         }
-                        className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full mb-3 md:mb-0"
+                        className="lg:h-[224px] lg:w-[224px] md:h-[122px] md:w-[112px] h-[170px] rounded-[10px] object-cover w-full mb-3 md:mb-0"
                         alt="newsletter"
                         width={224}
                         height={224}
@@ -852,6 +852,7 @@ const NewslettersList = ({
                             {newsletter.pricing.charAt(0).toUpperCase() +
                               newsletter.pricing.slice(1)}
                           </span>
+                          <div className="w-1.5 h-1.5 bg-light-grey rounded-full md:hidden"></div>
                           <span className="text-sm text-grey">
                             {format(
                               parseISO(newsletter.createdAt),
@@ -931,17 +932,13 @@ const NewslettersList = ({
                           </div>
                         </div>
                         <div className="flex gap-2 justify-between w-full md:w-auto md:justify-normal">
-                          <Link
-                            href={newsletter.link}
-                            legacyBehavior
-                            passHref
-                            className="w-1/2"
-                          >
+                          <Link href={newsletter.link} legacyBehavior passHref>
                             <a target="_blank" rel="noopener noreferrer">
                               <Button
                                 label="Read Newsletter"
                                 rounded="xl"
                                 fontSize="md"
+                                customStyles="max-w-[150px] md:max-w-none"
                               />
                             </a>
                           </Link>
@@ -949,7 +946,7 @@ const NewslettersList = ({
                             <Button
                               rounded="xl"
                               fontSize="md"
-                              customStyles="md:!w-[140px] !w-[125px]"
+                              customStyles="md:!w-[140px] !min-w-[125px]"
                               loading={Boolean(followLoading === newsletter.id)}
                               onClick={() =>
                                 handleFollow({

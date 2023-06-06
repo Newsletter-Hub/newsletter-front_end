@@ -9,6 +9,7 @@ interface CreateReviewModalProps {
   open: boolean;
   handleClose: () => void;
   size?: 'base' | 'sm' | 'md';
+  spacing?: 'base' | 'sm';
   customStyles?: string;
 }
 
@@ -17,6 +18,7 @@ const Modal = ({
   open,
   handleClose,
   size = 'base',
+  spacing = 'base',
   customStyles,
 }: CreateReviewModalProps) => {
   const maxWidth =
@@ -28,7 +30,11 @@ const Modal = ({
           <Dialog.Overlay className="bg-black/10 fixed inset-0 z-50">
             <Dialog.Content
               style={{ maxWidth: maxWidth }}
-              className={`${styles['hide-scrollbar']} data-[state=open]:animate-contentShow top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[${maxWidth}] translate-x-[-50%] translate-y-[-50%] bg-white p-10 shadow-md rounded-3xl focus:outline-none absolute overflow-scroll ${customStyles}]`}
+              className={`${
+                styles['hide-scrollbar']
+              } data-[state=open]:animate-contentShow top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[${maxWidth}] translate-x-[-50%] translate-y-[-50%] bg-white p-10 ${
+                spacing === 'sm' && 'md:p-10 p-3'
+              } shadow-md rounded-3xl focus:outline-none absolute overflow-scroll ${customStyles}]`}
               onPointerDownOutside={handleClose}
             >
               {children}
