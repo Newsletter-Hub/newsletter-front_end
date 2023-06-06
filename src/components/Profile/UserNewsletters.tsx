@@ -43,7 +43,6 @@ const UserNewsletters = ({
           getNewslettersList={getNewslettersList}
           isSeparated={false}
           isRated={!isProfile}
-          isAuthor={!isProfile}
           isFollowEnable={!isProfile}
           type="newsletter"
           authorId={userId}

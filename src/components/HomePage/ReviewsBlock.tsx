@@ -14,12 +14,12 @@ import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
 import { useUser } from '@/contexts/UserContext';
 import StarIcon from '@/assets/icons/star';
 import Modal from '../Modal';
-import Avatar from '../Avatar';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import Input from '../Input';
 import { useMutation } from 'react-query';
+import ReviewModal from '../Modals/ReviewModal';
 
 interface ReviewsBlockProps {
   reviewData: ReviewResponse;
@@ -120,12 +120,15 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                     <p className="text-xl text-dark-blue">
                       {review.newsletter.title}
                     </p>
-                    <Link
-                      href={`/users/${review.reviewer.id}`}
-                      className="text-base text-dark-grey font-inter mb-2"
-                    >
-                      {review.reviewer.username}
-                    </Link>
+                    <p className="text-base text-dark-grey font-inter mb-2 max-w-[150px] xs:max-w-[300px] overflow-hidden text-ellipsis">
+                      reviewed by&nbsp;
+                      <Link
+                        href={`/users/${review.reviewer.id}`}
+                        className="text-base text-dark-grey font-inter"
+                      >
+                        {review.reviewer.username}
+                      </Link>
+                    </p>
                     <StarRating
                       readonly
                       value={review.rating}
@@ -153,91 +156,20 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                       onClick={() => setIsOpenReviewModal(review.newsletter.id)}
                     >
                       <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
-                      <Modal
+                      <ReviewModal
+                        review={review}
+                        register={register}
                         open={Boolean(
                           isOpenReviewModal === review.newsletter.id
                         )}
                         handleClose={() => {
                           setIsOpenReviewModal(false);
                         }}
-                      >
-                        <div>
-                          <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
-                            <Avatar
-                              src={
-                                review.newsletter?.addedByUser?.avatar as string
-                              }
-                              alt="avatar"
-                              width={112}
-                              height={112}
-                              className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-                              username={
-                                review.newsletter?.addedByUser?.username
-                              }
-                              customStyles="max-h-[112px] min-w-[112px]"
-                            />
-                            <div className="flex flex-col">
-                              <span className="font-medium text-lightBlack text-xl mb-3">
-                                {review.newsletter?.newsletterAuthor}
-                              </span>
-                              <div className="flex items-center mb-3">
-                                <StarRating
-                                  readonly
-                                  value={
-                                    review.newsletter?.addedByUser
-                                      ?.averageUserRating
-                                  }
-                                  customStyles="mr-2"
-                                />
-                                <span className="font-inter text-dark-grey text-sm mr-6">
-                                  {
-                                    review.newsletter?.addedByUser
-                                      ?.amountUserRatings
-                                  }
-                                </span>
-                                <span className="font-inter text-sm text-dark-grey">
-                                  <span className="font-bold">207</span>{' '}
-                                  Followers
-                                </span>
-                              </div>
-                              <span className="font-inter text-sm text-dark-grey">
-                                {review.newsletter.addedByUser?.description}
-                              </span>
-                            </div>
-                          </div>
-                          <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="flex gap-4 items-center mb-14">
-                              <span className="text-lightBlack font-semibold text-lg font-inter">
-                                Your rating
-                              </span>
-                              <StarRating
-                                error={Boolean(errors.rating)}
-                                errorText={errors.rating?.message}
-                                setValue={(index: number) =>
-                                  setValue('rating', index)
-                                }
-                              />
-                            </div>
-                            <Input
-                              variant="filled"
-                              placeholder="Go ahead, we are listening..."
-                              customStyles="mb-9 !w-full"
-                              register={{ ...register('comment') }}
-                            />
-                            <div className="flex justify-center">
-                              <Button
-                                label="Add"
-                                type="submit"
-                                size="full"
-                                customStyles="max-w-[400px]"
-                                rounded="xl"
-                                height="sm"
-                                loading={reviewMutation.isLoading}
-                              />
-                            </div>
-                          </form>
-                        </div>
-                      </Modal>
+                        setValue={setValue}
+                        errors={errors}
+                        loading={reviewMutation.isLoading}
+                        onSubmit={handleSubmit(onSubmit)}
+                      />
                     </div>
                   </div>
                 )}
