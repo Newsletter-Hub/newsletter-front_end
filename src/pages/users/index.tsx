@@ -21,6 +21,7 @@ import PlusIcon from '@/assets/icons/plus';
 import SearchResultsIcon from '@/assets/icons/searchResults';
 import SortIcon from '@/assets/icons/sort';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
 
 const sortTypes: SortType[] = [
   {
@@ -63,8 +64,11 @@ const UsersList = ({ usersList }: UsersListProps) => {
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState(usersList);
   const [search, setSearch] = useState((router.query.search as string) || '');
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleChangeSearch = debounce(async (value: string) => {
+    setSearchLoading(true);
     setSearch(value);
     const usersListResponse = await getUsersList({
       page: 1,
@@ -73,7 +77,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
       orderDirection:
         sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
       search: value,
-    });
+    }).finally(() => setSearchLoading(false));
     if (usersListResponse) {
       setUsersData(usersListResponse as UserList);
     }
@@ -93,6 +97,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
     }
   };
   const loadMoreUsers = async () => {
+    setLoadMoreLoading(true);
     setPage(prevPage => prevPage + 1);
 
     const usersListResponse = await getUsersList({
@@ -101,7 +106,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
       order: sortTypes[choosedSortType].value,
       orderDirection:
         sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
-    });
+    }).finally(() => setLoadMoreLoading(false));
 
     if (usersListResponse) {
       setUsersData(usersListResponse as UserList);
@@ -147,7 +152,6 @@ const UsersList = ({ usersList }: UsersListProps) => {
       }
     }
   };
-  console.log(usersData);
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
       <div className="max-w-[1280px]">
@@ -163,11 +167,14 @@ const UsersList = ({ usersList }: UsersListProps) => {
             defaultValue={(router.query.search as string) || ''}
           />
           <Popover
+            customTriggerStyles="w-[200px]"
             triggerContent={
-              <span className="flex text-base justify-center items-center px-6 py-3 gap-4">
-                {sortTypes[choosedSortType].label}
-                <SortIcon />
-              </span>
+              <div className="flex items-center justify-center md:gap-4 h-12">
+                <span className="whitespace-nowrap text-sm">
+                  {sortTypes[choosedSortType].label}
+                </span>
+                <SortIcon className="min-w-4 min-h-4" />
+              </div>
             }
           >
             <div className="flex flex-col gap-[6px] py-[18px]">
@@ -191,7 +198,11 @@ const UsersList = ({ usersList }: UsersListProps) => {
             </div>
           </Popover>
         </div>
-        {usersData?.users?.length ? (
+        {searchLoading ? (
+          <div className="pt-10">
+            <Loading />
+          </div>
+        ) : usersData?.users?.length ? (
           <>
             <div className="flex flex-col pt-10 gap-16 mb-8">
               {usersData.users.map((item, index) => (
@@ -256,6 +267,7 @@ const UsersList = ({ usersList }: UsersListProps) => {
                 variant="outlined-secondary"
                 size="full"
                 onClick={loadMoreUsers}
+                loading={loadMoreLoading}
               />
             )}
           </>
