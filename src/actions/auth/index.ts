@@ -161,7 +161,7 @@ export const changePassword = async ({
 
 export const logout = ({ setUser }: LogOutPayload) => {
   try {
-    ky.post('/api/logout', { credentials: 'include' }).then(() => {
+    api.post('auth/sign-out', { credentials: 'include' }).then(() => {
       Cookies.remove('user');
       setUser(null);
     });
