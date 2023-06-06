@@ -19,9 +19,7 @@ import { UserMe } from '@/types/user';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
-import Input from '@/components/Input';
 import Loading from '@/components/Loading';
-import Modal from '@/components/Modal';
 import StarRating from '@/components/StarRating';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
@@ -32,7 +30,6 @@ import PlusIcon from '@/assets/icons/plus';
 import {
   addToBookmark,
   deleteBookmark,
-  getBookmarkById,
 } from '../../actions/newsletters/bookmarks';
 import {
   GetNewsletterResponse,
@@ -57,15 +54,10 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-const NewsletterPage = ({
-  newsletterData,
-  reviews,
-  isBookmark,
-}: NewsletterPageProps) => {
+const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
   const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookmarkState, setBookmarkState] = useState(isBookmark);
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const router = useRouter();
@@ -119,10 +111,13 @@ const NewsletterPage = ({
       const response = await addToBookmark({
         newsletterId: router.query.newsletterId as string,
       });
-      if (response.error) {
-        console.error(response?.error);
-      } else if (!response.error) {
-        setBookmarkState('added');
+      if (response.bookmark) {
+        const newsletterResponse = await getNewsletter({
+          id: +router.query.newsletterId,
+        });
+        if (newsletterResponse.newsletterData) {
+          setNewsletter(newsletterResponse.newsletterData);
+        }
       }
     }
   };
@@ -132,17 +127,24 @@ const NewsletterPage = ({
       const response = await deleteBookmark({
         newsletterId: router.query.newsletterId as string,
       });
-      if (response.error) {
-        console.error(response?.error);
-      } else if (!response.error) {
-        setBookmarkState('none');
+      if (response.isDeleted) {
+        const newsletterResponse = await getNewsletter({
+          id: +router.query.newsletterId,
+        });
+        if (newsletterResponse.newsletterData) {
+          setNewsletter(newsletterResponse.newsletterData);
+        }
       }
     }
   };
 
-  const handleBookmarkClick = () => {
+  const handleBookmarkClick = ({
+    isInBookmarks,
+  }: {
+    isInBookmarks: boolean;
+  }) => {
     if (user) {
-      bookmarkState === 'none' ? handleAddBookmark() : handleDeleteBookmark();
+      !isInBookmarks ? handleAddBookmark() : handleDeleteBookmark();
     } else {
       router.push('/sign-up');
     }
@@ -259,12 +261,12 @@ const NewsletterPage = ({
             onClick={() =>
               handleFollow({
                 entityId: newsletter.id,
-                followed: newsletter.followed,
+                followed: newsletter.isFollower,
               })
             }
-            variant={newsletter.followed ? 'outlined-secondary' : 'primary'}
+            variant={newsletter.isFollower ? 'outlined-secondary' : 'primary'}
             label={
-              newsletter.followed ? (
+              newsletter.isFollower ? (
                 'Following'
               ) : (
                 <span className="flex items-center gap-2">
@@ -310,13 +312,15 @@ const NewsletterPage = ({
           <div className="flex gap-10">
             <div
               className="flex gap-2 cursor-pointer"
-              onClick={handleBookmarkClick}
+              onClick={() =>
+                handleBookmarkClick({ isInBookmarks: newsletter.isInBookmarks })
+              }
             >
               <BookmarkIcon
-                className={`${bookmarkState === 'added' && 'fill-dark-blue'}`}
+                className={`${newsletter.isInBookmarks && 'fill-dark-blue'}`}
               />
               <span className="font-inter text-sm text-dark-grey">
-                {bookmarkState === 'added' ? 'Bookmarked' : 'Add to bookmarks'}
+                {newsletter.isInBookmarks ? 'Bookmarked' : 'Add to bookmarks'}
               </span>
             </div>
             {/* logic on future */}
@@ -412,12 +416,11 @@ const NewsletterPage = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { newsletterId } = context.params as { newsletterId: string };
-  const user: UserMe = context.req.cookies.user
-    ? JSON.parse(context.req.cookies.user as string)
-    : undefined;
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken ? cookies.accessToken : undefined;
   const response: GetNewsletterResponse = await getNewsletter({
     id: parseInt(newsletterId),
-    myId: user && user.id ? +user.id : undefined,
+    token,
   });
 
   const reviewsResponse: GetReviewResponse = await getReviews({
@@ -426,19 +429,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     pageSize: 5,
   });
 
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken ? cookies.accessToken : null;
-
-  let isBookmark = 'none';
-
-  if (!token) {
-    isBookmark = 'unauthorized';
-  } else {
-    const bookmarkResponse = await getBookmarkById({ newsletterId, token });
-    if (bookmarkResponse.bookmark) {
-      isBookmark = 'added';
-    }
-  }
   if (response.error || reviewsResponse.error) {
     return {
       props: {
@@ -452,7 +442,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       newsletterData: response.newsletterData,
       reviews: reviewsResponse.reviews,
-      isBookmark: isBookmark,
     },
   };
 };

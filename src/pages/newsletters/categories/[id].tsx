@@ -8,6 +8,7 @@ import { UserMe } from '@/types/user';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
+import parseCookies from 'next-cookies';
 
 const NewslettersPage = ({
   newslettersListData,
@@ -34,6 +35,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
       ? [+categoryId]
       : [];
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken ? cookies.accessToken : undefined;
   const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
@@ -42,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoriesIds,
     search,
     myId: user && user.id ? +user.id : undefined,
+    token,
   });
   const interests = await getInterests();
   if (!newsletterList || !interests) {
