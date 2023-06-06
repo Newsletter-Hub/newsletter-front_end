@@ -155,6 +155,7 @@ const NewslettersList = ({
   const [filtersLoading, setFiltersLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [moreNewslettersLoading, setMoreNewslettersLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState<boolean | number>(false);
 
   const filtersCount = useMemo(() => {
     let count = 0;
@@ -399,6 +400,7 @@ const NewslettersList = ({
     if (!user) {
       router.push('/sign-up');
     } else {
+      setFollowLoading(entityId);
       if (followed) {
         const response = await unfollow({ entityId, entityType: 'Newsletter' });
         if (response?.ok) {
@@ -452,6 +454,7 @@ const NewslettersList = ({
           }
         }
       }
+      setFollowLoading(false);
     }
   };
 
@@ -907,6 +910,7 @@ const NewslettersList = ({
                               rounded="xl"
                               fontSize="md"
                               customStyles="!w-[140px]"
+                              loading={Boolean(followLoading === newsletter.id)}
                               onClick={() =>
                                 handleFollow({
                                   entityId: newsletter.id,
