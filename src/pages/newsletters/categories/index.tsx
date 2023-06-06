@@ -16,37 +16,62 @@ interface CategoriesProps {
 
 const Categories = ({ categories }: CategoriesProps) => {
   return (
-    <div className="md:px-[10%] px-[5%] pt-20">
-      <h1 className="text-dark-blue text-7xl font-medium mb-10">Categories</h1>
-      <div className="flex flex-wrap -m-2">
-        {categories.map(category => (
-          <Link
-            href={`categories/${category.id}`}
-            key={category.id}
-            className="md:w-1/4 w-1/2 p-2"
-          >
-            <div>
-              <div className="h-fit">
-                <Image
-                  src={category.image}
-                  alt="category"
-                  width={302}
-                  height={204}
-                  className="rounded-t-lg object-cover"
-                  priority
-                />
+    <div className="md:pt-20 w-full flex justify-center pt-3">
+      <div className="max-w-[1280px] lg:px-10 px-3">
+        <h1 className="text-dark-blue xs:text-7xl font-medium mb-10 text-5xl">
+          Categories
+        </h1>
+        <div className="flex flex-wrap -m-2">
+          {categories.map(category => {
+            const categoryDiv = (
+              <div className="hover:!text-primary text-dark-blue">
+                <div className="h-fit">
+                  <Image
+                    src={category.image}
+                    alt="category"
+                    width={302}
+                    height={204}
+                    className={`rounded-t-lg object-cover ${
+                      !category.newsletterCount && 'grayscale'
+                    }`}
+                    priority
+                  />
+                </div>
+                <div className="bg-light-porcelain md:p-4 p-2 rounded-b-lg max-w-[302px] h-[88px]">
+                  <p
+                    className={`${
+                      !category.newsletterCount && 'text-dark-grey'
+                    } font-semibold font-inter xl:text-lg xs:text-base text-sm sm:mb-1 text-ellipsis overflow-hidden max-w-[200px`}
+                  >
+                    {category.interestName}
+                  </p>
+                  <span className="text-dark-grey font-inter xs:text-sm text-xs">
+                    {category.newsletterCount} Newsletter
+                    {category.newsletterCount > 1 && 's'}
+                  </span>
+                </div>
               </div>
-              <div className="bg-light-porcelain p-4 rounded-b-lg max-w-[302px] min-h-[108px] xl:min-h-0">
-                <p className="text-dark-blue font-semibold font-inter xl:text-lg text-base mb-1 xl:whitespace-nowrap">
-                  {category.interestName}
-                </p>
-                <p className="text-dark-grey font-inter text-sm">
-                  {category.newsletterCount} Newsletter
-                </p>
-              </div>
-            </div>
-          </Link>
-        ))}
+            );
+
+            if (category.newsletterCount) {
+              return (
+                <Link
+                  href={`categories/${category.id}`}
+                  key={category.id}
+                  className="md:w-1/3 lg:w-1/4 w-1/2 p-2"
+                >
+                  {categoryDiv}
+                </Link>
+              );
+            } else {
+              return (
+                <div key={category.id} className="md:w-1/3 lg:w-1/4 w-1/2 p-2">
+                  {categoryDiv}
+                </div>
+              );
+            }
+          })}
+        </div>
       </div>
     </div>
   );
