@@ -47,6 +47,7 @@ import StarIcon from '@/assets/icons/star';
 
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
+import ReviewModal from '../Modals/ReviewModal';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -66,7 +67,6 @@ export interface NewslettersPageProps {
   type: 'bookmark' | 'newsletter';
   isSeparated?: boolean;
   isRated?: boolean;
-  isAuthor?: boolean;
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
   authorId?: number;
@@ -121,7 +121,6 @@ const NewslettersList = ({
   type,
   isSeparated = true,
   isRated = true,
-  isAuthor = true,
   isFollowEnable = true,
   isNewsletterFollowed = false,
   authorId,
@@ -777,28 +776,8 @@ const NewslettersList = ({
                   </div>
                   <div className="w-full flex flex-col justify-between">
                     <div
-                      className={`flex flex-col md:flex-row mb-4 font-inter ${
-                        isAuthor ? 'justify-between' : 'justify-end'
-                      } md:items-center`}
+                      className={`flex flex-col md:flex-row mb-4 font-inter md:items-center`}
                     >
-                      {isAuthor && (
-                        <div className="flex gap-2 items-center">
-                          <Avatar
-                            src={newsletter.addedByUser?.avatar}
-                            width={40}
-                            height={40}
-                            alt="author avatar"
-                            username={newsletter.addedByUser?.username}
-                            className="rounded-full max-h-[40px] max-w-full object-cover min-w-[40px]"
-                          />
-                          <Link
-                            href={`/users/${newsletter.addedByUser?.id}`}
-                            className="text-sm text-dark-blue"
-                          >
-                            {newsletter.addedByUser?.username}
-                          </Link>
-                        </div>
-                      )}
                       <div className="flex gap-6 items-center">
                         {newsletter.averageDuration && (
                           <>
@@ -870,82 +849,16 @@ const NewslettersList = ({
                             <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
                           </div>
                         )}
-                        <Modal
+                        <ReviewModal
+                          register={register}
+                          setValue={setValue}
+                          errors={errors}
+                          newsletter={newsletter}
                           open={Boolean(isOpenReviewModal === newsletter.id)}
                           handleClose={() => setIsOpenReviewModal(false)}
-                        >
-                          <div>
-                            <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
-                              <Avatar
-                                src={newsletter?.addedByUser?.avatar as string}
-                                alt="avatar"
-                                width={112}
-                                height={112}
-                                className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-                                username={newsletter?.addedByUser?.username}
-                                customStyles="max-h-[112px] min-w-[112px]"
-                              />
-                              <div className="flex flex-col">
-                                <span className="font-medium text-lightBlack text-xl mb-3">
-                                  {newsletter?.newsletterAuthor}
-                                </span>
-                                <div className="flex items-center mb-3">
-                                  <StarRating
-                                    readonly
-                                    value={
-                                      newsletter?.addedByUser?.averageUserRating
-                                    }
-                                    customStyles="mr-2"
-                                  />
-                                  <span className="font-inter text-dark-grey text-sm mr-6">
-                                    {newsletter?.addedByUser?.amountUserRatings}
-                                  </span>
-                                  <span className="font-inter text-sm text-dark-grey">
-                                    <span className="font-bold">207</span>{' '}
-                                    Followers
-                                  </span>
-                                </div>
-                                <span className="font-inter text-sm text-dark-grey">
-                                  I create and curate content for both the blog
-                                  and our training courses. He also directs the
-                                  market research and strategic planning the
-                                  site.
-                                </span>
-                              </div>
-                            </div>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                              <div className="flex gap-4 items-center mb-14">
-                                <span className="text-lightBlack font-semibold text-lg font-inter">
-                                  Your rating
-                                </span>
-                                <StarRating
-                                  error={Boolean(errors.rating)}
-                                  errorText={errors.rating?.message}
-                                  setValue={(index: number) =>
-                                    setValue('rating', index)
-                                  }
-                                />
-                              </div>
-                              <Input
-                                variant="filled"
-                                placeholder="Go ahead, we are listening..."
-                                customStyles="!w-full mb-9"
-                                register={{ ...register('comment') }}
-                              />
-                              <div className="flex justify-center">
-                                <Button
-                                  label="Add"
-                                  type="submit"
-                                  size="full"
-                                  customStyles="max-w-[400px]"
-                                  rounded="xl"
-                                  height="sm"
-                                  loading={reviewMutation.isLoading}
-                                />
-                              </div>
-                            </form>
-                          </div>
-                        </Modal>
+                          onSubmit={handleSubmit(onSubmit)}
+                          loading={reviewMutation.isLoading}
+                        />
                       </div>
                       <div className="flex gap-2">
                         <Link href={newsletter.link}>

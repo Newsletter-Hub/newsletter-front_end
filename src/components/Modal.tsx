@@ -25,7 +25,7 @@ const Modal = ({
     <div>
       <Dialog.Root open={open}>
         <Dialog.Portal>
-          <Dialog.Overlay className="bg-black/10 fixed inset-0">
+          <Dialog.Overlay className="bg-black/10 fixed inset-0 z-50">
             <Dialog.Content
               style={{ maxWidth: maxWidth }}
               className={`${styles['hide-scrollbar']} data-[state=open]:animate-contentShow top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[${maxWidth}] translate-x-[-50%] translate-y-[-50%] bg-white p-10 shadow-md rounded-3xl focus:outline-none absolute overflow-scroll ${customStyles}]`}

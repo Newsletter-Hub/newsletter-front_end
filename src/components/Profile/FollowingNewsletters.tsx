@@ -23,7 +23,6 @@ const FollowingNewsletters = ({
         getNewslettersList={getMySubscriptions}
         isSeparated={false}
         isRated={true}
-        isAuthor={true}
         isFollowEnable={true}
         isNewsletterFollowed={isProfile}
         type="newsletter"

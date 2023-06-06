@@ -37,6 +37,7 @@ export interface NewsletterData {
   createdAt: string;
   followed: boolean;
   followersIds: number[];
+  amountFollowers: number;
 }
 
 export interface Newsletter {

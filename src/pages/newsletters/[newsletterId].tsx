@@ -42,6 +42,7 @@ import {
 } from '../../actions/newsletters/index';
 import { createReview, getReviews } from '../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
+import ReviewModal from '@/components/Modals/ReviewModal';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -213,47 +214,6 @@ const NewsletterPage = ({
         <h1 className="text-lightBlack text-7xl font-medium mb-10">
           {newsletter?.title}
         </h1>
-        {newsletter?.addedByUser && (
-          <div className="flex gap-6 mb-10">
-            <Avatar
-              src={newsletter?.addedByUser?.avatar as string}
-              alt="avatar"
-              width={112}
-              height={112}
-              className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-              customStyles="max-h-[112px] min-w-[112px]"
-              username={newsletter.addedByUser.username}
-            />
-            <div>
-              <div className="flex gap-4 items-center mb-4">
-                <span className="font-medium text-lightBlack text-xl">
-                  {newsletter?.newsletterAuthor}
-                </span>
-              </div>
-              <div className="flex items-center mb-3">
-                <StarRating
-                  readonly
-                  value={newsletter.addedByUser.averageUserRating}
-                  customStyles="mr-2"
-                />
-                <span className="font-inter text-dark-grey text-sm mr-6">
-                  {newsletter.addedByUser.amountUserRatings}
-                </span>
-                <span className="font-inter text-sm text-dark-grey">
-                  <span className="font-bold">
-                    {newsletter.addedByUser.amountUserFollowers}
-                  </span>{' '}
-                  Followers
-                </span>
-              </div>
-              {newsletter.addedByUser.description && (
-                <span className="font-inter text-sm text-dark-grey mb-10">
-                  {newsletter.addedByUser.description}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
         {newsletter?.image && (
           <Image
             src={newsletter.image || ''}
@@ -380,73 +340,16 @@ const NewsletterPage = ({
           customStyles="!px-8 mb-8"
           onClick={handleOpenModal}
         />
-        <Modal open={isModalOpen} handleClose={handleModalClose}>
-          <div>
-            <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
-              <Avatar
-                src={newsletter?.addedByUser?.avatar as string}
-                alt="avatar"
-                width={112}
-                height={112}
-                className="rounded-full max-h-[112px] max-w-full object-cover min-w-[112px]"
-                customStyles="max-h-[112px] min-w-[112px]"
-                username={newsletter?.addedByUser?.username}
-              />
-              <div className="flex flex-col">
-                <span className="font-medium text-lightBlack text-xl mb-3">
-                  {newsletter?.newsletterAuthor}
-                </span>
-                <div className="flex items-center mb-3">
-                  <StarRating
-                    readonly
-                    value={newsletter?.addedByUser?.averageUserRating}
-                    customStyles="mr-2"
-                  />
-                  <span className="font-inter text-dark-grey text-sm mr-6">
-                    {newsletter?.addedByUser?.amountUserRatings}
-                  </span>
-                  <span className="font-inter text-sm text-dark-grey">
-                    <span className="font-bold">207</span> Followers
-                  </span>
-                </div>
-                <span className="font-inter text-sm text-dark-grey">
-                  I create and curate content for both the blog and our training
-                  courses. He also directs the market research and strategic
-                  planning the site.
-                </span>
-              </div>
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex gap-4 items-center mb-14">
-                <span className="text-lightBlack font-semibold text-lg font-inter">
-                  Your rating
-                </span>
-                <StarRating
-                  error={Boolean(errors.rating)}
-                  errorText={errors.rating?.message}
-                  setValue={(index: number) => setValue('rating', index)}
-                />
-              </div>
-              <Input
-                variant="filled"
-                placeholder="Go ahead, we are listening..."
-                customStyles="!w-full mb-9"
-                register={{ ...register('comment') }}
-              />
-              <div className="flex justify-center">
-                <Button
-                  label="Add"
-                  type="submit"
-                  size="full"
-                  customStyles="max-w-[400px]"
-                  rounded="xl"
-                  height="sm"
-                  loading={reviewMutation.isLoading}
-                />
-              </div>
-            </form>
-          </div>
-        </Modal>
+        <ReviewModal
+          register={register}
+          setValue={setValue}
+          errors={errors}
+          newsletter={newsletter}
+          open={isModalOpen}
+          handleClose={handleModalClose}
+          loading={reviewMutation.isLoading}
+          onSubmit={handleSubmit(onSubmit)}
+        />
         <div className="mb-8">
           {Boolean(reviewsData.reviews.length) &&
             reviewsData.reviews.map((review, index) => (
