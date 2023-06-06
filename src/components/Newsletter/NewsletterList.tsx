@@ -489,13 +489,13 @@ const NewslettersList = ({
   return (
     <div
       className={`flex justify-center items-center flex-col ${
-        isSeparated && 'pt-20 px-3'
+        isSeparated && 'md:pt-20 pt-3 px-3'
       }`}
     >
       <div className="xl:w-[1280px] max-w-[1280px] w-[300px] xs:w-[350px] sm:w-[400px] md:w-fit px-3">
         {isSeparated && (
           <>
-            <h1 className="text-dark-blue md:text-7xl text-4xl font-medium mb-10">
+            <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
               {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
             </h1>
             <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[950px] flex-col md:flex-row gap-2 md:gap-0">
@@ -803,11 +803,11 @@ const NewslettersList = ({
             !newslettersData.newsletters ? (
               <div
                 className={`flex flex-col justify-center items-center ${
-                  isSeparated && 'pt-16'
+                  isSeparated && 'md:pt-16'
                 }`}
               >
                 <SearchResultsIcon />
-                <span className="text-5xl text-lightBlack">
+                <span className="text-5xl text-lightBlack text-center">
                   Sorry! We couldn’t find anything
                 </span>
               </div>
@@ -852,7 +852,6 @@ const NewslettersList = ({
                             {newsletter.pricing.charAt(0).toUpperCase() +
                               newsletter.pricing.slice(1)}
                           </span>
-                          <div className="w-1.5 h-1.5 bg-light-grey rounded-full md:hidden"></div>
                           <span className="text-sm text-grey">
                             {format(
                               parseISO(newsletter.createdAt),
@@ -896,7 +895,8 @@ const NewslettersList = ({
                                 )
                               }
                             >
-                              {newsletter.isInBookmarks ? (
+                              {newsletter.isInBookmarks ||
+                              type === 'bookmark' ? (
                                 <BookmarkIcon className="cursor-pointer fill-dark-blue" />
                               ) : (
                                 <BookmarkPlusIcon className="cursor-pointer" />
