@@ -13,11 +13,9 @@ import { addToBookmark } from '@/actions/newsletters/bookmarks';
 import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
 import { useUser } from '@/contexts/UserContext';
 import StarIcon from '@/assets/icons/star';
-import Modal from '../Modal';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import Input from '../Input';
 import { useMutation } from 'react-query';
 import ReviewModal from '../Modals/ReviewModal';
 

@@ -50,29 +50,31 @@ const ReviewModal = ({
     return null;
   }
   return (
-    <Modal open={open} handleClose={handleClose}>
-      <div>
-        <div className="flex gap-6 border-b border-b-light-grey pb-6 mb-6">
+    <Modal open={open} handleClose={handleClose} spacing="sm">
+      <div className="pt-10 md:pt-0">
+        <div className="flex flex-col md:flex-row gap-6 border-b border-b-light-grey md:pb-6 pb-3 md:mb-6 mb-3">
           <Image
             src={data.image || 'https://i.imgur.com/kZMNj7Q.jpeg'}
             alt="avatar"
             width={96}
             height={96}
-            className="rounded-[5px] h-[96px] w-[96px] object-cover object-center"
+            className="rounded-[5px] md:h-[96px] md:w-[96px] object-cover object-center w-full"
           />
           <div className="flex flex-col">
             <span className="font-medium text-lightBlack text-xl mb-3">
               {data.title}
             </span>
-            <div className="flex items-center mb-3">
-              <StarRating
-                readonly
-                value={data.averageRating}
-                customStyles="mr-2"
-              />
-              <span className="font-inter text-dark-grey text-sm mr-6">
-                {data.amountFollowers}
-              </span>
+            <div className="flex md:items-center mb-3 flex-col md:flex-row">
+              <div className="flex items-center mb-2 md:mb-0">
+                <StarRating
+                  readonly
+                  value={data.averageRating}
+                  customStyles="mr-2"
+                />
+                <span className="font-inter text-dark-grey text-sm mr-6">
+                  {data.amountFollowers}
+                </span>
+              </div>
               <span className="font-inter text-sm text-dark-grey">
                 <span className="font-bold">{data.amountFollowers}</span>{' '}
                 Followers
@@ -84,7 +86,7 @@ const ReviewModal = ({
           </div>
         </div>
         <form onSubmit={onSubmit}>
-          <div className="flex gap-4 items-center mb-14">
+          <div className="flex gap-4 items-center md:mb-14 mb-5 flex-col md:flex-row">
             <span className="text-lightBlack font-semibold text-lg font-inter">
               Your rating
             </span>
