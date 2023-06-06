@@ -16,7 +16,7 @@ interface CategoriesProps {
 
 const Categories = ({ categories }: CategoriesProps) => {
   return (
-    <div className="pt-20 w-full flex justify-center">
+    <div className="md:pt-20 w-full flex justify-center pt-3">
       <div className="max-w-[1280px] lg:px-10 px-3">
         <h1 className="text-dark-blue xs:text-7xl font-medium mb-10 text-5xl">
           Categories
@@ -24,31 +24,31 @@ const Categories = ({ categories }: CategoriesProps) => {
         <div className="flex flex-wrap -m-2">
           {categories.map(category => {
             const categoryDiv = (
-              <div>
+              <div className="hover:!text-primary text-dark-blue">
                 <div className="h-fit">
                   <Image
                     src={category.image}
                     alt="category"
                     width={302}
                     height={204}
-                    className="rounded-t-lg object-cover"
+                    className={`rounded-t-lg object-cover ${
+                      !category.newsletterCount && 'grayscale'
+                    }`}
                     priority
                   />
                 </div>
                 <div className="bg-light-porcelain md:p-4 p-2 rounded-b-lg max-w-[302px] h-[88px]">
                   <p
                     className={`${
-                      category.newsletterCount
-                        ? 'text-dark-blue'
-                        : 'text-dark-grey'
-                    } font-semibold font-inter xl:text-lg xs:text-base text-sm sm:mb-1 text-ellipsis overflow-hidden max-w-[200px]`}
+                      !category.newsletterCount && 'text-dark-grey'
+                    } font-semibold font-inter xl:text-lg xs:text-base text-sm sm:mb-1 text-ellipsis overflow-hidden max-w-[200px`}
                   >
                     {category.interestName}
                   </p>
-                  <p className="text-dark-grey font-inter xs:text-sm text-xs">
+                  <span className="text-dark-grey font-inter xs:text-sm text-xs">
                     {category.newsletterCount} Newsletter
                     {category.newsletterCount > 1 && 's'}
-                  </p>
+                  </span>
                 </div>
               </div>
             );
