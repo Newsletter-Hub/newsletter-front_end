@@ -34,7 +34,7 @@ interface GetUsersListProps {
   order: string;
   orderDirection: string;
   search?: string;
-  myId?: number;
+  token?: string;
 }
 
 export const updateUser = async ({
@@ -138,25 +138,17 @@ export const getUsersList = async ({
   order,
   orderDirection,
   search = '',
-  myId,
+  token,
 }: GetUsersListProps) => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     const response: UserList = await api
       .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
       })
       .json();
-    const userId = user ? user.id : myId;
-    if (userId) {
-      response.users.forEach(user => {
-        if (user.followersIds.includes(userId as number)) {
-          user.followed = true;
-        }
-      });
-    }
     return response;
   } catch (error) {
     console.log(error);

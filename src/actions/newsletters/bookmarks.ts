@@ -87,7 +87,6 @@ export const getBookmarksList = async ({
   ratings,
   search,
   token,
-  myId,
 }: GetNewsletterListProps) => {
   try {
     const user = Cookies.get('user')
@@ -122,14 +121,7 @@ export const getBookmarksList = async ({
     const newslettersListData: NewslettersListData = await api
       .get(url, { headers: { Cookie: `accessToken=${token}` } })
       .json();
-    const userId = user ? user.id : myId;
-    if (userId) {
-      newslettersListData.newsletters.forEach(newsletter => {
-        if (newsletter.followersIds.includes(userId as number)) {
-          newsletter.followed = true;
-        }
-      });
-    }
+
     return { newslettersListData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get bookmarks');

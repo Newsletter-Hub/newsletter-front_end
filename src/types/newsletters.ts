@@ -35,7 +35,8 @@ export interface NewsletterData {
   averageDuration: number;
   pricing: string;
   createdAt: string;
-  followed: boolean;
+  isFollower: boolean;
+  isInBookmarks: boolean;
   followersIds: number[];
   amountFollowers: number;
 }

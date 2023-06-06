@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { SortType } from '@/types/sorting';
-import { UserMe } from '@/types/user';
+import parseCookies from 'next-cookies';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -274,16 +274,15 @@ const UsersList = ({ usersList }: UsersListProps) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const search = (context.query.search as string) || '';
-  const user: UserMe = context.req.cookies.user
-    ? JSON.parse(context.req.cookies.user as string)
-    : undefined;
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken;
   const usersList = await getUsersList({
     page: 1,
     pageSize: 9,
     order: 'dataJoined',
     orderDirection: 'DESC',
     search,
-    myId: user && user.id ? +user.id : undefined,
+    token,
   });
   return {
     props: {

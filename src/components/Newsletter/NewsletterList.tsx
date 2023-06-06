@@ -46,6 +46,7 @@ import StarIcon from '@/assets/icons/star';
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import ReviewModal from '../Modals/ReviewModal';
+import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -333,7 +334,30 @@ const NewslettersList = ({
     }
   };
   const handleAddBookmark = async (id: string) => {
-    await addToBookmark({ newsletterId: id });
+    const response = await addToBookmark({ newsletterId: id });
+    if (!response.error) {
+      const bookmarksResponse = await getNewslettersList({
+        page: 1,
+        pageSize: 6 * page,
+        order: sortTypes[choosedSortType].value,
+        orderDirection:
+          sortTypes[choosedSortType].value === 'rating' ||
+          sortTypes[choosedSortType].value === 'date'
+            ? 'DESC'
+            : 'ASC',
+        search,
+        pricingTypes: filtersPayload.pricingType.map(item =>
+          item.toLowerCase()
+        ),
+        ratings: filtersPayload.ratings,
+        categoriesIds: filtersPayload.categories,
+        durationFrom: filtersPayload.durationFrom,
+        durationTo: filtersPayload.durationTo,
+      });
+      if (bookmarksResponse.newslettersListData) {
+        setNewslettersData(bookmarksResponse.newslettersListData as Newsletter);
+      }
+    }
   };
 
   const handleDeleteBookmark = async (id: string) => {
@@ -363,12 +387,16 @@ const NewslettersList = ({
     }
   };
 
-  const handleClickBookmark = (id: string) => {
+  const handleClickBookmark = async (id: string, isInBookmarks?: boolean) => {
     if (user) {
       if (type === 'bookmark') {
         handleDeleteBookmark(id);
       } else if (type === 'newsletter') {
-        handleAddBookmark(id);
+        if (isInBookmarks) {
+          handleDeleteBookmark(id);
+        } else {
+          handleAddBookmark(id);
+        }
       }
     } else {
       router.push('/sign-up');
@@ -862,14 +890,17 @@ const NewslettersList = ({
                         <div className={`flex ${isRated && 'gap-6'} mr-10`}>
                           <div
                             onClick={() =>
-                              handleClickBookmark(String(newsletter.id))
+                              handleClickBookmark(
+                                String(newsletter.id),
+                                newsletter.isInBookmarks
+                              )
                             }
                           >
-                            <BookmarkIcon
-                              className={`cursor-pointer ${
-                                type === 'bookmark' && 'fill-dark-blue'
-                              }`}
-                            />
+                            {newsletter.isInBookmarks ? (
+                              <BookmarkIcon className="cursor-pointer fill-dark-blue" />
+                            ) : (
+                              <BookmarkPlusIcon className="cursor-pointer" />
+                            )}
                           </div>
                           {isRated && (
                             <div
@@ -914,16 +945,17 @@ const NewslettersList = ({
                               onClick={() =>
                                 handleFollow({
                                   entityId: newsletter.id,
-                                  followed: newsletter.followed,
+                                  followed: newsletter.isFollower,
                                 })
                               }
                               variant={
-                                isNewsletterFollowed || newsletter.followed
+                                isNewsletterFollowed || newsletter.isFollower
                                   ? 'outlined-secondary'
                                   : 'primary'
                               }
                               label={
-                                isNewsletterFollowed || newsletter.followed ? (
+                                isNewsletterFollowed ||
+                                newsletter.isFollower ? (
                                   'Following'
                                 ) : (
                                   <span className="flex items-center gap-2">

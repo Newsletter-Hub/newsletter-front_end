@@ -137,24 +137,20 @@ export const newsletterUpdate = async ({
 
 export const getNewsletter = async ({
   id,
-  myId,
+  token,
 }: {
   id: number;
-  myId?: number;
+  token?: string;
 }): Promise<GetNewsletterResponse> => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     const newsletterData: NewsletterData = await api
-      .get(`newsletters/${id}`)
+      .get(`newsletters/${id}`, {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
       .json();
-    console.log(newsletterData, 'here');
-    if (myId || (user && user.id)) {
-      newsletterData.followed = newsletterData.followersIds.includes(
-        myId || user.id
-      );
-    }
+
     return { newsletterData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
@@ -176,7 +172,7 @@ export const getNewslettersList = async ({
   ratings,
   search,
   authorId,
-  myId,
+  token,
 }: GetNewsletterListProps) => {
   try {
     const user = Cookies.get('user')
@@ -209,19 +205,14 @@ export const getNewslettersList = async ({
     if (search) url += `&search=${search}`;
     if (authorId) url += `&authorId=${authorId}`;
 
-    const newslettersListData: NewslettersListData = await api.get(url).json();
-    const userId = user ? user.id : myId;
-    if (userId || authorId) {
-      newslettersListData.newsletters.forEach(newsletter => {
-        if (
-          newsletter.followersIds.includes(
-            (userId as number) || (authorId as number)
-          )
-        ) {
-          newsletter.followed = true;
-        }
-      });
-    }
+    const newslettersListData: NewslettersListData = await api
+      .get(url, {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+
     return { newslettersListData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
@@ -246,7 +237,6 @@ export const getMySubscriptions = async ({
         headers: { Cookie: `accessToken=${token}` },
       })
       .json();
-    newslettersListData.newsletters.forEach(item => (item.followed = true));
 
     return { newslettersListData };
   } catch (error) {
