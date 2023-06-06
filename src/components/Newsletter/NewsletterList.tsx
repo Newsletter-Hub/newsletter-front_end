@@ -489,10 +489,10 @@ const NewslettersList = ({
   return (
     <div
       className={`flex justify-center items-center flex-col ${
-        isSeparated && 'pt-20 lg:px-[17%] px-[3%]'
+        isSeparated && 'pt-20 px-3'
       }`}
     >
-      <div className="max-w-[1280px] lg:min-w-[950px] min-w-[300px]">
+      <div className="xl:w-[1280px] max-w-[1280px] w-[300px] xs:w-[350px] sm:w-[400px] md:w-fit px-3">
         {isSeparated && (
           <>
             <h1 className="text-dark-blue md:text-7xl text-4xl font-medium mb-10">
@@ -510,12 +510,12 @@ const NewslettersList = ({
                   defaultValue={(router.query.search as string) || ''}
                 />
               </div>
-              <div className="flex md:gap-4 md:w-fit w-full gap-2">
+              <div className="flex md:gap-4 md:w-fit w-full gap-2 flex-col md:flex-row">
                 <Button
                   variant="outlined-secondary"
                   onClick={handleOpenModal}
                   height="base"
-                  customStyles="w-1/2 max-w-[150px]"
+                  customStyles="md:w-full"
                   label={
                     <span
                       className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
@@ -827,7 +827,7 @@ const NewslettersList = ({
                         src={
                           newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
                         }
-                        className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full"
+                        className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full mb-3 md:mb-0"
                         alt="newsletter"
                         width={224}
                         height={224}
@@ -835,9 +835,7 @@ const NewslettersList = ({
                       />
                     </div>
                     <div className="w-full flex flex-col justify-between">
-                      <div
-                        className={`flex flex-col md:flex-row mb-4 font-inter md:items-center`}
-                      >
+                      <div className="flex flex-col md:flex-row mb-4 font-inter items-center">
                         <div className="flex gap-6 items-center">
                           {newsletter.averageDuration && (
                             <>
@@ -868,10 +866,10 @@ const NewslettersList = ({
                       >
                         {newsletter.title}
                       </Link>
-                      <span className="font-inter text-base text-lightBlack mb-6 block">
+                      <span className="font-inter text-base text-lightBlack mb-6">
                         {newsletter.description}
                       </span>
-                      <div className="flex mb-6 gap-2">
+                      <div className="flex mb-6 gap-2 max-w-[300px] flex-wrap">
                         {newsletter.interests?.map(interest => (
                           <span
                             key={interest.id}
@@ -881,53 +879,64 @@ const NewslettersList = ({
                           </span>
                         ))}
                       </div>
-                      <div className="flex items-center">
-                        <StarRating
-                          readonly
-                          value={newsletter.averageRating}
-                          customStyles="flex-1"
-                        />
-                        <div className={`flex ${isRated && 'gap-6'} mr-10`}>
-                          <div
-                            onClick={() =>
-                              handleClickBookmark(
-                                String(newsletter.id),
-                                newsletter.isInBookmarks
-                              )
-                            }
-                          >
-                            {newsletter.isInBookmarks ? (
-                              <BookmarkIcon className="cursor-pointer fill-dark-blue" />
-                            ) : (
-                              <BookmarkPlusIcon className="cursor-pointer" />
-                            )}
-                          </div>
-                          {isRated && (
-                            <div
-                              onClick={() => {
-                                if (user) {
-                                  setIsOpenReviewModal(newsletter.id as number);
-                                } else {
-                                  router.push('/sign-up');
-                                }
-                              }}
-                            >
-                              <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
-                            </div>
-                          )}
-                          <ReviewModal
-                            register={register}
-                            setValue={setValue}
-                            errors={errors}
-                            newsletter={newsletter}
-                            open={Boolean(isOpenReviewModal === newsletter.id)}
-                            handleClose={() => setIsOpenReviewModal(false)}
-                            onSubmit={handleSubmit(onSubmit)}
-                            loading={reviewMutation.isLoading}
+                      <div className="flex items-center md:flex-row flex-col gap-5 md:gap-0 justify-between">
+                        <div className="flex w-full">
+                          <StarRating
+                            readonly
+                            value={newsletter.averageRating}
+                            customStyles="flex-1"
                           />
+                          <div className="flex md:mr-10">
+                            <div
+                              onClick={() =>
+                                handleClickBookmark(
+                                  String(newsletter.id),
+                                  newsletter.isInBookmarks
+                                )
+                              }
+                            >
+                              {newsletter.isInBookmarks ? (
+                                <BookmarkIcon className="cursor-pointer fill-dark-blue" />
+                              ) : (
+                                <BookmarkPlusIcon className="cursor-pointer" />
+                              )}
+                            </div>
+                            {isRated && (
+                              <div
+                                onClick={() => {
+                                  if (user) {
+                                    setIsOpenReviewModal(
+                                      newsletter.id as number
+                                    );
+                                  } else {
+                                    router.push('/sign-up');
+                                  }
+                                }}
+                              >
+                                <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer md:ml-6 ml-3" />
+                              </div>
+                            )}
+                            <ReviewModal
+                              register={register}
+                              setValue={setValue}
+                              errors={errors}
+                              newsletter={newsletter}
+                              open={Boolean(
+                                isOpenReviewModal === newsletter.id
+                              )}
+                              handleClose={() => setIsOpenReviewModal(false)}
+                              onSubmit={handleSubmit(onSubmit)}
+                              loading={reviewMutation.isLoading}
+                            />
+                          </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Link href={newsletter.link} legacyBehavior passHref>
+                        <div className="flex gap-2 justify-between w-full md:w-auto md:justify-normal">
+                          <Link
+                            href={newsletter.link}
+                            legacyBehavior
+                            passHref
+                            className="w-1/2"
+                          >
                             <a target="_blank" rel="noopener noreferrer">
                               <Button
                                 label="Read Newsletter"
@@ -940,7 +949,7 @@ const NewslettersList = ({
                             <Button
                               rounded="xl"
                               fontSize="md"
-                              customStyles="!w-[140px]"
+                              customStyles="md:!w-[140px] !w-[125px]"
                               loading={Boolean(followLoading === newsletter.id)}
                               onClick={() =>
                                 handleFollow({
