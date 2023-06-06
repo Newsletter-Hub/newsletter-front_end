@@ -198,7 +198,6 @@ const NewsletterPage = ({
   if (!reviewsData || !newsletter) {
     return <Loading />;
   }
-  console.log(newsletter);
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-[320px]">
       <div className="!max-w-[1280px]">

@@ -92,7 +92,6 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
   if (!reviewsInfo) {
     return <span>Failed to get reviews</span>;
   }
-  console.log(reviewsInfo);
   return (
     <div className="mb-24">
       <div className="flex flex-col">
