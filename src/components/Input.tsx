@@ -59,7 +59,8 @@ const Input = ({
     variants[variant],
     error && 'border-red',
     customStyles,
-    'font-inter w-full'
+    'font-inter w-full',
+    isSearch && 'focus:border-primary focus:border focus:outline-primary-light'
   );
   const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col w-full');
   const [value, setValue] = useState(defaultValue || '');

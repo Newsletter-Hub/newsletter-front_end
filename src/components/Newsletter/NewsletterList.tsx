@@ -11,7 +11,6 @@ import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useQuery } from 'react-query';
 
 import { Alegreya } from 'next/font/google';
 import Image from 'next/image';
@@ -28,7 +27,6 @@ import { Interest } from '@/types/interests';
 import { Newsletter, NewslettersListData } from '@/types/newsletters';
 
 import Accordion from '@/components/Accordion';
-import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
 import Input from '@/components/Input';
@@ -95,7 +93,7 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 
 const sortTypes: SortType[] = [
   {
-    label: 'Data added',
+    label: 'Date added',
     value: 'date',
   },
   {
@@ -155,6 +153,9 @@ const NewslettersList = ({
   });
   const [filtersChoosed, setFiltersChoosed] = useState(false);
   const [filtersLoading, setFiltersLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [moreNewslettersLoading, setMoreNewslettersLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState<boolean | number>(false);
 
   const filtersCount = useMemo(() => {
     let count = 0;
@@ -177,6 +178,7 @@ const NewslettersList = ({
 
   const loadMoreNewsletters = async () => {
     setPage(prevPage => prevPage + 1);
+    setMoreNewslettersLoading(true);
 
     const newsletterResponse = await getNewslettersList({
       page: 1,
@@ -189,7 +191,7 @@ const NewslettersList = ({
           ? 'DESC'
           : 'ASC',
       entity: 'Newsletter',
-    });
+    }).finally(() => setMoreNewslettersLoading(false));
 
     if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
@@ -226,9 +228,6 @@ const NewslettersList = ({
             ? 'DESC'
             : 'ASC',
         search: search,
-      }).finally(() => {
-        setFiltersLoading(false);
-        handleCloseModal();
       });
 
       if (newsletterResponse.newslettersListData) {
@@ -237,9 +236,12 @@ const NewslettersList = ({
         );
       }
     }
+    setFiltersLoading(false);
+    handleCloseModal();
   };
 
   const handleChangeSearch = debounce(async (value: string) => {
+    setSearchLoading(true);
     setSearch(value);
     const newsletterResponse = await getNewslettersList({
       page: 1,
@@ -256,7 +258,7 @@ const NewslettersList = ({
         sortTypes[choosedSortType].value === 'date'
           ? 'DESC'
           : 'ASC',
-    });
+    }).finally(() => setSearchLoading(false));
 
     if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
@@ -264,27 +266,48 @@ const NewslettersList = ({
   }, 500);
 
   const applyFilters = async () => {
-    setFiltersLoading(true);
-    const newsletterResponse = await getNewslettersList({
-      page: 1,
-      pageSize: 6,
-      order: sortTypes[choosedSortType].value,
-      search,
-      pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
-      ratings: filtersPayload.ratings,
-      categoriesIds: filtersPayload.categories,
-      durationFrom: filtersPayload.durationFrom,
-      durationTo: filtersPayload.durationTo,
-      orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ||
-        sortTypes[choosedSortType].value === 'date'
-          ? 'DESC'
-          : 'ASC',
-    }).finally(() => setFiltersLoading(false));
-    if (newsletterResponse.newslettersListData) {
+    if (filtersCount) {
+      setFiltersLoading(true);
+      const newsletterResponse = await getNewslettersList({
+        page: 1,
+        pageSize: 6,
+        order: sortTypes[choosedSortType].value,
+        search,
+        pricingTypes: filtersPayload.pricingType.map(item =>
+          item.toLowerCase()
+        ),
+        ratings: filtersPayload.ratings,
+        categoriesIds: filtersPayload.categories,
+        durationFrom: filtersPayload.durationFrom,
+        durationTo: filtersPayload.durationTo,
+        orderDirection:
+          sortTypes[choosedSortType].value === 'rating' ||
+          sortTypes[choosedSortType].value === 'date'
+            ? 'DESC'
+            : 'ASC',
+      }).finally(() => setFiltersLoading(false));
+      if (newsletterResponse.newslettersListData) {
+        handleCloseModal();
+        setFiltersChoosed(true);
+        setNewslettersData(
+          newsletterResponse.newslettersListData as Newsletter
+        );
+      }
+    } else {
+      setFilters({
+        categories: false,
+        pricingType: false,
+        duration: false,
+        rating: false,
+      });
+      setFiltersPayload({
+        categories: [],
+        pricingType: [],
+        durationFrom: 1,
+        durationTo: 60,
+        ratings: [],
+      });
       handleCloseModal();
-      setFiltersChoosed(true);
-      setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
     }
   };
 
@@ -377,6 +400,7 @@ const NewslettersList = ({
     if (!user) {
       router.push('/sign-up');
     } else {
+      setFollowLoading(entityId);
       if (followed) {
         const response = await unfollow({ entityId, entityType: 'Newsletter' });
         if (response?.ok) {
@@ -430,6 +454,7 @@ const NewslettersList = ({
           }
         }
       }
+      setFollowLoading(false);
     }
   };
 
@@ -500,8 +525,9 @@ const NewslettersList = ({
                           }}
                         >
                           <div className="pt-4 pl-9 grid md:grid-cols-2 gap-4">
-                            {interests?.map(interest => (
+                            {interests?.map((interest, index) => (
                               <Checkbox
+                                id={index}
                                 label={interest.interestName}
                                 key={interest.id}
                                 setChecked={value => {
@@ -542,6 +568,7 @@ const NewslettersList = ({
                         >
                           <div className="pt-4 pl-9 flex flex-col gap-2">
                             <Checkbox
+                              id="Free"
                               label="Free"
                               setChecked={value => {
                                 if (value) {
@@ -567,6 +594,7 @@ const NewslettersList = ({
                               )}
                             />
                             <Checkbox
+                              id="Paid"
                               label="Paid"
                               setChecked={value => {
                                 if (value) {
@@ -650,8 +678,9 @@ const NewslettersList = ({
                           }}
                         >
                           <div className="flex flex-col gap-[10px] pt-4 pl-9">
-                            {ratings.map(rating => (
+                            {ratings.map((rating, index) => (
                               <Checkbox
+                                id={index}
                                 key={rating}
                                 label={<StarRating value={rating} readonly />}
                                 setChecked={value => {
@@ -698,18 +727,20 @@ const NewslettersList = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="flex justify-center items-center min-h-[432px]">
+                    <div className="h-[432px]">
                       <Loading />
                     </div>
                   )}
                 </Modal>
                 <Popover
-                  triggerStyles="bg-porcelain font-inter rounded-lg text-lightBlack w-1/2"
+                  customTriggerStyles="w-[200px]"
                   triggerContent={
-                    <span className="flex md:text-base justify-center items-center px-6 md:gap-4 h-12 text-sm">
-                      {sortTypes[choosedSortType].label}
-                      <SortIcon />
-                    </span>
+                    <div className="flex items-center justify-center md:gap-4 h-12">
+                      <span className="whitespace-nowrap text-sm">
+                        {sortTypes[choosedSortType].label}
+                      </span>
+                      <SortIcon className="min-w-4 min-h-4" />
+                    </div>
                   }
                 >
                   <div className="flex flex-col gap-[6px] py-[18px]">
@@ -737,180 +768,192 @@ const NewslettersList = ({
             </div>
           </>
         )}
-        <div>
-          {!newslettersData ||
-          Boolean(!newslettersData.newsletters?.length) ||
-          !newslettersData.newsletters ? (
-            <div
-              className={`flex flex-col justify-center items-center ${
-                isSeparated && 'pt-16'
-              }`}
-            >
-              <SearchResultsIcon />
-              <span className="text-5xl text-lightBlack">
-                Sorry! We couldn’t find anything
-              </span>
-            </div>
-          ) : (
-            newslettersData.newsletters.map((newsletter, index) => {
-              return (
-                <div
-                  key={newsletter.id}
-                  className={`md:flex mb-8 gap-8 pb-8 flex-col md:flex-row ${
-                    newslettersData.newsletters &&
-                    index + 1 !== newslettersData.newsletters.length &&
-                    'border-b'
-                  } border-b-light-grey`}
-                >
-                  <div className="lg:min-w-[224px] min-w-[112px]">
-                    <Image
-                      src={
-                        newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
-                      }
-                      className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full"
-                      alt="newsletter"
-                      width={224}
-                      height={224}
-                      priority
-                    />
-                  </div>
-                  <div className="w-full flex flex-col justify-between">
-                    <div
-                      className={`flex flex-col md:flex-row mb-4 font-inter md:items-center`}
-                    >
-                      <div className="flex gap-6 items-center">
-                        {newsletter.averageDuration && (
-                          <>
-                            <p className="text-sm text-dark-grey">
-                              <span className="font-semibold">
-                                {newsletter.averageDuration} min&nbsp;
-                              </span>
-                              read
-                            </p>
-                            <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-                          </>
-                        )}
-                        <span className="text-sm text-dark-grey font-semibold">
-                          {newsletter.pricing.charAt(0).toUpperCase() +
-                            newsletter.pricing.slice(1)}
-                        </span>
-                        <span className="text-sm text-grey">
-                          {format(parseISO(newsletter.createdAt), 'dd.MM.yyyy')}
-                        </span>
-                      </div>
-                    </div>
-                    <Link
-                      href={`/newsletters/${newsletter.id}`}
-                      className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
-                    >
-                      {newsletter.title}
-                    </Link>
-                    <span className="font-inter text-base text-lightBlack mb-6 block">
-                      {newsletter.description}
-                    </span>
-                    <div className="flex mb-6 gap-2">
-                      {newsletter.interests?.map(interest => (
-                        <span
-                          key={interest.id}
-                          className="bg-primary/10 text-primary rounded-lg px-[14px] py-2 text-base font-inter"
-                        >
-                          {interest.interestName}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center">
-                      <StarRating
-                        readonly
-                        value={newsletter.averageRating}
-                        customStyles="flex-1"
+        {!searchLoading ? (
+          <div>
+            {!newslettersData ||
+            Boolean(!newslettersData.newsletters?.length) ||
+            !newslettersData.newsletters ? (
+              <div
+                className={`flex flex-col justify-center items-center ${
+                  isSeparated && 'pt-16'
+                }`}
+              >
+                <SearchResultsIcon />
+                <span className="text-5xl text-lightBlack">
+                  Sorry! We couldn’t find anything
+                </span>
+              </div>
+            ) : (
+              newslettersData.newsletters.map((newsletter, index) => {
+                return (
+                  <div
+                    key={newsletter.id}
+                    className={`md:flex mb-8 gap-8 pb-8 flex-col md:flex-row ${
+                      newslettersData.newsletters &&
+                      index + 1 !== newslettersData.newsletters.length &&
+                      'border-b'
+                    } border-b-light-grey`}
+                  >
+                    <div className="lg:min-w-[224px] min-w-[112px]">
+                      <Image
+                        src={
+                          newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
+                        }
+                        className="lg:h-[224px] lg:w-[224px] h-[122px] md:w-[112px] rounded-[10px] object-cover w-full"
+                        alt="newsletter"
+                        width={224}
+                        height={224}
+                        priority
                       />
-                      <div className={`flex ${isRated && 'gap-6'} mr-10`}>
-                        <div
-                          onClick={() =>
-                            handleClickBookmark(String(newsletter.id))
-                          }
-                        >
-                          <BookmarkIcon
-                            className={`cursor-pointer ${
-                              type === 'bookmark' && 'fill-dark-blue'
-                            }`}
+                    </div>
+                    <div className="w-full flex flex-col justify-between">
+                      <div
+                        className={`flex flex-col md:flex-row mb-4 font-inter md:items-center`}
+                      >
+                        <div className="flex gap-6 items-center">
+                          {newsletter.averageDuration && (
+                            <>
+                              <p className="text-sm text-dark-grey">
+                                <span className="font-semibold">
+                                  {newsletter.averageDuration} min&nbsp;
+                                </span>
+                                read
+                              </p>
+                              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                            </>
+                          )}
+                          <span className="text-sm text-dark-grey font-semibold">
+                            {newsletter.pricing.charAt(0).toUpperCase() +
+                              newsletter.pricing.slice(1)}
+                          </span>
+                          <span className="text-sm text-grey">
+                            {format(
+                              parseISO(newsletter.createdAt),
+                              'dd.MM.yyyy'
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      <Link
+                        href={`/newsletters/${newsletter.id}`}
+                        className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
+                      >
+                        {newsletter.title}
+                      </Link>
+                      <span className="font-inter text-base text-lightBlack mb-6 block">
+                        {newsletter.description}
+                      </span>
+                      <div className="flex mb-6 gap-2">
+                        {newsletter.interests?.map(interest => (
+                          <span
+                            key={interest.id}
+                            className="bg-primary/10 text-primary rounded-lg px-[14px] py-2 text-base font-inter"
+                          >
+                            {interest.interestName}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center">
+                        <StarRating
+                          readonly
+                          value={newsletter.averageRating}
+                          customStyles="flex-1"
+                        />
+                        <div className={`flex ${isRated && 'gap-6'} mr-10`}>
+                          <div
+                            onClick={() =>
+                              handleClickBookmark(String(newsletter.id))
+                            }
+                          >
+                            <BookmarkIcon
+                              className={`cursor-pointer ${
+                                type === 'bookmark' && 'fill-dark-blue'
+                              }`}
+                            />
+                          </div>
+                          {isRated && (
+                            <div
+                              onClick={() => {
+                                if (user) {
+                                  setIsOpenReviewModal(newsletter.id as number);
+                                } else {
+                                  router.push('/sign-up');
+                                }
+                              }}
+                            >
+                              <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
+                            </div>
+                          )}
+                          <ReviewModal
+                            register={register}
+                            setValue={setValue}
+                            errors={errors}
+                            newsletter={newsletter}
+                            open={Boolean(isOpenReviewModal === newsletter.id)}
+                            handleClose={() => setIsOpenReviewModal(false)}
+                            onSubmit={handleSubmit(onSubmit)}
+                            loading={reviewMutation.isLoading}
                           />
                         </div>
-                        {isRated && (
-                          <div
-                            onClick={() => {
-                              if (user) {
-                                setIsOpenReviewModal(newsletter.id as number);
-                              } else {
-                                router.push('/sign-up');
+                        <div className="flex gap-2">
+                          <Link href={newsletter.link} legacyBehavior passHref>
+                            <a target="_blank" rel="noopener noreferrer">
+                              <Button
+                                label="Read Newsletter"
+                                rounded="xl"
+                                fontSize="md"
+                              />
+                            </a>
+                          </Link>
+                          {isFollowEnable && (
+                            <Button
+                              rounded="xl"
+                              fontSize="md"
+                              customStyles="!w-[140px]"
+                              loading={Boolean(followLoading === newsletter.id)}
+                              onClick={() =>
+                                handleFollow({
+                                  entityId: newsletter.id,
+                                  followed: newsletter.followed,
+                                })
                               }
-                            }}
-                          >
-                            <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer" />
-                          </div>
-                        )}
-                        <ReviewModal
-                          register={register}
-                          setValue={setValue}
-                          errors={errors}
-                          newsletter={newsletter}
-                          open={Boolean(isOpenReviewModal === newsletter.id)}
-                          handleClose={() => setIsOpenReviewModal(false)}
-                          onSubmit={handleSubmit(onSubmit)}
-                          loading={reviewMutation.isLoading}
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Link href={newsletter.link}>
-                          <Button
-                            label="Read Newsletter"
-                            rounded="xl"
-                            fontSize="md"
-                          />
-                        </Link>
-                        {isFollowEnable && (
-                          <Button
-                            rounded="xl"
-                            fontSize="md"
-                            onClick={() =>
-                              handleFollow({
-                                entityId: newsletter.id,
-                                followed: newsletter.followed,
-                              })
-                            }
-                            variant={
-                              isNewsletterFollowed || newsletter.followed
-                                ? 'outlined-secondary'
-                                : 'primary'
-                            }
-                            label={
-                              isNewsletterFollowed || newsletter.followed ? (
-                                'Following'
-                              ) : (
-                                <span className="flex items-center gap-2">
-                                  <PlusIcon />
-                                  Follow
-                                </span>
-                              )
-                            }
-                          />
-                        )}
+                              variant={
+                                isNewsletterFollowed || newsletter.followed
+                                  ? 'outlined-secondary'
+                                  : 'primary'
+                              }
+                              label={
+                                isNewsletterFollowed || newsletter.followed ? (
+                                  'Following'
+                                ) : (
+                                  <span className="flex items-center gap-2">
+                                    <PlusIcon />
+                                    Follow
+                                  </span>
+                                )
+                              }
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          )}
-          {newslettersData && Boolean(newslettersData.nextPage) && (
-            <Button
-              label="See more"
-              variant="outlined-secondary"
-              size="full"
-              onClick={loadMoreNewsletters}
-            />
-          )}
-        </div>
+                );
+              })
+            )}
+            {newslettersData && Boolean(newslettersData.nextPage) && (
+              <Button
+                label="See more"
+                variant="outlined-secondary"
+                size="full"
+                onClick={loadMoreNewsletters}
+                loading={moreNewslettersLoading}
+              />
+            )}
+          </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     </div>
   );
