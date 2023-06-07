@@ -125,8 +125,8 @@ const UserPage = ({
           )}
         </>
       )}
-      <div className="max-w-[1280px] px-[10%] w-full">
-        {isProfile ? (
+      <div className="max-w-[1280px] px-5 w-full">
+        {/* {isProfile ? (
           <div className="mb-[88px]">
             <Tabs tabs={tabs} />
           </div>
@@ -136,7 +136,7 @@ const UserPage = ({
             isProfile={isProfile}
             user={user}
           />
-        )}
+        )} */}
         {Boolean(notificationsInfo.total) && (
           <>
             <h3 className="font-medium text-5xl text-dark-blue mb-10">
