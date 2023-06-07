@@ -60,11 +60,11 @@ export interface FollowPayload {
   entityType: 'Newsletter' | 'User';
 }
 
-export const newsletterVerifyOwnership = async ({
+export const parseNewsletter = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
   try {
-    const response = await api.post('newsletters/verify-ownership', {
+    const response = await api.post('newsletters/parse-newsletter', {
       json: { link },
       credentials: 'include',
     });
@@ -118,6 +118,47 @@ export const newsletterUpdate = async ({
       }
     }
     const response = await api.put(`newsletters/${id}`, { body: formData });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const res = (await response.json()) as NewsletterLinkResponse;
+    if (response.ok) {
+      toast.success('Newsletter succesfully added');
+      if (router) {
+        router.push(`/newsletters/${res.id}`);
+      }
+    }
+    return res;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to update newsletter');
+    return undefined;
+  }
+};
+
+export const createNewsletter = async ({
+  link,
+  title,
+  description,
+  newsletterAuthor,
+  image,
+  interests,
+  averageDuration,
+  pricingType,
+  router,
+}: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
+  try {
+    const response = await api.post('newsletters', {
+      json: {
+        link,
+        title,
+        description,
+        newsletterAuthor,
+        image,
+        interestIds: interests,
+        averageDuration,
+        pricingType,
+      },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

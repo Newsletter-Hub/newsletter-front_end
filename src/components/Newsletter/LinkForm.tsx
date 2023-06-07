@@ -1,4 +1,4 @@
-import { newsletterVerifyOwnership } from '@/actions/newsletters';
+import { parseNewsletter } from '@/actions/newsletters';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -33,14 +33,13 @@ const LinkForm = ({
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
-  const mutation = useMutation(newsletterVerifyOwnership);
+  const mutation = useMutation(parseNewsletter);
   const onSubmit: SubmitHandler<ValidationSchema> = async data => {
     const response = await mutation.mutateAsync({ link: data.link });
-    if (response && response.id) {
+    if (response) {
       setStep(step + 1);
       setPayload({
         ...payload,
-        id: response.id,
         link: response.link,
         title: response.title,
         description: response.description,
@@ -66,6 +65,7 @@ const LinkForm = ({
           register={{ ...register('link') }}
           error={Boolean(errors.link)}
           errorText={errors.link?.message}
+          defaultValue={payload.link}
         />
       </div>
       <Button
