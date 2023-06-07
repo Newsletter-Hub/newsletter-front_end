@@ -869,7 +869,7 @@ const NewslettersList = ({
                       <span className="font-inter text-base text-lightBlack mb-6">
                         {newsletter.description}
                       </span>
-                      <div className="flex mb-6 gap-2 max-w-[300px] flex-wrap">
+                      <div className="flex mb-6 gap-2 max-w-[300px] md:max-w-none flex-wrap">
                         {newsletter.interests?.map(interest => (
                           <span
                             key={interest.id}
