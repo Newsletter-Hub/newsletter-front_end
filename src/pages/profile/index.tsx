@@ -12,6 +12,8 @@ import { NewslettersListData } from '@/types/newsletters';
 import { UserMe } from '@/types/user';
 
 import UserPage from '@/components/User/UserPage';
+import PrivateRoute from '@/components/PrivateRoute';
+import Loading from '@/components/Loading';
 
 interface ProfilePageProps {
   newslettersListData: NewslettersListData;
@@ -26,12 +28,20 @@ const ProfilePage = ({
 }: ProfilePageProps) => {
   const { user } = useUser();
   return (
-    <UserPage
-      notificationsData={notificationsData}
-      user={user as UserMe}
-      newslettersListData={newslettersListData}
-      followingNewsletterListData={followingNewsletterListData}
-    />
+    <PrivateRoute>
+      {!user ? (
+        <div className="flex h-screen w-screen justify-center items-center">
+          <Loading />
+        </div>
+      ) : (
+        <UserPage
+          notificationsData={notificationsData}
+          user={user as UserMe}
+          newslettersListData={newslettersListData}
+          followingNewsletterListData={followingNewsletterListData}
+        />
+      )}
+    </PrivateRoute>
   );
 };
 

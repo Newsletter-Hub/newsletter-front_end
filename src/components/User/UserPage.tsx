@@ -26,15 +26,13 @@ interface UserPageProps {
 
 const UserPage = ({
   user,
-  newslettersListData,
-  followingNewsletterListData,
   isProfile = true,
   notificationsData,
 }: UserPageProps) => {
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
   const [page, setPage] = useState(1);
   const [notificationLoading, setNotificationLoading] = useState(false);
-  const notificationRecipientId = user.id ? +user.id : undefined;
+  const notificationRecipientId = user && user.id ? +user.id : undefined;
   const loadMore = async () => {
     setNotificationLoading(true);
     setPage(prevPage => prevPage + 1);

@@ -9,18 +9,21 @@ import { UserMe } from '@/types/user';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
+import PrivateRoute from '@/components/PrivateRoute';
 
 const BookmarksPage = ({
   newslettersListData,
   interests,
 }: NewslettersPageProps) => {
   return (
-    <NewslettersList
-      newslettersListData={newslettersListData}
-      interests={interests}
-      getNewslettersList={getBookmarksList}
-      type="bookmark"
-    />
+    <PrivateRoute>
+      <NewslettersList
+        newslettersListData={newslettersListData}
+        interests={interests}
+        getNewslettersList={getBookmarksList}
+        type="bookmark"
+      />
+    </PrivateRoute>
   );
 };
 
@@ -46,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     myId: user && user.id ? +user.id : undefined,
   });
   const interests = await getInterests();
-  if (!bookmarkList || !interests) {
+  if (bookmarkList.error || !interests) {
     return {
       notFound: true,
     };
