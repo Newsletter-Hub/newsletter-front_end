@@ -1,5 +1,5 @@
 import {
-  newsletterUpdate, // newsletterVerifyOwnership,
+  createNewsletter, // newsletterVerifyOwnership,
 } from '@/actions/newsletters';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ import RadioGroup from '../RadioGroup';
 import Slider from '../Slider';
 import TextArea from '../TextArea';
 
-const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
+const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -30,11 +30,15 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
   const [averageDuration, setAverageDuration] = useState<number>(1);
   const autoCompleteRef = useRef(null);
-  const newsletterMutation = useMutation(newsletterUpdate);
+  const newsletterMutation = useMutation(createNewsletter);
 
   const router = useRouter();
 
   const { handleSubmit } = useForm();
+
+  const handlePreviousStep = () => {
+    setStep(1);
+  };
 
   // const onSubmit = async () => {
   //   try {
@@ -49,8 +53,10 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
 
   const onAdd = async () => {
     newsletterMutation.mutate({
-      id: payload.id,
       link: payload.link,
+      title: payload.title,
+      description: payload.description,
+      image: payload.image,
       interests: tags.map(item => item.id),
       averageDuration: String(averageDuration),
       pricingType,
@@ -76,10 +82,13 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
         );
         setSuggests(formattedData);
       }
-    } else {
-      setShowAutoComplete(false);
+    } else if (interests) {
+      const formattedSuggests = interests.filter(interest => {
+        return !tags.some(tag => tag.id === interest.id);
+      });
+      setSuggests(formattedSuggests);
     }
-  }, [inputValue, interests]);
+  }, [inputValue, interests, tags]);
 
   useEffect(() => {
     if (interests) {
@@ -94,9 +103,18 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
     }
   }, [tags]);
 
+  const handleClickInput = () => {
+    if (!inputValue && interests) {
+      const formattedSuggests = interests.filter(interest => {
+        return !tags.some(tag => tag.id === interest.id);
+      });
+      setSuggests(formattedSuggests);
+    }
+    setShowAutoComplete(true);
+  };
+
   const handleClickOutside = () => {
     setShowAutoComplete(false);
-    setInputValue('');
   };
 
   useOnClickOutside(autoCompleteRef, handleClickOutside);
@@ -158,7 +176,7 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                   className={`outline-none w-full`}
                   value={inputValue}
                   onChange={e => setInputValue(e.target.value)}
-                  onClick={() => setShowAutoComplete(true)}
+                  onClick={handleClickInput}
                 />
               )}
               {showAutoComplete &&
@@ -216,7 +234,13 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
           </div>
         </div>
       </div>
-      <div className="flex w-full gap-4 justify-center">
+      <div className="flex w-full gap-4 justify-between items-center">
+        <span
+          className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
+          onClick={handlePreviousStep}
+        >
+          Back
+        </span>
         {/* <Button
           label="Verify Ownership"
           size="full"

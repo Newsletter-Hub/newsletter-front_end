@@ -81,7 +81,7 @@ const Button = ({
   rounded = 'none',
   uppercase = false,
   bold = false,
-  fontSize = 'base',
+  fontSize = 'md',
   size = 'base',
   disabled,
   socialMedia = 'none',
