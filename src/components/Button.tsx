@@ -42,7 +42,7 @@ const variants = {
   'outlined-primary':
     'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base hover:bg-blue hover:text-white',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 hover:bg-blue hover:text-white',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 hover:bg-blue hover:text-white hover:border-blue',
   porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
 };
 
