@@ -13,7 +13,6 @@ import Avatar from '../Avatar';
 import Notification from '../Notification';
 import FollowingNewsletters from '../Profile/FollowingNewsletters';
 import UserNewsletters from '../Profile/UserNewsletters';
-import Tabs from '../Tabs';
 import { useState } from 'react';
 import { getNotifications } from '@/actions/user/notifications';
 
