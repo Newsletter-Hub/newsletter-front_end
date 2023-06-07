@@ -798,6 +798,13 @@ const NewslettersList = ({
                 </Popover>
               </div>
             </div>
+            <Link href={user ? '/newsletters/add' : '/sign-up'}>
+              <Button
+                label="Add Newsletter"
+                rounded="xl"
+                customStyles="mb-10 w-full md:w-fit"
+              />
+            </Link>
           </>
         )}
         {!searchLoading ? (
