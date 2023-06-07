@@ -29,18 +29,12 @@ const ProfilePage = ({
   const { user } = useUser();
   return (
     <PrivateRoute>
-      {!user ? (
-        <div className="flex h-screen w-screen justify-center items-center">
-          <Loading />
-        </div>
-      ) : (
-        <UserPage
-          notificationsData={notificationsData}
-          user={user as UserMe}
-          newslettersListData={newslettersListData}
-          followingNewsletterListData={followingNewsletterListData}
-        />
-      )}
+      <UserPage
+        notificationsData={notificationsData}
+        user={user as UserMe}
+        newslettersListData={newslettersListData}
+        followingNewsletterListData={followingNewsletterListData}
+      />
     </PrivateRoute>
   );
 };
