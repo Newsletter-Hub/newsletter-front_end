@@ -207,7 +207,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           href="/newsletters/categories/all"
           className="flex items-center gap-[18px] mb-[52px]"
         >
-          <ArrowLeft />
+          <ArrowLeft className="stroke-dark-blue" />
           <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg">
             Back to all newsletters
           </span>

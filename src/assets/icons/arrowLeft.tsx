@@ -10,7 +10,6 @@ const ArrowLeft = ({ className }: { className?: string }) => {
     >
       <path
         d="M9.35938 1.5L1.49921 9M1.49921 9L9.35938 16.5M1.49921 9H21.3594"
-        stroke="#253646"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
