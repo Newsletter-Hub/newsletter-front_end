@@ -33,8 +33,10 @@ const UserPage = ({
 }: UserPageProps) => {
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
   const [page, setPage] = useState(1);
+  const [notificationLoading, setNotificationLoading] = useState(false);
   const notificationRecipientId = user.id ? +user.id : undefined;
   const loadMore = async () => {
+    setNotificationLoading(true);
     setPage(prevPage => prevPage + 1);
 
     const response = await getNotifications({
@@ -42,35 +44,35 @@ const UserPage = ({
       pageSize: 5 * (page + 1),
       isOwnAccount: isProfile,
       notificationRecipientId,
-    });
+    }).finally(() => setNotificationLoading(false));
 
     if (response.notificationsData) {
       setNotificationsInfo(response.notificationsData);
     }
   };
-  const tabs = [
-    {
-      title: 'Your Newsletters',
-      value: 'userNewsletters',
-      content: (
-        <UserNewsletters
-          newslettersListData={newslettersListData}
-          isProfile={isProfile}
-          user={user}
-        />
-      ),
-    },
-    {
-      title: 'Newsletters Following',
-      value: 'followngNewsletters',
-      content: (
-        <FollowingNewsletters
-          newslettersListData={followingNewsletterListData}
-          isProfile={isProfile}
-        />
-      ),
-    },
-  ];
+  // const tabs = [
+  //   {
+  //     title: 'Your Newsletters',
+  //     value: 'userNewsletters',
+  //     content: (
+  //       <UserNewsletters
+  //         newslettersListData={newslettersListData}
+  //         isProfile={isProfile}
+  //         user={user}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     title: 'Newsletters Following',
+  //     value: 'followngNewsletters',
+  //     content: (
+  //       <FollowingNewsletters
+  //         newslettersListData={followingNewsletterListData}
+  //         isProfile={isProfile}
+  //       />
+  //     ),
+  //   },
+  // ];
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
       {user && (
@@ -160,6 +162,7 @@ const UserPage = ({
                   rounded="xl"
                   bold
                   onClick={loadMore}
+                  loading={notificationLoading}
                 />
               )}
             </div>
