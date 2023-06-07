@@ -492,7 +492,11 @@ const NewslettersList = ({
         isSeparated && 'md:pt-20 pt-3 px-3'
       }`}
     >
-      <div className="xl:w-[1280px] max-w-[1280px] w-[300px] xs:w-[350px] sm:w-[400px] md:w-fit px-3">
+      <div
+        className={`xl:w-[1280px] w-[300px] xs:w-[350px] sm:w-[400px] md:w-fit px-3 ${
+          !isSeparated && 'xl:!w-fit max-w-[1280px]'
+        }`}
+      >
         {isSeparated && (
           <>
             <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
