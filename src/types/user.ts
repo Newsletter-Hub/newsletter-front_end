@@ -2,7 +2,7 @@ import { Interest } from './interests';
 import { NewsletterData, Review } from './newsletters';
 
 export interface User {
-  id?: number;
+  id: number;
   email?: string;
   username?: string;
   avatar?: string;
@@ -10,6 +10,13 @@ export interface User {
   amountUserRatings: number;
   description?: string;
   amountUserFollowers: number;
+  followed: boolean;
+}
+
+export interface UserList {
+  users: User[];
+  total: number;
+  nextPage: number;
 }
 
 export interface UserMe {

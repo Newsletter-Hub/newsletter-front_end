@@ -3,12 +3,10 @@ import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
-import { UserList } from '@/pages/users';
-
 import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
-import { UserMe } from '@/types/user';
+import { UserList, UserMe } from '@/types/user';
 
 interface GetUserMePayload {
   token?: string | null;
@@ -28,7 +26,7 @@ interface UpdateUserResponse {
   response?: UserMe;
 }
 
-interface GetUsersListProps {
+export interface GetUsersListProps {
   page: number;
   pageSize: number;
   order: string;
@@ -36,6 +34,15 @@ interface GetUsersListProps {
   search?: string;
   token?: string;
 }
+
+interface UserListResponse {
+  userList?: UserList;
+  error?: string;
+}
+
+export type GetUserListType = (
+  props: GetUsersListProps
+) => Promise<UserListResponse>;
 
 export const updateUser = async ({
   dateBirth,
@@ -139,7 +146,7 @@ export const getUsersList = async ({
   orderDirection,
   search = '',
   token,
-}: GetUsersListProps) => {
+}: GetUsersListProps): Promise<UserListResponse> => {
   try {
     const response: UserList = await api
       .get('users/public-users-list', {
@@ -149,7 +156,7 @@ export const getUsersList = async ({
         },
       })
       .json();
-    return response;
+    return { userList: response };
   } catch (error) {
     console.log(error);
     return { error: 'Failed to fetch users list' };

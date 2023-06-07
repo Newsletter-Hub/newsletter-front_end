@@ -89,9 +89,6 @@ export const getBookmarksList = async ({
   token,
 }: GetNewsletterListProps) => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     let url = `newsletters/newsletters-in-bookmarks?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
