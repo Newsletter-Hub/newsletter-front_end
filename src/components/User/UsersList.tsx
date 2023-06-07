@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { debounce } from 'lodash';
 import { UserList } from '@/types/user';
 import { SortType } from '@/types/sorting';
-import { GetUserListType, GetUsersListProps } from '@/actions/user';
+import { GetUserListType } from '@/actions/user';
 import { follow, unfollow } from '@/actions/newsletters';
 import { FollowingPayload } from '@/types';
 import CheckIcon from '@/assets/icons/check';
@@ -134,21 +134,23 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
     }
   };
   return (
-    <div className="flex justify-center items-center flex-col pt-20 px-[17%]">
+    <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
       <div className="max-w-[1280px]">
-        <h1 className="text-dark-blue text-7xl font-medium mb-10">Users</h1>
-        <div className="flex mb-10 items-center min-w-[500px] md:min-w-[950px] justify-between">
+        <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
+          Users
+        </h1>
+        <div className="flex mb-10 items-center sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px] justify-between md:flex-row flex-col gap-3 md:gap-0">
           <Input
             isSearch
             placeholder="Search Newsletter Hub"
-            wrapperStyles="max-w-[262px]"
+            wrapperStyles="md:max-w-[262px]"
             customStyles="h-[48px]"
             iconStyles="!top-3"
             onChange={e => handleChangeSearch(e.target.value)}
             defaultValue={(router.query.search as string) || ''}
           />
           <Popover
-            customTriggerStyles="w-[200px]"
+            customTriggerStyles="md:w-[200px] w-full"
             triggerContent={
               <div className="flex items-center justify-center md:gap-4 h-12">
                 <span className="whitespace-nowrap text-sm">
@@ -189,20 +191,19 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
               {usersData.users.map((item, index) => (
                 <div
                   key={item.id}
-                  className={`flex items-center justify-between pb-8 ${
+                  className={`flex md:items-center justify-between flex-col md:flex-row pb-8 ${
                     usersData.users.length !== index + 1 &&
                     'border-b border-light-grey'
                   }`}
                 >
-                  <div className="flex gap-8 items-center">
+                  <div className="flex gap-8 items-center mb-2">
                     <Avatar
                       src={item.avatar}
                       alt="User avatar"
                       width={112}
                       height={112}
                       username={item.username}
-                      className="rounded-full max-h-[112px] min-w-[112px]"
-                      customStyles="h-[112px] min-w-[112px]"
+                      className="rounded-full h-[112px] w-[112px]"
                     />
                     <div className="flex flex-col gap-3">
                       <Link
@@ -212,33 +213,35 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
                         {item.username}
                       </Link>
                       {item.description && (
-                        <span className="font-inter text-sm text-dark-grey whitespace-nowrap max-w-[700px] overflow-hidden text-ellipsis">
+                        <span className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
                           {item.description}
                         </span>
                       )}
                     </div>
                   </div>
-                  <Button
-                    rounded="xl"
-                    fontSize="md"
-                    onClick={() =>
-                      handleFollow({
-                        entityId: item.id,
-                        followed: item.followed,
-                      })
-                    }
-                    variant={item.followed ? 'outlined-secondary' : 'primary'}
-                    label={
-                      item.followed ? (
-                        'Following'
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          <PlusIcon />
-                          Follow
-                        </span>
-                      )
-                    }
-                  />
+                  <div className="w-full flex justify-end md:w-fit">
+                    <Button
+                      rounded="xl"
+                      fontSize="md"
+                      onClick={() =>
+                        handleFollow({
+                          entityId: item.id,
+                          followed: item.followed,
+                        })
+                      }
+                      variant={item.followed ? 'outlined-secondary' : 'primary'}
+                      label={
+                        item.followed ? (
+                          'Following'
+                        ) : (
+                          <span className="flex items-center gap-2">
+                            <PlusIcon />
+                            Follow
+                          </span>
+                        )
+                      }
+                    />
+                  </div>
                 </div>
               ))}
             </div>
