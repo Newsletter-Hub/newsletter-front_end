@@ -82,7 +82,7 @@ const Header = () => {
                       customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px]"
                     />
                     {showSearchResult && data && (
-                      <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw]">
+                      <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw] z-10">
                         {Boolean(data?.newsletters?.length) && (
                           <div>
                             <div className="flex justify-between items-center">
