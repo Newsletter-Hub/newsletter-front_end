@@ -4,7 +4,6 @@ import { useUser } from '@/contexts/UserContext';
 import { useEffect, useRef, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
-import parseCookies from 'next-cookies';
 import { useRouter } from 'next/router';
 
 import format from 'date-fns/format';
@@ -18,6 +17,7 @@ import Edit from '@/components/Profile/Edit';
 import { EditProfilePayload } from '@/components/Profile/Edit';
 import ProfileInterests from '@/components/Profile/Interests';
 import Tabs from '@/components/Tabs';
+import PrivateRoute from '@/components/PrivateRoute';
 
 interface SettingsProps {
   interests: Interest[];
@@ -172,49 +172,41 @@ const Settings = ({ interests }: SettingsProps) => {
     return <Loading />;
   }
   return (
-    <div>
-      <div className="pt-[72px] px-[17%]">
-        <h1 className="text-7xl text-dark-blue font-medium mb-10">
-          Account settings
-        </h1>
-        <Tabs tabs={tabs} handleChange={handleTabChange} />
+    <PrivateRoute>
+      <div>
+        <div className="pt-[72px] px-[17%]">
+          <h1 className="text-7xl text-dark-blue font-medium mb-10">
+            Account settings
+          </h1>
+          <Tabs tabs={tabs} handleChange={handleTabChange} />
+        </div>
+        <div className="w-full shadow-md pl-[17%] flex gap-12 font-inter items-center py-5">
+          <span
+            className="text-base text-dark-blue cursor-pointer"
+            onClick={resetChanges}
+          >
+            Reset all changes
+          </span>
+          <Button
+            label="Save"
+            rounded="xl"
+            customStyles="max-w-[101px]"
+            onClick={onSubmit}
+            loading={isLoading}
+            disabled={
+              activeTab === 'edit'
+                ? !isDirty
+                : JSON.stringify(interestsPayload) ===
+                  JSON.stringify(user?.interests)
+            }
+          />
+        </div>
       </div>
-      <div className="w-full shadow-md pl-[17%] flex gap-12 font-inter items-center py-5">
-        <span
-          className="text-base text-dark-blue cursor-pointer"
-          onClick={resetChanges}
-        >
-          Reset all changes
-        </span>
-        <Button
-          label="Save"
-          rounded="xl"
-          customStyles="max-w-[101px]"
-          onClick={onSubmit}
-          loading={isLoading}
-          disabled={
-            activeTab === 'edit'
-              ? !isDirty
-              : JSON.stringify(interestsPayload) ===
-                JSON.stringify(user?.interests)
-          }
-        />
-      </div>
-    </div>
+    </PrivateRoute>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken ? cookies.accessToken : null;
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+export const getServerSideProps: GetServerSideProps = async () => {
   const interests = await getInterests();
   return {
     props: {

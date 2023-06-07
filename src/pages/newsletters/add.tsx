@@ -7,6 +7,7 @@ import DetailsForm from '@/components/Newsletter/DetailsForm';
 import LinkForm from '@/components/Newsletter/LinkForm';
 
 import { getInterests } from '../../actions/user/interests';
+import PrivateRoute from '@/components/PrivateRoute';
 
 interface AddNewsletterProps {
   interests?: Interest[];
@@ -24,27 +25,29 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
   });
 
   return (
-    <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
-      <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
-        Add Newsletter
-      </p>
-      {step === 1 ? (
-        <LinkForm
-          setPayload={setPayload}
-          payload={payload}
-          step={step}
-          setStep={setStep}
-        />
-      ) : (
-        <DetailsForm
-          setPayload={setPayload}
-          payload={payload}
-          step={step}
-          setStep={setStep}
-          interests={interests}
-        />
-      )}
-    </div>
+    <PrivateRoute>
+      <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
+        <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
+          Add Newsletter
+        </p>
+        {step === 1 ? (
+          <LinkForm
+            setPayload={setPayload}
+            payload={payload}
+            step={step}
+            setStep={setStep}
+          />
+        ) : (
+          <DetailsForm
+            setPayload={setPayload}
+            payload={payload}
+            step={step}
+            setStep={setStep}
+            interests={interests}
+          />
+        )}
+      </div>
+    </PrivateRoute>
   );
 };
 
