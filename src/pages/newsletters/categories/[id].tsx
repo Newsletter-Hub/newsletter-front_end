@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     token,
   });
   const interests = await getInterests();
-  if (!newsletterList || !interests) {
+  if (newsletterList.error || !interests) {
     return {
       notFound: true,
     };

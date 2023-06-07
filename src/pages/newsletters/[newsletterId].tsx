@@ -428,11 +428,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
     page: 1,
     pageSize: 5,
   });
+  if (response.error) {
+    return {
+      notFound: true,
+    };
+  }
 
-  if (response.error || reviewsResponse.error) {
+  if (reviewsResponse.error) {
     return {
       props: {
-        newsletterData: null,
         reviewsData: null,
       },
     };
