@@ -47,6 +47,7 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
   const [search, setSearch] = useState((router.query.search as string) || '');
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState<number | boolean>(false);
 
   const handleChangeSearch = debounce(async (value: string) => {
     setSearchLoading(true);
@@ -98,6 +99,7 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
     if (!user) {
       router.push('/sign-up');
     } else {
+      setFollowLoading(entityId);
       if (followed) {
         const response = await unfollow({ entityId, entityType: 'User' });
         if (response?.ok) {
@@ -109,7 +111,7 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
               sortTypes[choosedSortType].value === 'dataJoined'
                 ? 'DESC'
                 : 'ASC',
-          });
+          }).finally(() => setFollowLoading(false));
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
           }
@@ -125,7 +127,7 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
               sortTypes[choosedSortType].value === 'dataJoined'
                 ? 'DESC'
                 : 'ASC',
-          });
+          }).finally(() => setFollowLoading(false));
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
           }
@@ -223,6 +225,8 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
                     <Button
                       rounded="xl"
                       fontSize="md"
+                      customStyles="md:!w-[140px] !w-[125px]"
+                      loading={Boolean(followLoading === item.id)}
                       onClick={() =>
                         handleFollow({
                           entityId: item.id,
