@@ -89,7 +89,7 @@ const Input = ({
         />
         {isSearch && (
           <Search
-            className={`absolute right-3 top-1.5 ${iconStyles && iconStyles}`}
+            className={`absolute right-2 top-1.5 ${iconStyles && iconStyles}`}
           />
         )}
         {checkNumberOfSymbols && maxLength && (

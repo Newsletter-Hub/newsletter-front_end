@@ -40,6 +40,7 @@ import {
 import { createReview, getReviews } from '../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
+import SkeletonImage from '@/components/SkeletonImage';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -203,27 +204,34 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
   return (
     <div className="flex justify-center items-center flex-col pt-20 px-5">
       <div className="!max-w-[1280px]">
-        <Link
-          href="/newsletters/categories/all"
-          className="flex items-center gap-[18px] mb-[52px]"
-        >
-          <ArrowLeft className="stroke-dark-blue" />
-          <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg transition-colors duration-200 ease-in-out hover:text-primary">
-            Back to all newsletters
-          </span>
-        </Link>
+        <div className="flex justify-between items-center mb-[52px]">
+          <Link
+            href="/newsletters/categories/all"
+            className="flex items-center gap-[18px]"
+          >
+            <ArrowLeft className="stroke-dark-blue" />
+            <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg transition-colors duration-200 ease-in-out hover:text-primary">
+              Back to all newsletters
+            </span>
+          </Link>
+          <Link href={user ? '/newsletters/add' : '/sign-up'}>
+            <Button
+              label="Add Newsletter"
+              rounded="xl"
+              customStyles="w-full md:w-fit"
+            />
+          </Link>
+        </div>
         <h1 className="text-lightBlack text-7xl font-medium mb-10">
           {newsletter?.title}
         </h1>
         {newsletter?.image && (
-          <Image
-            src={newsletter.image || ''}
+          <SkeletonImage
+            src={newsletter.image}
             width={1280}
             height={678}
             alt="banner"
             className="w-full h-auto mb-6"
-            placeholder="blur"
-            blurDataURL={newsletter.image as string}
           />
         )}
         {Boolean(newsletter?.interests?.length) && (
@@ -245,13 +253,15 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
         )}
         <div className="flex gap-2 pb-10 border-b border-light-grey mb-10">
           {newsletter?.link && (
-            <Link href={newsletter.link}>
-              <Button
-                label="Read newsletter"
-                rounded="xl"
-                height="sm"
-                fontSize="md"
-              />
+            <Link href={newsletter.link} legacyBehavior passHref>
+              <a target="_blank" rel="noopener noreferrer">
+                <Button
+                  label="Read Newsletter"
+                  rounded="xl"
+                  fontSize="md"
+                  height="sm"
+                />
+              </a>
             </Link>
           )}
           <Button
@@ -362,15 +372,17 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                 } border-light-grey`}
                 key={review.id}
               >
-                <Avatar
-                  src={review.reviewer.avatar as string}
-                  alt="avatar"
-                  width={80}
-                  height={80}
-                  className="rounded-full max-h-[80px] max-w-full object-cover min-w-[80px] mr-[18px]"
-                  username={review.reviewer.username}
-                  customStyles="max-h-[80px] min-w-[80px] mr-[18px]"
-                />
+                <div className="mr-[18px]">
+                  <Avatar
+                    src={review.reviewer.avatar as string}
+                    alt="avatar"
+                    width={80}
+                    height={80}
+                    className="rounded-full max-h-[80px] max-w-full w-[80px] min-w-[80px] min-h-[80px]"
+                    username={review.reviewer.username}
+                    customStyles="h-[80px] w-[80px]"
+                  />
+                </div>
                 <div className="mr-[88px] w-[150px]">
                   <p className="text-lightBlack text-xl">
                     {review.reviewer.username}

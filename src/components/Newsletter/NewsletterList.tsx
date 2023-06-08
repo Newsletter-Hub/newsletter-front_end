@@ -13,7 +13,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Alegreya } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -47,6 +46,7 @@ import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import ReviewModal from '../Modals/ReviewModal';
 import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
+import SkeletonImage from '../SkeletonImage';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -834,7 +834,7 @@ const NewslettersList = ({
                     } border-b-light-grey`}
                   >
                     <div className="lg:min-w-[224px] min-w-[112px]">
-                      <Image
+                      <SkeletonImage
                         src={
                           newsletter.image || 'https://i.imgur.com/kZMNj7Q.jpeg'
                         }

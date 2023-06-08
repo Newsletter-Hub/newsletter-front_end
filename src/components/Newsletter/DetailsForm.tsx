@@ -229,7 +229,9 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
               setValues={values => setAverageDuration(values as number)}
             />
             <p className="text-lightBlack px-2 py-2 border-b-2 border-grey w-fit font-inter pt-2">
-              <span className="font-semibold">{averageDuration} minute</span>
+              <span className="font-semibold">
+                {averageDuration} minute{averageDuration > 1 && 's'}
+              </span>
             </p>
           </div>
         </div>

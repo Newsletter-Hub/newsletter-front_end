@@ -1,6 +1,6 @@
 import { getCategories } from '@/actions/user/interests';
+import SkeletonImage from '@/components/SkeletonImage';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 interface Category {
@@ -26,7 +26,7 @@ const Categories = ({ categories }: CategoriesProps) => {
             const categoryDiv = (
               <div className="hover:!text-primary text-dark-blue">
                 <div className="h-fit">
-                  <Image
+                  <SkeletonImage
                     src={category.image}
                     alt="category"
                     width={302}
@@ -34,7 +34,6 @@ const Categories = ({ categories }: CategoriesProps) => {
                     className={`rounded-t-lg object-cover ${
                       !category.newsletterCount && 'grayscale'
                     }`}
-                    priority
                   />
                 </div>
                 <div className="bg-light-porcelain md:p-4 p-2 rounded-b-lg max-w-[302px] h-[88px]">
