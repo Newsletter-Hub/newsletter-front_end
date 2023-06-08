@@ -28,7 +28,7 @@ import VerifyEmailModal from './Modals/VerifyEmail';
 export interface EditProfilePayload {
   avatar: string;
   country: string;
-  state: string;
+  state: string | undefined;
   dateOfBirth: string;
   username: string;
   email: string;
@@ -84,6 +84,7 @@ const Edit = forwardRef(
       watch,
       reset,
       formState: { isDirty, errors },
+      setValue,
     } = useForm({
       defaultValues: {
         avatar: user.avatar,
@@ -131,8 +132,9 @@ const Edit = forwardRef(
           };
         }
       );
+      setValue('state', '');
       setStates(formattedStates);
-    }, [watchCountry, getValues]);
+    }, [watchCountry, getValues, setValue]);
     useEffect(() => {
       setIsDirty(isDirty);
     }, [watchAll, isDirty, setIsDirty]);
@@ -182,10 +184,16 @@ const Edit = forwardRef(
                     selected={field.value === 'reader'}
                     rounded="xl"
                     onClick={() => field.onChange('reader')}
+                    customStyles={`${
+                      field.value === 'reader' && 'hover:!bg-primary'
+                    }`}
                   />
                   <Button
                     label="Writer"
                     selected={field.value === 'writter'}
+                    customStyles={`${
+                      field.value === 'writter' && 'hover:!bg-primary'
+                    }`}
                     rounded="xl"
                     onClick={() => field.onChange('writter')}
                   />
@@ -241,8 +249,8 @@ const Edit = forwardRef(
               render={({ field }) => (
                 <Input
                   variant="filled"
-                  customStyles="w-full"
                   placeholder="Tell something about yourself"
+                  customStyles="!w-full"
                   defaultValue={field.value}
                   onChange={e => field.onChange(e.target.value)}
                 />
@@ -287,10 +295,11 @@ const Edit = forwardRef(
                 name="state"
                 render={({ field: { onChange, value } }) => (
                   <Select
+                    key={value}
                     options={states}
                     placeholder="State"
                     name="state"
-                    value={value}
+                    value={value ? value : undefined}
                     onChange={onChange}
                     wrapperStyles="w-full"
                   />
@@ -302,7 +311,7 @@ const Edit = forwardRef(
             <>
               <p
                 onClick={handleOpenChangePasswordModal}
-                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21"
+                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
               >
                 Change password
               </p>

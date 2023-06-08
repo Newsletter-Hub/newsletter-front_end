@@ -57,9 +57,15 @@ const Tabs = ({ tabs, className, handleChange }: TabsComponentProps) => {
           <Trigger
             value={tab.value}
             key={tab.value}
-            className="relative z-10 text-dark-blue font-inter font-semibold"
+            className="relative z-10 text-dark-blue font-inter font-semibold mb-[6px]"
           >
-            <span className="mb-[6px]">{tab.title}</span>
+            <span
+              className={`mb-[6px] ${
+                activeTab === tab.value && 'text-primary'
+              }`}
+            >
+              {tab.title}
+            </span>
           </Trigger>
         ))}
         <div

@@ -96,10 +96,18 @@ const Settings = ({ interests }: SettingsProps) => {
 
   const resetChanges = () => {
     if (activeTab === 'edit') {
+      if (!isDirty) {
+        return;
+      }
       if (editRef.current) {
         editRef.current.resetForm();
       }
     } else if (user) {
+      if (
+        JSON.stringify(interestsPayload) === JSON.stringify(user?.interests)
+      ) {
+        return;
+      }
       setInterestsPayload(user?.interests);
     }
   };
@@ -182,7 +190,13 @@ const Settings = ({ interests }: SettingsProps) => {
         </div>
         <div className="w-full shadow-md pl-[17%] flex gap-12 font-inter items-center py-5">
           <span
-            className="text-base text-dark-blue cursor-pointer"
+            className={`text-base ${
+              (activeTab === 'edit'
+                ? !isDirty
+                : JSON.stringify(interestsPayload) ===
+                  JSON.stringify(user?.interests)) &&
+              'text-dark-grey cursor-default hover:text-dark-grey'
+            } text-dark-blue cursor-pointertransition-colors duration-200 ease-in-out hover:text-primary cursor-pointer`}
             onClick={resetChanges}
           >
             Reset all changes

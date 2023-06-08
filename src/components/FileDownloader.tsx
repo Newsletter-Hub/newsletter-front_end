@@ -96,7 +96,7 @@ const FileDownloader = ({
               width={105}
               height={104}
               alt="file downloader"
-              className="rounded-full object-cover border-2 border-primary h-[104px] w-[105px]"
+              className="rounded-full object-cover border-2 border-primary h-[104px] w-[105px] min-w-[105px]"
             />
             <div className="flex justify-end -mt-8">
               <Image
