@@ -31,6 +31,7 @@ const Notification = ({
         {notification.notificationAuthor?.username}
       </Link>
     );
+  console.log(notification);
   return (
     <div
       className={`flex justify-between md:items-center py-4 font-inter flex-col md:flex-row ${
@@ -44,6 +45,7 @@ const Notification = ({
           height={48}
           alt="Notification author"
           username={notification.notificationAuthor?.username}
+          className="h-[48px] object-cover"
         />
         {notification.notificationType === 'newNewsletter' &&
           notification.entity && (
@@ -56,7 +58,7 @@ const Notification = ({
               </div>
               <Link
                 href={`/newsletters/${notification.entity?.id}`}
-                className="text-primary font-semibold block md:max-w-[400px] max-w-[200px] xl:max-w-[700px] lg:max-w-[550px] whitespace-nowrap overflow-hidden text-ellipsis"
+                className="text-primary font-semibold block md:max-w-[400px] max-w-[200px] xl:max-w-[700px] lg:max-w-[550px] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-200 ease-in-out hover:text-dark-blue"
               >
                 {'title' in notification.entity && notification.entity.title}
               </Link>
@@ -80,7 +82,7 @@ const Notification = ({
                   </span>
                   <Link
                     href={`/newsletters/${notification.entity?.id}`}
-                    className="text-primary font-semibold block md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="text-primary font-semibold block md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-200 ease-in-out hover:text-dark-blue"
                   >
                     {'newsletter' in notification.entity &&
                       notification.entity.newsletter.title}
@@ -141,7 +143,7 @@ const Notification = ({
               </span>
               <Link
                 href={`/newsletters/${notification.entity?.id}`}
-                className="text-primary font-semibold block md:max-w-[220px] lg:max-w-[450px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] xl:max-w-[700px] whitespace-nowrap overflow-hidden text-ellipsis"
+                className="text-primary font-semibold block md:max-w-[220px] lg:max-w-[450px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] xl:max-w-[700px] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-200 ease-in-out hover:text-dark-blue"
               >
                 {'title' in notification.entity && notification.entity.title}
               </Link>
