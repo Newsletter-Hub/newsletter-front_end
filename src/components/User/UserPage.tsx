@@ -107,7 +107,7 @@ const UserPage = ({
             <div className="flex gap-8 items-center mb-[88px]">
               <Link href="profile/settings" className="flex items-center gap-2">
                 <EditIcon />
-                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue">
+                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
                   Edit a profile
                 </span>
               </Link>
@@ -116,7 +116,7 @@ const UserPage = ({
                 className="flex items-center gap-2"
               >
                 <BookmarkIcon />
-                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue">
+                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
                   Bookmarks
                 </span>
               </Link>
@@ -141,7 +141,7 @@ const UserPage = ({
             <h3 className="font-medium text-5xl text-dark-blue mb-10">
               Recent Activities
             </h3>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col">
               {notificationsInfo.notifications.map((notification, index) => (
                 <Notification
                   isProfile={isProfile}

@@ -33,16 +33,16 @@ interface ButtonProps {
 
 const variants = {
   primary:
-    'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center hover:bg-blue',
+    'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center transition-colors duration-200 ease-in-out hover:bg-blue',
   'primary-selected':
     'text-primary bg-primary-light whitespace-nowrap py-10px px-7 flex justify-center items-center',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
   outlined:
-    'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack hover:bg-blue hover:text-white',
+    'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white',
   'outlined-primary':
-    'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base hover:bg-blue hover:text-white',
+    'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 hover:bg-blue hover:text-white hover:border-blue',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white hover:border-blue',
   porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
 };
 

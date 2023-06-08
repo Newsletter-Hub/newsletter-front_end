@@ -13,7 +13,6 @@ import { UserMe } from '@/types/user';
 
 import UserPage from '@/components/User/UserPage';
 import PrivateRoute from '@/components/PrivateRoute';
-import Loading from '@/components/Loading';
 
 interface ProfilePageProps {
   newslettersListData: NewslettersListData;
