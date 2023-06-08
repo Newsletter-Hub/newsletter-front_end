@@ -201,14 +201,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     return <Loading />;
   }
   return (
-    <div className="flex justify-center items-center flex-col pt-20 px-[320px]">
+    <div className="flex justify-center items-center flex-col pt-20 px-5">
       <div className="!max-w-[1280px]">
         <Link
           href="/newsletters/categories/all"
           className="flex items-center gap-[18px] mb-[52px]"
         >
           <ArrowLeft className="stroke-dark-blue" />
-          <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg">
+          <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg transition-colors duration-200 ease-in-out hover:text-primary">
             Back to all newsletters
           </span>
         </Link>
