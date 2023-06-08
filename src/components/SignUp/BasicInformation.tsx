@@ -31,13 +31,14 @@ const BasicInformation = ({
 }: UserInfoStepsProps) => {
   const [states, setStates] = useState<Option[]>([]);
   const user = useContext(UserContext);
-  const { handleSubmit, control, getValues, watch } = useForm<Payload>({
-    defaultValues: {
-      country: user.country,
-      state: user.state,
-      dateBirth: user.dateBirth,
-    },
-  });
+  const { handleSubmit, control, getValues, watch, setValue } =
+    useForm<Payload>({
+      defaultValues: {
+        country: user.country,
+        state: user.state,
+        dateBirth: user.dateBirth,
+      },
+    });
 
   const watchCountry = watch('country');
 
@@ -73,8 +74,9 @@ const BasicInformation = ({
         };
       }
     );
+    setValue('state', undefined);
     setStates(formattedStates);
-  }, [watchCountry, getValues]);
+  }, [watchCountry, getValues, setValue]);
   return (
     <form
       className="md:max-w-[400px] max-w-[300px]"
@@ -114,15 +116,18 @@ const BasicInformation = ({
         <Controller
           control={control}
           name="state"
-          render={({ field: { onChange, value } }) => (
-            <Select
-              options={states}
-              placeholder="State"
-              name="state"
-              value={value}
-              onChange={onChange}
-            />
-          )}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                key={value}
+                options={states}
+                placeholder="State"
+                name="state"
+                value={value}
+                onChange={onChange}
+              />
+            );
+          }}
         />
       </div>
       <div className="flex items-center justify-center">

@@ -111,7 +111,7 @@ const Input = ({
           ))}
         {error && (
           <p
-            className={`absolute text-sm text-red ${
+            className={`absolute text-sm text-red font-inter ${
               checkNumberOfSymbols && maxLength ? '-bottom-10' : '-bottom-5'
             }`}
           >
