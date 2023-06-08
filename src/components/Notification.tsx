@@ -31,7 +31,6 @@ const Notification = ({
         {notification.notificationAuthor?.username}
       </Link>
     );
-  console.log(notification);
   return (
     <div
       className={`flex justify-between md:items-center py-4 font-inter flex-col md:flex-row ${
@@ -54,7 +53,7 @@ const Notification = ({
                 <div className="text-dark-blue font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis">
                   {userState}
                 </div>
-                <span>created the &nbsp;</span>
+                <span>added the &nbsp;</span>
               </div>
               <Link
                 href={`/newsletters/${notification.entity?.id}`}

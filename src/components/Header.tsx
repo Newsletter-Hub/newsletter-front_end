@@ -221,7 +221,7 @@ const Header = () => {
                     username={user.username}
                     customStyles="p-3"
                     src={user.avatar}
-                    className="rounded-full max-h-[48px] border-2 border-primary mr-2"
+                    className="rounded-full h-12 w-12 border-2 border-primary"
                   />
                   <div>
                     <span className="text-lg whitespace-nowrap block overflow-hidden text-ellipsis font-semibold text-lightBlack">
@@ -318,9 +318,9 @@ const Header = () => {
                   username={user.username}
                   customStyles="p-3"
                   src={user.avatar}
-                  className="rounded-full max-h-[48px] border-2 border-primary mr-2"
+                  className="rounded-full max-h-[48px] border-2 border-primary"
                 />
-                <div>
+                <div className="ml-2">
                   <ArrowDownIcon />
                 </div>
               </div>

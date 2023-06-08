@@ -17,7 +17,7 @@ const Home = ({ reviewData }: HomeProps) => {
         <MainBlock />
         <ReviewsBlock reviewData={reviewData} />
       </div>
-      <GetStartedBlock />
+      {/* <GetStartedBlock /> */}
     </main>
   );
 };
