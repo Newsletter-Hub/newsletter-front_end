@@ -35,7 +35,6 @@ const Select = ({
         <RadixSelect.Trigger
           className="border-b-2 outline-none border-grey w-full text-sm text-dark-grey text-start pb-2 inline-flex items-center justify-between font-inter pr-5 pl-4"
           name={name}
-          placeholder={placeholder}
         >
           <RadixSelect.Value placeholder={placeholder} {...register} />
           <RadixSelect.Icon>

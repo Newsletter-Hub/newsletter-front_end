@@ -107,7 +107,7 @@ const Button = ({
     customStyles,
     !selected &&
       selected !== undefined &&
-      '!bg-light-porcelain !text-dark-grey',
+      '!bg-light-porcelain !text-dark-grey transition-colors duration-200 ease-in-out hover:!bg-blue hover:!text-white',
     '!font-inter',
     heightVariants[height]
   );
