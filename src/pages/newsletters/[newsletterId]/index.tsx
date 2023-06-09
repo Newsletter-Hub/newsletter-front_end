@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -15,7 +14,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterData } from '@/types/newsletters';
 import { GetReviewResponse, ReviewResponse } from '@/types/newsletters';
-import { UserMe } from '@/types/user';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -30,14 +28,14 @@ import PlusIcon from '@/assets/icons/plus';
 import {
   addToBookmark,
   deleteBookmark,
-} from '../../actions/newsletters/bookmarks';
+} from '../../../actions/newsletters/bookmarks';
 import {
   GetNewsletterResponse,
   follow,
   getNewsletter,
   unfollow,
-} from '../../actions/newsletters/index';
-import { createReview, getReviews } from '../../actions/newsletters/reviews';
+} from '../../../actions/newsletters/index';
+import { createReview, getReviews } from '../../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
@@ -264,6 +262,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               </a>
             </Link>
           )}
+          <Link href={user ? `${newsletter.id}/edit` : '/sign-up'}>
+            <Button
+              label="Edit Newsletter"
+              rounded="xl"
+              fontSize="md"
+              height="sm"
+            />
+          </Link>
           <Button
             rounded="xl"
             fontSize="md"
