@@ -41,6 +41,7 @@ import { createReview, getReviews } from '../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
+import EmailLink from '@/components/EmailLink';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -214,13 +215,21 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               Back to all newsletters
             </span>
           </Link>
-          <Link href={user ? '/newsletters/add' : '/sign-up'}>
-            <Button
-              label="Add Newsletter"
-              rounded="xl"
-              customStyles="w-full md:w-fit"
-            />
-          </Link>
+          <div className="flex gap-2">
+            <Link href={user ? '/newsletters/add' : '/sign-up'}>
+              <Button
+                label="Add Newsletter"
+                rounded="xl"
+                customStyles="w-full md:w-fit"
+              />
+            </Link>
+            <EmailLink
+              email="jacky@newsletterhub.co"
+              subject={newsletter.title as string}
+            >
+              <Button label="Report" rounded="xl" />
+            </EmailLink>
+          </div>
         </div>
         <h1 className="text-lightBlack text-7xl font-medium mb-10">
           {newsletter?.title}
