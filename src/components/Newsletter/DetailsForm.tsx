@@ -129,7 +129,7 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
           <Input
             label="Title"
             variant="filled"
-            customStyles="w-full mb-4"
+            customStyles="!w-full mb-4"
             defaultValue={payload.title}
             disabled
           />

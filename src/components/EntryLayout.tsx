@@ -13,7 +13,7 @@ import Button from './Button';
 
 export interface EntryLayoutProps {
   children?: React.ReactNode;
-  type?: 'signup' | 'login' | 'newsletter';
+  type?: 'signup' | 'login' | 'newsletter' | 'newsletterEdit';
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
@@ -42,7 +42,22 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
                     <Image
                       src={addNewsletterImage}
                       width={450}
-                      alt="login"
+                      alt="newsletter"
+                      placeholder="blur"
+                      blurDataURL="src/assets/images/addNewsletterImage.svg"
+                    />
+                  </>
+                ) : type === 'newsletterEdit' ? (
+                  <>
+                    <p className="font-bold text-3xl mb-3">Edit Newsletter</p>
+                    <p className="max-w-xs text-center mb-28">
+                      Update newsletter details and continue your journey with
+                      us
+                    </p>
+                    <Image
+                      src={addNewsletterImage}
+                      width={450}
+                      alt="newsletter"
                       placeholder="blur"
                       blurDataURL="src/assets/images/addNewsletterImage.svg"
                     />

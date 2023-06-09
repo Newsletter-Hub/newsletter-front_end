@@ -91,40 +91,22 @@ export const newsletterLink = async ({
 
 export const newsletterUpdate = async ({
   id,
-  link,
-  title,
-  description,
-  newsletterAuthor,
-  image,
   interests,
   averageDuration,
   pricingType,
   router,
 }: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
   try {
-    const formData = new FormData();
-    link && formData.append('link', link as string);
-    title && formData.append('title', title as string);
-    description && formData.append('description', description as string);
-    newsletterAuthor &&
-      formData.append('newsletterAuthor', newsletterAuthor as string);
-    averageDuration &&
-      formData.append('averageDuration', averageDuration as string);
-    pricingType && formData.append('pricing', pricingType as string);
-    image && formData.append('image', image as Blob);
-    if (interests?.length) {
-      for (let i = 0; i < interests.length; i++) {
-        formData.append('interestIds[]', JSON.stringify(interests[i]));
-      }
-    }
-    const response = await api.put(`newsletters/${id}`, { body: formData });
+    const response = await api.put(`newsletters/${id}`, {
+      json: { interestIds: interests, averageDuration, pricing: pricingType },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const res = (await response.json()) as NewsletterLinkResponse;
     if (response.ok) {
-      toast.success('Newsletter succesfully added');
       if (router) {
+        toast.success('Newsletter succesfully updated');
         router.push(`/newsletters/${res.id}`);
       }
     }
