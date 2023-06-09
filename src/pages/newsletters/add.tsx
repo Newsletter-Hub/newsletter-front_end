@@ -30,7 +30,7 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
         <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
           Add Newsletter
         </p>
-        {step === 2 ? (
+        {step === 1 ? (
           <LinkForm
             setPayload={setPayload}
             payload={payload}
