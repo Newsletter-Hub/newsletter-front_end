@@ -1,7 +1,7 @@
 import {
   GetNewsletterResponse,
   getNewsletter,
-  newsletterUpdate, // newsletterVerifyOwnership,
+  newsletterUpdate,
 } from '@/actions/newsletters';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -53,17 +53,6 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
   const { newsletterId } = router.query;
 
   const { handleSubmit } = useForm();
-
-  // const onSubmit = async () => {
-  //   try {
-  //     const response = await newsletterVerifyOwnership({ link: payload.link });
-  //     if (response && response.id) {
-  //       router.push(`${response.id}`);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const onAdd = async () => {
     newsletterMutation.mutate({
@@ -259,24 +248,14 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
             </div>
           </div>
         </div>
-        <div className="flex w-full gap-4 justify-between items-center">
-          {/* <Button
-            label="Verify Ownership"
-            size="full"
-            rounded="xl"
-            onClick={onSubmit}
-            variant="outlined-primary"
-            fontSize="md"
-          /> */}
-          <Button
-            label="Add"
-            size="full"
-            rounded="xl"
-            fontSize="md"
-            type="submit"
-            loading={newsletterMutation.isLoading}
-          />
-        </div>
+        <Button
+          label="Add"
+          size="full"
+          rounded="xl"
+          fontSize="md"
+          type="submit"
+          loading={newsletterMutation.isLoading}
+        />
       </form>
     </div>
   );
