@@ -1,21 +1,21 @@
 import React, { ReactNode, createContext, useContext, useState } from 'react';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 interface UserContext {
-  user: UserMe | null;
-  setUser: React.Dispatch<React.SetStateAction<UserMe | null>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const UserContext = createContext<UserContext | undefined>(undefined);
 
 interface UserProviderProps {
   children: ReactNode;
-  defaultUser: UserMe | null;
+  defaultUser: User | null;
 }
 
 export const UserProvider = ({ children, defaultUser }: UserProviderProps) => {
-  const [user, setUser] = useState<UserMe | null>(defaultUser || null);
+  const [user, setUser] = useState<User | null>(defaultUser || null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

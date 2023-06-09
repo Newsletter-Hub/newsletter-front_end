@@ -1,34 +1,33 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
 import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
-import ky from 'ky';
 
 import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 import { toast } from 'react-toastify';
 
-interface User {
+interface LoginUser {
   email: string;
   password: string;
   router: NextRouter;
-  setUser?: (user: UserMe) => void;
+  setUser?: (user: User) => void;
 }
 
 interface LogOutPayload {
-  setUser: (user: UserMe | null) => void;
+  setUser: (user: User | null) => void;
 }
 
 interface GoogleAuth {
   token: string;
   router: NextRouter;
-  setUser?: (user: UserMe) => void;
+  setUser?: (user: User) => void;
 }
 
-interface SignupUser extends User {
+interface SignupUser extends LoginUser {
   username: string;
 }
 
@@ -42,7 +41,12 @@ interface ChangePasswordPayload {
   newPassword: string;
 }
 
-export const login = async ({ email, password, router, setUser }: User) => {
+export const login = async ({
+  email,
+  password,
+  router,
+  setUser,
+}: LoginUser) => {
   try {
     const response = await api
       .post('auth/sign-in', {
@@ -52,7 +56,7 @@ export const login = async ({ email, password, router, setUser }: User) => {
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
         if (setUser) {
-          setUser(res as UserMe);
+          setUser(res as User);
         }
         router.push('/');
       });
@@ -71,7 +75,7 @@ export const googleAuth = async ({ token, router, setUser }: GoogleAuth) => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
         router.push('/');
         if (setUser) {
-          setUser(res as UserMe);
+          setUser(res as User);
         }
       });
     return response;

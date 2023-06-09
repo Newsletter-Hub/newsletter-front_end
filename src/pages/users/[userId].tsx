@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
 import { NewslettersListData } from '@/types/newsletters';
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import UserPage from '@/components/User/UserPage';
 import { getUserById } from '@/actions/user';
@@ -15,7 +15,7 @@ import { getUserById } from '@/actions/user';
 interface UserPageProps {
   newslettersListData: NewslettersListData;
   notificationsData: NotificationData;
-  user: UserMe;
+  user: User;
 }
 
 const ProfilePage = ({

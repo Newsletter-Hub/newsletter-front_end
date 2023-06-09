@@ -5,7 +5,7 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
@@ -22,6 +22,7 @@ const BookmarksPage = ({
         interests={interests}
         getNewslettersList={getBookmarksList}
         type="bookmark"
+        title="Bookmarks"
       />
     </PrivateRoute>
   );
@@ -36,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       : [];
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const user: UserMe = context.req.cookies.user
+  const user: User = context.req.cookies.user
     ? JSON.parse(context.req.cookies.user as string)
     : undefined;
   const bookmarkList = await getBookmarksList({

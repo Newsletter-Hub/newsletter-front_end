@@ -70,6 +70,7 @@ export interface NewslettersPageProps {
   isNewsletterFollowed?: boolean;
   authorId?: number;
   defaultSortType?: 'date' | 'rating';
+  title?: string;
 }
 
 interface SortType {
@@ -124,6 +125,7 @@ const NewslettersList = ({
   isNewsletterFollowed = false,
   authorId,
   defaultSortType = 'rating',
+  title = 'Newsletters',
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
@@ -487,326 +489,316 @@ const NewslettersList = ({
   };
 
   return (
-    <div
-      className={`flex justify-center items-center flex-col ${
-        isSeparated && 'md:pt-20 pt-3 px-3'
-      }`}
-    >
+    <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
       <div
         className={`xl:w-[1280px] w-[300px] xs:w-[350px] sm:w-[400px] md:w-fit px-3 ${
           !isSeparated && 'xl:!w-fit max-w-[1280px]'
         }`}
       >
+        <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
+          {title}
+        </h1>
         {isSeparated && (
-          <>
-            <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
-              {type === 'newsletter' ? 'Newsletters' : 'Bookmarks'}
-            </h1>
-            <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[950px] flex-col md:flex-row gap-2 md:gap-0">
-              <div className="lg:flex-grow">
-                <Input
-                  isSearch
-                  placeholder="Search Newsletter Hub"
-                  wrapperStyles="md:max-w-[262px]"
-                  customStyles="h-[48px] w-full"
-                  iconStyles="!top-3"
-                  onChange={e => handleChangeSearch(e.target.value)}
-                  defaultValue={(router.query.search as string) || ''}
-                />
-              </div>
-              <div className="flex md:gap-4 md:w-fit w-full gap-2 flex-col md:flex-row">
-                <Button
-                  variant="outlined-secondary"
-                  onClick={handleOpenModal}
-                  height="base"
-                  customStyles="w-full md:max-w-[200px]"
-                  label={
-                    <span
-                      className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
-                        filtersCount && 'text-primary'
+          <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[950px] flex-col md:flex-row gap-2 md:gap-0">
+            <div className="lg:flex-grow">
+              <Input
+                isSearch
+                placeholder="Search Newsletter Hub"
+                wrapperStyles="md:max-w-[262px]"
+                customStyles="h-[48px] w-full"
+                iconStyles="!top-3"
+                onChange={e => handleChangeSearch(e.target.value)}
+                defaultValue={(router.query.search as string) || ''}
+              />
+            </div>
+            <div className="flex md:gap-4 md:w-fit w-full gap-2 flex-col md:flex-row">
+              <Button
+                variant="outlined-secondary"
+                onClick={handleOpenModal}
+                height="base"
+                customStyles="w-full md:max-w-[200px]"
+                label={
+                  <span
+                    className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
+                      filtersCount && 'text-primary'
+                    }`}
+                  >
+                    <FilterIcon
+                      className={`${
+                        filtersCount
+                          ? 'fill-primary stroke-primary'
+                          : 'stroke-grey-chat fill-grey-chat'
                       }`}
-                    >
-                      <FilterIcon
-                        className={`${
-                          filtersCount
-                            ? 'fill-primary stroke-primary'
-                            : 'stroke-grey-chat fill-grey-chat'
-                        }`}
-                      />
-                      Filters {Boolean(filtersCount) && `(${filtersCount})`}
-                    </span>
-                  }
-                />
-                <Modal
-                  open={isOpenModal}
-                  handleClose={handleCloseModal}
-                  customStyles="min-h-[472px]"
-                >
-                  {interests && interests?.length ? (
-                    <div>
-                      <h2 className={modalTitleStyles}>
-                        What would you like to filter by?
-                      </h2>
-                      <div className="flex flex-col gap-9 mb-9">
-                        <Accordion
-                          label="Categories"
-                          isSelected={Boolean(filtersPayload.categories.length)}
-                          isOpen={filters.categories}
-                          setIsOpen={value => {
-                            setFilters({ ...filters, categories: value });
-                          }}
-                        >
-                          <div className="pt-4 pl-9 grid md:grid-cols-2 gap-4">
-                            {interests?.map((interest, index) => (
-                              <Checkbox
-                                id={index}
-                                label={interest.interestName}
-                                key={interest.id}
-                                setChecked={value => {
-                                  if (value) {
-                                    setFiltersPayload({
-                                      ...filtersPayload,
-                                      categories: [
-                                        ...filtersPayload.categories,
-                                        interest.id,
-                                      ],
-                                    });
-                                  } else {
-                                    setFiltersPayload({
-                                      ...filtersPayload,
-                                      categories:
-                                        filtersPayload.categories.filter(
-                                          item => item !== interest.id
-                                        ),
-                                    });
-                                  }
-                                }}
-                                checked={filtersPayload.categories.includes(
-                                  interest.id
-                                )}
-                              />
-                            ))}
-                          </div>
-                        </Accordion>
-                        <Accordion
-                          label="Pricing type"
-                          isOpen={filters.pricingType}
-                          isSelected={Boolean(
-                            filtersPayload.pricingType.length
-                          )}
-                          setIsOpen={value => {
-                            setFilters({ ...filters, pricingType: value });
-                          }}
-                        >
-                          <div className="pt-4 pl-9 flex flex-col gap-2">
+                    />
+                    Filters {Boolean(filtersCount) && `(${filtersCount})`}
+                  </span>
+                }
+              />
+              <Modal
+                open={isOpenModal}
+                handleClose={handleCloseModal}
+                customStyles="min-h-[472px]"
+              >
+                {interests && interests?.length ? (
+                  <div>
+                    <h2 className={modalTitleStyles}>
+                      What would you like to filter by?
+                    </h2>
+                    <div className="flex flex-col gap-9 mb-9">
+                      <Accordion
+                        label="Categories"
+                        isSelected={Boolean(filtersPayload.categories.length)}
+                        isOpen={filters.categories}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, categories: value });
+                        }}
+                      >
+                        <div className="pt-4 pl-9 grid md:grid-cols-2 gap-4">
+                          {interests?.map((interest, index) => (
                             <Checkbox
-                              id="Free"
-                              label="Free"
+                              id={index}
+                              label={interest.interestName}
+                              key={interest.id}
                               setChecked={value => {
                                 if (value) {
                                   setFiltersPayload({
                                     ...filtersPayload,
-                                    pricingType: [
-                                      ...filtersPayload.pricingType,
-                                      'Free',
+                                    categories: [
+                                      ...filtersPayload.categories,
+                                      interest.id,
                                     ],
                                   });
                                 } else {
                                   setFiltersPayload({
                                     ...filtersPayload,
-                                    pricingType:
-                                      filtersPayload.pricingType.filter(
-                                        item => item !== 'Free'
+                                    categories:
+                                      filtersPayload.categories.filter(
+                                        item => item !== interest.id
                                       ),
                                   });
                                 }
                               }}
-                              checked={filtersPayload.pricingType.includes(
-                                'Free'
+                              checked={filtersPayload.categories.includes(
+                                interest.id
                               )}
                             />
-                            <Checkbox
-                              id="Paid"
-                              label="Paid"
-                              setChecked={value => {
-                                if (value) {
-                                  setFiltersPayload({
-                                    ...filtersPayload,
-                                    pricingType: [
-                                      ...filtersPayload.pricingType,
-                                      'Paid',
-                                    ],
-                                  });
-                                } else {
-                                  setFiltersPayload({
-                                    ...filtersPayload,
-                                    pricingType:
-                                      filtersPayload.pricingType.filter(
-                                        item => item !== 'Paid'
-                                      ),
-                                  });
-                                }
-                              }}
-                              checked={filtersPayload.pricingType.includes(
-                                'Paid'
-                              )}
-                            />
-                          </div>
-                        </Accordion>
-                        <Accordion
-                          label="Duration"
-                          isOpen={filters.duration}
-                          isSelected={Boolean(
-                            filtersPayload.durationFrom !== 1 ||
-                              filtersPayload.durationTo !== 60
-                          )}
-                          setIsOpen={value => {
-                            setFilters({ ...filters, duration: value });
-                          }}
-                        >
-                          <div className="md:pl-9">
-                            <div className="pt-[18px] mb-2">
-                              <Slider
-                                min={1}
-                                max={60}
-                                step={1}
-                                values={[
-                                  filtersPayload.durationFrom,
-                                  filtersPayload.durationTo,
-                                ]}
-                                setValues={values => {
-                                  if (Array.isArray(values)) {
-                                    setFiltersPayload({
-                                      ...filtersPayload,
-                                      durationFrom: values[0],
-                                      durationTo: values[1],
-                                    });
-                                  }
-                                }}
-                              />
-                            </div>
-                            <div className="flex justify-between">
-                              <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
-                                from&nbsp;
-                                <span className="font-semibold">
-                                  {filtersPayload.durationFrom} minute
-                                </span>
-                              </p>
-                              <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
-                                to&nbsp;
-                                <span className="font-semibold">
-                                  {filtersPayload.durationTo} minute
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        </Accordion>
-                        <Accordion
-                          label="Rating"
-                          isOpen={filters.rating}
-                          isSelected={Boolean(filtersPayload.ratings.length)}
-                          setIsOpen={value => {
-                            setFilters({ ...filters, rating: value });
-                          }}
-                        >
-                          <div className="flex flex-col gap-[10px] pt-4 pl-9">
-                            {ratings.map((rating, index) => (
-                              <Checkbox
-                                id={index}
-                                key={rating}
-                                label={<StarRating value={rating} readonly />}
-                                setChecked={value => {
-                                  if (value) {
-                                    setFiltersPayload({
-                                      ...filtersPayload,
-                                      ratings: [
-                                        ...filtersPayload.ratings,
-                                        rating,
-                                      ],
-                                    });
-                                  } else {
-                                    setFiltersPayload({
-                                      ...filtersPayload,
-                                      ratings: filtersPayload.ratings.filter(
-                                        item => item !== rating
-                                      ),
-                                    });
-                                  }
-                                }}
-                                checked={filtersPayload.ratings.includes(
-                                  rating
-                                )}
-                              />
-                            ))}
-                          </div>
-                        </Accordion>
-                      </div>
-                      <div className="flex md:pl-8 justify-between items-center">
-                        <span
-                          className="text-base text-lightBlack cursor-pointer"
-                          onClick={handleFiltersReset}
-                        >
-                          Clear
-                        </span>
-                        <Button
-                          label="Apply filters"
-                          rounded="xl"
-                          fontSize="md"
-                          customStyles="text-sm md:text-base min-w-[155px]"
-                          onClick={applyFilters}
-                          loading={filtersLoading}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="h-[432px]">
-                      <Loading />
-                    </div>
-                  )}
-                </Modal>
-                <Popover
-                  customTriggerStyles="md:w-[200px]"
-                  triggerContent={
-                    <div className="flex items-center justify-center md:gap-4 h-12">
-                      <span className="whitespace-nowrap text-sm">
-                        {sortTypes[choosedSortType].label}
-                      </span>
-                      <SortIcon className="min-w-4 min-h-4" />
-                    </div>
-                  }
-                >
-                  <div className="flex flex-col gap-[6px] py-[18px]">
-                    {sortTypes.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <div
-                          className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
-                            choosedSortType === index &&
-                            'bg-light-porcelain rounded'
-                          }`}
-                          onClick={() => handleSort(index)}
-                        >
-                          <span className="flex-1">{item.label}</span>
-                          <div className="w-4">
-                            {index === choosedSortType && (
-                              <CheckIcon className="stroke-[#253646]" />
+                          ))}
+                        </div>
+                      </Accordion>
+                      <Accordion
+                        label="Pricing type"
+                        isOpen={filters.pricingType}
+                        isSelected={Boolean(filtersPayload.pricingType.length)}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, pricingType: value });
+                        }}
+                      >
+                        <div className="pt-4 pl-9 flex flex-col gap-2">
+                          <Checkbox
+                            id="Free"
+                            label="Free"
+                            setChecked={value => {
+                              if (value) {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType: [
+                                    ...filtersPayload.pricingType,
+                                    'Free',
+                                  ],
+                                });
+                              } else {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType:
+                                    filtersPayload.pricingType.filter(
+                                      item => item !== 'Free'
+                                    ),
+                                });
+                              }
+                            }}
+                            checked={filtersPayload.pricingType.includes(
+                              'Free'
                             )}
+                          />
+                          <Checkbox
+                            id="Paid"
+                            label="Paid"
+                            setChecked={value => {
+                              if (value) {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType: [
+                                    ...filtersPayload.pricingType,
+                                    'Paid',
+                                  ],
+                                });
+                              } else {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType:
+                                    filtersPayload.pricingType.filter(
+                                      item => item !== 'Paid'
+                                    ),
+                                });
+                              }
+                            }}
+                            checked={filtersPayload.pricingType.includes(
+                              'Paid'
+                            )}
+                          />
+                        </div>
+                      </Accordion>
+                      <Accordion
+                        label="Duration"
+                        isOpen={filters.duration}
+                        isSelected={Boolean(
+                          filtersPayload.durationFrom !== 1 ||
+                            filtersPayload.durationTo !== 60
+                        )}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, duration: value });
+                        }}
+                      >
+                        <div className="md:pl-9">
+                          <div className="pt-[18px] mb-2">
+                            <Slider
+                              min={1}
+                              max={60}
+                              step={1}
+                              values={[
+                                filtersPayload.durationFrom,
+                                filtersPayload.durationTo,
+                              ]}
+                              setValues={values => {
+                                if (Array.isArray(values)) {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    durationFrom: values[0],
+                                    durationTo: values[1],
+                                  });
+                                }
+                              }}
+                            />
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
+                              from&nbsp;
+                              <span className="font-semibold">
+                                {filtersPayload.durationFrom} minute
+                              </span>
+                            </p>
+                            <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
+                              to&nbsp;
+                              <span className="font-semibold">
+                                {filtersPayload.durationTo} minute
+                              </span>
+                            </p>
                           </div>
                         </div>
-                      </React.Fragment>
-                    ))}
+                      </Accordion>
+                      <Accordion
+                        label="Rating"
+                        isOpen={filters.rating}
+                        isSelected={Boolean(filtersPayload.ratings.length)}
+                        setIsOpen={value => {
+                          setFilters({ ...filters, rating: value });
+                        }}
+                      >
+                        <div className="flex flex-col gap-[10px] pt-4 pl-9">
+                          {ratings.map((rating, index) => (
+                            <Checkbox
+                              id={index}
+                              key={rating}
+                              label={<StarRating value={rating} readonly />}
+                              setChecked={value => {
+                                if (value) {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    ratings: [
+                                      ...filtersPayload.ratings,
+                                      rating,
+                                    ],
+                                  });
+                                } else {
+                                  setFiltersPayload({
+                                    ...filtersPayload,
+                                    ratings: filtersPayload.ratings.filter(
+                                      item => item !== rating
+                                    ),
+                                  });
+                                }
+                              }}
+                              checked={filtersPayload.ratings.includes(rating)}
+                            />
+                          ))}
+                        </div>
+                      </Accordion>
+                    </div>
+                    <div className="flex md:pl-8 justify-between items-center">
+                      <span
+                        className="text-base text-lightBlack cursor-pointer"
+                        onClick={handleFiltersReset}
+                      >
+                        Clear
+                      </span>
+                      <Button
+                        label="Apply filters"
+                        rounded="xl"
+                        fontSize="md"
+                        customStyles="text-sm md:text-base min-w-[155px]"
+                        onClick={applyFilters}
+                        loading={filtersLoading}
+                      />
+                    </div>
                   </div>
-                </Popover>
-              </div>
+                ) : (
+                  <div className="h-[432px]">
+                    <Loading />
+                  </div>
+                )}
+              </Modal>
+              <Popover
+                customTriggerStyles="md:w-[200px]"
+                triggerContent={
+                  <div className="flex items-center justify-center md:gap-4 h-12">
+                    <span className="whitespace-nowrap text-sm">
+                      {sortTypes[choosedSortType].label}
+                    </span>
+                    <SortIcon className="min-w-4 min-h-4" />
+                  </div>
+                }
+              >
+                <div className="flex flex-col gap-[6px] py-[18px]">
+                  {sortTypes.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
+                          choosedSortType === index &&
+                          'bg-light-porcelain rounded'
+                        }`}
+                        onClick={() => handleSort(index)}
+                      >
+                        <span className="flex-1">{item.label}</span>
+                        <div className="w-4">
+                          {index === choosedSortType && (
+                            <CheckIcon className="stroke-[#253646]" />
+                          )}
+                        </div>
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </Popover>
             </div>
-            <Link href={user ? '/newsletters/add' : '/sign-up'}>
-              <Button
-                label="Add Newsletter"
-                rounded="xl"
-                customStyles="mb-10 w-full md:w-fit"
-              />
-            </Link>
-          </>
+          </div>
         )}
+        <Link href={user ? '/newsletters/add' : '/sign-up'}>
+          <Button
+            label="Add Newsletter"
+            rounded="xl"
+            customStyles="mb-10 w-full md:w-fit"
+          />
+        </Link>
         {!searchLoading ? (
           <div>
             {!newslettersData ||

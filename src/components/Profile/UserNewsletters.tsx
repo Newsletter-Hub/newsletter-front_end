@@ -3,7 +3,7 @@ import { getNewslettersList } from '@/actions/newsletters';
 import Link from 'next/link';
 
 import { NewslettersListData } from '@/types/newsletters';
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import Button from '../Button';
 import NewslettersList from '../Newsletter/NewsletterList';
@@ -11,7 +11,7 @@ import NewslettersList from '../Newsletter/NewsletterList';
 interface UserNewslettersProps {
   newslettersListData: NewslettersListData;
   isProfile?: boolean;
-  user: UserMe;
+  user: User;
 }
 
 const UserNewsletters = ({

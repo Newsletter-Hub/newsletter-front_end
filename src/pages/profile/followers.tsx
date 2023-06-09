@@ -1,4 +1,4 @@
-import { getUsersList } from '@/actions/user';
+import { getFollowers } from '@/actions/user';
 import React from 'react';
 
 import { GetServerSideProps } from 'next';
@@ -12,19 +12,21 @@ interface UsersListProps {
 }
 
 const Users = ({ usersList }: UsersListProps) => {
-  return <UsersList usersList={usersList} getUsersList={getUsersList} />;
+  return (
+    <UsersList
+      usersList={usersList}
+      getUsersList={getFollowers}
+      isSortable={false}
+    />
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const search = (context.query.search as string) || '';
   const cookies = parseCookies(context);
   const token = cookies.accessToken;
-  const usersResponse = await getUsersList({
+  const usersResponse = await getFollowers({
     page: 1,
     pageSize: 9,
-    order: 'dataJoined',
-    orderDirection: 'DESC',
-    search,
     token,
   });
   return {
