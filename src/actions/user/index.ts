@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
-import { UserList, UserMe } from '@/types/user';
+import { UserList, User } from '@/types/user';
 
 interface GetUserMePayload {
   token?: string | null;
@@ -17,22 +17,25 @@ interface GetUserByIdPayload extends GetUserMePayload {
 }
 
 interface GetUserMeResponse {
-  response?: UserMe;
+  response?: User;
   error?: string;
 }
 
 interface UpdateUserResponse {
   error?: string;
-  response?: UserMe;
+  response?: User;
 }
 
-export interface GetUsersListProps {
+export interface GetSimpleUserListProps {
   page: number;
   pageSize: number;
+  token?: string;
+}
+
+export interface GetAdvancedUsersListProps extends GetSimpleUserListProps {
   order: string;
   orderDirection: string;
   search?: string;
-  token?: string;
 }
 
 interface UserListResponse {
@@ -40,8 +43,12 @@ interface UserListResponse {
   error?: string;
 }
 
-export type GetUserListType = (
-  props: GetUsersListProps
+export type GetAdvancedUserListType = (
+  props: GetAdvancedUsersListProps
+) => Promise<UserListResponse>;
+
+export type GetSimpleUserListType = (
+  props: GetSimpleUserListProps
 ) => Promise<UserListResponse>;
 
 export const updateUser = async ({
@@ -76,10 +83,10 @@ export const updateUser = async ({
     });
 
     if (response.ok) {
-      const res: UserMe = await response.json();
+      const res: User = await response.json();
       Cookies.set('user', JSON.stringify(res), { expires: 1 });
       if (setUser) {
-        setUser(res as UserMe);
+        setUser(res as User);
       }
       if (router) {
         router.push('/');
@@ -109,7 +116,7 @@ export const getUserMe = async ({
 }: GetUserMePayload): Promise<GetUserMeResponse> => {
   try {
     const headers = token ? { Cookie: `accessToken=${token}` } : {};
-    const response: UserMe = await api
+    const response: User = await api
       .get('users', {
         headers,
         credentials: 'include',
@@ -127,7 +134,7 @@ export const getUserById = async ({
 }: GetUserByIdPayload): Promise<GetUserMeResponse> => {
   try {
     const headers = token ? { Cookie: `accessToken=${token}` } : {};
-    const response: UserMe = await api
+    const response: User = await api
       .get(`users/public-user/${userId}`, {
         headers,
         credentials: 'include',
@@ -146,11 +153,53 @@ export const getUsersList = async ({
   orderDirection,
   search = '',
   token,
-}: GetUsersListProps): Promise<UserListResponse> => {
+}: GetAdvancedUsersListProps): Promise<UserListResponse> => {
   try {
     const response: UserList = await api
       .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    return { userList: response };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to fetch users list' };
+  }
+};
+
+export const getFollowers = async ({
+  page,
+  pageSize,
+  token,
+}: GetSimpleUserListProps): Promise<UserListResponse> => {
+  try {
+    const response: UserList = await api
+      .get('subscriptions/subscribers', {
+        searchParams: { page, pageSize },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    return { userList: response };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to fetch users list' };
+  }
+};
+
+export const getUserSubscriptions = async ({
+  page,
+  pageSize,
+  token,
+}: GetSimpleUserListProps): Promise<UserListResponse> => {
+  try {
+    const response: UserList = await api
+      .get('subscriptions/my-subscriptions', {
+        searchParams: { page, pageSize, entity: 'User' },
         headers: {
           Cookie: `accessToken=${token}`,
         },

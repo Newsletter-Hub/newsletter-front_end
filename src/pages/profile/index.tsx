@@ -1,4 +1,3 @@
-import { getMySubscriptions, getNewslettersList } from '@/actions/newsletters';
 import {
   NotificationData,
   getNotifications,
@@ -9,28 +8,30 @@ import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
 import { NewslettersListData } from '@/types/newsletters';
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import UserPage from '@/components/User/UserPage';
 import PrivateRoute from '@/components/PrivateRoute';
+import { getUserMe } from '@/actions/user';
 
 interface ProfilePageProps {
   newslettersListData: NewslettersListData;
   followingNewsletterListData: NewslettersListData;
   notificationsData: NotificationData;
+  userMe: User;
 }
 
 const ProfilePage = ({
   newslettersListData,
   followingNewsletterListData,
   notificationsData,
+  userMe,
 }: ProfilePageProps) => {
-  const { user } = useUser();
   return (
     <PrivateRoute>
       <UserPage
         notificationsData={notificationsData}
-        user={user as UserMe}
+        user={userMe}
         newslettersListData={newslettersListData}
         followingNewsletterListData={followingNewsletterListData}
       />
@@ -39,15 +40,9 @@ const ProfilePage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { params } = context;
   const cookies = parseCookies(context);
-  const user = cookies.user as UserMe | undefined;
+  const user = cookies.user as User | undefined;
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const categoryId = params && params.id;
-  const categoriesIds =
-    categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
-      ? [+categoryId]
-      : [];
   const authorId = user && user.id ? +user.id : undefined;
   if (!user) {
     return {
@@ -57,20 +52,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   }
-  const newsletterList = await getNewslettersList({
-    page: 1,
-    pageSize: 6,
-    order: 'date',
-    orderDirection: 'DESC',
-    categoriesIds,
-    authorId,
-  });
-  const followingNewsletterList = await getMySubscriptions({
-    entity: 'Newsletter',
-    page: 1,
-    pageSize: 6,
-    token,
-  });
   const notificationsList = await getNotifications({
     notificationRecipientId: authorId,
     isOwnAccount: true,
@@ -78,17 +59,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
     pageSize: 6,
     token,
   });
-  if (!newsletterList || !followingNewsletterList || !notificationsList) {
+
+  let userMe = null;
+  if (token) {
+    userMe = await getUserMe({ token });
+  }
+  if (!notificationsList) {
     return {
       notFound: true,
     };
   }
   return {
     props: {
-      newslettersListData: newsletterList.newslettersListData || null,
-      followingNewsletterListData:
-        followingNewsletterList.newslettersListData || null,
       notificationsData: notificationsList.notificationsData,
+      userMe: userMe?.response,
     },
   };
 };

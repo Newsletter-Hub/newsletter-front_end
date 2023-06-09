@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { debounce } from 'lodash';
 import { UserList } from '@/types/user';
 import { SortType } from '@/types/sorting';
-import { GetUserListType } from '@/actions/user';
+import { GetAdvancedUserListType, GetSimpleUserListType } from '@/actions/user';
 import { follow, unfollow } from '@/actions/newsletters';
 import { FollowingPayload } from '@/types';
 import CheckIcon from '@/assets/icons/check';
@@ -35,10 +35,17 @@ const sortTypes: SortType[] = [
 
 interface UsersListProps {
   usersList: UserList;
-  getUsersList: GetUserListType;
+  getUsersList: GetAdvancedUserListType | GetSimpleUserListType;
+  isSortable?: boolean;
+  title?: string;
 }
 
-const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
+const UsersList = ({
+  usersList,
+  getUsersList,
+  isSortable = true,
+  title = 'Users',
+}: UsersListProps) => {
   const { user } = useUser();
   const router = useRouter();
   const [choosedSortType, setChoosedSortType] = useState(0);
@@ -115,6 +122,8 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
           }
+        } else {
+          setFollowLoading(false);
         }
       } else {
         const response = await follow({ entityId, entityType: 'User' });
@@ -131,58 +140,63 @@ const UsersList = ({ usersList, getUsersList }: UsersListProps) => {
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
           }
+        } else {
+          setFollowLoading(false);
         }
       }
     }
   };
   return (
     <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
-      <div className="max-w-[1280px]">
+      <div className="max-w-[1280px] sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px]">
         <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
-          Users
+          {title}
         </h1>
-        <div className="flex mb-10 items-center sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px] justify-between md:flex-row flex-col gap-3 md:gap-0">
-          <Input
-            isSearch
-            placeholder="Search Newsletter Hub"
-            wrapperStyles="md:max-w-[262px]"
-            customStyles="h-[48px]"
-            iconStyles="!top-3"
-            onChange={e => handleChangeSearch(e.target.value)}
-            defaultValue={(router.query.search as string) || ''}
-          />
-          <Popover
-            customTriggerStyles="md:w-[200px] w-full"
-            triggerContent={
-              <div className="flex items-center justify-center md:gap-4 h-12">
-                <span className="whitespace-nowrap text-sm">
-                  {sortTypes[choosedSortType].label}
-                </span>
-                <SortIcon className="min-w-4 min-h-4" />
-              </div>
-            }
-          >
-            <div className="flex flex-col gap-[6px] py-[18px]">
-              {sortTypes.map((item, index) => (
-                <React.Fragment key={index}>
-                  <div
-                    className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
-                      choosedSortType === index && 'bg-light-porcelain rounded'
-                    }`}
-                    onClick={() => handleSort(index)}
-                  >
-                    <span className="flex-1">{item.label}</span>
-                    <div className="w-4">
-                      {index === choosedSortType && (
-                        <CheckIcon className="stroke-[#253646]" />
-                      )}
+        {isSortable && (
+          <div className="flex mb-10 items-center justify-between md:flex-row flex-col gap-3 md:gap-0">
+            <Input
+              isSearch
+              placeholder="Search Newsletter Hub"
+              wrapperStyles="md:max-w-[262px]"
+              customStyles="h-[48px]"
+              iconStyles="!top-3"
+              onChange={e => handleChangeSearch(e.target.value)}
+              defaultValue={(router.query.search as string) || ''}
+            />
+            <Popover
+              customTriggerStyles="md:w-[200px] w-full"
+              triggerContent={
+                <div className="flex items-center justify-center md:gap-4 h-12">
+                  <span className="whitespace-nowrap text-sm">
+                    {sortTypes[choosedSortType].label}
+                  </span>
+                  <SortIcon className="min-w-4 min-h-4" />
+                </div>
+              }
+            >
+              <div className="flex flex-col gap-[6px] py-[18px]">
+                {sortTypes.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <div
+                      className={`flex gap-4 items-center w-full cursor-pointer px-4 py-2 ${
+                        choosedSortType === index &&
+                        'bg-light-porcelain rounded'
+                      }`}
+                      onClick={() => handleSort(index)}
+                    >
+                      <span className="flex-1">{item.label}</span>
+                      <div className="w-4">
+                        {index === choosedSortType && (
+                          <CheckIcon className="stroke-[#253646]" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </React.Fragment>
-              ))}
-            </div>
-          </Popover>
-        </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            </Popover>
+          </div>
+        )}
         {searchLoading ? (
           <div className="pt-10">
             <Loading />

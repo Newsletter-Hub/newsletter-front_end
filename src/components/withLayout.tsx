@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import EntryLayout from './EntryLayout';
 import Layout from './Layout';
@@ -10,7 +10,7 @@ export type EntryType = 'signup' | 'login' | 'newsletter';
 
 interface WithLayoutProps {
   children?: ReactNode;
-  user?: UserMe | null;
+  user?: User | null;
   layoutProps?: {
     isFooter?: boolean;
   };

@@ -16,7 +16,7 @@ import { COUNTRIES } from '@/config/constants';
 
 import { Country, State } from 'country-state-city';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import Button from '../Button';
 import FileDownloader from '../FileDownloader';
@@ -47,7 +47,7 @@ const validationSchema = z.object({
 });
 
 interface EditProps {
-  user: UserMe;
+  user: User;
   onSubmit: (data: EditProfilePayload) => void;
   setIsDirty: (value: boolean) => void;
   isVerifyEmailModalOpen: boolean;

@@ -242,7 +242,7 @@ export const getNewslettersList = async ({
   }
 };
 
-export const getMySubscriptions = async ({
+export const getMyNewsletterSubscriptions = async ({
   entity = 'Newsletter',
   page,
   pageSize,

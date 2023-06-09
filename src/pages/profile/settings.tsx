@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import format from 'date-fns/format';
 
 import { Interest } from '@/types/interests';
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import Button from '@/components/Button';
 import Loading from '@/components/Loading';
@@ -79,7 +79,7 @@ const Settings = ({ interests }: SettingsProps) => {
           if (res) {
             const user = await getUserMe({ token: null });
             if (user.response) {
-              setUser(user.response as UserMe);
+              setUser(user.response as User);
             }
           }
         })
@@ -127,7 +127,7 @@ const Settings = ({ interests }: SettingsProps) => {
         setInterestsPayload(user.response.interests);
         const getUser = await getUserMe({ token: null });
         if (getUser.response) {
-          setUser(getUser.response as UserMe);
+          setUser(getUser.response as User);
         }
       }
     }
@@ -148,7 +148,7 @@ const Settings = ({ interests }: SettingsProps) => {
       value: 'edit',
       content: (
         <Edit
-          user={user as UserMe}
+          user={user as User}
           onSubmit={onEditSubmit}
           ref={editRef}
           setIsDirty={setIsDirty}
@@ -204,7 +204,7 @@ const Settings = ({ interests }: SettingsProps) => {
           <Button
             label="Save"
             rounded="xl"
-            customStyles="max-w-[101px]"
+            customStyles="w-[101px]"
             onClick={onSubmit}
             loading={isLoading}
             disabled={
