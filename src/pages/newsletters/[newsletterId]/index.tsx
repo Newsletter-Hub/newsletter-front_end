@@ -209,7 +209,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     return <Loading />;
   }
   return (
-    <div className="flex justify-center items-center flex-col pt-20 px-5">
+    <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
       <div className="max-w-[1280px]">
         <div className="flex justify-between md:items-center md:flex-row mb-[52px] flex-col gap-2 md:gap-0">
           <Link
