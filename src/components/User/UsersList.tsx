@@ -224,7 +224,7 @@ const UsersList = ({
                     <div className="flex flex-col gap-3">
                       <Link
                         href={`/users/${item.id}`}
-                        className="text-lightBlack text-xl font-medium"
+                        className="text-lightBlack text-xl font-medium max-w-[150px] xs:max-w-[180px] sm:max-w-[230px] md:max-w-none overflow-hidden block whitespace-nowrap text-ellipsis"
                       >
                         {item.username}
                       </Link>
