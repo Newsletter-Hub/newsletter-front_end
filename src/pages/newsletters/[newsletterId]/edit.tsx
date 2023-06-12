@@ -129,7 +129,7 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
   }
 
   return (
-    <div className="shadow-md p-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
+    <div className="md:shadow-md md:p-12 p-3 pt-6 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
       <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
         Edit Newsletter
       </p>
@@ -161,7 +161,7 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
                 />
               </div>
             )}
-            <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap mb-4">
+            <div className="border-b-grey border-b-2 flex gap-3 md:w-[600px] w-[280px] xs:w-[330px] sm:w-[380px] flex-wrap mb-4">
               {Boolean(tags.length) &&
                 tags.map(item => (
                   <React.Fragment key={item.id}>
@@ -249,7 +249,7 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
           </div>
         </div>
         <Button
-          label="Add"
+          label="Edit"
           size="full"
           rounded="xl"
           fontSize="md"

@@ -39,9 +39,12 @@ const RadioGroup = ({ options, defaultValue, setValue }: RadioGroupProps) => {
           >
             <RadixRadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-[50%] after:bg-white bg-primary rounded-[50%]" />
           </RadixRadioGroup.Item>
-          <span className="font-inter pl-2 text-base text-dark-grey">
+          <label
+            htmlFor={String(option.id)}
+            className="font-inter pl-2 text-base text-dark-grey cursor-pointer"
+          >
             {option.label}
-          </span>
+          </label>
         </div>
       ))}
     </RadixRadioGroup.Root>
