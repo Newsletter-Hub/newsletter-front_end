@@ -39,6 +39,7 @@ import { createReview, getReviews } from '../../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
+import ReportModal from '@/components/Modals/ReportModal';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -57,12 +58,20 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
   const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const router = useRouter();
   const handleOpenModal = () => {
     if (user) {
       setIsModalOpen(true);
+    } else {
+      router.push('/sign-up');
+    }
+  };
+  const handleOpenReportModal = () => {
+    if (user) {
+      setIsReportModalOpen(true);
     } else {
       router.push('/sign-up');
     }
@@ -212,13 +221,25 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               Back to all newsletters
             </span>
           </Link>
-          <Link href={user ? '/newsletters/add' : '/sign-up'}>
+          <div className="flex gap-4">
+            <Link href={user ? '/newsletters/add' : '/sign-up'}>
+              <Button
+                label="Add Newsletter"
+                rounded="xl"
+                customStyles="w-1/2 md:w-fit"
+              />
+            </Link>
             <Button
-              label="Add Newsletter"
+              label="Report"
               rounded="xl"
-              customStyles="w-full md:w-fit"
+              customStyles="w-1/2"
+              onClick={handleOpenReportModal}
             />
-          </Link>
+            <ReportModal
+              open={isReportModalOpen}
+              handleClose={() => setIsReportModalOpen(false)}
+            />
+          </div>
         </div>
         <h1 className="text-lightBlack text-7xl font-medium mb-10">
           {newsletter?.title}

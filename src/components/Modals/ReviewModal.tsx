@@ -5,7 +5,7 @@ import StarRating from '../StarRating';
 import Input from '../Input';
 import Button from '../Button';
 import { FormEventHandler } from 'react';
-import { FieldValues, UseFormRegister, FieldPath } from 'react-hook-form';
+import { UseFormRegister, FieldPath } from 'react-hook-form';
 
 interface ReviewErrors {
   rating?: {

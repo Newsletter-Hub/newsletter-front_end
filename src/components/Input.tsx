@@ -25,6 +25,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
   disabled?: boolean;
+  size?: 'base' | 'full';
 }
 
 const variants = {
@@ -52,6 +53,7 @@ const Input = ({
   disabled,
   onChange,
   defaultValue,
+  size = 'base',
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -60,7 +62,8 @@ const Input = ({
     error && 'border-red',
     customStyles,
     'font-inter w-full',
-    isSearch && 'focus:border-primary focus:border focus:outline-primary-light'
+    isSearch && 'focus:border-primary focus:border focus:outline-primary-light',
+    size === 'full' && '!w-full'
   );
   const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col w-full');
   const [value, setValue] = useState(defaultValue || '');
