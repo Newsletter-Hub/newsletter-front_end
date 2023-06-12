@@ -404,7 +404,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                 } border-light-grey`}
                 key={review.id}
               >
-                <div className="md:mr-[88px] flex gap-[18px] md:w-[200px] w-[300px] sm:w-[400px] items-center">
+                <div className="md:mr-[88px] flex gap-[18px] md:w-[250px] w-[300px] sm:w-[400px] items-center">
                   <div className="mb-2 md:mb-0">
                     <Avatar
                       src={review.reviewer.avatar as string}
@@ -416,7 +416,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                       customStyles="h-[80px] w-[80px]"
                     />
                   </div>
-                  <p className="text-lightBlack text-xl max-w-[280px] sm:max-w-[400px] overflow-hidden whitespace-nowrap text-ellipsis">
+                  <p className="text-lightBlack text-xl max-w-[280px] sm:max-w-[400px] md:max-w-none md:whitespace-normal overflow-hidden whitespace-nowrap text-ellipsis">
                     {review.reviewer.username}
                   </p>
                 </div>
