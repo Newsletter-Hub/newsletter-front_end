@@ -16,7 +16,7 @@ const ProfileInterests = ({
   return (
     <div className="pt-10">
       <h3 className="text-xl text-dark-blue font-medium mb-8">Interests</h3>
-      <div className="flex max-w-[768px] flex-wrap h-[400px] mb-12">
+      <div className="flex max-w-[768px] flex-wrap h-[400px] mb-12 overflow-scroll md:overflow-visible interests-container">
         {interests.map(item => (
           <Button
             label={item.interestName}
