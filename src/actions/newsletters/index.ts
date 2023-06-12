@@ -60,6 +60,16 @@ export interface FollowPayload {
   entityType: 'Newsletter' | 'User';
 }
 
+export interface ReportNewsletterResponse {
+  error?: string;
+  isReported?: boolean;
+}
+
+export interface ReportPayload {
+  newsletterId: number;
+  report: string;
+}
+
 export const parseNewsletter = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
@@ -288,5 +298,25 @@ export const unfollow = async ({ entityId, entityType }: FollowPayload) => {
   } catch (error) {
     console.log(error);
     throwErrorMessage(error as HTTPError, `Failed to delete ${entityType}`);
+  }
+};
+
+export const newsletterReport = async ({
+  report,
+  newsletterId,
+}: ReportPayload): Promise<ReportNewsletterResponse | undefined> => {
+  try {
+    await api
+      .post('reports', {
+        json: { report, newsletterId },
+      })
+      .then(() => {
+        toast.success('Report was succesfully sended');
+        return { isReported: true };
+      });
+  } catch (error) {
+    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to send report');
+    return { error: 'Failed to send report' };
   }
 };
