@@ -209,12 +209,12 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     return <Loading />;
   }
   return (
-    <div className="flex justify-center items-center flex-col pt-20 px-5">
-      <div className="!max-w-[1280px]">
-        <div className="flex justify-between items-center mb-[52px]">
+    <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
+      <div className="max-w-[1280px]">
+        <div className="flex justify-between md:items-center md:flex-row mb-[52px] flex-col gap-2 md:gap-0">
           <Link
             href="/newsletters/categories/all"
-            className="flex items-center gap-[18px]"
+            className="flex items-center gap-[18px] mb-3 md:mb-0"
           >
             <ArrowLeft className="stroke-dark-blue" />
             <span className="font-inter border-b-2 border-primary text-lightBlack font-semibold text-lg transition-colors duration-200 ease-in-out hover:text-primary">
@@ -241,7 +241,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             />
           </div>
         </div>
-        <h1 className="text-lightBlack text-7xl font-medium mb-10">
+        <h1 className="text-lightBlack sm:text-7xl text-5xl font-medium mb-10">
           {newsletter?.title}
         </h1>
         {newsletter?.image && (
@@ -254,7 +254,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           />
         )}
         {Boolean(newsletter?.interests?.length) && (
-          <div className="flex gap-2 mb-10">
+          <div className="flex gap-2 mb-10 max-w-[300px] sm:max-w-[400px] md:max-w-none flex-wrap md:flex-nowrap">
             {newsletter?.interests?.map(interest => (
               <span
                 key={interest.id}
@@ -270,7 +270,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             {newsletter?.description}
           </p>
         )}
-        <div className="flex gap-2 pb-10 border-b border-light-grey mb-10">
+        <div className="flex flex-col sm:flex-row gap-2 sm:pb-10 pb-5 border-b border-light-grey mb-10">
           {newsletter?.link && (
             <Link href={newsletter.link} legacyBehavior passHref>
               <a target="_blank" rel="noopener noreferrer">
@@ -279,6 +279,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                   rounded="xl"
                   fontSize="md"
                   height="sm"
+                  customStyles="w-full sm:w-fit"
                 />
               </a>
             </Link>
@@ -289,12 +290,14 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               rounded="xl"
               fontSize="md"
               height="sm"
+              customStyles="w-full sm:w-fit"
             />
           </Link>
           <Button
             rounded="xl"
             fontSize="md"
             height="sm"
+            customStyles="w-full sm:w-fit"
             onClick={() =>
               handleFollow({
                 entityId: newsletter.id,
@@ -314,31 +317,33 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             }
           />
         </div>
-        <div className="flex justify-between font-inter items-center mb-20">
-          <div className="flex gap-6 items-center">
-            {newsletter?.averageDuration && (
-              <>
-                <p className="text-sm text-dark-grey">
-                  <span className="font-semibold">
-                    {newsletter?.averageDuration} min
-                  </span>{' '}
-                  read
-                </p>
-                <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-              </>
-            )}
-            {newsletter?.pricing && (
-              <>
-                <span className="text-sm text-dark-grey font-semibold">
-                  {newsletter.pricing.charAt(0).toUpperCase() +
-                    newsletter.pricing.slice(1)}
-                </span>
-                <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-              </>
-            )}
-            <div className="flex gap-2 items-center">
+        <div className="flex justify-between font-inter items-center md:mb-20 mb-10 flex-col md:flex-row">
+          <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">
+            <div className="flex gap-6 items-center">
+              {newsletter?.averageDuration && (
+                <>
+                  <p className="text-sm text-dark-grey">
+                    <span className="font-semibold">
+                      {newsletter?.averageDuration} min
+                    </span>{' '}
+                    read
+                  </p>
+                  <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                </>
+              )}
+              {newsletter?.pricing && (
+                <>
+                  <span className="text-sm text-dark-grey font-semibold">
+                    {newsletter.pricing.charAt(0).toUpperCase() +
+                      newsletter.pricing.slice(1)}
+                  </span>
+                  <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
+                </>
+              )}
+            </div>
+            <div className="flex gap-2 items-center mb-3">
               <StarRating readonly value={newsletter?.averageRating} />
-              <span className="font-inter text-sm text-dark-grey">
+              <span className="font-inter xs:text-sm text-dark-grey text-xs">
                 <span className="font-semibold">
                   {newsletter?.amountRatings} people
                 </span>{' '}
@@ -394,32 +399,29 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           {Boolean(reviewsData.reviews.length) &&
             reviewsData.reviews.map((review, index) => (
               <div
-                className={`flex w-full py-6 ${
+                className={`flex flex-col md:flex-row w-full py-6 ${
                   index + 1 < reviewsData.reviews.length && 'border-b'
                 } border-light-grey`}
                 key={review.id}
               >
-                <div className="mr-[18px]">
-                  <Avatar
-                    src={review.reviewer.avatar as string}
-                    alt="avatar"
-                    width={80}
-                    height={80}
-                    className="rounded-full max-h-[80px] max-w-full w-[80px] min-w-[80px] min-h-[80px]"
-                    username={review.reviewer.username}
-                    customStyles="h-[80px] w-[80px]"
-                  />
-                </div>
-                <div className="mr-[88px] w-[150px]">
-                  <p className="text-lightBlack text-xl">
+                <div className="md:mr-[88px] flex gap-[18px] md:w-[250px] w-[300px] sm:w-[400px] items-center">
+                  <div className="mb-2 md:mb-0">
+                    <Avatar
+                      src={review.reviewer.avatar as string}
+                      alt="avatar"
+                      width={80}
+                      height={80}
+                      className="rounded-full max-h-[80px] max-w-full w-[80px] min-w-[80px] min-h-[80px]"
+                      username={review.reviewer.username}
+                      customStyles="h-[80px] w-[80px]"
+                    />
+                  </div>
+                  <p className="text-lightBlack text-xl max-w-[280px] sm:max-w-[400px] md:max-w-none md:whitespace-normal overflow-hidden whitespace-nowrap text-ellipsis">
                     {review.reviewer.username}
-                  </p>
-                  <p className="font-inter text-dark-grey text-sm">
-                    {review.reviewer.country}
                   </p>
                 </div>
                 <div className="w-full">
-                  <div className="flex mb-4">
+                  <div className="flex md:mb-4 mb-2">
                     <StarRating
                       readonly
                       value={review.rating}
