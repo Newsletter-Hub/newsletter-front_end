@@ -9,7 +9,7 @@ import { COUNTRIES } from '@/config/constants';
 
 import { Country, State } from 'country-state-city';
 
-import { format } from 'date-fns';
+import { format, subYears } from 'date-fns';
 
 import { UserInfoStepsProps } from '@/types/signup';
 
@@ -77,6 +77,8 @@ const BasicInformation = ({
     setValue('state', undefined);
     setStates(formattedStates);
   }, [watchCountry, getValues, setValue]);
+  const sixteenYearsAgo = subYears(new Date(), 16);
+  const hundredYearsAgo = subYears(new Date(), 100);
   return (
     <form
       className="md:max-w-[400px] max-w-[300px]"
@@ -96,6 +98,14 @@ const BasicInformation = ({
             inputProps={{ placeholder: 'Date of birth' }}
             onChange={onChange}
             value={value}
+            initialViewDate={sixteenYearsAgo}
+            initialViewMode="years"
+            isValidDate={currentDate => {
+              return (
+                currentDate.isBefore(sixteenYearsAgo) &&
+                currentDate.isAfter(hundredYearsAgo)
+              );
+            }}
           />
         )}
       />

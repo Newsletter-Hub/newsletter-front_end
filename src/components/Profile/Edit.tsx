@@ -9,6 +9,7 @@ import {
 import Datetime from 'react-datetime';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import subYears from 'date-fns/subYears';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -142,6 +143,8 @@ const Edit = forwardRef(
     const handleCloseVerifyEmailModal = () => {
       setIsVerifyEmailModalOpen(false);
     };
+    const sixteenYearsAgo = subYears(new Date(), 16);
+    const hundredYearsAgo = subYears(new Date(), 100);
     return (
       <div className="pt-10">
         <h3 className="text-xl text-dark-blue font-medium mb-8">
@@ -272,6 +275,14 @@ const Edit = forwardRef(
                   inputProps={{ placeholder: 'Date of birth' }}
                   onChange={onChange}
                   value={value}
+                  initialViewDate={sixteenYearsAgo}
+                  initialViewMode="years"
+                  isValidDate={currentDate => {
+                    return (
+                      currentDate.isBefore(sixteenYearsAgo) &&
+                      currentDate.isAfter(hundredYearsAgo)
+                    );
+                  }}
                 />
               )}
             />
