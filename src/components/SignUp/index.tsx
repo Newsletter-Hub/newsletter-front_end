@@ -83,18 +83,15 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
     password,
     username,
   }) => {
-    signUpMutation
-      .mutateAsync({
-        email,
-        password,
-        username,
-        router,
-      })
-      .then(res => {
-        if (res?.ok) {
-          setEmail(email);
-        }
-      });
+    const response = await signUpMutation.mutateAsync({
+      email,
+      password,
+      username,
+      router,
+    });
+    if (response) {
+      setEmail(email);
+    }
   };
   const { width } = useWindowSize();
   const googleButtonWidth = () => {

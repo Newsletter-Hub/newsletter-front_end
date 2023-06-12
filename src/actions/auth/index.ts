@@ -183,7 +183,8 @@ export const signUpSetCookie = async ({
     const response = await api.post('auth/set-cookie', {
       json: { accessToken },
     });
-    return response.json();
+    const res: User = await response.json();
+    return res;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Invalid access token');
     console.log(error);

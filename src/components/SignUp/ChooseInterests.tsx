@@ -45,9 +45,10 @@ const ChooseInterests = ({
     const res = await signUpSetCookie({
       accessToken: accessToken as string,
     });
-    if (res) {
+    if (res && res.username) {
       updateUser({
         ...formattedPayload,
+        username: res.username,
         router,
         setUser,
       });
