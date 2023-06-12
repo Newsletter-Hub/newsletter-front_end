@@ -14,6 +14,8 @@ import Button from '../Button';
 import Input from '../Input';
 import { useWindowSize } from 'usehooks-ts';
 import Link from 'next/link';
+import { useMutation } from 'react-query';
+import { useUser } from '@/contexts/UserContext';
 
 const validationSchema = z
   .object({
@@ -63,6 +65,7 @@ const fields: Fields = [
 
 const SignUpForm = ({ setEmail }: SignUpProps) => {
   const router = useRouter();
+  const { setUser } = useUser();
   const {
     register,
     handleSubmit,
@@ -70,18 +73,28 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
+  const signUpMutation = useMutation(signup);
+  const googleAuthMutation = useMutation(googleAuth);
   const onGoogleLogin = (token: string) => {
-    googleAuth({ token, router });
+    googleAuthMutation.mutate({ token, router, setUser });
   };
   const onSubmit: SubmitHandler<ValidationSchema> = async ({
     email,
     password,
     username,
   }) => {
-    const response = await signup({ email, password, username, router });
-    if (response) {
-      setEmail(email);
-    }
+    signUpMutation
+      .mutateAsync({
+        email,
+        password,
+        username,
+        router,
+      })
+      .then(res => {
+        if (res?.ok) {
+          setEmail(email);
+        }
+      });
   };
   const { width } = useWindowSize();
   const googleButtonWidth = () => {
@@ -117,7 +130,13 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
           Login
         </Link>
       </p>
-      <Button label="Signup" size="full" rounded="xl" type="submit" />
+      <Button
+        label="Signup"
+        size="full"
+        rounded="xl"
+        type="submit"
+        loading={signUpMutation.isLoading || googleAuthMutation.isLoading}
+      />
       <GoogleLogin
         onSuccess={({ credential }) => onGoogleLogin(credential as string)}
         theme="filled_black"
