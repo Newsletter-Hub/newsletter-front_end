@@ -223,7 +223,7 @@ const Header = () => {
                     src={user.avatar}
                     className="rounded-full h-12 w-12 border-2 border-primary"
                   />
-                  <div>
+                  <div className="ml-3">
                     <span className="text-lg whitespace-nowrap block overflow-hidden text-ellipsis font-semibold text-lightBlack">
                       {user.username}
                     </span>

@@ -93,20 +93,22 @@ const UserPage = ({
               )
             </p>
           )}
-          <p className="text-center max-w-[512px] font-inter text-dark-grey text-sm mb-8">
-            {user.description}
-          </p>
+          <div className="text-center flex flex-wrap justify-center">
+            <p className="font-inter text-dark-grey text-sm mb-8 max-w-[512px] px-3">
+              {user.description}
+            </p>
+          </div>
           {isProfile && (
-            <div className="flex gap-6 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
+            <div className="flex flex-col md:flex-row md:gap-6 gap-2 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
               <Link href="profile/followers">
                 {user.amountUserFollowers} Followers
               </Link>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
               <Link href="profile/users-following">
                 {user.amountUserFollowing} User
                 {user.amountUserFollowing > 1 && 's'} Following
               </Link>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
               <Link href="profile/newsletters-following">
                 {user.amountFollowingNewsletters} Newsletter
                 {user.amountFollowingNewsletters > 1 && 's'} Following
@@ -114,14 +116,14 @@ const UserPage = ({
             </div>
           )}
           {!isProfile && (
-            <div className="flex gap-6 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
+            <div className="flex flex-col md:flex-row md:gap-6 gap-2 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
               <span>{user.amountUserFollowers} Followers</span>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
               <span>
                 {user.amountUserFollowing} User
                 {user.amountUserFollowing > 1 && 's'} Following
               </span>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
               <span>
                 {user.amountFollowingNewsletters} Newsletter
                 {user.amountFollowingNewsletters > 1 && 's'} Following

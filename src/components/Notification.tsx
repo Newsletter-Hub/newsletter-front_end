@@ -112,7 +112,6 @@ const Notification = ({
                   className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[200px] lg:max-w-[400px] xl:max-w-[700px] overflow-hidden whitespace-nowrap text-ellipsis block"
                 >
                   {notification.notificationAuthor?.username}
-                  asdjkajdklasjdlkasjdjlasjdkja
                 </Link>
               </div>
               <span className="text-base text-dark-grey">
