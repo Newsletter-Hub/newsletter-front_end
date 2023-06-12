@@ -151,7 +151,7 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
               />
             </div>
           )}
-          <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap mb-4">
+          <div className="border-b-grey border-b-2 flex gap-3 md:w-[600px] w-[280px] xs:w-[330px] sm:w-[380px] flex-wrap mb-4">
             {Boolean(tags.length) &&
               tags.map(item => (
                 <React.Fragment key={item.id}>
