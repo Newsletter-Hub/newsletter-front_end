@@ -17,6 +17,7 @@ const Users = ({ usersList }: UsersListProps) => {
       usersList={usersList}
       getUsersList={getFollowers}
       isSortable={false}
+      title="Followers"
     />
   );
 };
