@@ -205,7 +205,7 @@ const Edit = forwardRef(
             <p className="font-semibold text-lg text-dark-blue mb-4">
               Personal information
             </p>
-            <div className="flex mb-12 max-w-[676px] overflow-hidden gap-6">
+            <div className="flex mb-12 max-w-[676px] overflow-hidden gap-6 flex-col md:flex-row">
               <Controller
                 control={control}
                 name="username"
@@ -250,7 +250,7 @@ const Edit = forwardRef(
                 <Input
                   variant="filled"
                   placeholder="Tell something about yourself"
-                  customStyles="!w-full"
+                  size="full"
                   defaultValue={field.value}
                   onChange={e => field.onChange(e.target.value)}
                 />
@@ -275,7 +275,7 @@ const Edit = forwardRef(
                 />
               )}
             />
-            <div className="flex gap-6 mb-10 w-full">
+            <div className="flex gap-6 mb-10 w-full flex-col md:flex-row">
               <Controller
                 control={control}
                 name="country"
