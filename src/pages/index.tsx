@@ -5,6 +5,7 @@ import { Review } from '@/types/newsletters';
 import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
+import GoogleAds from '@/components/GoogleAdsBlock';
 
 interface HomeProps {
   reviewData: { reviews: Review[]; nextPage: number; total: number };
@@ -15,20 +16,7 @@ const Home = ({ reviewData }: HomeProps) => {
     <main>
       <div className="lg:pt-[88px] pt-16 max-w-[1280px] mx-auto px-4">
         <MainBlock />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8804004591913052"
-          crossOrigin="anonymous"
-        ></script>
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block' }}
-          data-ad-client="ca-pub-8804004591913052"
-          data-ad-slot="2040931016"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <GoogleAds />
         <ReviewsBlock reviewData={reviewData} />
       </div>
       {/* <GetStartedBlock /> */}
