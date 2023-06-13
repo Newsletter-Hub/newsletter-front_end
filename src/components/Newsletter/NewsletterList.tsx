@@ -159,7 +159,6 @@ const NewslettersList = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [moreNewslettersLoading, setMoreNewslettersLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean | number>(false);
-
   const filtersCount = useMemo(() => {
     let count = 0;
     if (filtersPayload.categories.length > 0) count++;
@@ -177,6 +176,15 @@ const NewslettersList = ({
   };
   const handleCloseModal = () => {
     setIsOpenModal(false);
+    setFilters(prevFilters => {
+      const newFilters = { ...prevFilters };
+      if (!filtersPayload.categories.length) newFilters.categories = false;
+      if (!filtersPayload.pricingType.length) newFilters.pricingType = false;
+      if (filtersPayload.durationFrom === 1 && filtersPayload.durationTo === 60)
+        newFilters.duration = false;
+      if (!filtersPayload.ratings.length) newFilters.rating = false;
+      return newFilters;
+    });
   };
 
   const loadMoreNewsletters = async () => {
