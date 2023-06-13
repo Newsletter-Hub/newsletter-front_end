@@ -43,11 +43,11 @@ const Select = ({
           <RadixSelect.SelectContent>
             {options.length ? (
               <RadixSelect.Viewport className="top-10 shadow-md rounded-lg bg-white border-t border-t-light-grey">
-                <div className="max-h-[250px] overflow-auto pl-4">
+                <div className="max-h-[250px] overflow-auto">
                   {options.map(item => (
                     <RadixSelect.Item
                       value={item.value}
-                      className="bg-white font-inter text-dark-blue text-base hover:outline-none focus:outline-none py-2"
+                      className="bg-white font-inter text-dark-blue text-base hover:outline-none focus:outline-none py-2 pl-4 hover:bg-porcelain"
                       key={item.value}
                     >
                       <RadixSelect.ItemText> {item.label}</RadixSelect.ItemText>

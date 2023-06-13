@@ -254,7 +254,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           />
         )}
         {Boolean(newsletter?.interests?.length) && (
-          <div className="flex gap-2 mb-10 max-w-[300px] sm:max-w-[400px] md:max-w-none flex-wrap md:flex-nowrap">
+          <div className="flex gap-2 mb-10 max-w-[300px] sm:max-w-[400px] md:max-w-none flex-wrap">
             {newsletter?.interests?.map(interest => (
               <span
                 key={interest.id}
@@ -341,7 +341,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                 </>
               )}
             </div>
-            <div className="flex gap-2 items-center mb-3">
+            <div className="flex gap-2 items-center mb-3 md:mb-0">
               <StarRating readonly value={newsletter?.averageRating} />
               <span className="font-inter xs:text-sm text-dark-grey text-xs">
                 <span className="font-semibold">
