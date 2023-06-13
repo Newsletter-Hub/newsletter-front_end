@@ -28,6 +28,7 @@ const withLayout = (
 ) => {
   const WithLayoutComponent = (props: WithLayoutProps) => {
     const isFooter = props.layoutProps?.isFooter !== false;
+    const measurementId = process.env.NEXT_PUBLIC_G_MEASUREMENT_ID;
     const LayoutComponent =
       layout === 'default'
         ? (props: WithLayoutProps) => (
@@ -39,7 +40,7 @@ const withLayout = (
 
     return (
       <LayoutComponent {...props}>
-        <GoogleAnalytics measurementId="G-RFTX5EN20H" />
+        <GoogleAnalytics measurementId={measurementId as string} />
         <WrappedComponent {...props} />
       </LayoutComponent>
     );
