@@ -705,9 +705,9 @@ const NewslettersList = ({
                         }}
                       >
                         <div className="flex flex-col gap-[10px] pt-4 pl-9">
-                          {ratings.map((rating, index) => (
+                          {ratings.map(rating => (
                             <Checkbox
-                              id={index}
+                              id={`${rating}star`}
                               key={rating}
                               label={<StarRating value={rating} readonly />}
                               setChecked={value => {
