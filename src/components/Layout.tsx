@@ -23,7 +23,7 @@ const Layout = ({ children, isFooter }: LayoutProps) => {
       <div className={`${alegreya.className} overflow-x-hidden`}>
         <Header />
         <div className="mx-auto">{children}</div>
-        {isFooter && <Footer />}
+        {/* {isFooter && <Footer />} */}
       </div>
     </>
   );
