@@ -507,7 +507,7 @@ const NewslettersList = ({
           {title}
         </h1>
         {isSeparated && (
-          <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[1000px] flex-col md:flex-row gap-2 md:gap-0">
+          <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[1000px] flex-col md:flex-row gap-4 md:gap-0">
             <div className="lg:flex-grow">
               <Input
                 isSearch
@@ -524,7 +524,7 @@ const NewslettersList = ({
                 variant="outlined-secondary"
                 onClick={handleOpenModal}
                 height="base"
-                customStyles="w-full md:max-w-[200px]"
+                customStyles="w-full md:max-w-[200px] group"
                 label={
                   <span
                     className={`flex text-base justify-center px-6 gap-2 whitespace-nowrap ${
@@ -535,7 +535,7 @@ const NewslettersList = ({
                       className={`${
                         filtersCount
                           ? 'fill-primary stroke-primary'
-                          : 'stroke-grey-chat fill-grey-chat'
+                          : 'stroke-grey-chat fill-grey-chat group-hover:stroke-white group-hover:fill-white'
                       }`}
                     />
                     Filters {Boolean(filtersCount) && `(${filtersCount})`}

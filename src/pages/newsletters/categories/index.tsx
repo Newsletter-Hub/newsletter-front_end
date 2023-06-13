@@ -36,11 +36,11 @@ const Categories = ({ categories }: CategoriesProps) => {
                     }`}
                   />
                 </div>
-                <div className="bg-light-porcelain md:p-4 p-2 rounded-b-lg max-w-[302px] h-[88px]">
+                <div className="bg-light-porcelain md:p-4 p-2 rounded-b-lg max-w-[302px] h-[88px] overflow-auto">
                   <p
                     className={`${
                       !category.newsletterCount && 'text-dark-grey'
-                    } font-semibold font-inter xl:text-lg xs:text-base text-sm sm:mb-1 text-ellipsis overflow-hidden max-w-[200px`}
+                    } font-semibold font-inter xl:text-lg xs:text-base text-sm sm:mb-1 text-ellipsis overflow-hidden max-w-[200px]`}
                   >
                     {category.interestName}
                   </p>

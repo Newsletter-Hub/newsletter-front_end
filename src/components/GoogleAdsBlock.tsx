@@ -1,5 +1,4 @@
 import Script from 'next/script';
-import { useEffect } from 'react';
 
 const GoogleAds = () => {
   return (
