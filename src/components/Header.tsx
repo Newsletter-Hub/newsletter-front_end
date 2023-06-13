@@ -61,7 +61,7 @@ const Header = () => {
   useOnClickOutside(searchResultRef, handleClickOutside);
   return (
     <div className="shadow-md py-4">
-      <div className="bg-white flex items-center lg:justify-center justify-between font-inter xl:gap-24 lg:gap-10 w-full px-2 lg:px-0">
+      <div className="bg-white flex items-center justify-between font-inter xl:gap-24 lg:gap-10 w-full px-2 lg:px-5">
         <div className="hidden lg:block">
           <Logo className="max-w-200px" />
         </div>
