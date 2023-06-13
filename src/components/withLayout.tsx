@@ -4,6 +4,7 @@ import { User } from '@/types/user';
 
 import EntryLayout from './EntryLayout';
 import Layout from './Layout';
+import GoogleAnalytics from './GoogleAnalytics';
 
 export type LayoutType = 'default' | 'entry';
 export type EntryType = 'signup' | 'login' | 'newsletter';
@@ -38,6 +39,7 @@ const withLayout = (
 
     return (
       <LayoutComponent {...props}>
+        <GoogleAnalytics measurementId="G-RFTX5EN20H" />
         <WrappedComponent {...props} />
       </LayoutComponent>
     );
