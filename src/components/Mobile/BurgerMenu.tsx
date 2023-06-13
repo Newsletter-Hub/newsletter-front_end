@@ -33,7 +33,7 @@ const BurgerMenu = ({ children }: BurgerMenuProps) => {
       {isOpen && (
         <div className="fixed top-0 right-0 w-full md:w-1/2 h-full bg-white dark:bg-gray-900 transition-all duration-500 ease-in-out z-40 shadow-md">
           <button
-            className="float-right focus:outline-none mt-4 mr-4"
+            className="float-right focus:outline-none mt-[18px] mr-2"
             onClick={() => setIsOpen(!isOpen)}
           >
             <svg

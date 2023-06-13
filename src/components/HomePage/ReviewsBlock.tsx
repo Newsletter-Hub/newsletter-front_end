@@ -114,7 +114,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                   className="rounded-[5px] mr-8 h-[96px] w-[96px] object-cover object-center"
                 />
                 <div className="flex md:items-start flex-col md:flex-row">
-                  <div className="mr-4 min-w-[160px]">
+                  <div className="mr-4 md:w-[250px]">
                     <p className="text-xl text-dark-blue">
                       {review.newsletter.title}
                     </p>
@@ -136,7 +136,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                       {timeAgo(review.createdAt)}
                     </p>
                   </div>
-                  <p className="md:text-base mb-8 pt-1 font-inter text-dark-blue text-sm block max-w-[160px] xs:max-w-[230px] sm:max-w-[280px] whitespace-nowrap overflow-hidden text-ellipsis lg:max-w-[600px] lg:whitespace-normal lg:overflow-auto">
+                  <p className="md:text-base mb-8 pt-1 font-inter text-dark-blue text-sm block max-w-[160px] xs:max-w-[230px] sm:max-w-[280px] whitespace-nowrap md:whitespace-normal overflow-hidden text-ellipsis lg:max-w-[600px] lg:whitespace-normal lg:overflow-auto">
                     {review.comment}
                   </p>
                 </div>

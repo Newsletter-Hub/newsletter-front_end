@@ -267,7 +267,7 @@ const Header = () => {
                       Account settings
                     </Link>
                     <span
-                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer hover:text-primary"
                       onClick={() => logout({ setUser })}
                     >
                       <div className="w-6 h-6">
