@@ -507,7 +507,7 @@ const NewslettersList = ({
           {title}
         </h1>
         {isSeparated && (
-          <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[950px] flex-col md:flex-row gap-2 md:gap-0">
+          <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[1000px] flex-col md:flex-row gap-2 md:gap-0">
             <div className="lg:flex-grow">
               <Input
                 isSearch

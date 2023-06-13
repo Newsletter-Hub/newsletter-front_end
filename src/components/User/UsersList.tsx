@@ -112,7 +112,7 @@ const UsersList = ({
         if (response?.ok) {
           const usersListResponse = await getUsersList({
             page: 1,
-            pageSize: 9 * (page + 1),
+            pageSize: 9 * page,
             order: sortTypes[choosedSortType].value,
             orderDirection:
               sortTypes[choosedSortType].value === 'dataJoined'
@@ -130,7 +130,7 @@ const UsersList = ({
         if (response?.ok) {
           const usersListResponse = await getUsersList({
             page: 1,
-            pageSize: 9 * (page + 1),
+            pageSize: 9 * page,
             order: sortTypes[choosedSortType].value,
             orderDirection:
               sortTypes[choosedSortType].value === 'dataJoined'
