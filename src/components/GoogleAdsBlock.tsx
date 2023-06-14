@@ -1,25 +1,16 @@
 import Script from 'next/script';
+import { Adsense } from '@ctrl/react-adsense';
 
 const GoogleAds = () => {
   return (
     <>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8804004591913052"
-        crossOrigin="anonymous"
-      ></Script>
-      <ins
-        className="adsbygoogle"
+      <Adsense
+        client="ca-pub-8804004591913052"
+        slot="5662242139"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-8804004591913052"
-        data-ad-slot="5662242139"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-
-      <Script id="adsbygoogle-init" strategy="afterInteractive">{`
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      `}</Script>
+        layout="in-article"
+        format="fluid"
+      />
     </>
   );
 };
