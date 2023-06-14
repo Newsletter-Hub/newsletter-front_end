@@ -36,8 +36,10 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
     false
   );
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const { user } = useUser();
   const loadMore = async () => {
+    setLoading(true);
     setPage(prevPage => prevPage + 1);
 
     const response = await getReviews({
@@ -47,6 +49,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
 
     if (response.reviews) {
       setReviewsInfo(response.reviews);
+      setLoading(false);
     }
   };
   const handleAddBookmark = async (id: number) => {
@@ -98,7 +101,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
           {reviewsInfo.reviews.map((review, index) => (
             <div
               className={`${
-                index + 1 !== reviewData.reviews.length && 'border-b'
+                index + 1 !== reviewsInfo.reviews.length && 'border-b'
               } border-light-grey py-8 w-full`}
               key={review.id}
             >
