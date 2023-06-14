@@ -1,16 +1,17 @@
 import React, { ReactNode } from 'react';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import EntryLayout from './EntryLayout';
 import Layout from './Layout';
+import GoogleAnalytics from './GoogleAnalytics';
 
 export type LayoutType = 'default' | 'entry';
 export type EntryType = 'signup' | 'login' | 'newsletter';
 
 interface WithLayoutProps {
   children?: ReactNode;
-  user?: UserMe | null;
+  user?: User | null;
   layoutProps?: {
     isFooter?: boolean;
   };
@@ -27,6 +28,7 @@ const withLayout = (
 ) => {
   const WithLayoutComponent = (props: WithLayoutProps) => {
     const isFooter = props.layoutProps?.isFooter !== false;
+    const measurementId = process.env.NEXT_PUBLIC_G_MEASUREMENT_ID;
     const LayoutComponent =
       layout === 'default'
         ? (props: WithLayoutProps) => (
@@ -38,6 +40,7 @@ const withLayout = (
 
     return (
       <LayoutComponent {...props}>
+        <GoogleAnalytics measurementId={measurementId as string} />
         <WrappedComponent {...props} />
       </LayoutComponent>
     );

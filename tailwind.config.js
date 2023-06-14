@@ -14,6 +14,10 @@ module.exports = {
       inter: ['Inter', 'Alegreya', 'ui-sans-serif', 'system-ui'],
     },
     extend: {
+      colors: {
+        skeletonStart: 'rgb(195, 195, 195)', // Start color of skeleton animation
+        skeletonEnd: 'rgb(219, 219, 219)', // End color of skeleton animation
+      },
       animation: {
         pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
@@ -22,6 +26,13 @@ module.exports = {
           '0%, 100%': { opacity: 1 },
           '50%': { opacity: 0.5 },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '-100% 0%' },
+          '100%': { backgroundPosition: '100% 0%' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 2s infinite linear',
       },
       height: {
         82: '341px',
@@ -29,6 +40,7 @@ module.exports = {
       backgroundImage: {
         getStarted: "url('../assets/images/getStartedBackground.png')",
         profile: "url('../assets/images/userPageBg.jpg')",
+        skeleton: 'linear-gradient(90deg, var(--tw-gradient-stops))',
       },
       boxShadow: {
         md: '0px 4px 60px rgba(0,0,0,0.1)',

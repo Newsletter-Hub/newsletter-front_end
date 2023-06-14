@@ -8,7 +8,7 @@ export interface AddNewsletterPayload {
   title?: string;
   description?: string;
   author?: string;
-  image?: File | string;
+  image?: string;
   topics: [];
   id?: number;
 }
@@ -35,8 +35,10 @@ export interface NewsletterData {
   averageDuration: number;
   pricing: string;
   createdAt: string;
-  followed: boolean;
+  isFollower: boolean;
+  isInBookmarks: boolean;
   followersIds: number[];
+  amountFollowers: number;
 }
 
 export interface Newsletter {
@@ -54,6 +56,7 @@ export interface Reviewer {
   username: string;
   avatar: string;
   country: string;
+  id: number;
 }
 
 export interface Review {

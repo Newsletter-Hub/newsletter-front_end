@@ -1,32 +1,33 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
 import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
-import ky from 'ky';
 
 import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
+import { toast } from 'react-toastify';
 
-interface User {
+interface LoginUser {
   email: string;
   password: string;
   router: NextRouter;
-  setUser?: (user: UserMe) => void;
+  setUser?: (user: User) => void;
 }
 
 interface LogOutPayload {
-  setUser: (user: UserMe | null) => void;
+  setUser: (user: User | null) => void;
 }
 
 interface GoogleAuth {
   token: string;
   router: NextRouter;
+  setUser?: (user: User) => void;
 }
 
-interface SignupUser extends User {
+interface SignupUser extends LoginUser {
   username: string;
 }
 
@@ -40,7 +41,12 @@ interface ChangePasswordPayload {
   newPassword: string;
 }
 
-export const login = async ({ email, password, router, setUser }: User) => {
+export const login = async ({
+  email,
+  password,
+  router,
+  setUser,
+}: LoginUser) => {
   try {
     const response = await api
       .post('auth/sign-in', {
@@ -50,7 +56,7 @@ export const login = async ({ email, password, router, setUser }: User) => {
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
         if (setUser) {
-          setUser(res as UserMe);
+          setUser(res as User);
         }
         router.push('/');
       });
@@ -60,7 +66,7 @@ export const login = async ({ email, password, router, setUser }: User) => {
   }
 };
 
-export const googleAuth = async ({ token, router }: GoogleAuth) => {
+export const googleAuth = async ({ token, router, setUser }: GoogleAuth) => {
   try {
     const response = await api
       .post('auth/google', { json: { token } })
@@ -68,6 +74,9 @@ export const googleAuth = async ({ token, router }: GoogleAuth) => {
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
         router.push('/');
+        if (setUser) {
+          setUser(res as User);
+        }
       });
     return response;
   } catch (error) {
@@ -86,6 +95,7 @@ export const signup = async ({
     });
     return response.json();
   } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to create user');
     console.log(error);
   }
 };
@@ -155,11 +165,43 @@ export const changePassword = async ({
 
 export const logout = ({ setUser }: LogOutPayload) => {
   try {
-    ky.post('/api/logout', { credentials: 'include' }).then(() => {
+    setUser(null);
+    api.post('auth/sign-out', { credentials: 'include' }).then(() => {
       Cookies.remove('user');
-      setUser(null);
     });
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const signUpSetCookie = async ({
+  accessToken,
+}: {
+  accessToken: string;
+}) => {
+  try {
+    const response = await api.post('auth/set-cookie', {
+      json: { accessToken },
+    });
+    const res: User = await response.json();
+    return res;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Invalid access token');
+    console.log(error);
+  }
+};
+
+export const resendVerifyEmail = async ({ email }: { email: string }) => {
+  try {
+    const response = await api.post('auth/resend-email-confirmation-link', {
+      json: { email },
+    });
+    if (response.ok) {
+      toast.success('New verification email was sended');
+    }
+    return response.json();
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Invalid email');
+    console.log(error);
   }
 };

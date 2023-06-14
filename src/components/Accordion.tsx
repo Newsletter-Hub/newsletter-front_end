@@ -46,7 +46,7 @@ const Accordion = ({
             <span
               className={`${
                 isOpen || isSelected ? 'text-primary' : 'text-lightBlack'
-              } text-xl`}
+              } text-xl hover:text-primary`}
             >
               {label}
             </span>

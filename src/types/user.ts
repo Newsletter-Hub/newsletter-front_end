@@ -1,17 +1,8 @@
 import { Interest } from './interests';
+import { NewsletterData, Review } from './newsletters';
 
 export interface User {
-  id?: number;
-  email?: string;
-  username?: string;
-  avatar?: string;
-  averageUserRating: number;
-  amountUserRatings: number;
-  description?: string;
-}
-
-export interface UserMe {
-  id?: string;
+  id: number;
   email: string;
   username: string;
   interests: Interest[];
@@ -24,4 +15,28 @@ export interface UserMe {
   googleId: number | null;
   amountUserFollowers: number;
   amountUserFollowing: number;
+  amountFollowingNewsletters: number;
+  followed: boolean;
+}
+
+export interface UserList {
+  users: User[];
+  total: number;
+  nextPage: number;
+}
+
+export interface Notification {
+  id?: number;
+  entityId?: number;
+  entityType?: 'newsletter' | 'user';
+  notificationType?:
+    | 'newNewsletter'
+    | 'newReview'
+    | 'subscriptionToUser'
+    | 'subscriptionToNewsletter';
+  notificationRecipientId?: number;
+  notificationAuthorId?: number;
+  notificationAuthor?: User;
+  entity?: User | Review | NewsletterData;
+  createdAt?: string;
 }

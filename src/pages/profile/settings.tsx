@@ -4,13 +4,12 @@ import { useUser } from '@/contexts/UserContext';
 import { useEffect, useRef, useState } from 'react';
 
 import { GetServerSideProps } from 'next';
-import parseCookies from 'next-cookies';
 import { useRouter } from 'next/router';
 
 import format from 'date-fns/format';
 
 import { Interest } from '@/types/interests';
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import Button from '@/components/Button';
 import Loading from '@/components/Loading';
@@ -18,6 +17,7 @@ import Edit from '@/components/Profile/Edit';
 import { EditProfilePayload } from '@/components/Profile/Edit';
 import ProfileInterests from '@/components/Profile/Interests';
 import Tabs from '@/components/Tabs';
+import PrivateRoute from '@/components/PrivateRoute';
 
 interface SettingsProps {
   interests: Interest[];
@@ -37,6 +37,7 @@ const Settings = ({ interests }: SettingsProps) => {
   );
   const [isDirty, setIsDirty] = useState(false);
   const editRef = useRef<EditRefType | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInterestClick = (item: Interest) => {
     if (interestsPayload.some(interest => interest.id === item.id)) {
@@ -67,20 +68,26 @@ const Settings = ({ interests }: SettingsProps) => {
         data[key as keyof typeof data]
     );
     if (!(changedFields.length === 1 && changedFields.includes('email'))) {
-      const result = await updateUser({
+      setIsLoading(true);
+      await updateUser({
         ...data,
         interests: user?.interests && user.interests.map(item => item.id),
         type: 'update',
         dateBirth: data.dateOfBirth && format(date, 'yyyy-MM-dd'),
-      });
+      })
+        .then(async res => {
+          if (res) {
+            const user = await getUserMe({ token: null });
+            if (user.response) {
+              setUser(user.response as User);
+            }
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
       if (data.email !== user?.email) {
         setIsVerifyEmailModalOpen(true);
-      }
-      if (result?.response) {
-        const user = await getUserMe({ token: null });
-        if (user.response) {
-          setUser(user.response as UserMe);
-        }
       }
     } else {
       setIsVerifyEmailModalOpen(true);
@@ -89,10 +96,18 @@ const Settings = ({ interests }: SettingsProps) => {
 
   const resetChanges = () => {
     if (activeTab === 'edit') {
+      if (!isDirty) {
+        return;
+      }
       if (editRef.current) {
         editRef.current.resetForm();
       }
     } else if (user) {
+      if (
+        JSON.stringify(interestsPayload) === JSON.stringify(user?.interests)
+      ) {
+        return;
+      }
       setInterestsPayload(user?.interests);
     }
   };
@@ -103,15 +118,16 @@ const Settings = ({ interests }: SettingsProps) => {
         editRef.current.submitForm();
       }
     } else {
+      setIsLoading(true);
       const user = await updateUser({
         interests: interestsPayload.map(item => item.id),
         type: 'interests',
-      });
+      }).finally(() => setIsLoading(false));
       if (user?.response) {
         setInterestsPayload(user.response.interests);
         const getUser = await getUserMe({ token: null });
         if (getUser.response) {
-          setUser(getUser.response as UserMe);
+          setUser(getUser.response as User);
         }
       }
     }
@@ -132,7 +148,7 @@ const Settings = ({ interests }: SettingsProps) => {
       value: 'edit',
       content: (
         <Edit
-          user={user as UserMe}
+          user={user as User}
           onSubmit={onEditSubmit}
           ref={editRef}
           setIsDirty={setIsDirty}
@@ -164,48 +180,47 @@ const Settings = ({ interests }: SettingsProps) => {
     return <Loading />;
   }
   return (
-    <div>
-      <div className="pt-[72px] px-[17%]">
-        <h1 className="text-7xl text-dark-blue font-medium mb-10">
-          Account settings
-        </h1>
-        <Tabs tabs={tabs} handleChange={handleTabChange} />
+    <PrivateRoute>
+      <div>
+        <div className="md:pt-[72px] pt-3 max-w-[1280px] px-3">
+          <h1 className="md:text-7xl text-5xl text-dark-blue font-medium mb-10">
+            Account settings
+          </h1>
+          <Tabs tabs={tabs} handleChange={handleTabChange} />
+        </div>
+        <div className="w-full shadow-md md:pl-[17%] flex justify-between px-3 md:pr-0 md:justify-normal gap-12 font-inter items-center py-5">
+          <span
+            className={`text-base ${
+              (activeTab === 'edit'
+                ? !isDirty
+                : JSON.stringify(interestsPayload) ===
+                  JSON.stringify(user?.interests)) &&
+              'text-dark-grey cursor-default hover:text-dark-grey'
+            } text-dark-blue cursor-pointertransition-colors duration-200 ease-in-out hover:text-primary cursor-pointer`}
+            onClick={resetChanges}
+          >
+            Reset all changes
+          </span>
+          <Button
+            label="Save"
+            rounded="xl"
+            customStyles="w-[101px]"
+            onClick={onSubmit}
+            loading={isLoading}
+            disabled={
+              activeTab === 'edit'
+                ? !isDirty
+                : JSON.stringify(interestsPayload) ===
+                  JSON.stringify(user?.interests)
+            }
+          />
+        </div>
       </div>
-      <div className="w-full shadow-md pl-[17%] flex gap-12 font-inter items-center py-5">
-        <span
-          className="text-base text-dark-blue cursor-pointer"
-          onClick={resetChanges}
-        >
-          Reset all changes
-        </span>
-        <Button
-          label="Save"
-          rounded="xl"
-          customStyles="max-w-[101px]"
-          onClick={onSubmit}
-          disabled={
-            activeTab === 'edit'
-              ? !isDirty
-              : JSON.stringify(interestsPayload) ===
-                JSON.stringify(user?.interests)
-          }
-        />
-      </div>
-    </div>
+    </PrivateRoute>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken ? cookies.accessToken : null;
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+export const getServerSideProps: GetServerSideProps = async () => {
   const interests = await getInterests();
   return {
     props: {

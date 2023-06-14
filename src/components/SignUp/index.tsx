@@ -12,6 +12,10 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import Button from '../Button';
 import Input from '../Input';
+import { useWindowSize } from 'usehooks-ts';
+import Link from 'next/link';
+import { useMutation } from 'react-query';
+import { useUser } from '@/contexts/UserContext';
 
 const validationSchema = z
   .object({
@@ -61,6 +65,7 @@ const fields: Fields = [
 
 const SignUpForm = ({ setEmail }: SignUpProps) => {
   const router = useRouter();
+  const { setUser } = useUser();
   const {
     register,
     handleSubmit,
@@ -68,23 +73,42 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
+  const signUpMutation = useMutation(signup);
+  const googleAuthMutation = useMutation(googleAuth);
   const onGoogleLogin = (token: string) => {
-    googleAuth({ token, router });
+    googleAuthMutation.mutate({ token, router, setUser });
   };
   const onSubmit: SubmitHandler<ValidationSchema> = async ({
     email,
     password,
     username,
   }) => {
-    const response = await signup({ email, password, username, router });
+    const response = await signUpMutation.mutateAsync({
+      email,
+      password,
+      username,
+      router,
+    });
     if (response) {
       setEmail(email);
     }
   };
+  const { width } = useWindowSize();
+  const googleButtonWidth = () => {
+    if (width) {
+      if (width >= 320 && width < 375) {
+        return '300';
+      } else if (width >= 375 && width < 768) {
+        return '360';
+      }
+      return '400';
+    }
+    return '400';
+  };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-7 items-center"
+      className="flex flex-col gap-7 items-center w-full"
     >
       {fields.map(field => (
         <Input
@@ -97,12 +121,18 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
           isPassword={field.isPassword}
         />
       ))}
+      <p className="font-inter text-sm text-dark-blue lg:hidden">
+        Already have an account?{' '}
+        <Link href="/login" className="font-semibold">
+          Login
+        </Link>
+      </p>
       <Button
-        label="Confirm email"
-        uppercase
+        label="Signup"
         size="full"
         rounded="xl"
         type="submit"
+        loading={signUpMutation.isLoading || googleAuthMutation.isLoading}
       />
       <GoogleLogin
         onSuccess={({ credential }) => onGoogleLogin(credential as string)}
@@ -111,7 +141,7 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
         auto_select={false}
         shape="circle"
         size="large"
-        width="400"
+        width={googleButtonWidth()}
       />
     </form>
   );

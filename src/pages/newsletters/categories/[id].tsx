@@ -4,10 +4,11 @@ import React from 'react';
 
 import { GetServerSideProps } from 'next';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
+import parseCookies from 'next-cookies';
 
 const NewslettersPage = ({
   newslettersListData,
@@ -25,7 +26,7 @@ const NewslettersPage = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { params, req } = context;
-  const user: UserMe = req.cookies.user
+  const user: User = req.cookies.user
     ? JSON.parse(req.cookies.user as string)
     : undefined;
   const categoryId = params && params.id;
@@ -34,6 +35,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
       ? [+categoryId]
       : [];
+  const cookies = parseCookies(context);
+  const token = cookies.accessToken ? cookies.accessToken : undefined;
   const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
@@ -42,9 +45,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
     categoriesIds,
     search,
     myId: user && user.id ? +user.id : undefined,
+    token,
   });
   const interests = await getInterests();
-  if (!newsletterList || !interests) {
+  if (newsletterList.error || !interests) {
     return {
       notFound: true,
     };

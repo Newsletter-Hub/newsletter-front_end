@@ -24,7 +24,9 @@ const GetStartedBlock = () => {
           <div></div>
         </div>
         <div className="md:flex justify-center items-center hidden">
-          <ContactUs />
+          <Link href="mailto: jacky@newsletterhub.co">
+            <ContactUs />
+          </Link>
         </div>
       </div>
     </div>

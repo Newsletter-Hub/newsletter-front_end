@@ -6,7 +6,11 @@ const throwErrorMessage = (error: HTTPError, defaultMessage: string) => {
     error.response
       .json()
       .then(errorMessage => {
-        toast.error(errorMessage.message || defaultMessage);
+        toast.error(
+          (Array.isArray(errorMessage.message) && errorMessage.message[0]) ||
+            errorMessage.message ||
+            defaultMessage
+        );
       })
       .catch(() => {
         toast.error(defaultMessage);

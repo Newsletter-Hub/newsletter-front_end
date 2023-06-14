@@ -3,35 +3,53 @@ import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
-import { UserList } from '@/pages/users';
-
 import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
-import { UserMe } from '@/types/user';
+import { UserList, User } from '@/types/user';
 
 interface GetUserMePayload {
   token?: string | null;
 }
 
+interface GetUserByIdPayload extends GetUserMePayload {
+  userId?: number;
+}
+
 interface GetUserMeResponse {
-  response?: UserMe;
+  response?: User;
   error?: string;
 }
 
 interface UpdateUserResponse {
   error?: string;
-  response?: UserMe;
+  response?: User;
 }
 
-interface GetUsersListProps {
+export interface GetSimpleUserListProps {
   page: number;
   pageSize: number;
+  token?: string;
+}
+
+export interface GetAdvancedUsersListProps extends GetSimpleUserListProps {
   order: string;
   orderDirection: string;
   search?: string;
-  myId?: number;
 }
+
+interface UserListResponse {
+  userList?: UserList;
+  error?: string;
+}
+
+export type GetAdvancedUserListType = (
+  props: GetAdvancedUsersListProps
+) => Promise<UserListResponse>;
+
+export type GetSimpleUserListType = (
+  props: GetSimpleUserListProps
+) => Promise<UserListResponse>;
 
 export const updateUser = async ({
   dateBirth,
@@ -60,17 +78,15 @@ export const updateUser = async ({
         formData.append('interestIds[]', JSON.stringify(interests[i]));
       }
     }
-    const response = await fetch('/api/users', {
+    const response = await api.put('users', {
       body: formData,
-      method: 'PUT',
-      credentials: 'include',
     });
 
     if (response.ok) {
-      const res = await response.json();
+      const res: User = await response.json();
       Cookies.set('user', JSON.stringify(res), { expires: 1 });
       if (setUser) {
-        setUser(res as UserMe);
+        setUser(res as User);
       }
       if (router) {
         router.push('/');
@@ -89,6 +105,7 @@ export const updateUser = async ({
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   } catch (error) {
+    console.log(error);
     throwErrorMessage(error as HTTPError, 'Failed to update user');
     return { error: 'Failed to update user' };
   }
@@ -99,8 +116,26 @@ export const getUserMe = async ({
 }: GetUserMePayload): Promise<GetUserMeResponse> => {
   try {
     const headers = token ? { Cookie: `accessToken=${token}` } : {};
-    const response: UserMe = await api
+    const response: User = await api
       .get('users', {
+        headers,
+        credentials: 'include',
+      })
+      .json();
+    return { response };
+  } catch (error) {
+    return { error: 'Failed to get user' };
+  }
+};
+
+export const getUserById = async ({
+  token,
+  userId,
+}: GetUserByIdPayload): Promise<GetUserMeResponse> => {
+  try {
+    const headers = token ? { Cookie: `accessToken=${token}` } : {};
+    const response: User = await api
+      .get(`users/public-user/${userId}`, {
         headers,
         credentials: 'include',
       })
@@ -117,26 +152,60 @@ export const getUsersList = async ({
   order,
   orderDirection,
   search = '',
-  myId,
-}: GetUsersListProps) => {
+  token,
+}: GetAdvancedUsersListProps): Promise<UserListResponse> => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     const response: UserList = await api
       .get('users/public-users-list', {
         searchParams: { page, pageSize, order, orderDirection, search },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
       })
       .json();
-    const userId = user ? user.id : myId;
-    if (userId) {
-      response.users.forEach(user => {
-        if (user.followersIds.includes(userId as number)) {
-          user.followed = true;
-        }
-      });
-    }
-    return response;
+    return { userList: response };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to fetch users list' };
+  }
+};
+
+export const getFollowers = async ({
+  page,
+  pageSize,
+  token,
+}: GetSimpleUserListProps): Promise<UserListResponse> => {
+  try {
+    const response: UserList = await api
+      .get('subscriptions/subscribers', {
+        searchParams: { page, pageSize },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    return { userList: response };
+  } catch (error) {
+    console.log(error);
+    return { error: 'Failed to fetch users list' };
+  }
+};
+
+export const getUserSubscriptions = async ({
+  page,
+  pageSize,
+  token,
+}: GetSimpleUserListProps): Promise<UserListResponse> => {
+  try {
+    const response: UserList = await api
+      .get('subscriptions/my-subscriptions', {
+        searchParams: { page, pageSize, entity: 'User' },
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+    return { userList: response };
   } catch (error) {
     console.log(error);
     return { error: 'Failed to fetch users list' };

@@ -56,7 +56,7 @@ const StarRating = ({
             key={index}
             className={`${
               index <= (hover || rating) ? activeStarStyle : inActiveStarStyle
-            } cursor-pointer`}
+            } ${!readonly && 'cursor-pointer'}`}
             onClick={() => handleClick(index)}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}

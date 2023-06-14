@@ -6,9 +6,10 @@ interface CheckboxProps {
   label?: string | JSX.Element;
   checked: boolean;
   setChecked: (arg: boolean) => void;
+  id: number | string;
 }
 
-const Checkbox = ({ label, checked, setChecked }: CheckboxProps) => {
+const Checkbox = ({ label, checked, setChecked, id }: CheckboxProps) => {
   const handleClick = () => {
     setChecked(!checked);
   };
@@ -20,12 +21,15 @@ const Checkbox = ({ label, checked, setChecked }: CheckboxProps) => {
         } border-light-grey h-[20px] w-[20px] rounded-md flex justify-center items-center`}
         onClick={handleClick}
         checked={checked}
+        id={String(id)}
       >
         <RadixCheckbox.Indicator>
           <CheckIcon className="stroke-white" />
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
-      <span>{label}</span>
+      <label htmlFor={String(id)} className="cursor-pointer">
+        {label}
+      </label>
     </div>
   );
 };

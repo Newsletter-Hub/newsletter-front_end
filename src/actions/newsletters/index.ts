@@ -5,6 +5,8 @@ import { HTTPError } from 'ky';
 import api from '@/config/ky';
 
 import { NewsletterData, NewslettersListData } from '@/types/newsletters';
+import { toast } from 'react-toastify';
+import { NextRouter } from 'next/router';
 
 interface NewsletterLink {
   link?: string;
@@ -13,6 +15,9 @@ interface NewsletterLink {
 export interface NewsletterLinkResponse {
   id: number;
   link?: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
 interface Newsletter {
@@ -23,6 +28,9 @@ interface Newsletter {
   image?: Blob | string;
   interests?: number[];
   newsletterAuthor?: string;
+  averageDuration: string;
+  pricingType: 'free' | 'paid';
+  router?: NextRouter;
 }
 
 export interface GetNewsletterResponse {
@@ -52,17 +60,27 @@ export interface FollowPayload {
   entityType: 'Newsletter' | 'User';
 }
 
-export const newsletterVerifyOwnership = async ({
+export interface ReportNewsletterResponse {
+  error?: string;
+  isReported?: boolean;
+}
+
+export interface ReportPayload {
+  newsletterId: number;
+  report: string;
+}
+
+export const parseNewsletter = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
   try {
-    const response = await api.post('newsletters/verify-ownership', {
+    const response = await api.post('newsletters/parse-newsletter', {
       json: { link },
       credentials: 'include',
     });
     return response.json();
   } catch (error) {
-    throwErrorMessage(error as HTTPError, 'Failed to verify ownership');
+    throwErrorMessage(error as HTTPError, 'Failed to add newsletter');
     console.log(error);
   }
 };
@@ -83,39 +101,66 @@ export const newsletterLink = async ({
 
 export const newsletterUpdate = async ({
   id,
+  interests,
+  averageDuration,
+  pricingType,
+  router,
+}: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
+  try {
+    const response = await api.put(`newsletters/${id}`, {
+      json: { interestIds: interests, averageDuration, pricing: pricingType },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const res = (await response.json()) as NewsletterLinkResponse;
+    if (response.ok) {
+      if (router) {
+        toast.success('Newsletter succesfully updated');
+        router.push(`/newsletters/${res.id}`);
+      }
+    }
+    return res;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to update newsletter');
+    return undefined;
+  }
+};
+
+export const createNewsletter = async ({
   link,
   title,
   description,
   newsletterAuthor,
   image,
   interests,
+  averageDuration,
+  pricingType,
+  router,
 }: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
   try {
-    const formData = new FormData();
-    link && formData.append('link', link as string);
-    title && formData.append('title', title as string);
-    description && formData.append('description', description as string);
-    newsletterAuthor &&
-      formData.append('newsletterAuthor', newsletterAuthor as string);
-    image && formData.append('image', image as Blob);
-    if (interests?.length) {
-      for (let i = 0; i < interests.length; i++) {
-        formData.append('interestIds[]', JSON.stringify(interests[i]));
-      }
-    }
-    const response = await fetch(
-      `https://newsletter-back-quzx.onrender.com/newsletters/${id}`,
-      {
-        body: formData,
-        method: 'PUT',
-        credentials: 'include',
-      }
-    );
+    const response = await api.post('newsletters', {
+      json: {
+        link,
+        title,
+        description,
+        newsletterAuthor,
+        image,
+        interestIds: interests,
+        averageDuration,
+        pricingType,
+      },
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    const res = await response.json();
+    const res = (await response.json()) as NewsletterLinkResponse;
+    if (response.ok) {
+      toast.success('Newsletter succesfully added');
+      if (router) {
+        router.push(`/newsletters/${res.id}`);
+      }
+    }
     return res;
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to update newsletter');
@@ -125,24 +170,20 @@ export const newsletterUpdate = async ({
 
 export const getNewsletter = async ({
   id,
-  myId,
+  token,
 }: {
   id: number;
-  myId?: number;
+  token?: string;
 }): Promise<GetNewsletterResponse> => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     const newsletterData: NewsletterData = await api
-      .get(`newsletters/${id}`)
+      .get(`newsletters/${id}`, {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
       .json();
-    console.log(newsletterData, 'here');
-    if (myId || (user && user.id)) {
-      newsletterData.followed = newsletterData.followersIds.includes(
-        myId || user.id
-      );
-    }
+
     return { newsletterData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
@@ -164,12 +205,9 @@ export const getNewslettersList = async ({
   ratings,
   search,
   authorId,
-  myId,
+  token,
 }: GetNewsletterListProps) => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
@@ -197,15 +235,14 @@ export const getNewslettersList = async ({
     if (search) url += `&search=${search}`;
     if (authorId) url += `&authorId=${authorId}`;
 
-    const newslettersListData: NewslettersListData = await api.get(url).json();
-    const userId = user ? user.id : myId;
-    if (authorId || userId) {
-      newslettersListData.newsletters.forEach(newsletter => {
-        if (newsletter.followersIds.includes(authorId || (userId as number))) {
-          newsletter.followed = true;
-        }
-      });
-    }
+    const newslettersListData: NewslettersListData = await api
+      .get(url, {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      })
+      .json();
+
     return { newslettersListData };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get newsletter');
@@ -215,7 +252,7 @@ export const getNewslettersList = async ({
   }
 };
 
-export const getMySubscriptions = async ({
+export const getMyNewsletterSubscriptions = async ({
   entity = 'Newsletter',
   page,
   pageSize,
@@ -230,7 +267,6 @@ export const getMySubscriptions = async ({
         headers: { Cookie: `accessToken=${token}` },
       })
       .json();
-    newslettersListData.newsletters.forEach(item => (item.followed = true));
 
     return { newslettersListData };
   } catch (error) {
@@ -262,5 +298,25 @@ export const unfollow = async ({ entityId, entityType }: FollowPayload) => {
   } catch (error) {
     console.log(error);
     throwErrorMessage(error as HTTPError, `Failed to delete ${entityType}`);
+  }
+};
+
+export const newsletterReport = async ({
+  report,
+  newsletterId,
+}: ReportPayload): Promise<ReportNewsletterResponse | undefined> => {
+  try {
+    await api
+      .post('reports', {
+        json: { report, newsletterId },
+      })
+      .then(() => {
+        toast.success('Report was succesfully sended');
+        return { isReported: true };
+      });
+  } catch (error) {
+    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to send report');
+    return { error: 'Failed to send report' };
   }
 };

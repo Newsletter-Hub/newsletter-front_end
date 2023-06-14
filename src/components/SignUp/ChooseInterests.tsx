@@ -1,3 +1,4 @@
+import { signUpSetCookie } from '@/actions/auth';
 import { updateUser } from '@/actions/user';
 import { useUser } from '@/contexts/UserContext';
 
@@ -18,6 +19,7 @@ const ChooseInterests = ({
 }: UserInfoStepsProps & { interests?: Interest[] }) => {
   const router = useRouter();
   const { setUser } = useUser();
+  const { accessToken } = router.query;
 
   const handlePreviousStep = () => setPage(page - 1);
   const handleInterestClick = (id: number) => {
@@ -40,11 +42,21 @@ const ChooseInterests = ({
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(([key, value]) => value !== undefined)
     );
-    await updateUser({ ...formattedPayload, router, setUser });
+    const res = await signUpSetCookie({
+      accessToken: accessToken as string,
+    });
+    if (res && res.username) {
+      updateUser({
+        ...formattedPayload,
+        username: res.username,
+        router,
+        setUser,
+      });
+    }
   };
   return (
     <>
-      <div className="flex w-[600px] flex-wrap h-[400px] mb-12">
+      <div className="flex md:w-[600px] flex-wrap h-[400px] mb-12 overflow-scroll md:overflow-visible interests-container">
         {interests ? (
           interests.map(item => (
             <Button
@@ -66,7 +78,7 @@ const ChooseInterests = ({
           <Loading />
         )}
       </div>
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-center w-full px-3 md:px-0">
         <span
           className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
           onClick={handlePreviousStep}
@@ -76,7 +88,8 @@ const ChooseInterests = ({
         <Button
           label="Finish"
           onClick={handleSubmit}
-          customStyles="w-1/2"
+          customStyles="max-w-[200px]"
+          size="full"
           rounded="xl"
           fontSize="md"
         />

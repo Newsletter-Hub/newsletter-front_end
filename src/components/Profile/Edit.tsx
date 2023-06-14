@@ -9,6 +9,7 @@ import {
 import Datetime from 'react-datetime';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import subYears from 'date-fns/subYears';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -16,7 +17,7 @@ import { COUNTRIES } from '@/config/constants';
 
 import { Country, State } from 'country-state-city';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import Button from '../Button';
 import FileDownloader from '../FileDownloader';
@@ -28,7 +29,7 @@ import VerifyEmailModal from './Modals/VerifyEmail';
 export interface EditProfilePayload {
   avatar: string;
   country: string;
-  state: string;
+  state: string | undefined;
   dateOfBirth: string;
   username: string;
   email: string;
@@ -40,14 +41,14 @@ const validationSchema = z.object({
   country: z.string().nullable().optional(),
   state: z.string().nullable().optional(),
   dateOfBirth: z.any().optional(),
-  username: z.string().optional(),
+  username: z.string().nullable().optional(),
   email: z.string().email('Email need to be valid').optional(),
   profileType: z.enum(['reader', 'writter']).optional(),
   description: z.string().nullable().optional(),
 });
 
 interface EditProps {
-  user: UserMe;
+  user: User;
   onSubmit: (data: EditProfilePayload) => void;
   setIsDirty: (value: boolean) => void;
   isVerifyEmailModalOpen: boolean;
@@ -84,6 +85,7 @@ const Edit = forwardRef(
       watch,
       reset,
       formState: { isDirty, errors },
+      setValue,
     } = useForm({
       defaultValues: {
         avatar: user.avatar,
@@ -131,8 +133,9 @@ const Edit = forwardRef(
           };
         }
       );
+      setValue('state', '');
       setStates(formattedStates);
-    }, [watchCountry, getValues]);
+    }, [watchCountry, getValues, setValue]);
     useEffect(() => {
       setIsDirty(isDirty);
     }, [watchAll, isDirty, setIsDirty]);
@@ -140,7 +143,8 @@ const Edit = forwardRef(
     const handleCloseVerifyEmailModal = () => {
       setIsVerifyEmailModalOpen(false);
     };
-    console.log(errors);
+    const sixteenYearsAgo = subYears(new Date(), 16);
+    const hundredYearsAgo = subYears(new Date(), 100);
     return (
       <div className="pt-10">
         <h3 className="text-xl text-dark-blue font-medium mb-8">
@@ -183,10 +187,16 @@ const Edit = forwardRef(
                     selected={field.value === 'reader'}
                     rounded="xl"
                     onClick={() => field.onChange('reader')}
+                    customStyles={`${
+                      field.value === 'reader' && 'hover:!bg-primary'
+                    }`}
                   />
                   <Button
                     label="Writer"
                     selected={field.value === 'writter'}
+                    customStyles={`${
+                      field.value === 'writter' && 'hover:!bg-primary'
+                    }`}
                     rounded="xl"
                     onClick={() => field.onChange('writter')}
                   />
@@ -198,7 +208,7 @@ const Edit = forwardRef(
             <p className="font-semibold text-lg text-dark-blue mb-4">
               Personal information
             </p>
-            <div className="flex mb-12 max-w-[676px] overflow-hidden gap-6">
+            <div className="flex mb-12 max-w-[676px] overflow-hidden gap-6 flex-col md:flex-row">
               <Controller
                 control={control}
                 name="username"
@@ -242,8 +252,8 @@ const Edit = forwardRef(
               render={({ field }) => (
                 <Input
                   variant="filled"
-                  customStyles="w-full"
                   placeholder="Tell something about yourself"
+                  size="full"
                   defaultValue={field.value}
                   onChange={e => field.onChange(e.target.value)}
                 />
@@ -265,10 +275,18 @@ const Edit = forwardRef(
                   inputProps={{ placeholder: 'Date of birth' }}
                   onChange={onChange}
                   value={value}
+                  initialViewDate={sixteenYearsAgo}
+                  initialViewMode="years"
+                  isValidDate={currentDate => {
+                    return (
+                      currentDate.isBefore(sixteenYearsAgo) &&
+                      currentDate.isAfter(hundredYearsAgo)
+                    );
+                  }}
                 />
               )}
             />
-            <div className="flex gap-6 mb-10 w-full">
+            <div className="flex gap-6 mb-10 w-full flex-col md:flex-row">
               <Controller
                 control={control}
                 name="country"
@@ -288,10 +306,11 @@ const Edit = forwardRef(
                 name="state"
                 render={({ field: { onChange, value } }) => (
                   <Select
+                    key={value}
                     options={states}
                     placeholder="State"
                     name="state"
-                    value={value}
+                    value={value ? value : undefined}
                     onChange={onChange}
                     wrapperStyles="w-full"
                   />
@@ -303,7 +322,7 @@ const Edit = forwardRef(
             <>
               <p
                 onClick={handleOpenChangePasswordModal}
-                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21"
+                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
               >
                 Change password
               </p>

@@ -10,7 +10,7 @@ import { NewslettersListData } from '@/types/newsletters';
 import { GetNewsletterListProps } from '.';
 
 interface BookmarkWithIdPayload {
-  newsletterId: string;
+  newsletterId: string | number;
   token?: string;
 }
 
@@ -87,12 +87,8 @@ export const getBookmarksList = async ({
   ratings,
   search,
   token,
-  myId,
 }: GetNewsletterListProps) => {
   try {
-    const user = Cookies.get('user')
-      ? JSON.parse(Cookies.get('user') as string)
-      : undefined;
     let url = `newsletters/newsletters-in-bookmarks?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
@@ -122,17 +118,10 @@ export const getBookmarksList = async ({
     const newslettersListData: NewslettersListData = await api
       .get(url, { headers: { Cookie: `accessToken=${token}` } })
       .json();
-    const userId = user ? user.id : myId;
-    if (userId) {
-      newslettersListData.newsletters.forEach(newsletter => {
-        if (newsletter.followersIds.includes(userId as number)) {
-          newsletter.followed = true;
-        }
-      });
-    }
+
     return { newslettersListData };
   } catch (error) {
-    console.error(error);
+    throwErrorMessage(error as HTTPError, 'Failed to get bookmarks');
     return {
       error: 'Failed to get newsletter',
     };

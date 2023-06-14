@@ -25,13 +25,14 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   defaultValue?: string;
   disabled?: boolean;
+  size?: 'base' | 'full';
 }
 
 const variants = {
   outlined:
-    'bg-porcelain border-0 outline-none rounded-lg h-9 w-72 pl-2 pr-8 font-body text-sm',
+    'bg-porcelain outline-none rounded-lg h-9 w-72 pl-2 font-body text-sm border border-porcelain',
   filled:
-    'border-b-2 outline-none border-grey w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-light-grey disabled:bg-white',
+    'border-b-2 outline-none border-grey lg:w-96 text-base pb-2 pl-2 text-lightBlack placeholder:text-dark-grey disabled:text-dark-blue disabled:bg-light-porcelain',
 };
 
 const Input = ({
@@ -52,6 +53,7 @@ const Input = ({
   disabled,
   onChange,
   defaultValue,
+  size = 'base',
 }: InputProps) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const handleShowPassword = () => setIsShowPassword(!isShowPassword);
@@ -59,9 +61,12 @@ const Input = ({
     variants[variant],
     error && 'border-red',
     customStyles,
-    'font-inter'
+    'font-inter w-full',
+    isSearch && 'focus:border-primary focus:border focus:outline-primary-light',
+    size === 'full' && '!w-full',
+    isSearch || isPassword ? 'pr-8' : 'pr-2'
   );
-  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col');
+  const wrapperFormattedStyles = clsx(wrapperStyles, 'flex flex-col w-full');
   const [value, setValue] = useState(defaultValue || '');
   return (
     <div className={wrapperFormattedStyles}>
@@ -88,7 +93,7 @@ const Input = ({
         />
         {isSearch && (
           <Search
-            className={`absolute right-3 top-1.5 ${iconStyles && iconStyles}`}
+            className={`absolute right-2 top-1.5 ${iconStyles && iconStyles}`}
           />
         )}
         {checkNumberOfSymbols && maxLength && (
@@ -99,18 +104,18 @@ const Input = ({
         {isPassword &&
           (isShowPassword ? (
             <EyeOnIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
+              className="absolute right-5 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ) : (
             <EyeOffIcon
-              className="absolute right-3 top-1.5 cursor-pointer"
+              className="absolute right-5 top-1.5 cursor-pointer"
               onClick={handleShowPassword}
             />
           ))}
         {error && (
           <p
-            className={`absolute text-sm text-red ${
+            className={`absolute text-sm text-red font-inter ${
               checkNumberOfSymbols && maxLength ? '-bottom-10' : '-bottom-5'
             }`}
           >

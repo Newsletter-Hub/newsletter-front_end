@@ -61,7 +61,7 @@ const Header = () => {
   useOnClickOutside(searchResultRef, handleClickOutside);
   return (
     <div className="shadow-md py-4">
-      <div className="bg-white flex items-center lg:justify-center justify-between font-inter xl:gap-24 lg:gap-10 w-full px-2 lg:px-0">
+      <div className="bg-white flex items-center justify-between font-inter xl:gap-24 lg:gap-10 w-full px-2 lg:px-5">
         <div className="hidden lg:block">
           <Logo className="max-w-200px" />
         </div>
@@ -82,7 +82,7 @@ const Header = () => {
                       customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px]"
                     />
                     {showSearchResult && data && (
-                      <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw]">
+                      <div className="bg-white absolute md:w-full top-10 shadow-md border-t border-t-light-grey rounded-lg p-2 w-[95vw] z-10">
                         {Boolean(data?.newsletters?.length) && (
                           <div>
                             <div className="flex justify-between items-center">
@@ -93,7 +93,7 @@ const Header = () => {
                               </span>
                               <Link
                                 href={`/newsletters/categories/all?search=${searchTerm}`}
-                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold hover:border-b-primary"
                               >
                                 View all Newsletter results
                               </Link>
@@ -141,7 +141,7 @@ const Header = () => {
                               </span>
                               <Link
                                 href={`/users?search=${searchTerm}`}
-                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold"
+                                className="xl:text-sm text-xs border-b border-b-dark-grey font-semibold hover:border-b-primary"
                               >
                                 View all User results
                               </Link>
@@ -221,9 +221,9 @@ const Header = () => {
                     username={user.username}
                     customStyles="p-3"
                     src={user.avatar}
-                    className="rounded-full max-h-[48px] border-2 border-primary mr-2"
+                    className="rounded-full h-12 w-12 border-2 border-primary"
                   />
-                  <div>
+                  <div className="ml-3">
                     <span className="text-lg whitespace-nowrap block overflow-hidden text-ellipsis font-semibold text-lightBlack">
                       {user.username}
                     </span>
@@ -267,7 +267,7 @@ const Header = () => {
                       Account settings
                     </Link>
                     <span
-                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer hover:text-primary"
                       onClick={() => logout({ setUser })}
                     >
                       <div className="w-6 h-6">
@@ -318,9 +318,9 @@ const Header = () => {
                   username={user.username}
                   customStyles="p-3"
                   src={user.avatar}
-                  className="rounded-full max-h-[48px] border-2 border-primary mr-2"
+                  className="rounded-full max-h-[48px] border-2 border-primary"
                 />
-                <div>
+                <div className="ml-2">
                   <ArrowDownIcon />
                 </div>
               </div>

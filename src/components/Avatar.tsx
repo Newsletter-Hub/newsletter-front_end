@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import SkeletonImage from './SkeletonImage';
 
 interface AvatarProps {
   src?: string;
@@ -25,12 +25,13 @@ const Avatar = ({
   return (
     <>
       {src ? (
-        <Image
+        <SkeletonImage
+          style={{ width, height }}
           src={src}
           width={width}
           height={height}
           alt={alt}
-          className={className}
+          className={`${className} rounded-full object-cover`}
         />
       ) : (
         <div

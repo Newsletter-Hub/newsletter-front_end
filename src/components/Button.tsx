@@ -3,6 +3,7 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 import GoogleIcon from '@/assets/icons/google';
+import LoadingButton from './LoadingButton';
 
 interface ButtonProps {
   label: string | JSX.Element;
@@ -27,20 +28,21 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   height?: 'sm' | 'base';
+  loading?: boolean;
 }
 
 const variants = {
   primary:
-    'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center',
+    'text-white bg-primary whitespace-nowrap py-10px px-7 flex justify-center items-center transition-colors duration-200 ease-in-out hover:bg-blue',
   'primary-selected':
     'text-primary bg-primary-light whitespace-nowrap py-10px px-7 flex justify-center items-center',
   secondary: 'text-white bg-black whitespace-nowrap py-10px px-7',
   outlined:
-    'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack',
+    'border-[1.5px] border-lightBlack py-5 px-16 rounded-[36px] flex justify-center items-center text-lightBlack transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white',
   'outlined-primary':
-    'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base',
+    'text-primary border-[1.5px] flex justify-center items-center whitespace-nowrap py-3 px-8 rounded-full text-base transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white',
   'outlined-secondary':
-    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7',
+    'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white hover:border-blue',
   porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
 };
 
@@ -79,7 +81,7 @@ const Button = ({
   rounded = 'none',
   uppercase = false,
   bold = false,
-  fontSize = 'base',
+  fontSize = 'md',
   size = 'base',
   disabled,
   socialMedia = 'none',
@@ -88,6 +90,7 @@ const Button = ({
   selected,
   onClick,
   height = 'base',
+  loading,
 }: ButtonProps) => {
   const styles = clsx(
     variants[variant],
@@ -104,14 +107,14 @@ const Button = ({
     customStyles,
     !selected &&
       selected !== undefined &&
-      '!bg-light-porcelain !text-dark-grey',
+      '!bg-light-porcelain !text-dark-grey transition-colors duration-200 ease-in-out hover:!bg-blue hover:!text-white',
     '!font-inter',
     heightVariants[height]
   );
   return (
     <button
       className={styles}
-      disabled={disabled}
+      disabled={loading || disabled}
       type={type}
       onClick={onClick}
     >
@@ -119,6 +122,8 @@ const Button = ({
         <span className="flex justify-center items-center gap-3 py-1">
           <GoogleIcon /> {label}
         </span>
+      ) : loading ? (
+        <LoadingButton />
       ) : (
         label
       )}

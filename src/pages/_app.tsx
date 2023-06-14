@@ -8,7 +8,7 @@ import { NextPage } from 'next';
 import parseCookies from 'next-cookies';
 import type { AppContext, AppProps } from 'next/app';
 
-import { UserMe } from '@/types/user';
+import { User } from '@/types/user';
 
 import withLayout, { EntryType, LayoutType } from '@/components/withLayout';
 
@@ -24,7 +24,7 @@ function MyApp({
   Component,
   pageProps,
   user,
-}: AppProps & { Component: MyComponentType; user: UserMe }) {
+}: AppProps & { Component: MyComponentType; user: User }) {
   const LayoutComponent = withLayout(Component, Component.layout, {
     type: Component.type as EntryType,
   });

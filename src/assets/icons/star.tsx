@@ -1,6 +1,6 @@
 interface StarIconProps {
   className?: string;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<SVGSVGElement>) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }

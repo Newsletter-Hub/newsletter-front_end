@@ -1,14 +1,11 @@
 import {
-  newsletterUpdate,
-  newsletterVerifyOwnership,
+  createNewsletter, // newsletterVerifyOwnership,
 } from '@/actions/newsletters';
 import React, { useEffect, useRef, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useForm } from 'react-hook-form';
 
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 
@@ -16,84 +13,55 @@ import { Interest } from '@/types/interests';
 import { NewsletterFormProps } from '@/types/newsletters';
 
 import CrossIcon from '@/assets/icons/cross';
+import { useMutation } from 'react-query';
 
 import Button from '../Button';
-import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 import Loading from '../Loading';
+import RadioGroup from '../RadioGroup';
+import Slider from '../Slider';
+import TextArea from '../TextArea';
 
-const validationSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required field' }),
-  description: z.string().min(1, { message: 'Description is required field' }),
-  author: z.string().min(1, { message: 'Author is required field' }),
-  image: z
-    .union([z.string(), z.unknown()])
-    .refine(
-      value => {
-        return typeof value === 'string' || value instanceof File;
-      },
-      { message: 'Image is a required field' }
-    )
-    .refine(
-      value => {
-        if (typeof value === 'string') {
-          return value.trim() !== '';
-        } else if (value instanceof File) {
-          return value.name !== '';
-        }
-        return false;
-      },
-      { message: 'Image is a required field' }
-    ),
-});
-
-type ValidationSchema = z.infer<typeof validationSchema>;
-
-const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
+const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
   const [tags, setTags] = useState<Interest[]>([]);
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [suggests, setSuggests] = useState<Interest[]>([]);
-
+  const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
+  const [averageDuration, setAverageDuration] = useState<number>(1);
   const autoCompleteRef = useRef(null);
+  const newsletterMutation = useMutation(createNewsletter);
 
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
+  const { handleSubmit } = useForm();
 
-  const onSubmit = async () => {
-    try {
-      const response = await newsletterVerifyOwnership({ link: payload.link });
-      if (response && response.id) {
-        router.push(`${response.id}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handlePreviousStep = () => {
+    setStep(1);
   };
 
-  const onAdd: SubmitHandler<ValidationSchema> = async data => {
-    try {
-      const response = await newsletterUpdate({
-        id: payload.id,
-        link: payload.link,
-        title: data.title,
-        newsletterAuthor: data.author,
-        description: data.description,
-        image: data.image as File,
-        interests: tags.map(item => item.id),
-      });
-      if (response && response.id) {
-        router.push(`${response.id}`);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  // const onSubmit = async () => {
+  //   try {
+  //     const response = await newsletterVerifyOwnership({ link: payload.link });
+  //     if (response && response.id) {
+  //       router.push(`${response.id}`);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const onAdd = async () => {
+    newsletterMutation.mutate({
+      link: payload.link,
+      title: payload.title,
+      description: payload.description,
+      image: payload.image,
+      interests: tags.map(item => item.id),
+      averageDuration: String(averageDuration),
+      pricingType,
+      router,
+    });
   };
 
   const handleAddTag = (tag: Interest) => {
@@ -114,10 +82,13 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
         );
         setSuggests(formattedData);
       }
-    } else {
-      setShowAutoComplete(false);
+    } else if (interests) {
+      const formattedSuggests = interests.filter(interest => {
+        return !tags.some(tag => tag.id === interest.id);
+      });
+      setSuggests(formattedSuggests);
     }
-  }, [inputValue, interests]);
+  }, [inputValue, interests, tags]);
 
   useEffect(() => {
     if (interests) {
@@ -132,17 +103,21 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
     }
   }, [tags]);
 
-  const handleClickOutside = () => {
-    setShowAutoComplete(false);
-    setInputValue('');
+  const handleClickInput = () => {
+    if (!inputValue && interests) {
+      const formattedSuggests = interests.filter(interest => {
+        return !tags.some(tag => tag.id === interest.id);
+      });
+      setSuggests(formattedSuggests);
+    }
+    setShowAutoComplete(true);
   };
 
-  const handleSetValue = (value: string | File) => {
-    setValue('image', value);
+  const handleClickOutside = () => {
+    setShowAutoComplete(false);
   };
 
   useOnClickOutside(autoCompleteRef, handleClickOutside);
-
   if (!interests) {
     return <Loading />;
   }
@@ -150,40 +125,33 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
   return (
     <form onSubmit={handleSubmit(onAdd)}>
       <div className="mb-6">
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col">
           <Input
-            placeholder="Title"
+            label="Title"
             variant="filled"
-            register={{ ...register('title') }}
-            customStyles="w-full"
-            error={Boolean(errors.title)}
-            errorText={errors.title?.message}
+            customStyles="!w-full mb-4"
+            defaultValue={payload.title}
+            disabled
           />
-          <Input
-            placeholder="Description"
+          <TextArea
+            label="Description"
             variant="filled"
-            register={{ ...register('description') }}
-            maxLength={300}
-            checkNumberOfSymbols
-            customStyles="w-full"
-            error={Boolean(errors.description)}
-            errorText={errors.description?.message}
+            customStyles="w-full mb-8"
+            defaultValue={payload.description}
+            disabled
           />
-          <Input
-            placeholder="Author"
-            variant="filled"
-            register={{ ...register('author') }}
-            customStyles="w-full"
-            error={Boolean(errors.author)}
-            errorText={errors.author?.message}
-          />
-          <FileDownloader
-            setValue={handleSetValue}
-            variant="lg"
-            error={Boolean(errors.image)}
-            errorText={errors.image?.message}
-          />
-          <div className="border-b-grey border-b-2 flex gap-3 w-[600px] flex-wrap">
+          {payload.image && (
+            <div className="flex justify-center mb-8">
+              <Image
+                src={payload.image}
+                alt="newsletter image"
+                width={434}
+                height={236}
+                className="object-cover object-center rounded-3xl w-[434px] h-[236px]"
+              />
+            </div>
+          )}
+          <div className="border-b-grey border-b-2 flex gap-3 md:w-[600px] w-[280px] xs:w-[330px] sm:w-[380px] flex-wrap mb-4">
             {Boolean(tags.length) &&
               tags.map(item => (
                 <React.Fragment key={item.id}>
@@ -208,12 +176,13 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                   className={`outline-none w-full`}
                   value={inputValue}
                   onChange={e => setInputValue(e.target.value)}
+                  onClick={handleClickInput}
                 />
               )}
               {showAutoComplete &&
                 (suggests.length ? (
                   <div
-                    className="absolute shadow-md bg-white top-6 w-full max-h-28 overflow-scroll pl-4"
+                    className="absolute shadow-md bg-white top-6 w-full max-h-48 overflow-scroll pl-4 z-10"
                     ref={autoCompleteRef}
                   >
                     {suggests.map(item => (
@@ -231,28 +200,65 @@ const DetailsForm = ({ payload, interests }: NewsletterFormProps) => {
                     className="absolute shadow-md bg-white top-6 w-full overflow-scroll"
                     ref={autoCompleteRef}
                   >
-                    <p className="w-full">Nothing..</p>
+                    <p className="w-full font-inter text-base text-dark-blue">
+                      Nothing..
+                    </p>
                   </div>
                 ))}
             </div>
           </div>
+          <div className="mb-4">
+            <RadioGroup
+              defaultValue="free"
+              options={[
+                { label: 'Free', value: 'free', id: '1' },
+                { label: 'Paid', value: 'paid', id: '2' },
+              ]}
+              setValue={(value: string) =>
+                setPricingType(value as 'free' | 'paid')
+              }
+            />
+          </div>
+          <div>
+            <p className="mb-4 text-dark-blue text-xl font-medium">Duration</p>
+            <Slider
+              min={1}
+              max={60}
+              step={1}
+              values={averageDuration}
+              setValues={values => setAverageDuration(values as number)}
+            />
+            <p className="text-lightBlack px-2 py-2 border-b-2 border-grey w-fit font-inter pt-2">
+              <span className="font-semibold">
+                {averageDuration} minute{averageDuration > 1 && 's'}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
-      <div className="flex w-full gap-4">
-        <Button
+      <div className="flex w-full gap-4 justify-between items-center">
+        <span
+          className="font-inter text-dark-blue text-base font-semibold border-b border-dark-blue cursor-pointer"
+          onClick={handlePreviousStep}
+        >
+          Back
+        </span>
+        {/* <Button
           label="Verify Ownership"
           size="full"
           rounded="xl"
           onClick={onSubmit}
           variant="outlined-primary"
           fontSize="md"
-        />
+        /> */}
         <Button
           label="Add"
           size="full"
           rounded="xl"
           fontSize="md"
           type="submit"
+          customStyles="max-w-[400px]"
+          loading={newsletterMutation.isLoading}
         />
       </div>
     </form>

@@ -8,6 +8,9 @@
     -webkit-appearance: none;
     margin: 0;
   }
+  a {
+    @apply transition-colors duration-200 ease-in-out hover:text-primary;
+  }
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg {
@@ -16,4 +19,20 @@
 
 .Toastify__toast--success .Toastify__progress-bar {
   background: #01aaed;
+}
+
+@media (max-width: 767px) {
+  .interests-container {
+    position: relative;
+  }
+  .interests-container::after {
+    content: '';
+    display: block;
+    position: sticky;
+    bottom: 0;
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to top, white, transparent);
+    pointer-events: none;
+  }
 }

@@ -9,7 +9,7 @@ import { COUNTRIES } from '@/config/constants';
 
 import { Country, State } from 'country-state-city';
 
-import { format } from 'date-fns';
+import { format, subYears } from 'date-fns';
 
 import { UserInfoStepsProps } from '@/types/signup';
 
@@ -31,13 +31,14 @@ const BasicInformation = ({
 }: UserInfoStepsProps) => {
   const [states, setStates] = useState<Option[]>([]);
   const user = useContext(UserContext);
-  const { handleSubmit, control, getValues, watch } = useForm<Payload>({
-    defaultValues: {
-      country: user.country,
-      state: user.state,
-      dateBirth: user.dateBirth,
-    },
-  });
+  const { handleSubmit, control, getValues, watch, setValue } =
+    useForm<Payload>({
+      defaultValues: {
+        country: user.country,
+        state: user.state,
+        dateBirth: user.dateBirth,
+      },
+    });
 
   const watchCountry = watch('country');
 
@@ -73,10 +74,16 @@ const BasicInformation = ({
         };
       }
     );
+    setValue('state', undefined);
     setStates(formattedStates);
-  }, [watchCountry, getValues]);
+  }, [watchCountry, getValues, setValue]);
+  const sixteenYearsAgo = subYears(new Date(), 16);
+  const hundredYearsAgo = subYears(new Date(), 100);
   return (
-    <form className="max-w-[400px]" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="md:max-w-[400px] max-w-[300px]"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <p className="text-xs text-dark-blue mb-3 pl-4 font-inter font-semibold">
         Birth information
       </p>
@@ -87,10 +94,18 @@ const BasicInformation = ({
           <Datetime
             timeFormat={false}
             dateFormat="DD-MM-yyyy"
-            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-grey [&>input]:w-96 [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-dark-blue font-inter [&>input]:pl-4 [&>input]:placeholder:text-dark-grey"
+            className="[&>input]:border-b-2 [&>input]:outline-none [&>input]:border-grey md:[&>input]:w-96 [&>input]:w-full [&>input]:pb-3 mb-5 [&>input]:text-sm [&>input]:text-dark-blue font-inter [&>input]:pl-4 [&>input]:placeholder:text-dark-grey"
             inputProps={{ placeholder: 'Date of birth' }}
             onChange={onChange}
             value={value}
+            initialViewDate={sixteenYearsAgo}
+            initialViewMode="years"
+            isValidDate={currentDate => {
+              return (
+                currentDate.isBefore(sixteenYearsAgo) &&
+                currentDate.isAfter(hundredYearsAgo)
+              );
+            }}
           />
         )}
       />
@@ -111,15 +126,18 @@ const BasicInformation = ({
         <Controller
           control={control}
           name="state"
-          render={({ field: { onChange, value } }) => (
-            <Select
-              options={states}
-              placeholder="State"
-              name="state"
-              value={value}
-              onChange={onChange}
-            />
-          )}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <Select
+                key={value}
+                options={states}
+                placeholder="State"
+                name="state"
+                value={value}
+                onChange={onChange}
+              />
+            );
+          }}
         />
       </div>
       <div className="flex items-center justify-center">
