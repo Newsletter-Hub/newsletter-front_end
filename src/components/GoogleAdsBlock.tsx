@@ -1,26 +1,25 @@
-import Script from 'next/script';
+import React, { useEffect } from 'react';
 
-const GoogleAds = () => {
+declare global {
+  interface Window {
+    adsbygoogle: { [key: string]: unknown }[];
+  }
+}
+
+const GoogleAds: React.FC = () => {
+  useEffect(() => {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }, []);
+
   return (
-    <>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8804004591913052"
-        crossOrigin="anonymous"
-      ></Script>
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client="ca-pub-8804004591913052"
-        data-ad-slot="5662242139"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-
-      <Script id="adsbygoogle-init" strategy="afterInteractive">{`
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      `}</Script>
-    </>
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block' }}
+      data-ad-client="ca-pub-8804004591913052"
+      data-ad-slot="5662242139"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
   );
 };
 
