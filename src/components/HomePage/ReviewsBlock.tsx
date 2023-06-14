@@ -37,7 +37,9 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
   );
   const [page, setPage] = useState(1);
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
   const loadMore = async () => {
+    setIsLoading(true);
     setPage(prevPage => prevPage + 1);
 
     const response = await getReviews({
@@ -47,6 +49,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
 
     if (response.reviews) {
       setReviewsInfo(response.reviews);
+      setIsLoading(false);
     }
   };
   const handleAddBookmark = async (id: number) => {
@@ -186,6 +189,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
             rounded="xl"
             bold
             onClick={loadMore}
+            loading={isLoading}
           />
         )}
       </div>
