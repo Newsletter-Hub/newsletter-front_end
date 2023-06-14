@@ -101,7 +101,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
           {reviewsInfo.reviews.map((review, index) => (
             <div
               className={`${
-                index + 1 !== reviewData.reviews.length && 'border-b'
+                index + 1 !== reviewsInfo.reviews.length && 'border-b'
               } border-light-grey py-8 w-full`}
               key={review.id}
             >
