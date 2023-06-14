@@ -25,6 +25,7 @@ const LoadableImage = ({ placeholder, alt, ...props }: LoadableImageProps) => {
   return (
     <div>
       <Image
+        key={String(props.src)}
         {...props}
         onLoad={handleImageLoad}
         alt={alt}
