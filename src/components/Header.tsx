@@ -298,6 +298,7 @@ const Header = () => {
         ) : (
           <Popover
             triggerStyles="hidden lg:flex"
+            customWrapperStyles="mr-2"
             triggerContent={
               <div className="lg:flex items-center">
                 <div className="max-w-[80px] text-right mr-3">
@@ -358,7 +359,7 @@ const Header = () => {
                   Account settings
                 </Link>
                 <span
-                  className="flex gap-3 items-center text-dark-blue text-base p-2 mb-1 cursor-pointer"
+                  className="flex gap-3 items-center text-dark-blue text-base p-2 mb-1 cursor-pointer hover:text-primary"
                   onClick={() => logout({ setUser })}
                 >
                   <div className="w-6 h-6">
