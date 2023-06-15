@@ -18,15 +18,15 @@ const Users = ({ usersList }: UsersListProps) => {
       getUsersList={getUserSubscriptions}
       isSortable={false}
       isUserId={true}
+      isFollowEnable={false}
     />
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const user = JSON.parse(context.req.cookies.user as string);
-  const userId = user.id;
   const cookies = parseCookies(context);
   const token = cookies.accessToken;
+  const userId = Number(context.query.userId);
   const usersResponse = await getUserSubscriptions({
     page: 1,
     pageSize: 9,

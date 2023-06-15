@@ -3,7 +3,6 @@ import React from 'react';
 
 import { GetServerSideProps } from 'next';
 
-import parseCookies from 'next-cookies';
 import UsersList from '@/components/User/UsersList';
 import { UserList } from '@/types/user';
 
@@ -18,17 +17,18 @@ const Users = ({ usersList }: UsersListProps) => {
       getUsersList={getFollowers}
       isSortable={false}
       title="Followers"
+      isUserId={true}
     />
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const cookies = parseCookies(context);
-  const token = cookies.accessToken;
+  const user = JSON.parse(context.req.cookies.user as string);
+  const userId = user.id;
   const usersResponse = await getFollowers({
     page: 1,
     pageSize: 9,
-    token,
+    userId,
   });
   return {
     props: {

@@ -30,6 +30,7 @@ export interface GetSimpleUserListProps {
   page: number;
   pageSize: number;
   token?: string;
+  userId?: number;
 }
 
 export interface GetAdvancedUsersListProps extends GetSimpleUserListProps {
@@ -173,12 +174,20 @@ export const getUsersList = async ({
 export const getFollowers = async ({
   page,
   pageSize,
+  userId,
   token,
 }: GetSimpleUserListProps): Promise<UserListResponse> => {
+  const searchParams: Record<string, string | number | boolean> = {
+    page,
+    pageSize,
+  };
+  if (userId) {
+    searchParams.userId = userId;
+  }
   try {
     const response: UserList = await api
       .get('subscriptions/subscribers', {
-        searchParams: { page, pageSize },
+        searchParams,
         headers: {
           Cookie: `accessToken=${token}`,
         },
@@ -195,11 +204,21 @@ export const getUserSubscriptions = async ({
   page,
   pageSize,
   token,
+  userId,
 }: GetSimpleUserListProps): Promise<UserListResponse> => {
+  const searchParams: Record<string, string | number | boolean> = {
+    page,
+    pageSize,
+    entity: 'User',
+  };
+
+  if (userId) {
+    searchParams.userId = userId;
+  }
   try {
     const response: UserList = await api
-      .get('subscriptions/my-subscriptions', {
-        searchParams: { page, pageSize, entity: 'User' },
+      .get('subscriptions/subscriptions', {
+        searchParams,
         headers: {
           Cookie: `accessToken=${token}`,
         },
