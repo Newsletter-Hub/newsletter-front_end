@@ -11,7 +11,6 @@ import { useQuery } from 'react-query';
 import { useOnClickOutside } from 'usehooks-ts';
 
 import { Alegreya } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import ArrowDownIcon from '@/assets/icons/arrowDown';
@@ -27,6 +26,7 @@ import Button from './Button';
 import Input from './Input';
 import BurgerMenu from './Mobile/BurgerMenu';
 import Popover from './Popover';
+import SkeletonImage from './SkeletonImage';
 
 const links = [
   { label: 'Newsletters', href: '/newsletters/categories/all' },
@@ -105,16 +105,18 @@ const Header = () => {
                                   key={item.id}
                                   className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
                                 >
-                                  <Image
-                                    src={
-                                      (item?.image as string) ||
-                                      'https://i.imgur.com/kZMNj7Q.jpeg'
-                                    }
-                                    width={48}
-                                    height={48}
-                                    alt="Newsletter image"
-                                    className="rounded-[10px] w-12 h-12 object-cover"
-                                  />
+                                  <div>
+                                    <SkeletonImage
+                                      src={
+                                        (item?.image as string) ||
+                                        'https://i.imgur.com/kZMNj7Q.jpeg'
+                                      }
+                                      width={48}
+                                      height={48}
+                                      alt="Newsletter image"
+                                      className="rounded-[10px] w-[48px] h-[48px] object-cover"
+                                    />
+                                  </div>
                                   <div>
                                     <p className="text-dark-blue text-xs font-semibold">
                                       {item.newsletterAuthor}
@@ -159,13 +161,13 @@ const Header = () => {
                                     width={48}
                                     height={48}
                                     alt="Newsletter image"
-                                    className="rounded-[10px] w-12 h-12 object-cover"
+                                    className="rounded-[10px] w-12 h-12 min-w-[48px] object-cover"
                                   />
                                   <div>
                                     <p className="text-dark-blue font-semibold text-base">
                                       {item.username}
                                     </p>
-                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden max-w-[300px] text-ellipsis">
+                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden xs:max-w-[280px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[270px] xl:max-w-[320px] max-w-[230px] text-ellipsis">
                                       {item.description}
                                     </p>
                                   </div>

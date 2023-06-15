@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 import { ReviewResponse } from '@/types/newsletters';
 
-import Image from 'next/image';
 import Button from '../Button';
 import StarRating from '../StarRating';
 import { addToBookmark } from '@/actions/newsletters/bookmarks';
@@ -18,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { useMutation } from 'react-query';
 import ReviewModal from '../Modals/ReviewModal';
+import SkeletonImage from '../SkeletonImage';
 
 interface ReviewsBlockProps {
   reviewData: ReviewResponse;
@@ -106,7 +106,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
               key={review.id}
             >
               <div className="flex items-center">
-                <Image
+                <SkeletonImage
                   src={
                     review.newsletter.image ||
                     'https://i.imgur.com/kZMNj7Q.jpeg'
@@ -114,9 +114,9 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                   alt="latest"
                   width={96}
                   height={96}
-                  className="rounded-[5px] mr-8 h-[96px] w-[96px] object-cover object-center"
+                  className="rounded-[5px] h-[96px] w-[96px] object-cover object-center"
                 />
-                <div className="flex md:items-start flex-col md:flex-row">
+                <div className="flex md:items-start flex-col md:flex-row ml-8">
                   <div className="mr-4 md:w-[250px]">
                     <p className="text-xl text-dark-blue">
                       {review.newsletter.title}

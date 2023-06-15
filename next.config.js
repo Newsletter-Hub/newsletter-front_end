@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://newsletter-back-quzx.onrender.com/:path*',
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/:path*`,
       },
     ];
   },

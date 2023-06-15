@@ -25,14 +25,16 @@ const Avatar = ({
   return (
     <>
       {src ? (
-        <SkeletonImage
-          style={{ width, height }}
-          src={src}
-          width={width}
-          height={height}
-          alt={alt}
-          className={`${className} rounded-full object-cover`}
-        />
+        <div>
+          <SkeletonImage
+            style={{ width, height, minWidth: width }}
+            src={src}
+            width={width}
+            height={height}
+            alt={alt}
+            className={`${className} rounded-full object-cover`}
+          />
+        </div>
       ) : (
         <div
           style={{ width, height, minWidth: width }}

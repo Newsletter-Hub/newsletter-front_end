@@ -10,7 +10,7 @@ const SkeletonImage: React.FC<SkeletonImageProps> = ({ alt, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <div
-      style={props.style}
+      style={{ ...props.style, width: props.width, height: props.height }}
       className={`w-full overflow-hidden ${
         !isLoaded
           ? `skeleton bg-gradient-to-r from-skeletonStart to-skeletonEnd animate-shimmer ${props.className}`
