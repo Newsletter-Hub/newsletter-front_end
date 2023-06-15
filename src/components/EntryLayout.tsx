@@ -25,7 +25,9 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
         <title>Newsletter Hub</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <GoogleOAuthProvider clientId="373284142318-di7t0hm27ac0ll9vtl93l5d5kmlkg67q.apps.googleusercontent.com">
+      <GoogleOAuthProvider
+        clientId={String(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)}
+      >
         <div className={alegreya.className}>
           <div className="flex h-[100vh] overflow-hidden">
             <div className="w-[55%] bg-primary-light h-full pt-[64px] xl:px-[56px] hidden lg:block lg:px-3">
