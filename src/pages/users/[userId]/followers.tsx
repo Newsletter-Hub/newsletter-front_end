@@ -1,4 +1,4 @@
-import { getUserSubscriptions } from '@/actions/user';
+import { getFollowers } from '@/actions/user';
 import React from 'react';
 
 import { GetServerSideProps } from 'next';
@@ -15,19 +15,20 @@ const Users = ({ usersList }: UsersListProps) => {
   return (
     <UsersList
       usersList={usersList}
-      getUsersList={getUserSubscriptions}
+      getUsersList={getFollowers}
       isSortable={false}
+      title="Followers"
       isUserId={true}
+      isFollowEnable={false}
     />
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const user = JSON.parse(context.req.cookies.user as string);
-  const userId = user.id;
   const cookies = parseCookies(context);
-  const token = cookies.accessToken;
-  const usersResponse = await getUserSubscriptions({
+  const token = cookies.accessToken ? cookies.accessToken : undefined;
+  const userId = Number(context.query.userId);
+  const usersResponse = await getFollowers({
     page: 1,
     pageSize: 9,
     userId,

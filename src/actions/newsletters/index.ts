@@ -252,17 +252,20 @@ export const getNewslettersList = async ({
   }
 };
 
-export const getMyNewsletterSubscriptions = async ({
+export const getNewsletterSubscriptions = async ({
   entity = 'Newsletter',
   page,
   pageSize,
   token,
+  authorId,
 }: GetNewsletterListProps) => {
   try {
     const searchParams =
-      entity && page && pageSize ? { entity, page, pageSize } : undefined;
+      entity && page && pageSize && authorId
+        ? { entity, page, pageSize, userId: authorId }
+        : undefined;
     const newslettersListData: NewslettersListData = await api
-      .get('subscriptions/my-subscriptions', {
+      .get('subscriptions/subscriptions', {
         searchParams,
         headers: { Cookie: `accessToken=${token}` },
       })

@@ -13,6 +13,7 @@ import Avatar from '../Avatar';
 import Notification from '../Notification';
 import { useState } from 'react';
 import { getNotifications } from '@/actions/user/notifications';
+import { useRouter } from 'next/router';
 
 interface UserPageProps {
   newslettersListData: NewslettersListData;
@@ -31,6 +32,7 @@ const UserPage = ({
   const [page, setPage] = useState(1);
   const [notificationLoading, setNotificationLoading] = useState(false);
   const notificationRecipientId = user && user.id ? +user.id : undefined;
+  const router = useRouter();
   const loadMore = async () => {
     setNotificationLoading(true);
     setPage(prevPage => prevPage + 1);
@@ -98,38 +100,40 @@ const UserPage = ({
               {user.description}
             </p>
           </div>
-          {isProfile && (
-            <div className="flex flex-col md:flex-row md:gap-6 gap-2 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
-              <Link href="profile/followers">
-                {user.amountUserFollowers} Followers
+          <div className="flex flex-col md:flex-row md:gap-6 gap-2 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
+            {user.amountUserFollowers > 0 ? (
+              <Link href={`${router.asPath}/followers`}>
+                {user.amountUserFollowers} Follower
+                {user.amountUserFollowers !== 1 && 's'}
               </Link>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
-              <Link href="profile/users-following">
+            ) : (
+              <div>{user.amountUserFollowers} Followers</div>
+            )}
+            <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
+            {user.amountUserFollowing > 0 ? (
+              <Link href={`${router.asPath}/users-following`}>
                 {user.amountUserFollowing} User
-                {user.amountUserFollowing > 1 && 's'} Following
+                {user.amountUserFollowing !== 1 && 's'} Following
               </Link>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
-              <Link href="profile/newsletters-following">
+            ) : (
+              <div>
+                {user.amountUserFollowing} User
+                {user.amountUserFollowing !== 1 && 's'} Following
+              </div>
+            )}
+            <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
+            {user.amountFollowingNewsletters > 0 ? (
+              <Link href={`${router.asPath}/newsletters-following`}>
                 {user.amountFollowingNewsletters} Newsletter
                 {user.amountFollowingNewsletters > 1 && 's'} Following
               </Link>
-            </div>
-          )}
-          {!isProfile && (
-            <div className="flex flex-col md:flex-row md:gap-6 gap-2 text-sm font-semibold font-inter items-center text-dark-grey mb-8">
-              <span>{user.amountUserFollowers} Followers</span>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
-              <span>
-                {user.amountUserFollowing} User
-                {user.amountUserFollowing > 1 && 's'} Following
-              </span>
-              <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
-              <span>
+            ) : (
+              <div>
                 {user.amountFollowingNewsletters} Newsletter
                 {user.amountFollowingNewsletters > 1 && 's'} Following
-              </span>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
           {isProfile && (
             <div className="flex gap-8 items-center mb-[88px]">
               <Link href="profile/settings" className="flex items-center gap-2">
