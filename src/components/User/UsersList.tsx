@@ -39,6 +39,7 @@ interface UsersListProps {
   isSortable?: boolean;
   title?: string;
   isUserId?: boolean;
+  isFollowEnable?: boolean;
 }
 
 const UsersList = ({
@@ -47,6 +48,7 @@ const UsersList = ({
   isSortable = true,
   title = 'Users',
   isUserId = false,
+  isFollowEnable = true,
 }: UsersListProps) => {
   const { user } = useUser();
   const router = useRouter();
@@ -245,31 +247,35 @@ const UsersList = ({
                       )}
                     </div>
                   </div>
-                  <div className="w-full flex justify-end md:w-fit">
-                    <Button
-                      rounded="xl"
-                      fontSize="md"
-                      customStyles="md:!w-[140px] !w-[125px]"
-                      loading={Boolean(followLoading === item.id)}
-                      onClick={() =>
-                        handleFollow({
-                          entityId: item.id,
-                          followed: item.followed,
-                        })
-                      }
-                      variant={item.followed ? 'outlined-secondary' : 'primary'}
-                      label={
-                        item.followed ? (
-                          'Following'
-                        ) : (
-                          <span className="flex items-center gap-2">
-                            <PlusIcon />
-                            Follow
-                          </span>
-                        )
-                      }
-                    />
-                  </div>
+                  {isFollowEnable && (
+                    <div className="w-full flex justify-end md:w-fit">
+                      <Button
+                        rounded="xl"
+                        fontSize="md"
+                        customStyles="md:!w-[140px] !w-[125px]"
+                        loading={Boolean(followLoading === item.id)}
+                        onClick={() =>
+                          handleFollow({
+                            entityId: item.id,
+                            followed: item.followed,
+                          })
+                        }
+                        variant={
+                          item.followed ? 'outlined-secondary' : 'primary'
+                        }
+                        label={
+                          item.followed ? (
+                            'Following'
+                          ) : (
+                            <span className="flex items-center gap-2">
+                              <PlusIcon />
+                              Follow
+                            </span>
+                          )
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

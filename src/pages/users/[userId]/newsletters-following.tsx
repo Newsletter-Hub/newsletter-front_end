@@ -4,7 +4,6 @@ import { NewslettersListData } from '@/types/newsletters';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { GetServerSideProps } from 'next';
-import { useUser } from '@/contexts/UserContext';
 import parseCookies from 'next-cookies';
 
 interface UserNewslettersProps {
@@ -16,18 +15,16 @@ const FollowingNewsletters = ({
   newslettersListData,
   isProfile,
 }: UserNewslettersProps) => {
-  const { user } = useUser();
   return (
     <NewslettersList
       newslettersListData={newslettersListData}
       getNewslettersList={getNewsletterSubscriptions}
       isSeparated={false}
       isRated={true}
-      isFollowEnable={true}
+      isFollowEnable={false}
       isNewsletterFollowed={isProfile}
       type="newsletter"
       title="Newsletters Following"
-      authorId={user?.id}
     />
   );
 };
