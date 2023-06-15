@@ -5,12 +5,14 @@ interface RadixPopoverProps {
   triggerStyles?: string;
   customTriggerStyles?: string;
   children?: JSX.Element;
+  customWrapperStyles?: string;
 }
 
 const Popover = ({
   triggerContent,
   triggerStyles,
   customTriggerStyles,
+  customWrapperStyles,
   children,
 }: RadixPopoverProps) => {
   return (
@@ -26,7 +28,9 @@ const Popover = ({
         </button>
       </RadixPopover.Trigger>
       <RadixPopover.Portal>
-        <RadixPopover.Content className="bg-white shadow-md rounded-2xl mt-2">
+        <RadixPopover.Content
+          className={`bg-white shadow-md rounded-2xl mt-2 ${customWrapperStyles}`}
+        >
           {children}
         </RadixPopover.Content>
       </RadixPopover.Portal>

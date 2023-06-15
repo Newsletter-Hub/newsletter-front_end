@@ -189,6 +189,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
             rounded="xl"
             bold
             onClick={loadMore}
+            loading={loading}
           />
         )}
       </div>
