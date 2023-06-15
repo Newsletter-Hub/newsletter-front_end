@@ -161,13 +161,13 @@ const Header = () => {
                                     width={48}
                                     height={48}
                                     alt="Newsletter image"
-                                    className="rounded-[10px] w-12 h-12 object-cover"
+                                    className="rounded-[10px] w-12 h-12 min-w-[48px] object-cover"
                                   />
                                   <div>
                                     <p className="text-dark-blue font-semibold text-base">
                                       {item.username}
                                     </p>
-                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden max-w-[300px] text-ellipsis">
+                                    <p className="text-dark-grey text-sm whitespace-nowrap overflow-hidden xs:max-w-[280px] sm:max-w-[300px] md:max-w-[350px] lg:max-w-[270px] xl:max-w-[320px] max-w-[230px] text-ellipsis">
                                       {item.description}
                                     </p>
                                   </div>
