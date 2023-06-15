@@ -3,9 +3,9 @@ import { getNewsletterSubscriptions } from '@/actions/newsletters';
 import { NewslettersListData } from '@/types/newsletters';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
-import parseCookies from 'next-cookies';
 import { GetServerSideProps } from 'next';
 import { useUser } from '@/contexts/UserContext';
+import parseCookies from 'next-cookies';
 
 interface UserNewslettersProps {
   newslettersListData?: NewslettersListData;
@@ -33,8 +33,7 @@ const FollowingNewsletters = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const user = JSON.parse(context.req.cookies.user as string);
-  const userId = user.id;
+  const userId = Number(context.query.userId);
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
   const followingNewsletterList = await getNewsletterSubscriptions({

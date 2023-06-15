@@ -38,6 +38,7 @@ interface UsersListProps {
   getUsersList: GetAdvancedUserListType | GetSimpleUserListType;
   isSortable?: boolean;
   title?: string;
+  isUserId?: boolean;
 }
 
 const UsersList = ({
@@ -45,6 +46,7 @@ const UsersList = ({
   getUsersList,
   isSortable = true,
   title = 'Users',
+  isUserId = false,
 }: UsersListProps) => {
   const { user } = useUser();
   const router = useRouter();
@@ -95,13 +97,15 @@ const UsersList = ({
       order: sortTypes[choosedSortType].value,
       orderDirection:
         sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
+      userId: isUserId
+        ? Number(router.query.userId) || Number(user?.id)
+        : undefined,
     }).finally(() => setLoadMoreLoading(false));
 
     if (usersListResponse.userList) {
       setUsersData(usersListResponse.userList);
     }
   };
-
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
     if (!user) {
       router.push('/sign-up');
@@ -118,6 +122,9 @@ const UsersList = ({
               sortTypes[choosedSortType].value === 'dataJoined'
                 ? 'DESC'
                 : 'ASC',
+            userId: isUserId
+              ? Number(router.query.userId) || Number(user?.id)
+              : undefined,
           }).finally(() => setFollowLoading(false));
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
@@ -136,6 +143,9 @@ const UsersList = ({
               sortTypes[choosedSortType].value === 'dataJoined'
                 ? 'DESC'
                 : 'ASC',
+            userId: isUserId
+              ? Number(router.query.userId) || Number(user?.id)
+              : undefined,
           }).finally(() => setFollowLoading(false));
           if (usersListResponse.userList) {
             setUsersData(usersListResponse.userList);
