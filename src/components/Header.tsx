@@ -11,7 +11,6 @@ import { useQuery } from 'react-query';
 import { useOnClickOutside } from 'usehooks-ts';
 
 import { Alegreya } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import ArrowDownIcon from '@/assets/icons/arrowDown';
@@ -27,6 +26,7 @@ import Button from './Button';
 import Input from './Input';
 import BurgerMenu from './Mobile/BurgerMenu';
 import Popover from './Popover';
+import SkeletonImage from './SkeletonImage';
 
 const links = [
   { label: 'Newsletters', href: '/newsletters/categories/all' },
@@ -105,16 +105,18 @@ const Header = () => {
                                   key={item.id}
                                   className="mb-2 flex gap-2 rounded-lg hover:bg-light-porcelain p-2 items-center"
                                 >
-                                  <Image
-                                    src={
-                                      (item?.image as string) ||
-                                      'https://i.imgur.com/kZMNj7Q.jpeg'
-                                    }
-                                    width={48}
-                                    height={48}
-                                    alt="Newsletter image"
-                                    className="rounded-[10px] w-12 h-12 object-cover"
-                                  />
+                                  <div>
+                                    <SkeletonImage
+                                      src={
+                                        (item?.image as string) ||
+                                        'https://i.imgur.com/kZMNj7Q.jpeg'
+                                      }
+                                      width={48}
+                                      height={48}
+                                      alt="Newsletter image"
+                                      className="rounded-[10px] w-[48px] h-[48px] object-cover"
+                                    />
+                                  </div>
                                   <div>
                                     <p className="text-dark-blue text-xs font-semibold">
                                       {item.newsletterAuthor}
