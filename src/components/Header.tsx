@@ -113,6 +113,7 @@ const Header = () => {
                                       }
                                       width={48}
                                       height={48}
+                                      style={{ width: 48, height: 48 }}
                                       alt="Newsletter image"
                                       className="rounded-[10px] w-[48px] h-[48px] object-cover"
                                     />

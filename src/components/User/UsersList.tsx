@@ -160,7 +160,7 @@ const UsersList = ({
   };
   return (
     <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
-      <div className="max-w-[1280px] sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px]">
+      <div className="max-w-[1280px] sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px] min-w-[308px]">
         <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
           {title}
         </h1>

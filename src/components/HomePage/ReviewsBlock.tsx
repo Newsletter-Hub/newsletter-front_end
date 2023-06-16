@@ -112,6 +112,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                     'https://i.imgur.com/kZMNj7Q.jpeg'
                   }
                   alt="latest"
+                  style={{ width: 96, height: 96 }}
                   width={96}
                   height={96}
                   className="rounded-[5px] h-[96px] w-[96px] object-cover object-center"
