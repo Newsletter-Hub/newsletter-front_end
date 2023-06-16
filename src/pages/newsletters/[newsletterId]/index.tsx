@@ -40,6 +40,7 @@ import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
+import GoogleAds from '@/components/GoogleAdsBlock';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -209,8 +210,8 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     return <Loading />;
   }
   return (
-    <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
-      <div className="max-w-[1280px]">
+    <main>
+      <div className="md:pt-20 pt-3 px-3 max-w-[1280px] mx-auto">
         <div className="flex justify-between md:items-center md:flex-row mb-[52px] flex-col gap-2 md:gap-0">
           <Link
             href="/newsletters/categories/all"
@@ -355,7 +356,9 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             <div
               className="flex gap-2 cursor-pointer"
               onClick={() =>
-                handleBookmarkClick({ isInBookmarks: newsletter.isInBookmarks })
+                handleBookmarkClick({
+                  isInBookmarks: newsletter.isInBookmarks,
+                })
               }
             >
               <BookmarkIcon
@@ -399,7 +402,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           {Boolean(reviewsData.reviews.length) &&
             reviewsData.reviews.map((review, index) => (
               <div
-                className={`flex flex-col md:flex-row w-full py-6 ${
+                className={`flex flex-col md:flex-row w-full py-6 px-3 ${
                   index + 1 < reviewsData.reviews.length && 'border-b'
                 } border-light-grey`}
                 key={review.id}
@@ -450,8 +453,9 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
             onClick={loadMoreReviews}
           />
         )}
+        <GoogleAds />
       </div>
-    </div>
+    </main>
   );
 };
 
