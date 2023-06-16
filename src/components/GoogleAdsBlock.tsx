@@ -6,8 +6,8 @@ const GoogleAds = () => {
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-8804004591913052"
-        data-ad-slot="5662242139"
+        data-ad-client={process.env.NEXT_PUBLIC_DATA_AD_CLIENT}
+        data-ad-slot={process.env.NEXT_PUBLIC_DATA_AD_SLOT}
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
