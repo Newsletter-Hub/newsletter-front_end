@@ -16,8 +16,8 @@ const Home = ({ reviewData }: HomeProps) => {
     <main>
       <div className="lg:pt-[88px] pt-16 max-w-[1280px] mx-auto px-4">
         <MainBlock />
-        {/* <GoogleAds /> */}
         <ReviewsBlock reviewData={reviewData} />
+        <GoogleAds />
       </div>
       {/* <GetStartedBlock /> */}
     </main>

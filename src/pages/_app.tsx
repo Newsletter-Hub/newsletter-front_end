@@ -13,6 +13,7 @@ import { User } from '@/types/user';
 import withLayout, { EntryType, LayoutType } from '@/components/withLayout';
 
 import '@/styles/globals.css';
+import Head from 'next/head';
 
 const queryClient = new QueryClient();
 
@@ -29,12 +30,21 @@ function MyApp({
     type: Component.type as EntryType,
   });
   return (
-    <QueryClientProvider client={queryClient}>
-      <UserProvider defaultUser={user}>
-        <LayoutComponent {...pageProps} />
-      </UserProvider>
-      <ToastContainer position="top-right" autoClose={1500} />
-    </QueryClientProvider>
+    <>
+      <Head>
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_DATA_AD_CLIENT}`}
+          crossOrigin="anonymous"
+        ></script>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider defaultUser={user}>
+          <LayoutComponent {...pageProps} />
+        </UserProvider>
+        <ToastContainer position="top-right" autoClose={1500} />
+      </QueryClientProvider>
+    </>
   );
 }
 

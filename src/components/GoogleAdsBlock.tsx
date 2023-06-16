@@ -3,11 +3,6 @@ import Script from 'next/script';
 const GoogleAds = () => {
   return (
     <>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8804004591913052"
-        crossOrigin="anonymous"
-      ></Script>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}

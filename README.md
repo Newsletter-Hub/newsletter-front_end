@@ -1,23 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Newsletter Hub
 
-## Getting Started
+Newsletter Hub is a Next.js project that was initialized with create-next-app.
 
-First, run the development server:
+## Key Libraries
+
+This project makes use of the following main libraries:
+
+- [Next.js](https://nextjs.org/) - The core framework.
+- [Radix UI](https://www.radix-ui.com/) - A low-level UI component library.
+- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework.
+- [React Query](https://react-query.tanstack.com/) - Tools for fetching, caching, and updating asynchronous data in React.
+- [date-fns](https://date-fns.org/) - Modern JavaScript date utility library.
+- [lodash](https://lodash.com/) - A modern JavaScript utility library delivering modularity, performance, and extras.
+
+## Setup and Installation
+
+To set up and install the project on your local machine, you'll need Node.js and npm. Once you have those installed, follow these steps:
 
 ```bash
+# Clone the repository
+git clone https://github.com/Newsletter-Hub/newsletter-front_end.git
+
+# Navigate into the directory
+cd newsletter-front_end
+
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Open http://localhost:3000 with your browser to see the result. The page auto-updates as you edit the file.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# Start editing the page by modifying pages/index.tsx
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# To build the application for production, run the following command:
+npm run build
