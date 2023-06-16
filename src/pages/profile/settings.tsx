@@ -181,40 +181,38 @@ const Settings = ({ interests }: SettingsProps) => {
   }
   return (
     <PrivateRoute>
-      <div>
-        <div className="md:pt-[72px] pt-3 max-w-[1280px] px-3">
-          <h1 className="md:text-7xl text-5xl text-dark-blue font-medium mb-10">
-            Account settings
-          </h1>
-          <Tabs tabs={tabs} handleChange={handleTabChange} />
-        </div>
-        <div className="w-full shadow-md md:pl-[17%] flex justify-between px-3 md:pr-0 md:justify-normal gap-12 font-inter items-center py-5">
-          <span
-            className={`text-base ${
-              (activeTab === 'edit'
-                ? !isDirty
-                : JSON.stringify(interestsPayload) ===
-                  JSON.stringify(user?.interests)) &&
-              'text-dark-grey cursor-default hover:text-dark-grey'
-            } text-dark-blue cursor-pointertransition-colors duration-200 ease-in-out hover:text-primary cursor-pointer`}
-            onClick={resetChanges}
-          >
-            Reset all changes
-          </span>
-          <Button
-            label="Save"
-            rounded="xl"
-            customStyles="w-[101px]"
-            onClick={onSubmit}
-            loading={isLoading}
-            disabled={
-              activeTab === 'edit'
-                ? !isDirty
-                : JSON.stringify(interestsPayload) ===
-                  JSON.stringify(user?.interests)
-            }
-          />
-        </div>
+      <div className="md:pt-[72px] pt-3 max-w-[1280px] px-3 mx-auto">
+        <h1 className="md:text-7xl text-5xl text-dark-blue font-medium mb-10">
+          Account settings
+        </h1>
+        <Tabs tabs={tabs} handleChange={handleTabChange} />
+      </div>
+      <div className="w-full shadow-md md:pl-[17%] flex justify-between px-3 md:pr-0 md:justify-normal gap-12 font-inter items-center py-5">
+        <span
+          className={`text-base ${
+            (activeTab === 'edit'
+              ? !isDirty
+              : JSON.stringify(interestsPayload) ===
+                JSON.stringify(user?.interests)) &&
+            'text-dark-grey cursor-default hover:text-dark-grey'
+          } text-dark-blue cursor-pointertransition-colors duration-200 ease-in-out hover:text-primary cursor-pointer`}
+          onClick={resetChanges}
+        >
+          Reset all changes
+        </span>
+        <Button
+          label="Save"
+          rounded="xl"
+          customStyles="w-[101px]"
+          onClick={onSubmit}
+          loading={isLoading}
+          disabled={
+            activeTab === 'edit'
+              ? !isDirty
+              : JSON.stringify(interestsPayload) ===
+                JSON.stringify(user?.interests)
+          }
+        />
       </div>
     </PrivateRoute>
   );
