@@ -7,6 +7,7 @@ import Avatar from './Avatar';
 import StarRating from './StarRating';
 import Button from './Button';
 import PlusIcon from '@/assets/icons/plus';
+import { useUser } from '@/contexts/UserContext';
 
 interface NotificationProps {
   notification: NotificationType;
@@ -31,6 +32,7 @@ const Notification = ({
         {notification.notificationAuthor?.username}
       </Link>
     );
+  const { user } = useUser();
   return (
     <div
       className={`flex justify-between md:items-center py-4 font-inter flex-col md:flex-row ${
@@ -111,23 +113,36 @@ const Notification = ({
                   href={`/users/${notification.notificationAuthorId}`}
                   className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[200px] lg:max-w-[400px] xl:max-w-[700px] overflow-hidden whitespace-nowrap text-ellipsis block"
                 >
-                  {notification.notificationAuthor?.username}
+                  {notification.notificationAuthor?.username === user?.username
+                    ? 'You'
+                    : notification.notificationAuthor?.username}
                 </Link>
               </div>
               <span className="text-base text-dark-grey">
-                started following you
+                {user && user.id === notification.notificationRecipientId
+                  ? 'started following you'
+                  : 'started following'}
+                {user && user.id !== notification.notificationRecipientId && (
+                  <Link href={`/users/${notification.notificationRecipientId}`}>
+                    &nbsp;
+                    {'username' in notification.entity &&
+                      notification.entity.username}
+                  </Link>
+                )}
               </span>
-              <Link href={`/users/${notification.notificationAuthorId}`}>
-                <Button
-                  rounded="xl"
-                  label={
-                    <p className="flex items-center gap-2">
-                      <PlusIcon />
-                      <span className="text-base">Follow back</span>
-                    </p>
-                  }
-                />
-              </Link>
+              {user && user.id === notification.notificationRecipientId && (
+                <Link href={`/users/${notification.notificationAuthorId}`}>
+                  <Button
+                    rounded="xl"
+                    label={
+                      <p className="flex items-center gap-2">
+                        <PlusIcon />
+                        <span className="text-base">Follow back</span>
+                      </p>
+                    }
+                  />
+                </Link>
+              )}
             </div>
           )}
         {notification.notificationType === 'subscriptionToNewsletter' &&
