@@ -36,3 +36,12 @@ npm run dev
 
 # To build the application for production, run the following command:
 npm run build
+
+```
+
+# Google Ads Setup
+
+This project uses Google Ads for monetization. For setup instructions, please refer to the following guides:
+
+- [Part 1](https://www.loom.com/share/18a2b8a37e9a4e5f9d32347e53e6087e?sid=0de39c43-8c2c-47b5-96ca-bd7835d21e45)
+- [Part 2](https://www.loom.com/share/f5783e1223764cf19f524975f0da49c3?sid=8d1901bc-656b-4424-a577-c4e01411aba2)
