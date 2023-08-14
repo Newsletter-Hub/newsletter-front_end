@@ -64,13 +64,13 @@ const Form = () => {
   const googleButtonWidth = () => {
     if (width) {
       if (width >= 320 && width < 375) {
-        return '300';
+        return 300;
       } else if (width >= 375 && width < 768) {
-        return '360';
+        return 360;
       }
-      return '400';
+      return 400;
     }
-    return '400';
+    return 400;
   };
   return (
     <>
