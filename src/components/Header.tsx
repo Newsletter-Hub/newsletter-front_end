@@ -42,12 +42,12 @@ const Header = () => {
       href: `/${user ? 'newsletters/add' : 'sign-up'}`,
     },
   ];
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResult, setShowSearchResults] = useState(false);
   const searchResultRef = useRef(null);
   const searchPayload: GlobalSearchPayload = { search: searchTerm };
-  
+
   const { data } = useQuery<GlobalSearchResponse | undefined, Error>(
     ['globalSearch', searchPayload],
     () => search(searchPayload),
