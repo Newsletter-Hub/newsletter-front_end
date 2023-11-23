@@ -1,5 +1,4 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
-import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 
 import api from '@/config/ky';

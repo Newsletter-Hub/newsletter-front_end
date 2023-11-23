@@ -111,7 +111,6 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
 
 export async function getServerSideProps() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const measurementId = process.env.NEXT_PUBLIC_G_MEASUREMENT_ID;
 
   console.log(baseUrl);
 

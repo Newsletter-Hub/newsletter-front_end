@@ -5,8 +5,6 @@ import { format, parseISO } from 'date-fns';
 
 import Avatar from './Avatar';
 import StarRating from './StarRating';
-import Button from './Button';
-import PlusIcon from '@/assets/icons/plus';
 import { useUser } from '@/contexts/UserContext';
 
 interface NotificationProps {
@@ -73,9 +71,7 @@ const Notification = ({
                   <div className="text-dark-blue font-semibold text-base">
                     {userState}
                   </div>
-                  <span>
-                    rated
-                  </span>
+                  <span>rated</span>
                   {'newsletter' in notification.entity && (
                     <Link
                       href={`/newsletters/${notification.entity.newsletter.id}`}
@@ -83,8 +79,7 @@ const Notification = ({
                     >
                       {notification.entity.newsletter.title}
                     </Link>
-                  )
-                  }
+                  )}
                 </div>
                 {'rating' in notification.entity && (
                   <StarRating
@@ -119,7 +114,9 @@ const Notification = ({
                 {user && user.id === notification.notificationRecipientId
                   ? 'started following you'
                   : 'started following'}
-                {(!user || (user && user.id !== notification.notificationRecipientId)) && (
+                {(!user ||
+                  (user &&
+                    user.id !== notification.notificationRecipientId)) && (
                   <Link href={`/users/${notification.notificationRecipientId}`}>
                     &nbsp;
                     {'username' in notification.entity &&

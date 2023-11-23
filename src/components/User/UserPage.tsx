@@ -34,7 +34,6 @@ const UserPage = ({
   isProfile: isProfileFromProps = true,
   notificationsData,
 }: UserPageProps) => {
-  
   const [user, setUser] = useState(userFromProps);
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
   const [page, setPage] = useState(1);
@@ -77,8 +76,7 @@ const UserPage = ({
         } else {
           setFollowLoading(false);
         }
-      }
-        else {
+      } else {
         const response = await follow({ entityId, entityType: 'User' });
         if (response?.ok) {
           const getUserMeResponse = await getUserById({
@@ -182,7 +180,10 @@ const UserPage = ({
           </div>
           {isProfile && (
             <div className="flex gap-8 items-center mb-[88px]">
-              <Link href="/profile/settings" className="flex items-center gap-2">
+              <Link
+                href="/profile/settings"
+                className="flex items-center gap-2"
+              >
                 <EditIcon />
                 <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
                   Edit profile
@@ -199,34 +200,32 @@ const UserPage = ({
               </Link>
             </div>
           )}
-          {
-            !isProfile && (
-              <Button
-                rounded="xl"
-                fontSize="md"
-                height="sm"
-                customStyles="w-full sm:w-fit"
-                loading={followLoading}
-                onClick={() =>
-                  handleFollow({
-                    entityId: user.id,
-                    followed: user.followed,
-                  })
-                }
-                variant={user.followed ? 'outlined-secondary' : 'primary'}
-                label={
-                  user.followed ? (
-                    'Following'
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <PlusIcon />
-                      Follow
-                    </span>
-                  )
-                }
-              />
-            )
-          }
+          {!isProfile && (
+            <Button
+              rounded="xl"
+              fontSize="md"
+              height="sm"
+              customStyles="w-full sm:w-fit"
+              loading={followLoading}
+              onClick={() =>
+                handleFollow({
+                  entityId: user.id,
+                  followed: user.followed,
+                })
+              }
+              variant={user.followed ? 'outlined-secondary' : 'primary'}
+              label={
+                user.followed ? (
+                  'Following'
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <PlusIcon />
+                    Follow
+                  </span>
+                )
+              }
+            />
+          )}
         </>
       )}
       <div className="max-w-[1280px] px-5 w-full">
