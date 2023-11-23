@@ -40,7 +40,7 @@ const ChooseInterests = ({
   const handleSubmit = async () => {
     delete payload.avatarURL;
     const formattedPayload = Object.fromEntries(
-      Object.entries(payload).filter(([key, value]) => value !== undefined)
+      Object.entries(payload).filter(([value]) => value !== undefined)
     );
     const res = await signUpSetCookie({
       accessToken: accessToken as string,

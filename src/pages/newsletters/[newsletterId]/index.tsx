@@ -222,25 +222,6 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               Back to all newsletters
             </span>
           </Link>
-          <div className="flex gap-4">
-            <Link href={user ? '/newsletters/add' : '/sign-up'}>
-              <Button
-                label="Add Newsletter"
-                rounded="xl"
-                customStyles="w-1/2 md:w-fit"
-              />
-            </Link>
-            <Button
-              label="Report"
-              rounded="xl"
-              customStyles="w-1/2"
-              onClick={handleOpenReportModal}
-            />
-            <ReportModal
-              open={isReportModalOpen}
-              handleClose={() => setIsReportModalOpen(false)}
-            />
-          </div>
         </div>
         <h1 className="text-lightBlack sm:text-7xl text-5xl font-medium mb-10">
           {newsletter?.title}
@@ -317,6 +298,18 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
               )
             }
           />
+          <Button
+            label="Report"
+            rounded="xl"
+            fontSize="md"
+            height="sm"
+            customStyles="w-full sm:w-fit"
+            onClick={handleOpenReportModal}
+          />
+          <ReportModal
+            open={isReportModalOpen}
+            handleClose={() => setIsReportModalOpen(false)}
+          />
         </div>
         <div className="flex justify-between font-inter items-center md:mb-20 mb-10 flex-col md:flex-row">
           <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">
@@ -381,7 +374,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           Latest Reviews
         </h2>
         <Button
-          label="Add you review"
+          label="Add your review"
           rounded="xl"
           height="sm"
           fontSize="md"
@@ -420,7 +413,12 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
                     />
                   </div>
                   <p className="text-lightBlack text-xl max-w-[280px] sm:max-w-[400px] md:max-w-none md:whitespace-normal overflow-hidden whitespace-nowrap text-ellipsis">
-                    {review.reviewer.username}
+                    <Link
+                      href={`/users/${review.reviewer.id}`}
+                      className="text-base text-dark-grey font-inter"
+                    >
+                      {review.reviewer.username}
+                    </Link>
                   </p>
                 </div>
                 <div className="w-full">
