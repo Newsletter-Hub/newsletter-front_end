@@ -28,16 +28,21 @@ import BurgerMenu from './Mobile/BurgerMenu';
 import Popover from './Popover';
 import SkeletonImage from './SkeletonImage';
 
-const links = [
-  { label: 'Newsletters', href: '/newsletters/categories/all' },
-  { label: 'Categories', href: '/newsletters/categories' },
-  { label: 'Users', href: '/users' },
-];
-
 const alegreya = Alegreya({ subsets: ['latin'] });
 
 const Header = () => {
   const { user, setUser } = useUser();
+
+  const links = [
+    { label: 'Newsletters', href: '/newsletters/categories/all' },
+    { label: 'Categories', href: '/newsletters/categories' },
+    { label: 'Users', href: '/users' },
+    {
+      label: 'Add a Newsletter',
+      href: `/${user ? 'newsletters/add' : 'sign-up'}`,
+    },
+  ];
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResult, setShowSearchResults] = useState(false);
   const searchResultRef = useRef(null);

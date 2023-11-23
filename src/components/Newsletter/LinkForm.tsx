@@ -60,7 +60,7 @@ const LinkForm = ({
       </p>
       <div className="mb-8">
         <Input
-          placeholder="http://"
+          placeholder="https://thehustle.co/"
           variant="filled"
           register={{ ...register('link') }}
           error={Boolean(errors.link)}

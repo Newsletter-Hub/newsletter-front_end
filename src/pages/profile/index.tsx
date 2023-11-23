@@ -2,7 +2,6 @@ import {
   NotificationData,
   getNotifications,
 } from '@/actions/user/notifications';
-import { useUser } from '@/contexts/UserContext';
 
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';

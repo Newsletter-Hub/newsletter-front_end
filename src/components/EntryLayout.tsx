@@ -37,9 +37,9 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
               <div className="flex flex-col items-center h-full">
                 {type === 'newsletter' ? (
                   <>
-                    <p className="font-bold text-3xl mb-3">Add Newsletter</p>
+                    <p className="font-bold text-3xl mb-3">Add a Newsletter</p>
                     <p className="max-w-xs text-center mb-28">
-                      Enter your personal details and start journey with us
+                      Whether you write it or read it, share it with the world
                     </p>
                     <Image
                       src={addNewsletterImage}
@@ -111,7 +111,6 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
 
 export async function getServerSideProps() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const measurementId = process.env.NEXT_PUBLIC_G_MEASUREMENT_ID;
 
   console.log(baseUrl);
 
