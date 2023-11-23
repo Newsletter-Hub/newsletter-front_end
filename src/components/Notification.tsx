@@ -55,7 +55,7 @@ const Notification = ({
                 <div className="text-dark-blue font-semibold text-base whitespace-nowrap overflow-hidden text-ellipsis">
                   {userState}
                 </div>
-                <span>added the &nbsp;</span>
+                <span>added the</span>
               </div>
               <Link
                 href={`/newsletters/${notification.entity?.id}`}
@@ -74,20 +74,17 @@ const Notification = ({
                     {userState}
                   </div>
                   <span>
-                    rated{' '}
-                    {notification.notificationAuthorId !==
-                    notification.notificationRecipientId
-                      ? 'your'
-                      : notification.notificationAuthor?.username}{' '}
-                    &nbsp;
+                    rated
                   </span>
-                  <Link
-                    href={`/newsletters/${notification.entity?.id}`}
-                    className="text-primary font-semibold block md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-200 ease-in-out hover:text-dark-blue"
-                  >
-                    {'newsletter' in notification.entity &&
-                      notification.entity.newsletter.title}
-                  </Link>
+                  {'newsletter' in notification.entity && (
+                    <Link
+                      href={`/newsletters/${notification.entity.newsletter.id}`}
+                      className="text-primary font-semibold block md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-200 ease-in-out hover:text-dark-blue"
+                    >
+                      {notification.entity.newsletter.title}
+                    </Link>
+                  )
+                  }
                 </div>
                 {'rating' in notification.entity && (
                   <StarRating
@@ -122,7 +119,7 @@ const Notification = ({
                 {user && user.id === notification.notificationRecipientId
                   ? 'started following you'
                   : 'started following'}
-                {user && user.id !== notification.notificationRecipientId && (
+                {(!user || (user && user.id !== notification.notificationRecipientId)) && (
                   <Link href={`/users/${notification.notificationRecipientId}`}>
                     &nbsp;
                     {'username' in notification.entity &&
@@ -130,19 +127,6 @@ const Notification = ({
                   </Link>
                 )}
               </span>
-              {user && user.id === notification.notificationRecipientId && (
-                <Link href={`/users/${notification.notificationAuthorId}`}>
-                  <Button
-                    rounded="xl"
-                    label={
-                      <p className="flex items-center gap-2">
-                        <PlusIcon />
-                        <span className="text-base">Follow back</span>
-                      </p>
-                    }
-                  />
-                </Link>
-              )}
             </div>
           )}
         {notification.notificationType === 'subscriptionToNewsletter' &&
@@ -152,7 +136,7 @@ const Notification = ({
                 {userState}
               </div>
               <span className="text-base text-dark-grey">
-                started following {isProfile && 'your'}
+                started following
               </span>
               <Link
                 href={`/newsletters/${notification.entity?.id}`}

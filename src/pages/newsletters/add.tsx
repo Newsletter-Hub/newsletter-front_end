@@ -28,7 +28,7 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
     <PrivateRoute>
       <div className="md:shadow-md md:p-12 p-3 pt-6 md:pt-12 rounded-3xl max-w-[696px] max-h-[95vh] overflow-y-auto">
         <p className="text-lightBlack font-semibold text-center mb-8 text-5xl">
-          Add Newsletter
+          Add a Newsletter
         </p>
         {step === 1 ? (
           <LinkForm

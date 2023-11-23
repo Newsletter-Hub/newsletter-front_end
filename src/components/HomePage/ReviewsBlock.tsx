@@ -119,9 +119,12 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                 />
                 <div className="flex md:items-start flex-col md:flex-row ml-8">
                   <div className="mr-4 md:w-[250px]">
-                    <p className="text-xl text-dark-blue">
-                      {review.newsletter.title}
-                    </p>
+                      <Link
+                        href={`/newsletters/${review.newsletter.id}`}
+                        className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
+                      >
+                        {review.newsletter.title}
+                      </Link>
                     <p className="text-base text-dark-grey font-inter mb-2 max-w-[150px] xs:max-w-[300px] overflow-hidden text-ellipsis">
                       reviewed by&nbsp;
                       <Link
@@ -175,8 +178,10 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                     </div>
                   </div>
                 )}
-                <Link href={`newsletters/${review.newsletter.id}`}>
-                  <Button label="Read Newsletter" rounded="xl" fontSize="md" />
+                <Link href={review.newsletter.link} legacyBehavior passHref>
+                  <a target="_blank" rel="noopener noreferrer">
+                    <Button label="Read Newsletter" rounded="xl" fontSize="md" />
+                    </a>
                 </Link>
               </div>
             </div>
