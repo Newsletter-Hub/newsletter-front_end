@@ -20,6 +20,8 @@ import Button from '@/components/Button';
 import Loading from '@/components/Loading';
 import StarRating from '@/components/StarRating';
 
+import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
 // import ListIcon from '@/assets/icons/list';
@@ -58,15 +60,27 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
   const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const router = useRouter();
+
+  const isReviewModalOpenQueryParam = router.query.reviewModal === '1';
+  const isReportModalOpenQueryParam =
+    !isReviewModalOpenQueryParam && router.query.reportModal === '1';
+
+  const [isModalOpen, setIsModalOpen] = useState(isReviewModalOpenQueryParam);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(
+    isReportModalOpenQueryParam
+  );
+
   const handleOpenModal = () => {
     if (user) {
       setIsModalOpen(true);
     } else {
+      const storedRedirectPath = newsletter
+        ? `/newsletters/${newsletter.id}?reviewModal=1`
+        : '/';
+      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -74,6 +88,10 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     if (user) {
       setIsReportModalOpen(true);
     } else {
+      const storedRedirectPath = newsletter
+        ? `/newsletters/${newsletter.id}?reportModal=1`
+        : '/';
+      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -155,12 +173,20 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     if (user) {
       !isInBookmarks ? handleAddBookmark() : handleDeleteBookmark();
     } else {
+      const storedRedirectPath = newsletter
+        ? `/newsletters/${newsletter.id}`
+        : '/';
+      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
       router.push('/sign-up');
     }
   };
 
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
     if (!user) {
+      const storedRedirectPath = newsletter
+        ? `/newsletters/${newsletter.id}`
+        : '/';
+      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
       router.push('/sign-up');
     } else {
       if (followed) {

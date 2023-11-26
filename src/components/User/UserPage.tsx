@@ -15,6 +15,8 @@ import BookmarkIcon from '@/assets/icons/bookmark';
 import EditIcon from '@/assets/icons/edit';
 import PlusIcon from '@/assets/icons/plus';
 
+import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+
 import Avatar from '../Avatar';
 import Notification from '../Notification';
 import { useState } from 'react';
@@ -61,6 +63,8 @@ const UserPage = ({
 
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
     if (!currentUser) {
+      const storedRedirectPath = `/users/${entityId}`;
+      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
       router.push('/sign-up');
     } else {
       setFollowLoading(true);
