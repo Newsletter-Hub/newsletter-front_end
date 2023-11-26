@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
+import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
 import api from '@/config/ky';
 
 import { Payload } from '@/types/signup';
@@ -90,7 +91,13 @@ export const updateUser = async ({
         setUser(res as User);
       }
       if (router) {
-        router.push('/');
+        const storedRedirectPath = sessionStorage.getItem(
+          REDIRECT_AFTER_LOGIN_PATH
+        );
+        if (storedRedirectPath) {
+          router.push(storedRedirectPath);
+          sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_PATH);
+        } else router.push('/');
       }
 
       toast.success(
