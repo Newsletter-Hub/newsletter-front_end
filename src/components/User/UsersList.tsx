@@ -17,7 +17,7 @@ import CheckIcon from '@/assets/icons/check';
 import Avatar from '../Avatar';
 import Link from 'next/link';
 import PlusIcon from '@/assets/icons/plus';
-import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 const sortTypes: SortType[] = [
   {
@@ -112,7 +112,7 @@ const UsersList = ({
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
     if (!user) {
       const storedRedirectPath = `/users/${entityId}`;
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     } else {
       setFollowLoading(entityId);

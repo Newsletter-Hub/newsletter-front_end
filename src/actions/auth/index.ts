@@ -6,7 +6,7 @@ import { NextRouter } from 'next/router';
 import { NextResponse } from 'next/server';
 
 import api from '@/config/ky';
-import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+import { getRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import { User } from '@/types/user';
 import { toast } from 'react-toastify';
@@ -59,12 +59,9 @@ export const login = async ({
         if (setUser) {
           setUser(res as User);
         }
-        const storedRedirectPath = sessionStorage.getItem(
-          REDIRECT_AFTER_LOGIN_PATH
-        );
+        const storedRedirectPath = getRedirectPath();
         if (storedRedirectPath) {
           router.push(storedRedirectPath);
-          sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_PATH);
         } else router.push('/');
       });
     return response;
@@ -80,12 +77,9 @@ export const googleAuth = async ({ token, router, setUser }: GoogleAuth) => {
       .json()
       .then(res => {
         Cookies.set('user', JSON.stringify(res), { expires: 1 });
-        const storedRedirectPath = sessionStorage.getItem(
-          REDIRECT_AFTER_LOGIN_PATH
-        );
+        const storedRedirectPath = getRedirectPath();
         if (storedRedirectPath) {
           router.push(storedRedirectPath);
-          sessionStorage.removeItem(REDIRECT_AFTER_LOGIN_PATH);
         } else router.push('/');
         if (setUser) {
           setUser(res as User);

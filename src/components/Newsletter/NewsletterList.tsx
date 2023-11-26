@@ -42,7 +42,7 @@ import SearchResultsIcon from '@/assets/icons/searchResults';
 import SortIcon from '@/assets/icons/sort';
 import StarIcon from '@/assets/icons/star';
 
-import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
@@ -412,7 +412,7 @@ const NewslettersList = ({
       }
     } else {
       const storedRedirectPath = `/newsletters/${id}`;
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -441,7 +441,7 @@ const NewslettersList = ({
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
     if (!user) {
       const storedRedirectPath = `/newsletters/${entityId}`;
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     } else {
       setFollowLoading(entityId);
@@ -923,10 +923,7 @@ const NewslettersList = ({
                                     const storedRedirectPath = newsletter
                                       ? `/newsletters/${newsletter.id}?reviewModal=1`
                                       : '/';
-                                    sessionStorage.setItem(
-                                      REDIRECT_AFTER_LOGIN_PATH,
-                                      storedRedirectPath
-                                    );
+                                    setRedirectPath(storedRedirectPath);
                                     router.push('/sign-up');
                                   }
                                 }}
