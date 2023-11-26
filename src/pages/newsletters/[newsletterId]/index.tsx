@@ -20,7 +20,7 @@ import Button from '@/components/Button';
 import Loading from '@/components/Loading';
 import StarRating from '@/components/StarRating';
 
-import { REDIRECT_AFTER_LOGIN_PATH } from '@/config/constants';
+import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import BookmarkIcon from '@/assets/icons/bookmark';
@@ -80,7 +80,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
       const storedRedirectPath = newsletter
         ? `/newsletters/${newsletter.id}?reviewModal=1`
         : '/';
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -91,7 +91,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
       const storedRedirectPath = newsletter
         ? `/newsletters/${newsletter.id}?reportModal=1`
         : '/';
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -176,7 +176,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
       const storedRedirectPath = newsletter
         ? `/newsletters/${newsletter.id}`
         : '/';
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     }
   };
@@ -186,7 +186,7 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
       const storedRedirectPath = newsletter
         ? `/newsletters/${newsletter.id}`
         : '/';
-      sessionStorage.setItem(REDIRECT_AFTER_LOGIN_PATH, storedRedirectPath);
+      setRedirectPath(storedRedirectPath);
       router.push('/sign-up');
     } else {
       if (followed) {
