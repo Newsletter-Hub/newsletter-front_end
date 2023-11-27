@@ -61,14 +61,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     pageSize: 6,
     token,
   });
-  if (
-    !newsletterList ||
-    !notificationsList ||
-    !user ||
-    newsletterList.error ||
-    notificationsList.error ||
-    user.error
-  ) {
+  if (!newsletterList || !notificationsList || !user || user.error) {
     return {
       notFound: true,
     };
