@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     token,
   });
   const user = await getUserById({ token, userId });
-  if (!newsletterList || !notificationsList || !user) {
+  if (!newsletterList || !notificationsList || !user || user.error) {
     return {
       notFound: true,
     };
