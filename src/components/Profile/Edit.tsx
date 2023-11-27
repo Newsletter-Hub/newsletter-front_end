@@ -33,7 +33,7 @@ export interface EditProfilePayload {
   dateOfBirth: string;
   username: string;
   email: string;
-  profileType: 'reader' | 'writter';
+  profileType: 'reader' | 'writer';
 }
 
 const validationSchema = z.object({
@@ -43,7 +43,7 @@ const validationSchema = z.object({
   dateOfBirth: z.any().optional(),
   username: z.string().nullable().optional(),
   email: z.string().email('Email need to be valid').optional(),
-  profileType: z.enum(['reader', 'writter']).optional(),
+  profileType: z.enum(['reader', 'writer']).optional(),
   description: z.string().nullable().optional(),
 });
 
@@ -193,12 +193,12 @@ const Edit = forwardRef(
                   />
                   <Button
                     label="Writer"
-                    selected={field.value === 'writter'}
+                    selected={field.value === 'writer'}
                     customStyles={`${
-                      field.value === 'writter' && 'hover:!bg-primary'
+                      field.value === 'writer' && 'hover:!bg-primary'
                     }`}
                     rounded="xl"
-                    onClick={() => field.onChange('writter')}
+                    onClick={() => field.onChange('writer')}
                   />
                 </>
               )}

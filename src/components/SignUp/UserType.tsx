@@ -25,7 +25,7 @@ type IUserTypes = IUserType[];
 
 const userTypes: IUserTypes = [
   { label: 'Reader', value: 'reader' },
-  { label: 'Writter', value: 'writter' },
+  { label: 'Writer', value: 'writer' },
 ];
 
 const UserType = ({
