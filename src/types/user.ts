@@ -6,7 +6,7 @@ export interface User {
   email: string;
   username: string;
   interests: Interest[];
-  profileType: 'reader' | 'writter';
+  profileType: 'reader' | 'writer';
   avatar: string;
   dateOfBirth: string;
   country: string;
