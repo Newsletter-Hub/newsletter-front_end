@@ -44,6 +44,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       ? [+categoryId]
       : [];
   const userId = id ? +id : undefined;
+  const user = await getUserById({ token, userId });
   const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
@@ -60,8 +61,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
     pageSize: 6,
     token,
   });
-  const user = await getUserById({ token, userId });
-  if (!newsletterList || !notificationsList || !user) {
+  if (
+    !newsletterList ||
+    !notificationsList ||
+    !user ||
+    newsletterList.error ||
+    notificationsList.error ||
+    user.error
+  ) {
     return {
       notFound: true,
     };
