@@ -8,7 +8,7 @@
 	],
 	"plugins": ["@typescript-eslint", "prettier"],
 	"rules": {
-		"prettier/prettier": "error",
+		"prettier/prettier": "warn",
 		"react/jsx-uses-react": "off",
 		"react/react-in-jsx-scope": "off"
 	},

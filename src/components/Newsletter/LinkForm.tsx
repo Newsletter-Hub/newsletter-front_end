@@ -14,8 +14,8 @@ import Input from '../Input';
 const validationSchema = z.object({
   link: z
     .string()
-    .min(1, { message: 'Please entry link' })
-    .url({ message: 'Prease write valid url' }),
+    .min(1, { message: 'Please enter a url' })
+    .url({ message: 'Please enter a valid url' }),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
@@ -29,6 +29,7 @@ const LinkForm = ({
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -45,15 +46,22 @@ const LinkForm = ({
         description: response.description,
         image: response.image,
       });
+    } else {
+      setError('link', {
+        type: 'manual',
+        message: 'Newsletter will need to be manually added',
+      });
     }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
-        To add a newsletter, you should include a link to the homepage of the
-        newsletter. Remember to insert the full URL with &quot;https://&quot;
-        and &quot;.com&quot; in order to properly add your newsletters. Please
-        ensure the grammar and formatting are correct when adding the URLs.
+        Include a link to the homepage of the newsletter. Follow the format in
+        the example below; insert the full URL with &quot;https://&quot; and
+        &quot;.com&quot;.
+        <br/>
+         If you get a &quot;Newsletter will need to be manually added&quot; error, we had an issue verifying the newsletter. Our team will
+         try to manually add it, and email you on the result of the request.
       </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
         Link a Newsletter
@@ -63,9 +71,9 @@ const LinkForm = ({
           placeholder="https://thehustle.co/"
           variant="filled"
           register={{ ...register('link') }}
+          defaultValue={payload.link}
           error={Boolean(errors.link)}
           errorText={errors.link?.message}
-          defaultValue={payload.link}
         />
       </div>
       <Button
