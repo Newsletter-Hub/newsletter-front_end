@@ -23,6 +23,19 @@ interface GetReviewsQuery {
   newsletterId?: number;
 }
 
+interface UpdateReviewPayload {
+  comment?: string;
+  rating: number;
+  id: number;
+}
+interface DeleteReviewPayload {
+  reviewId: string | number;
+}
+export interface DeleteReviewResponse {
+  error?: string;
+  isDeleted?: string;
+}
+
 export const createReview = async ({
   comment,
   rating,
@@ -46,7 +59,7 @@ export const createReview = async ({
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to create review');
     return {
-      error: 'Failed to create reviews',
+      error: 'Failed to create review',
     };
   }
 };
@@ -79,5 +92,45 @@ export const getReviews = async ({
     return {
       error: 'Failed to get reviews',
     };
+  }
+};
+
+export const updateReview = async ({
+  comment,
+  rating,
+  id,
+}: UpdateReviewPayload): Promise<CreateReviewResponse> => {
+  try {
+    const payload = comment
+      ? {
+          comment,
+          rating,
+        }
+      : { rating };
+    const response = await api.put(`reviews/${id}`, {
+      json: payload,
+    });
+    if (response) {
+      toast.success('Review succesfully updated');
+    }
+    return response.json();
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to update review');
+    return {
+      error: 'Failed to update review',
+    };
+  }
+};
+
+export const deleteReview = async ({
+  reviewId,
+}: DeleteReviewPayload): Promise<DeleteReviewResponse> => {
+  try {
+    const response = await api.delete(`reviews/${reviewId}`).json();
+    toast.success('Review was succesfully deleted');
+    return { isDeleted: response as string };
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to delete review');
+    return { error: 'Failed to delete review' };
   }
 };
