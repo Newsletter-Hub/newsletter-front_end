@@ -59,9 +59,10 @@ const LinkForm = ({
         Include a link to the homepage of the newsletter. Follow the format in
         the example below; insert the full URL with &quot;https://&quot; and
         &quot;.com&quot;.
-        <br/>
-         If you get a &quot;Newsletter will need to be manually added&quot; error, we had an issue verifying the newsletter. Our team will
-         try to manually add it, and email you on the result of the request.
+        <br />
+        If you get a &quot;Newsletter will need to be manually added&quot;
+        error, we had an issue verifying the newsletter. Our team will try to
+        manually add it, and email you on the result of the request.
       </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
         Link a Newsletter
