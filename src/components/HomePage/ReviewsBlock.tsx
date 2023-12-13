@@ -96,7 +96,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
   return (
     <div className="mb-24">
       <div className="flex flex-col">
-        <h4 className="md:text-5xl text-dark-blue text-2xl">Latest reviews</h4>
+        <h4 className="md:text-5xl text-dark-blue text-2xl">Latest Reviews</h4>
         <div className="mb-10">
           {reviewsInfo.reviews.map((review, index) => (
             <div

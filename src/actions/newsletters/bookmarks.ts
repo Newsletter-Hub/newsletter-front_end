@@ -66,7 +66,7 @@ export const deleteBookmark = async ({
 }: BookmarkWithIdPayload): Promise<DeleteBookmarkResponse> => {
   try {
     const response = await api.delete(`bookmarks/${newsletterId}`).json();
-    toast.success('Bookmark is succesfully deleted');
+    toast.success('Bookmark was succesfully deleted');
     return { isDeleted: response as string };
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to delete bookmark');
