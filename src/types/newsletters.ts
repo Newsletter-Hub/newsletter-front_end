@@ -75,7 +75,14 @@ export interface ReviewResponse {
   nextPage?: number;
 }
 
+export interface UserReviewForNewsletterResponse {
+  review: Review;
+}
+
 export interface GetReviewResponse {
   reviews?: ReviewResponse;
   error?: string;
+}
+export interface GetUserReviewForNewsletterResponse {
+  review: UserReviewForNewsletterResponse | null;
 }

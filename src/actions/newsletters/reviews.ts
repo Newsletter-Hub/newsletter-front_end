@@ -4,8 +4,14 @@ import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
-import { GetReviewResponse } from '@/types/newsletters';
-import { ReviewResponse } from '@/types/newsletters';
+import {
+  GetReviewResponse,
+  GetUserReviewForNewsletterResponse,
+} from '@/types/newsletters';
+import {
+  ReviewResponse,
+  UserReviewForNewsletterResponse,
+} from '@/types/newsletters';
 
 interface ReviewPayload {
   comment?: string;
@@ -30,6 +36,11 @@ interface UpdateReviewPayload {
 }
 interface DeleteReviewPayload {
   reviewId: string | number;
+}
+
+interface GetUserReviewForNewsletterPayload {
+  newsletterId: number;
+  token?: string | null;
 }
 export interface DeleteReviewResponse {
   error?: string;
@@ -60,6 +71,24 @@ export const createReview = async ({
     throwErrorMessage(error as HTTPError, 'Failed to create review');
     return {
       error: 'Failed to create review',
+    };
+  }
+};
+
+export const getUserReviewForNewsletter = async ({
+  newsletterId,
+  token,
+}: GetUserReviewForNewsletterPayload): Promise<GetUserReviewForNewsletterResponse> => {
+  try {
+    const review: UserReviewForNewsletterResponse = await api
+      .get(`reviews/user-review-for-newsletter/${newsletterId}`, {
+        headers: { Cookie: `accessToken=${token}` },
+      })
+      .json();
+    return { review };
+  } catch (error) {
+    return {
+      review: null,
     };
   }
 };
