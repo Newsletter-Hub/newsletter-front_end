@@ -13,7 +13,12 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { NewsletterData } from '@/types/newsletters';
-import { GetReviewResponse, ReviewResponse } from '@/types/newsletters';
+import {
+  GetReviewResponse,
+  ReviewResponse,
+  GetUserReviewForNewsletterResponse,
+  UserReviewForNewsletterResponse,
+} from '@/types/newsletters';
 
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
@@ -37,9 +42,16 @@ import {
   getNewsletter,
   unfollow,
 } from '../../../actions/newsletters/index';
-import { createReview, getReviews } from '../../../actions/newsletters/reviews';
+import {
+  createReview,
+  getReviews,
+  getUserReviewForNewsletter,
+  updateReview,
+  deleteReview,
+} from '../../../actions/newsletters/reviews';
 import { useMutation } from 'react-query';
 import ReviewModal from '@/components/Modals/ReviewModal';
+import EditReviewModal from '@/components/Modals/EditReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
 import GoogleAds from '@/components/GoogleAdsBlock';
@@ -47,7 +59,9 @@ import GoogleAds from '@/components/GoogleAdsBlock';
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
   reviews?: ReviewResponse;
+  reviewForNewsletter?: UserReviewForNewsletterResponse;
   isBookmark?: 'none' | 'unauthorized' | 'added';
+  token?: string | null;
 }
 
 const validationSchema = z.object({
@@ -57,13 +71,23 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
+const NewsletterPage = ({
+  newsletterData,
+  reviews,
+  reviewForNewsletter,
+  token,
+}: NewsletterPageProps) => {
   const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
+  const [reviewForNewsletterData, setReviewForNewsletterData] = useState<
+    UserReviewForNewsletterResponse | null | undefined
+  >(reviewForNewsletter);
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const router = useRouter();
 
+  const hasExistingReview: boolean =
+    user !== null && reviewForNewsletterData?.review !== null;
   const isReviewModalOpenQueryParam = router.query.reviewModal === '1';
   const isReportModalOpenQueryParam =
     !isReviewModalOpenQueryParam && router.query.reportModal === '1';
@@ -96,6 +120,8 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
     }
   };
   const reviewMutation = useMutation(createReview);
+  const updateReviewMutation = useMutation(updateReview);
+  const deleteReviewMutation = useMutation(deleteReview);
   const {
     register,
     handleSubmit,
@@ -121,14 +147,94 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
           pageSize: 5 * page,
         });
 
+        const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
+          await getUserReviewForNewsletter({
+            newsletterId: parseInt(router.query.newsletterId as string),
+            token,
+          });
+
         if (reviewsResponse.error) {
           console.error(reviewsResponse.error);
         } else {
           setIsModalOpen(false);
           setReviewsData(reviewsResponse.reviews);
+          setReviewForNewsletterData(reviewForNewsletterResponse.review);
         }
       } else {
         setIsModalOpen(false);
+      }
+    }
+  };
+
+  const onEdit: SubmitHandler<ValidationSchema> = async ({
+    rating,
+    comment,
+  }) => {
+    if (router.query.newsletterId) {
+      if (hasExistingReview && reviewForNewsletterData?.review?.id) {
+        const response = await updateReviewMutation.mutateAsync({
+          rating,
+          comment,
+          id: reviewForNewsletterData?.review?.id,
+        });
+
+        if (!response?.error) {
+          const reviewsResponse: GetReviewResponse = await getReviews({
+            newsletterId: parseInt(router.query.newsletterId as string),
+            page: 1,
+            pageSize: 5 * page,
+          });
+
+          const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
+            await getUserReviewForNewsletter({
+              newsletterId: parseInt(router.query.newsletterId as string),
+              token,
+            });
+
+          if (reviewsResponse.error) {
+            console.error(reviewsResponse.error);
+          } else {
+            setIsModalOpen(false);
+            setReviewsData(reviewsResponse.reviews);
+            setReviewForNewsletterData(reviewForNewsletterResponse.review);
+          }
+        } else {
+          setIsModalOpen(false);
+        }
+      }
+    }
+  };
+
+  const onDelete = async () => {
+    if (router.query.newsletterId) {
+      if (hasExistingReview && reviewForNewsletterData?.review?.id) {
+        const response = await deleteReviewMutation.mutateAsync({
+          reviewId: reviewForNewsletterData.review.id,
+        });
+
+        if (response.isDeleted) {
+          const reviewsResponse: GetReviewResponse = await getReviews({
+            newsletterId: parseInt(router.query.newsletterId as string),
+            page: 1,
+            pageSize: 5 * page,
+          });
+
+          const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
+            await getUserReviewForNewsletter({
+              newsletterId: parseInt(router.query.newsletterId as string),
+              token,
+            });
+
+          if (reviewsResponse.error) {
+            console.error(reviewsResponse.error);
+          } else {
+            setIsModalOpen(false);
+            setReviewsData(reviewsResponse.reviews);
+            setReviewForNewsletterData(reviewForNewsletterResponse.review);
+          }
+        } else {
+          setIsModalOpen(false);
+        }
       }
     }
   };
@@ -399,24 +505,52 @@ const NewsletterPage = ({ newsletterData, reviews }: NewsletterPageProps) => {
         <h2 className="text-lightBlack text-5xl font-medium mb-8">
           Latest Reviews
         </h2>
-        <Button
-          label="Add your review"
-          rounded="xl"
-          height="sm"
-          fontSize="md"
-          customStyles="!px-8 mb-8"
-          onClick={handleOpenModal}
-        />
-        <ReviewModal
-          register={register}
-          setValue={setValue}
-          errors={errors}
-          newsletter={newsletter}
-          open={isModalOpen}
-          handleClose={handleModalClose}
-          loading={reviewMutation.isLoading}
-          onSubmit={handleSubmit(onSubmit)}
-        />
+        {hasExistingReview ? (
+          <>
+            <Button
+              label="View your review"
+              rounded="xl"
+              height="sm"
+              fontSize="md"
+              customStyles="!px-8 mb-8"
+              onClick={handleOpenModal}
+            />
+            <EditReviewModal
+              register={register}
+              setValue={setValue}
+              errors={errors}
+              newsletter={newsletter}
+              open={isModalOpen}
+              handleClose={handleModalClose}
+              loading={reviewMutation.isLoading}
+              onSubmit={handleSubmit(onEdit)}
+              review={reviewForNewsletterData?.review}
+              onDelete={onDelete}
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              label="Add your review"
+              rounded="xl"
+              height="sm"
+              fontSize="md"
+              customStyles="!px-8 mb-8"
+              onClick={handleOpenModal}
+            />
+            <ReviewModal
+              register={register}
+              setValue={setValue}
+              errors={errors}
+              newsletter={newsletter}
+              open={isModalOpen}
+              handleClose={handleModalClose}
+              loading={reviewMutation.isLoading}
+              onSubmit={handleSubmit(onSubmit)}
+              review={reviewForNewsletterData?.review}
+            />
+          </>
+        )}
         <div className="mb-8">
           {Boolean(reviewsData.reviews.length) &&
             reviewsData.reviews.map((review, index) => (
@@ -497,6 +631,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
     page: 1,
     pageSize: 5,
   });
+
+  const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
+    await getUserReviewForNewsletter({
+      newsletterId: parseInt(newsletterId),
+      token,
+    });
+
   if (response.error) {
     return {
       notFound: true,
@@ -511,12 +652,24 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
-  return {
-    props: {
-      newsletterData: response.newsletterData,
-      reviews: reviewsResponse.reviews,
-    },
-  };
+  if (token) {
+    return {
+      props: {
+        newsletterData: response.newsletterData,
+        reviews: reviewsResponse.reviews,
+        reviewForNewsletter: reviewForNewsletterResponse.review,
+        token,
+      },
+    };
+  } else {
+    return {
+      props: {
+        newsletterData: response.newsletterData,
+        reviews: reviewsResponse.reviews,
+        reviewForNewsletter: reviewForNewsletterResponse.review,
+      },
+    };
+  }
 };
 
 export default NewsletterPage;
