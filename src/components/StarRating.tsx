@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import StarIcon from '@/assets/icons/star';
 
@@ -25,6 +25,14 @@ const StarRating = ({
   const [hover, setHover] = useState(0);
   const activeStarStyle = 'fill-primary';
   const inActiveStarStyle = 'stroke-primary !fill-transparent stroke-[1.5px]';
+
+  useEffect(() => {
+    if (setValue && rating !== 0) {
+      setValue(rating);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleClick = (index: number) => {
     if (readonly) {
       return;
