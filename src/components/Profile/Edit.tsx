@@ -24,6 +24,7 @@ import FileDownloader from '../FileDownloader';
 import Input from '../Input';
 import Select, { Option } from '../Select';
 import ChangePasswordModal from './Modals/ChangePassword';
+import DeleteProfileModal from './Modals/DeleteProfile';
 import VerifyEmailModal from './Modals/VerifyEmail';
 
 export interface EditProfilePayload {
@@ -76,6 +77,17 @@ const Edit = forwardRef(
 
     const handleCloseChangePasswordModal = () => {
       setIsChangePasswordModalOpen(false);
+    };
+
+    const [isDeleteProfileModalOpen, setIsDeleteProfileModalOpen] =
+      useState(false);
+
+    const handleOpenDeleteProfileModal = () => {
+      setIsDeleteProfileModalOpen(true);
+    };
+
+    const handleCloseDeleteProfileModal = () => {
+      setIsDeleteProfileModalOpen(false);
     };
 
     const {
@@ -332,6 +344,16 @@ const Edit = forwardRef(
               />
             </>
           )}
+          <p
+            onClick={handleOpenDeleteProfileModal}
+            className="cursor-pointer border-b border-b-red text-red text-base font-semibold w-fit mb-21 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
+          >
+            Delete profile
+          </p>
+          <DeleteProfileModal
+            open={isDeleteProfileModalOpen}
+            handleClose={handleCloseDeleteProfileModal}
+          /> 
         </form>
       </div>
     );

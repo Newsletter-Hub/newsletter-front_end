@@ -61,7 +61,6 @@ interface NewsletterPageProps {
   reviews?: ReviewResponse;
   reviewForNewsletter?: UserReviewForNewsletterResponse;
   isBookmark?: 'none' | 'unauthorized' | 'added';
-  token?: string | null;
 }
 
 const validationSchema = z.object({
@@ -75,7 +74,6 @@ const NewsletterPage = ({
   newsletterData,
   reviews,
   reviewForNewsletter,
-  token,
 }: NewsletterPageProps) => {
   const [newsletter, setNewsletter] = useState(newsletterData);
   const [reviewsData, setReviewsData] = useState(reviews);
@@ -150,7 +148,7 @@ const NewsletterPage = ({
         const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
           await getUserReviewForNewsletter({
             newsletterId: parseInt(router.query.newsletterId as string),
-            token,
+            token: null,
           });
 
         if (reviewsResponse.error) {
@@ -188,7 +186,7 @@ const NewsletterPage = ({
           const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
             await getUserReviewForNewsletter({
               newsletterId: parseInt(router.query.newsletterId as string),
-              token,
+              token: null,
             });
 
           if (reviewsResponse.error) {
@@ -222,7 +220,7 @@ const NewsletterPage = ({
           const reviewForNewsletterResponse: GetUserReviewForNewsletterResponse =
             await getUserReviewForNewsletter({
               newsletterId: parseInt(router.query.newsletterId as string),
-              token,
+              token: null,
             });
 
           if (reviewsResponse.error) {
