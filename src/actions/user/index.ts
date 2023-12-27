@@ -44,6 +44,14 @@ interface UserListResponse {
   userList?: UserList;
   error?: string;
 }
+interface DeleteProfilePayload {
+  token?: string | null;
+}
+
+interface DeleteProfileResponse {
+  error?: string;
+  isDeleted?: string;
+}
 
 export type GetAdvancedUserListType = (
   props: GetAdvancedUsersListProps
@@ -232,5 +240,23 @@ export const getUserSubscriptions = async ({
   } catch (error) {
     console.log(error);
     return { error: 'Failed to fetch users list' };
+  }
+};
+
+export const deleteProfile = async ({
+  token,
+}: DeleteProfilePayload): Promise<DeleteProfileResponse> => {
+  try {
+    const response = await api
+      .delete('users', {
+        headers: { Cookie: `accessToken=${token}` },
+        credentials: 'include',
+      })
+      .json();
+    toast.success('Profile was succesfully deleted');
+    return { isDeleted: response as string };
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to delete profile');
+    return { error: 'Failed to delete profile' };
   }
 };
