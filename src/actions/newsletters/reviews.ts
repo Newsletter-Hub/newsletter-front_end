@@ -83,6 +83,7 @@ export const getUserReviewForNewsletter = async ({
     const review: UserReviewForNewsletterResponse = await api
       .get(`reviews/user-review-for-newsletter/${newsletterId}`, {
         headers: { Cookie: `accessToken=${token}` },
+        credentials: 'include',
       })
       .json();
     return { review };

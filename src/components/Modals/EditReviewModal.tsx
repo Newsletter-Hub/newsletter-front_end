@@ -45,7 +45,7 @@ const EditReviewModal = ({
   register,
   setValue,
   newsletter,
-  onDelete
+  onDelete,
 }: ReviewModalProps) => {
   const data = review?.newsletter || newsletter;
   if (!data) {
@@ -101,12 +101,8 @@ const EditReviewModal = ({
           </div>
           <Input
             variant="filled"
-            placeholder={
-              review?.comment !== '' ? '' : 'Go ahead, we are listening...'
-            }
-            defaultValue={
-              review?.comment ? review.comment : 'Go ahead, we are listening...'
-            }
+            placeholder="Go ahead, we are listening..."
+            defaultValue={review?.comment ? review.comment : ''}
             customStyles="mb-9 !w-full"
             register={{ ...register('comment') }}
           />
