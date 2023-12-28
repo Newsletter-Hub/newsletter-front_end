@@ -12,6 +12,7 @@ interface NewsletterLink {
 }
 
 export interface NewsletterLinkResponse {
+  newsletterAuthor?: string;
   id: number;
   link?: string;
   title: string;

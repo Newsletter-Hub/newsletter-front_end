@@ -45,6 +45,7 @@ const LinkForm = ({
         title: response.title,
         description: response.description,
         image: response.image,
+        author: response.newsletterAuthor,
       });
     } else {
       setError('link', {

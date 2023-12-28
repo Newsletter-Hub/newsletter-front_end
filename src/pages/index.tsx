@@ -2,7 +2,6 @@ import { getReviews } from '@/actions/newsletters/reviews';
 
 import { Review } from '@/types/newsletters';
 
-// import GetStartedBlock from '@/components/HomePage/GetStartedBlock';
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
 import GoogleAds from '@/components/GoogleAdsBlock';
@@ -19,7 +18,6 @@ const Home = ({ reviewData }: HomeProps) => {
         <ReviewsBlock reviewData={reviewData} />
         <GoogleAds />
       </div>
-      {/* <GetStartedBlock /> */}
     </main>
   );
 };
