@@ -330,20 +330,32 @@ const Edit = forwardRef(
               />
             </div>
           </div>
-          {!user.googleId && (
-            <>
-              <p
-                onClick={handleOpenChangePasswordModal}
-                className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-21 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
-              >
-                Change password
-              </p>
-              <ChangePasswordModal
-                open={isChangePasswordModalOpen}
-                handleClose={handleCloseChangePasswordModal}
-              />
-            </>
-          )}
+          <div className="flex gap-6 mb-10 w-full flex-col md:flex-row">
+            {!user.googleId && (
+              <>
+                <p
+                  onClick={handleOpenChangePasswordModal}
+                  className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-10 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
+                >
+                  Change password
+                </p>
+                <ChangePasswordModal
+                  open={isChangePasswordModalOpen}
+                  handleClose={handleCloseChangePasswordModal}
+                />
+              </>
+            )}
+            <p
+              onClick={() => {
+                window.displayPreferenceModal();
+                return false;
+              }}
+              id="termly-consent-preferences"
+              className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-10 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
+            >
+              Consent Preferences
+            </p>
+          </div>
           <p
             onClick={handleOpenDeleteProfileModal}
             className="cursor-pointer border-b border-b-red text-red text-base font-semibold w-fit mb-21 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
@@ -353,7 +365,7 @@ const Edit = forwardRef(
           <DeleteProfileModal
             open={isDeleteProfileModalOpen}
             handleClose={handleCloseDeleteProfileModal}
-          /> 
+          />
         </form>
       </div>
     );

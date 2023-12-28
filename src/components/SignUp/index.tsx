@@ -127,6 +127,20 @@ const SignUpForm = ({ setEmail }: SignUpProps) => {
           Login
         </Link>
       </p>
+      <p className="font-inter text-sm text-start max-w-[395px] text-dark-blue">
+      Creating an account means you agree to our{' '}
+      <Link href="/terms" legacyBehavior passHref>
+          <a target="_blank" className="font-semibold" rel="noopener noreferrer">
+            Terms & Conditions {' '}
+          </a>
+        </Link>
+        and {' '}
+        <Link href="/privacy" legacyBehavior passHref>
+          <a target="_blank" className="font-semibold" rel="noopener noreferrer">
+          Privacy Policy
+          </a>
+        </Link>
+      </p>
       <Button
         label="Signup"
         size="full"
