@@ -345,7 +345,7 @@ const Edit = forwardRef(
                 />
               </>
             )}
-            {/* <p
+            <p
               onClick={() => {
                 window.displayPreferenceModal();
                 return false;
@@ -354,7 +354,7 @@ const Edit = forwardRef(
               className="cursor-pointer border-b border-b-dark-blue text-dark-blue text-base font-semibold w-fit mb-10 transition-colors duration-200 ease-in-out hover:text-primary hover:border-primary"
             >
               Consent Preferences
-            </p> */}
+            </p>
           </div>
           <p
             onClick={handleOpenDeleteProfileModal}
