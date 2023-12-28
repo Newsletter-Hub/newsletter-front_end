@@ -444,6 +444,17 @@ const NewsletterPage = ({
         <div className="flex justify-between font-inter items-center md:mb-20 mb-10 flex-col md:flex-row">
           <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">
             <div className="flex gap-6 items-center">
+              {newsletter?.newsletterAuthor && (
+                <>
+                  <p className="text-sm text-dark-grey">
+                    Author:&nbsp;
+                    <span className="font-semibold">
+                      {newsletter?.newsletterAuthor}
+                    </span>{' '}
+                  </p>
+                  <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                </>
+              )}
               {newsletter?.averageDuration && (
                 <>
                   <p className="text-sm text-dark-grey">
@@ -500,9 +511,7 @@ const NewsletterPage = ({
             </div> */}
           </div>
         </div>
-        <h2 className="text-lightBlack text-5xl font-medium mb-8">
-          Latest Reviews
-        </h2>
+        <h2 className="text-lightBlack text-5xl font-medium mb-8">Reviews</h2>
         {hasExistingReview ? (
           <>
             <Button

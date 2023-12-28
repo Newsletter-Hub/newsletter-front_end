@@ -61,6 +61,7 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
       averageDuration: String(averageDuration),
       pricingType,
       router,
+      newsletterAuthor: payload.author,
     });
   };
 

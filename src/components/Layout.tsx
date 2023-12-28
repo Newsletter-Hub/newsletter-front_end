@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Alegreya } from 'next/font/google';
 import Head from 'next/head';
 
-// import Footer from './Footer';
+import Footer from './Footer';
 import Header from './Header';
 
 interface LayoutProps {
@@ -27,7 +27,7 @@ const Layout = ({ children, isFooter = true }: LayoutProps) => {
       >
         <Header />
         <div className="mx-auto">{children}</div>
-        {/* {isFooter && <Footer />} */}
+        {isFooter && <Footer />}
       </div>
     </>
   );
