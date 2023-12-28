@@ -51,16 +51,16 @@ const PrivacyPage = () => {
               Newsletter Hub
               <bdt className="block-component" />
             </bdt>{" "}
-            (<bdt className="block-component" />"<strong>we</strong>," "
-            <strong>us</strong>," or "<strong>our</strong>"
+            (<bdt className="block-component" />&quot;<strong>we</strong>,&quot; &quot;
+            <strong>us</strong>,&quot; or &quot;<strong>our</strong>&quot;
             <bdt className="statement-end-if-in-editor" />
           </span>
           <span data-custom-class="body_text">
             ), describes how and why we might collect, store, use, and/or share
-            (<bdt className="block-component" />"<strong>process</strong>"
+            (<bdt className="block-component" />&quot;<strong>process</strong>&quot;
             <bdt className="statement-end-if-in-editor" />) your information
-            when you use our services (<bdt className="block-component" />"
-            <strong>Services</strong>"
+            when you use our services (<bdt className="block-component" />&quot;
+            <strong>Services</strong>&quot;
             <bdt className="statement-end-if-in-editor" />
             ), such as when you:
           </span>
@@ -1276,7 +1276,7 @@ const PrivacyPage = () => {
                 features you use), device event information (such as system
                 activity, error reports (sometimes called{" "}
                 <bdt className="block-component" />
-                "crash dumps" <bdt className="statement-end-if-in-editor" />
+                &quot;crash dumps&quot; <bdt className="statement-end-if-in-editor" />
                 ), and hardware settings).
                 <span style={{ fontSize: 15 }}>
                   <span style={{ color: "rgb(89, 89, 89)" }}>
@@ -1577,7 +1577,7 @@ const PrivacyPage = () => {
                                       marketing preferences. You can opt out of
                                       our marketing emails at any time. For more
                                       information, see{" "}
-                                      <bdt className="block-component" />"
+                                      <bdt className="block-component" />&quot;
                                       <bdt className="statement-end-if-in-editor" />
                                     </span>
                                   </span>
@@ -1617,7 +1617,7 @@ const PrivacyPage = () => {
                                     }}
                                   >
                                     <span data-custom-class="body_text">
-                                      <bdt className="block-component" />"
+                                      <bdt className="block-component" />&quot;
                                       <bdt className="statement-end-if-in-editor" />{" "}
                                       below.
                                     </span>
@@ -3179,11 +3179,11 @@ const PrivacyPage = () => {
                                                             contractors, or
                                                             agents (
                                                             <bdt className="block-component" />
-                                                            "
+                                                            &quot;
                                                             <strong>
                                                               third parties
                                                             </strong>
-                                                            "
+                                                            &quot;
                                                             <bdt className="statement-end-if-in-editor" />
                                                             ) who perform
                                                             services for us or
