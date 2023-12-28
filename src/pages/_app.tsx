@@ -21,6 +21,12 @@ type MyComponentType = NextPage & {
   layout?: LayoutType;
   type?: EntryType;
 };
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    displayPreferenceModal?: any;
+  }
+}
 function MyApp({
   Component,
   pageProps,
@@ -32,6 +38,28 @@ function MyApp({
   return (
     <>
       <Head>
+        <script>
+          {`
+            // Define dataLayer and the gtag function.
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}// Default all categories to 'denied' 
+            gtag('consent', 'default', {
+              'ad_storage': 'granted',
+              'analytics_storage': 'granted',
+              'functionality_storage': 'denied',
+              'personalization_storage': 'denied',
+              'security_storage': 'denied',
+              'social_storage': 'denied',
+              'ad_user_data': 'granted',
+              'ad_personalization': 'granted',
+            });
+        `}
+        </script>
+        <script
+          async
+          type="text/javascript"
+          src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
+        ></script>
         <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_DATA_AD_CLIENT}`}
