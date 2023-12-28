@@ -40,7 +40,6 @@ function MyApp({
       <Head>
         <script>
           {`
-            // Define dataLayer and the gtag function.
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}// Default all categories to 'denied' 
             gtag('consent', 'default', {
