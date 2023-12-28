@@ -23,6 +23,7 @@ type MyComponentType = NextPage & {
 };
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     displayPreferenceModal?: any;
   }
 }
@@ -37,6 +38,23 @@ function MyApp({
   return (
     <>
       <Head>
+        <script>
+          {`
+            // Define dataLayer and the gtag function.
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}// Default all categories to 'denied' 
+            gtag('consent', 'default', {
+              'ad_storage': 'granted',
+              'analytics_storage': 'granted',
+              'functionality_storage': 'denied',
+              'personalization_storage': 'denied',
+              'security_storage': 'denied',
+              'social_storage': 'denied',
+              'ad_user_data': 'granted',
+              'ad_personalization': 'granted',
+            });
+        `}
+        </script>
         <script
           async
           type="text/javascript"
