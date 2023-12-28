@@ -197,3 +197,4 @@ export const COUNTRIES = [
   'Zimbabwe',
 ];
 export const REDIRECT_AFTER_LOGIN_PATH = 'redirectAfterLoginPath';
+export const HIDE_ADBLOCK_MSG = 'hideAdblockMsg';

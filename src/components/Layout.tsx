@@ -5,6 +5,7 @@ import Head from 'next/head';
 
 import Footer from './Footer';
 import Header from './Header';
+import AdblockModal from './Modals/AdblockModal';
 
 interface LayoutProps {
   children: ReactNode;
@@ -26,6 +27,7 @@ const Layout = ({ children, isFooter = true }: LayoutProps) => {
         }`}
       >
         <Header />
+        <AdblockModal />
         <div className="mx-auto">{children}</div>
         {isFooter && <Footer />}
       </div>
