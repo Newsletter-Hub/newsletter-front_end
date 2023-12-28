@@ -37,15 +37,15 @@ function MyApp({
   return (
     <>
       <Head>
+      <script
+          async
+          type="text/javascript"
+          src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
+        ></script>
         <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_DATA_AD_CLIENT}`}
           crossOrigin="anonymous"
-        ></script>
-        <script
-          async
-          type="text/javascript"
-          src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
         ></script>
       </Head>
       <QueryClientProvider client={queryClient}>
