@@ -43,6 +43,7 @@ function MyApp({
           crossOrigin="anonymous"
         ></script>
         <script
+          async
           type="text/javascript"
           src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
         ></script>
