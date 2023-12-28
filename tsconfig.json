@@ -22,8 +22,7 @@
     "next-env.d.ts",
     "**/*.ts", 
     "**/*.tsx", 
-    "src/pages/privacy/index.jsx",
-    "src/pages/terms/index.jsx"
+    "**/*.jsx"
   ],
   "exclude": ["node_modules"]
 }
