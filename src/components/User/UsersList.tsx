@@ -18,6 +18,7 @@ import Avatar from '../Avatar';
 import Link from 'next/link';
 import PlusIcon from '@/assets/icons/plus';
 import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
+import GoogleAds from '@/components/GoogleAdsBlock';
 
 const sortTypes: SortType[] = [
   {
@@ -282,6 +283,7 @@ const UsersList = ({
                 </div>
               ))}
             </div>
+            <GoogleAds />
             {usersData.nextPage && (
               <Button
                 label="See more"
