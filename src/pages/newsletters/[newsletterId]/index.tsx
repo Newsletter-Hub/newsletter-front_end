@@ -511,6 +511,7 @@ const NewsletterPage = ({
             </div> */}
           </div>
         </div>
+        <GoogleAds />
         <h2 className="text-lightBlack text-5xl font-medium mb-8">Reviews</h2>
         {hasExistingReview ? (
           <>
@@ -618,7 +619,6 @@ const NewsletterPage = ({
             onClick={loadMoreReviews}
           />
         )}
-        <GoogleAds />
       </div>
     </main>
   );
