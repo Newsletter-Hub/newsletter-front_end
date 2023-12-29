@@ -33,6 +33,7 @@ import Modal from '@/components/Modal';
 import Popover from '@/components/Popover';
 import Slider from '@/components/Slider';
 import StarRating from '@/components/StarRating';
+import GoogleAds from '@/components/GoogleAdsBlock';
 
 import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
@@ -993,6 +994,7 @@ const NewslettersList = ({
                 );
               })
             )}
+            <GoogleAds />
             {newslettersData && Boolean(newslettersData.nextPage) && (
               <Button
                 label="See more"
