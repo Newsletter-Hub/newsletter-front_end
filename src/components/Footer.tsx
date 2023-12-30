@@ -10,7 +10,7 @@ const additionalLinks = [
 
 const Footer = () => {
   return (
-    <footer className="pt-29 px-32 pb-4">
+    <footer className="lg:pt-[88px] pt-16 max-w-[1280px] mx-auto px-4">
       <GetStartedBlock></GetStartedBlock>
       <div className="bg-primary py-8 pl-8 pr-20 flex items-center">
         <div className="flex text-white flex-1">
