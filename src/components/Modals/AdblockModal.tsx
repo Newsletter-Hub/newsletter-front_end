@@ -27,7 +27,16 @@ const AdblockModal = () => {
       const hideAdblockMsg = sessionStorage.getItem(HIDE_ADBLOCK_MSG);
 
       if (hideAdblockMsg === '1') return;
-      setIsModalOpen(true);
+
+      // Add a delay before showing the modal
+      const delay = 5000;
+
+      const timer = setTimeout(() => {
+        setIsModalOpen(true);
+      }, delay);
+
+      // Clear the timer if the component unmounts
+      return () => clearTimeout(timer);
     }
   }, [adBlockDetected]);
 
