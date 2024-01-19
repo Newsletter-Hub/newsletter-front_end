@@ -56,9 +56,12 @@ const LinkForm = ({
         &quot;.com&quot;.
         <br />
         <br />
-        If you get a &quot;Newsletter will need to be manually added&quot;
-        error, we had an issue verifying the newsletter. Our team will try to
-        manually add it, and email you with the result of the request.
+        In the event of a &quot;Newsletter will need to be manually added&quot;
+        error, rest assured that our team is actively addressing the issue
+        related to newsletter verification. We will promptly initiate manual
+        processing and keep you informed via email regarding the status of your
+        request. For any further inquiries, please don&apos;t hesitate to reach
+        out to us at team@newsletterhub.co.
       </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
         Link a Newsletter
