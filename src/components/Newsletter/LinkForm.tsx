@@ -29,7 +29,6 @@ const LinkForm = ({
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
@@ -46,11 +45,6 @@ const LinkForm = ({
         description: response.description,
         image: response.image,
         author: response.newsletterAuthor,
-      });
-    } else {
-      setError('link', {
-        type: 'manual',
-        message: 'Newsletter will need to be manually added',
       });
     }
   };
