@@ -81,7 +81,7 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
           return !tags.some(tag => tag.id === interest.id);
         });
         const formattedData = filteredInterests.filter(item =>
-          item.interestName.includes(inputValue)
+          item.interestName.toLowerCase().includes(inputValue.toLowerCase())
         );
         setSuggests(formattedData);
       }

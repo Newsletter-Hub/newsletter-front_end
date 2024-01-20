@@ -79,7 +79,7 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
       setShowAutoComplete(true);
       if (interests) {
         const formattedData = interests.filter(item =>
-          item.interestName.includes(inputValue)
+          item.interestName.toLowerCase().includes(inputValue.toLowerCase())
         );
         setSuggests(formattedData);
       }

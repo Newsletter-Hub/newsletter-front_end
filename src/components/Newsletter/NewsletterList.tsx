@@ -205,6 +205,8 @@ const NewslettersList = ({
           ? 'DESC'
           : 'ASC',
       entity: 'Newsletter',
+      search,
+      categoriesIds: filtersPayload.categories,
     }).finally(() => setMoreNewslettersLoading(false));
 
     if (newsletterResponse.newslettersListData) {
