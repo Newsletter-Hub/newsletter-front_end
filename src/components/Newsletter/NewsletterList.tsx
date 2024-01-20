@@ -173,12 +173,6 @@ const NewslettersList = ({
   }, [filtersPayload]);
 
   const [search, setSearch] = useState((router.query.search as string) || '');
-  const categoryId = router.query.id;
-  const categoriesIds =
-    categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
-      ? [+categoryId]
-      : [];
-    console.log("categoryId:", categoryId)
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
@@ -212,7 +206,7 @@ const NewslettersList = ({
           : 'ASC',
       entity: 'Newsletter',
       search,
-      categoriesIds,
+      categoriesIds: filtersPayload.categories,
     }).finally(() => setMoreNewslettersLoading(false));
 
     if (newsletterResponse.newslettersListData) {
@@ -250,7 +244,6 @@ const NewslettersList = ({
             ? 'DESC'
             : 'ASC',
         search: search,
-        categoriesIds,
       });
 
       if (newsletterResponse.newslettersListData) {
