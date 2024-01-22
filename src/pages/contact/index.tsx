@@ -12,7 +12,7 @@ const Contact = () => {
         </p>
         <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
           For help with your account, adding a newsletter, navigating our site,
-          or anything else, email us at &nbsp;
+          or anything else, email us at&nbsp;
           <Link href="mailto: team@newsletterhub.co">
             team@newsletterhub.co
           </Link>
@@ -22,8 +22,8 @@ const Contact = () => {
           Business Inquires
         </p>
         <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
-          For advertising, partnerships, and all things business, email us at
-          &nbsp;
+          For advertising, partnerships, and all things business, email us
+          at&nbsp;
           <Link href="mailto: team@newsletterhub.co">
             team@newsletterhub.co
           </Link>
@@ -33,8 +33,8 @@ const Contact = () => {
           Feedback
         </p>
         <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
-          Tell us how we are doing or what you would like to see, email us at
-          &nbsp;
+          Tell us how we are doing or what you would like to see, email us
+          at&nbsp;
           <Link href="mailto: team@newsletterhub.co">
             team@newsletterhub.co
           </Link>
@@ -47,11 +47,27 @@ const Contact = () => {
           Found inaccuarte or inapproriate content posted by other users on our
           site? You can directly report newsletters by locating the
           &quot;Report&quot; button on the page of the newsletter. For reporting
-          other things like reviews, users, etc., email us at &nbsp;
+          other things like reviews, users, etc., email us at&nbsp;
           <Link href="mailto: team@newsletterhub.co">
             team@newsletterhub.co
           </Link>
           .
+        </p>
+        <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
+          Social
+        </p>
+        <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
+          You can find us on&nbsp;
+          <Link
+            href="https://twitter.com/newsletter_hub'"
+            legacyBehavior
+            passHref
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              Twitter&nbsp;
+            </a>
+          </Link>
+          at @newsletter_hub.
         </p>
       </div>
     </div>
