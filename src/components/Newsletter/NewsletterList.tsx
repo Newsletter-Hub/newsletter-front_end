@@ -174,6 +174,11 @@ const NewslettersList = ({
 
   const [search, setSearch] = useState((router.query.search as string) || '');
 
+  if (interests && interests?.length && id !== 'all') {
+    const category = interests.find(interest => interest.id === Number(id));
+    title = category ? `${category.interestName} Newsletters` : title;
+  }
+
   const handleOpenModal = () => {
     setIsOpenModal(true);
   };
