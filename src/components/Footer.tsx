@@ -15,10 +15,10 @@ const newsletterLinks = [
 
 const socialMediaLinks = [
   {
-    label: 'Linkedin',
+    label: 'LinkedIn',
     href: 'https://www.linkedin.com/company/newsletter-hub',
   },
-  { label: 'X', href: 'https://twitter.com/newsletter_hub' },
+  { label: 'Twitter', href: 'https://twitter.com/newsletter_hub' },
 ];
 
 const additionalLinks = [
