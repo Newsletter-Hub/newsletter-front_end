@@ -1,7 +1,7 @@
 import { getServerSideSitemapLegacy, ISitemapField } from 'next-sitemap';
 import { GetServerSideProps } from 'next';
 import { getNewslettersList } from '@/actions/newsletters';
-import { getCategories } from '@/actions/user/interests';
+import { getInterests } from '@/actions/user/interests';
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
   // Method to source urls from cms
@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   });
   const newsletterListData = newsletterListResponse.newslettersListData;
   const newsletters = newsletterListData?.newsletters || [];
-  const categories = await getCategories();
+  const interests = await getInterests();
 
   const fields: ISitemapField[] = [];
 
@@ -25,10 +25,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     fields.push(page);
   });
 
-  if (categories instanceof Array) {
-    categories.map(category => {
+  if (interests instanceof Array) {
+    interests.forEach(interest => {
+      let interestName = interest.interestName;
+      if (interestName.includes('&')) {
+        interestName = escapeAmpersandsForXML(interestName);
+      }
       const page = {
-        loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/categories/${category.id}`,
+        loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/categories/${interestName}`,
         lastmod: new Date().toISOString(),
       };
 
@@ -37,6 +41,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   }
 
   return getServerSideSitemapLegacy(ctx, fields);
+};
+
+const escapeAmpersandsForXML = (str: string) => {
+  return str.replace(/&/g, '&amp;');
 };
 
 // Default export to prevent next.js errors
