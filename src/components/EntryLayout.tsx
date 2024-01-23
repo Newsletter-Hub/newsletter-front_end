@@ -7,13 +7,14 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import addNewsletterImage from '@/assets/images/addNewsletterImage.svg';
 import loginImage from '@/assets/images/loginImage.svg';
+import contactImage from '@/assets/images/contactImage.svg';
 import Logo from '@/assets/images/logo';
 
 import Button from './Button';
 
 export interface EntryLayoutProps {
   children?: React.ReactNode;
-  type?: 'signup' | 'login' | 'newsletter' | 'newsletterEdit';
+  type?: 'signup' | 'login' | 'newsletter' | 'newsletterEdit' | 'contact';
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
@@ -62,6 +63,21 @@ const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
                       alt="newsletter"
                       placeholder="blur"
                       blurDataURL="src/assets/images/addNewsletterImage.svg"
+                    />
+                  </>
+                ) : type === 'contact' ? (
+                  <>
+                    <p className="font-bold text-3xl mb-3">Contact Us</p>
+                    <p className="max-w-xs text-center mb-28">
+                      Want to reach out for business inquires, feedback,
+                      support, or anything else?
+                    </p>
+                    <Image
+                      src={contactImage}
+                      width={450}
+                      alt="contact"
+                      placeholder="blur"
+                      blurDataURL="src/assets/images/contactImage.svg"
                     />
                   </>
                 ) : (

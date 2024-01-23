@@ -512,7 +512,9 @@ const NewsletterPage = ({
           </div>
         </div>
         <GoogleAds />
-        <h2 className="text-lightBlack text-5xl font-medium mb-8">Reviews</h2>
+        <h2 className="text-lightBlack text-5xl font-medium mb-8">
+          {newsletter?.title ? `Reviews for ${newsletter?.title}` : 'Reviews'}
+        </h2>
         {hasExistingReview ? (
           <>
             <Button

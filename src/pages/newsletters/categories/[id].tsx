@@ -29,7 +29,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const user: User = req.cookies.user
     ? JSON.parse(req.cookies.user as string)
     : undefined;
-  const categoryId = params && params.id;
+  const interestName = params && params.id;
+  const interests = await getInterests();
+  let categoryId;
+  if (interestName !== 'all' && interests instanceof Array) {
+    const category = interests.find(
+      interest => interest.interestName === interestName
+    );
+    categoryId = category.id;
+  }
   const search = (context.query && (context.query.search as string)) || '';
   const categoriesIds =
     categoryId && typeof +categoryId === 'number' && categoryId !== 'all'
@@ -47,7 +55,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     myId: user && user.id ? +user.id : undefined,
     token,
   });
-  const interests = await getInterests();
   if (newsletterList.error || !interests) {
     return {
       notFound: true,

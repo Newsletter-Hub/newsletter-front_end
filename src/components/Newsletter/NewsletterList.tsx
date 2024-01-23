@@ -132,7 +132,14 @@ const NewslettersList = ({
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const { id, userId } = router.query;
+  const { userId } = router.query;
+  let id: number | string | undefined;
+  if (router.query.id !== 'all' && interests) {
+    const category = interests.find(
+      interest => interest.interestName === router.query.id
+    );
+    id = category?.id;
+  }
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -173,6 +180,11 @@ const NewslettersList = ({
   }, [filtersPayload]);
 
   const [search, setSearch] = useState((router.query.search as string) || '');
+
+  if (interests && interests?.length && id !== 'all') {
+    const category = interests.find(interest => interest.id === Number(id));
+    title = category ? `${category.interestName} Newsletters` : title;
+  }
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
