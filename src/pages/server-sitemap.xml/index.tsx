@@ -9,6 +9,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const newsletterListResponse = await getNewslettersList({
     order: 'date',
     orderDirection: 'ASC',
+    getAll: true,
   });
   const newsletterListData = newsletterListResponse.newslettersListData;
   const newsletters = newsletterListData?.newsletters || [];
