@@ -64,7 +64,7 @@ const Contact = () => {
             passHref
           >
             <a target="_blank" rel="noopener noreferrer">
-              Twitter&nbsp;
+              X/Twitter&nbsp;
             </a>
           </Link>
           at @newsletter_hub.
