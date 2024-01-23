@@ -14,7 +14,7 @@ const MainBlock = () => {
           Your Hub for Newsletter Reviews and Discovery
         </h1>
         <p className="md:text-xl text-dark-grey md:max-w-md mb-7">
-          Rate, review, and browse newsletters that you, your friends, and the
+          Add, review, and browse newsletters that you, your friends, and the
           world are subscribed to.
         </p>
         {!user && (

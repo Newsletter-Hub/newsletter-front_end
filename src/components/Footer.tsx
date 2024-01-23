@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const productLinks = [
   { label: 'Contact Us', href: '/contact' },
-  { label: 'Site Map', href: '/site-map' },
+  { label: 'Site Map', href: '/sitemap.xml' },
 ];
 
 const newsletterLinks = [
@@ -18,7 +18,7 @@ const socialMediaLinks = [
     label: 'LinkedIn',
     href: 'https://www.linkedin.com/company/newsletter-hub',
   },
-  { label: 'Twitter', href: 'https://twitter.com/newsletter_hub' },
+  { label: 'X/Twitter', href: 'https://twitter.com/newsletter_hub' },
 ];
 
 const additionalLinks = [
@@ -68,10 +68,9 @@ const Footer = () => {
           <div>
             <h4 className="text-2xl mb-3">What is Newsletter Hub?</h4>
             <p className="text-sm text-dark-grey">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              The ultimate destination for everything newsletters. Readers, find
+              your next daily source of knowledge and information. Writers, get
+              exposure, feedback, and social social proof for your newsletter.
             </p>
           </div>
         </div>
