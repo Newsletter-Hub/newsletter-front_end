@@ -70,7 +70,7 @@ const Footer = () => {
             <p className="text-sm text-dark-grey">
               The ultimate destination for everything newsletters. Readers, find
               your next daily source of knowledge and information. Writers, get
-              exposure, feedback, and social social proof for your newsletter.
+              exposure, feedback, and social proof for your newsletter.
             </p>
           </div>
         </div>
