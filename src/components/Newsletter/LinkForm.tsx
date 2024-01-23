@@ -10,6 +10,7 @@ import { NewsletterFormProps } from '@/types/newsletters';
 
 import Button from '../Button';
 import Input from '../Input';
+import Link from 'next/link';
 
 const validationSchema = z.object({
   link: z
@@ -52,8 +53,7 @@ const LinkForm = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
         Include a link to the homepage of the newsletter. Follow the format in
-        the example below; insert the full URL with &quot;https://&quot; and
-        &quot;.com&quot;.
+        the example below; prepend the full URL with &quot;https://&quot;.
         <br />
         <br />
         In the event of a &quot;Newsletter will need to be manually added&quot;
@@ -61,7 +61,8 @@ const LinkForm = ({
         related to newsletter verification. We will promptly initiate manual
         processing and keep you informed via email regarding the status of your
         request. For any further inquiries, please don&apos;t hesitate to reach
-        out to us at team@newsletterhub.co.
+        out to us at&nbsp;
+        <Link href="mailto: team@newsletterhub.co">team@newsletterhub.co</Link>.
       </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">
         Link a Newsletter
