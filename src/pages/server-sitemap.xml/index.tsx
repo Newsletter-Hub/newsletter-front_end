@@ -7,7 +7,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   // Note if we have over 5000 newsletters, we should create an index server sitemap
   const newsletterListResponse = await getNewslettersList({
     page: 1,
-    pageSize: 25,
+    pageSize: 10,
     order: 'date',
     orderDirection: 'ASC',
   });
