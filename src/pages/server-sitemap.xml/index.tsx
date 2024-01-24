@@ -17,12 +17,11 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 
   const fields: ISitemapField[] = [];
 
-  newsletters.map(newsletter => {
+  newsletters.forEach(newsletter => {
     const page = {
       loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/${newsletter.id}`,
       lastmod: new Date().toISOString(),
     };
-
     fields.push(page);
   });
 
