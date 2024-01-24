@@ -12,15 +12,10 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const newsletterListData = newsletterListResponse.newslettersListData;
   const newsletters = newsletterListData?.newsletters || [];
 
-  const fields: ISitemapField[] = [];
-
-  newsletters.forEach(newsletter => {
-    const page = {
-      loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/${newsletter.id}`,
-      lastmod: new Date().toISOString(),
-    };
-    fields.push(page);
-  });
+  const fields: ISitemapField[] = newsletters.map(newsletter => ({
+    loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/${newsletter.id}`,
+    lastmod: new Date().toISOString(),
+  }));
 
   return getServerSideSitemapLegacy(ctx, fields);
 };
