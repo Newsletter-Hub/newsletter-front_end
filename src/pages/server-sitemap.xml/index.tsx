@@ -4,12 +4,12 @@ import { getNewslettersList } from '@/actions/newsletters';
 import { getInterests } from '@/actions/user/interests';
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  // Method to source urls from cms
-  // const urls = await fetch('https//example.com/api')
+  // Note if we have over 5000 newsletters, we should create an index server sitemap
   const newsletterListResponse = await getNewslettersList({
+    page: 1,
+    pageSize: 5000,
     order: 'date',
     orderDirection: 'ASC',
-    getAll: true,
   });
   const newsletterListData = newsletterListResponse.newslettersListData;
   const newsletters = newsletterListData?.newsletters || [];
