@@ -41,7 +41,6 @@ export interface GetNewsletterResponse {
 export interface GetNewsletterListProps {
   page?: number;
   pageSize?: number;
-  getAll?: boolean;
   order?: string;
   orderDirection?: string;
   categoriesIds?: number[] | [];
@@ -197,7 +196,6 @@ export const getNewsletter = async ({
 export const getNewslettersList = async ({
   page = 1,
   pageSize = 5,
-  getAll = false,
   order,
   orderDirection = 'ASC',
   categoriesIds,
@@ -210,10 +208,7 @@ export const getNewslettersList = async ({
   token,
 }: GetNewsletterListProps) => {
   try {
-    let url =
-      getAll === true
-        ? `newsletters?order=${order}&orderDirection=${orderDirection}`
-        : `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
+    let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
 
     if (pricingTypes && pricingTypes.length > 0) {
       pricingTypes.forEach((type, index) => {
