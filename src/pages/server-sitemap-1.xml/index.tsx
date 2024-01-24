@@ -5,7 +5,7 @@ import { getNewslettersList } from '@/actions/newsletters';
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const newsletterListResponse = await getNewslettersList({
     page: 1,
-    pageSize: 100,
+    pageSize: 50,
     order: 'date',
     orderDirection: 'ASC',
   });
