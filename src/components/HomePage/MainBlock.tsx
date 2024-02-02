@@ -20,7 +20,7 @@ const MainBlock = () => {
         {!user && (
           <Link href="/sign-up">
             <Button
-              label="Create your profile now"
+              label="Create Your Profile Now"
               rounded="xl"
               fontSize="md"
               customStyles="w-full md:w-fit"
