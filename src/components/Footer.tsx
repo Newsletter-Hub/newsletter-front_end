@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 const productLinks = [
+  { label: 'About Us', href: '/about' },
   { label: 'Contact Us', href: '/contact' },
   { label: 'Site Map', href: '/sitemap.xml' },
 ];

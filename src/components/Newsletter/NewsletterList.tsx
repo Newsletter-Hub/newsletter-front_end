@@ -183,7 +183,7 @@ const NewslettersList = ({
 
   if (interests && interests?.length && id !== 'all') {
     const category = interests.find(interest => interest.id === Number(id));
-    title = category ? `${category.interestName} Newsletters` : title;
+    title = category ? `Best ${category.interestName} Newsletters` : title;
   }
 
   const handleOpenModal = () => {
@@ -203,12 +203,13 @@ const NewslettersList = ({
   };
 
   const loadMoreNewsletters = async () => {
-    setPage(prevPage => prevPage + 1);
+    const nextPage = newslettersData.nextPage;
+    if (nextPage == null) return;
     setMoreNewslettersLoading(true);
 
     const newsletterResponse = await getNewslettersList({
-      page: 1,
-      pageSize: 6 * (page + 1),
+      page: nextPage,
+      pageSize: 6,
       order: sortTypes[choosedSortType].value,
       authorId: authorId || (userId ? +userId : undefined),
       orderDirection:
@@ -220,9 +221,16 @@ const NewslettersList = ({
       search,
       categoriesIds: filtersPayload.categories,
     }).finally(() => setMoreNewslettersLoading(false));
-
+    const prevNewsletters = newslettersData.newsletters;
     if (newsletterResponse.newslettersListData) {
-      setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
+      const newNewsletters = newsletterResponse.newslettersListData.newsletters;
+      setNewslettersData({
+        ...(newsletterResponse.newslettersListData as Newsletter),
+        newsletters: prevNewsletters
+          ? prevNewsletters.concat(newNewsletters)
+          : newNewsletters,
+      });
+      setPage(nextPage);
     }
   };
   const modalTitleStyles = clsx(

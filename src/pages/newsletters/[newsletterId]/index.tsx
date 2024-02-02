@@ -9,6 +9,18 @@ import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  EmailShareButton,
+  EmailIcon,
+  RedditIcon,
+  RedditShareButton,
+} from 'next-share';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -441,6 +453,41 @@ const NewsletterPage = ({
             handleClose={() => setIsReportModalOpen(false)}
           />
         </div>
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:pb-10 pb-5 border-b border-light-grey mb-10">
+          <span className="font-inter text-sm text-dark-grey">
+            Share This Newsletter
+          </span>
+          <FacebookShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+            quote={`Review ${newsletter.title} on Newsletter Hub`}
+          >
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
+          <LinkedinShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+            title={`Review ${newsletter.title} on Newsletter Hub`}
+          >
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+          <TwitterShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+            title={`Review ${newsletter.title} on @newsletter_hub`}
+          >
+            <TwitterIcon size={32} round />
+          </TwitterShareButton>
+          <RedditShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+            title={`Review ${newsletter.title} on Newsletter Hub`}
+          >
+            <RedditIcon size={32} round />
+          </RedditShareButton>
+          <EmailShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+            subject={`Review ${newsletter.title} on Newsletter Hub`}
+          >
+            <EmailIcon size={32} round />
+          </EmailShareButton>
+        </div>
         <div className="flex justify-between font-inter items-center md:mb-20 mb-10 flex-col md:flex-row">
           <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">
             <div className="flex gap-6 items-center">
@@ -499,7 +546,7 @@ const NewsletterPage = ({
                 className={`${newsletter.isInBookmarks && 'fill-dark-blue'}`}
               />
               <span className="font-inter text-sm text-dark-grey">
-                {newsletter.isInBookmarks ? 'Bookmarked' : 'Add to bookmarks'}
+                {newsletter.isInBookmarks ? 'Bookmarked' : 'Add To Bookmarks'}
               </span>
             </div>
             {/* logic on future */}
@@ -541,7 +588,7 @@ const NewsletterPage = ({
         ) : (
           <>
             <Button
-              label="Add your review"
+              label="Add Your Review"
               rounded="xl"
               height="sm"
               fontSize="md"
