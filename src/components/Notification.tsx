@@ -6,6 +6,7 @@ import { format, parseISO } from 'date-fns';
 import Avatar from './Avatar';
 import StarRating from './StarRating';
 import { useUser } from '@/contexts/UserContext';
+import VerifiedWithTooltip from './VerifiedWithTooltip';
 
 interface NotificationProps {
   notification: NotificationType;
@@ -23,12 +24,15 @@ const Notification = ({
       notification.notificationRecipientId && isProfile ? (
       'You'
     ) : (
-      <Link
-        href={`/users/${notification.notificationAuthorId}`}
-        className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis block"
-      >
-        {notification.notificationAuthor?.username}
-      </Link>
+      <div className="flex flex-row">
+        <Link
+          href={`/users/${notification.notificationAuthorId}`}
+          className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[150px] overflow-hidden whitespace-nowrap text-ellipsis block"
+        >
+          {notification.notificationAuthor?.username}
+        </Link>
+        {notification.notificationAuthor?.isVerified && <VerifiedWithTooltip />}
+      </div>
     );
   const { user } = useUser();
   return (
@@ -101,27 +105,38 @@ const Notification = ({
           notification.entity && (
             <div className="flex gap-4 md:items-center flex-col md:flex-row">
               <div className="text-dark-blue font-semibold text-base">
-                <Link
-                  href={`/users/${notification.notificationAuthorId}`}
-                  className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[200px] lg:max-w-[400px] xl:max-w-[700px] overflow-hidden whitespace-nowrap text-ellipsis block"
-                >
-                  {notification.notificationAuthor?.username === user?.username
-                    ? 'You'
-                    : notification.notificationAuthor?.username}
-                </Link>
+                <div className="flex flex-row">
+                  <Link
+                    href={`/users/${notification.notificationAuthorId}`}
+                    className="max-w-[200px] xs:max-w-[250px] sm:max-w-[300px] md:max-w-[200px] lg:max-w-[400px] xl:max-w-[700px] overflow-hidden whitespace-nowrap text-ellipsis block"
+                  >
+                    {notification.notificationAuthor?.username ===
+                    user?.username
+                      ? 'You'
+                      : notification.notificationAuthor?.username}
+                  </Link>
+                  {notification.notificationAuthor?.username !==
+                    user?.username &&
+                    user?.isVerified && <VerifiedWithTooltip />}
+                </div>
               </div>
-              <span className="text-base text-dark-grey">
+              <span className="text-base text-dark-grey flex flex-row">
                 {user && user.id === notification.notificationRecipientId
                   ? 'started following you'
                   : 'started following'}
                 {(!user ||
                   (user &&
                     user.id !== notification.notificationRecipientId)) && (
-                  <Link href={`/users/${notification.notificationRecipientId}`}>
-                    &nbsp;
-                    {'username' in notification.entity &&
-                      notification.entity.username}
-                  </Link>
+                  <div className="flex flex-row">
+                    <Link
+                      href={`/users/${notification.notificationRecipientId}`}
+                    >
+                      &nbsp;
+                      {'username' in notification.entity &&
+                        notification.entity.username}
+                    </Link>
+                    {user?.isVerified && <VerifiedWithTooltip />}
+                  </div>
                 )}
               </span>
             </div>

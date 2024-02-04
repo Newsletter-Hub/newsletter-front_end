@@ -85,4 +85,7 @@ const ResetPassword = () => {
 
 ResetPassword.layout = 'entry';
 
+ResetPassword.title = 'Reset Password | Newsletter Hub';
+ResetPassword.description =
+  'Reset your password so you can regain access to your Newsletter Hub account.';
 export default ResetPassword;

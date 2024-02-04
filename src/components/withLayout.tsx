@@ -24,6 +24,8 @@ interface EntryLayoutConfig {
 const withLayout = (
   WrappedComponent: React.ComponentType<WithLayoutProps>,
   layout: LayoutType = 'default',
+  title = 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today',
+  description = 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today',
   entryLayoutConfig?: EntryLayoutConfig
 ) => {
   const WithLayoutComponent = (props: WithLayoutProps) => {
@@ -31,11 +33,19 @@ const withLayout = (
     const measurementId = process.env.NEXT_PUBLIC_G_MEASUREMENT_ID;
     const LayoutComponent =
       layout === 'default'
-        ? (props: WithLayoutProps) => (
-            <Layout isFooter={isFooter}>{props.children}</Layout>
+        ? (layoutProps: WithLayoutProps) => (
+            <Layout isFooter={isFooter} title={title} description={description}>
+              {layoutProps.children}
+            </Layout>
           )
-        : (props: WithLayoutProps) => (
-            <EntryLayout {...entryLayoutConfig}>{props.children}</EntryLayout>
+        : (layoutProps: WithLayoutProps) => (
+            <EntryLayout
+              {...entryLayoutConfig}
+              title={title}
+              description={description}
+            >
+              {layoutProps.children}
+            </EntryLayout>
           );
 
     return (

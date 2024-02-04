@@ -15,15 +15,23 @@ import Button from './Button';
 export interface EntryLayoutProps {
   children?: React.ReactNode;
   type?: 'signup' | 'login' | 'newsletter' | 'newsletterEdit' | 'contact';
+  title: string;
+  description: string;
 }
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
-const EntryLayout = ({ children, type = 'login' }: EntryLayoutProps) => {
+const EntryLayout = ({
+  children,
+  type = 'login',
+  title,
+  description,
+}: EntryLayoutProps) => {
   return (
     <>
       <Head>
-        <title>Newsletter Hub</title>
+        <title>{title}</title>
+        <meta name="description" content={description} />{' '}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <GoogleOAuthProvider

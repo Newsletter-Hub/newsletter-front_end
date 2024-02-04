@@ -20,6 +20,8 @@ const queryClient = new QueryClient();
 type MyComponentType = NextPage & {
   layout?: LayoutType;
   type?: EntryType;
+  title?: string;
+  description?: string;
 };
 declare global {
   interface Window {
@@ -32,9 +34,15 @@ function MyApp({
   pageProps,
   user,
 }: AppProps & { Component: MyComponentType; user: User }) {
-  const LayoutComponent = withLayout(Component, Component.layout, {
-    type: Component.type as EntryType,
-  });
+  const LayoutComponent = withLayout(
+    Component,
+    Component.layout,
+    Component.title,
+    Component.description,
+    {
+      type: Component.type as EntryType,
+    }
+  );
   return (
     <>
       <Head>

@@ -19918,4 +19918,7 @@ const PrivacyPage = () => {
   );
 };
 
+PrivacyPage.title = 'Privacy | Newsletter Hub';
+PrivacyPage.description =
+  'Learn how we maintain your privacy on Newsletter Hub.';
 export default PrivacyPage;

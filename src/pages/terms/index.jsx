@@ -6655,4 +6655,6 @@ const TermsPage = () => {
   );
 };
 
+CookiesPage.title = 'Terms of Service | Newsletter Hub';
+CookiesPage.description = 'Read our terms of service on Newsletter Hub.';
 export default TermsPage;

@@ -66,5 +66,8 @@ const ForgotPassword = () => {
 };
 
 ForgotPassword.layout = 'entry';
+ForgotPassword.title = 'Forgot Password | Newsletter Hub';
+ForgotPassword.description =
+  'Reset your password so you can regain access to your Newsletter Hub account.';
 
 export default ForgotPassword;
