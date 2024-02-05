@@ -2376,4 +2376,6 @@ const CookiesPage = () => {
   );
 };
 
+CookiesPage.title = 'Cookies | Newsletter Hub';
+CookiesPage.description = 'Learn how we use cookies on Newsletter Hub.';
 export default CookiesPage;

@@ -14,6 +14,7 @@ import { GetAdvancedUserListType, GetSimpleUserListType } from '@/actions/user';
 import { follow, unfollow } from '@/actions/newsletters';
 import { FollowingPayload } from '@/types';
 import CheckIcon from '@/assets/icons/check';
+import VerifiedWithTooltip from '../VerifiedWithTooltip';
 import Avatar from '../Avatar';
 import Link from 'next/link';
 import PlusIcon from '@/assets/icons/plus';
@@ -238,12 +239,15 @@ const UsersList = ({
                       className="rounded-full h-[112px] w-[112px]"
                     />
                     <div className="flex flex-col gap-3">
-                      <Link
-                        href={`/users/${item.id}`}
-                        className="text-lightBlack text-xl font-medium max-w-[150px] xs:max-w-[180px] sm:max-w-[230px] md:max-w-none overflow-hidden block whitespace-nowrap text-ellipsis"
-                      >
-                        {item.username}
-                      </Link>
+                      <div className="flex flex-row items-center">
+                        <Link
+                          href={`/users/${item.id}`}
+                          className="text-lightBlack text-xl font-medium max-w-[150px] xs:max-w-[180px] sm:max-w-[230px] md:max-w-none overflow-hidden block whitespace-nowrap text-ellipsis"
+                        >
+                          {item.username}
+                        </Link>
+                        {item.isVerified && <VerifiedWithTooltip />}
+                      </div>
                       {item.description && (
                         <span className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
                           {item.description}

@@ -117,4 +117,7 @@ const About = () => {
   );
 };
 
+About.title = 'About | Newsletter Hub';
+About.description =
+  "Learn about Newsletter Hub's story and features, including newsletter ratings and reviews and so much more!";
 export default About;

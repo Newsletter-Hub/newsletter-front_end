@@ -227,5 +227,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     },
   };
 };
-
+Settings.title = 'Settings | Newsletter Hub';
+Settings.description = 'View and change your settings on Newsletter Hub.';
 export default Settings;

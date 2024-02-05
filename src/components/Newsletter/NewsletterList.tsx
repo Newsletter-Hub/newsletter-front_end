@@ -74,6 +74,8 @@ export interface NewslettersPageProps {
   authorId?: number;
   defaultSortType?: 'date' | 'rating';
   title?: string;
+  categoryName?: number | string | null;
+  categoryId?: string | null;
 }
 
 interface SortType {
@@ -129,17 +131,13 @@ const NewslettersList = ({
   authorId,
   defaultSortType = 'rating',
   title = 'Newsletters',
+  categoryId,
+  categoryName,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
   const { userId } = router.query;
-  let id: number | string | undefined;
-  if (router.query.id !== 'all' && interests) {
-    const category = interests.find(
-      interest => interest.interestName === router.query.id
-    );
-    id = category?.id;
-  }
+  title = categoryName ? `Best ${categoryName} Newsletters` : title;
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -158,7 +156,7 @@ const NewslettersList = ({
     rating: false,
   });
   const [filtersPayload, setFiltersPayload] = useState<Filters>({
-    categories: id === 'all' ? [] : id ? [+id] : [],
+    categories: categoryId === 'all' ? [] : categoryId ? [+categoryId] : [],
     pricingType: [],
     durationFrom: 1,
     durationTo: 60,
@@ -180,11 +178,6 @@ const NewslettersList = ({
   }, [filtersPayload]);
 
   const [search, setSearch] = useState((router.query.search as string) || '');
-
-  if (interests && interests?.length && id !== 'all') {
-    const category = interests.find(interest => interest.id === Number(id));
-    title = category ? `Best ${category.interestName} Newsletters` : title;
-  }
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
@@ -253,7 +246,7 @@ const NewslettersList = ({
       durationTo: 60,
       ratings: [],
     });
-    if (filtersChoosed || id !== 'all') {
+    if (filtersChoosed || categoryId !== 'all') {
       const newsletterResponse = await getNewslettersList({
         page: 1,
         pageSize: 6,

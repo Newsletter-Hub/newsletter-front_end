@@ -11,6 +11,7 @@ import StarRating from '../StarRating';
 import { addToBookmark } from '@/actions/newsletters/bookmarks';
 import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
 import { useUser } from '@/contexts/UserContext';
+import VerifiedWithTooltip from '../VerifiedWithTooltip';
 import StarIcon from '@/assets/icons/star';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -126,15 +127,18 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                     >
                       {review.newsletter.title}
                     </Link>
-                    <p className="text-base text-dark-grey font-inter mb-2 max-w-[150px] xs:max-w-[300px] overflow-hidden text-ellipsis">
-                      reviewed by&nbsp;
-                      <Link
-                        href={`/users/${review.reviewer.id}`}
-                        className="text-base text-dark-grey font-inter"
-                      >
-                        {review.reviewer.username}
-                      </Link>
-                    </p>
+                    <div className="flex flex-row">
+                      <p className="text-base text-dark-grey font-inter mb-2 max-w-[150px] xs:max-w-[300px] overflow-hidden text-ellipsis">
+                        reviewed by&nbsp;
+                        <Link
+                          href={`/users/${review.reviewer.id}`}
+                          className="text-base text-dark-grey font-inter"
+                        >
+                          {review.reviewer.username}
+                        </Link>
+                      </p>
+                      {review.reviewer?.isVerified && <VerifiedWithTooltip />}
+                    </div>
                     <StarRating
                       readonly
                       value={review.rating}

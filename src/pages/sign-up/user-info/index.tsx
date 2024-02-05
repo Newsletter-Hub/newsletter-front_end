@@ -92,4 +92,7 @@ export const getServerSideProps = async () => {
 SignUpInfo.layout = 'entry';
 SignUpInfo.type = 'signup';
 
+SignUpInfo.title = 'Sign Up | Newsletter Hub';
+SignUpInfo.description =
+  'Sign up today to Newsletter Hub and start curating and sharing your newsletter tastes.';
 export default SignUpInfo;
