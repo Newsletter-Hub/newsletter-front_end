@@ -63,4 +63,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
+BookmarksPage.title = 'Bookmarks | Newsletter Hub';
+BookmarksPage.description = 'View all newsletters that you have bookmarked';
 export default BookmarksPage;

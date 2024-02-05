@@ -68,4 +68,7 @@ export const getServerSideProps = async () => {
 AddNewsletter.layout = 'entry';
 AddNewsletter.type = 'newsletter';
 
+AddNewsletter.title = 'Add Newsletter | Newsletter Hub';
+AddNewsletter.description =
+  'Share a newsletter you love reading or one you own yourself with a community of enthusiasts.';
 export default AddNewsletter;

@@ -40,4 +40,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
+Users.title = 'Following | Newsletter Hub';
+Users.description =
+  'View all users that this user is following on Newsletter Hub.';
 export default Users;

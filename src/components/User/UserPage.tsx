@@ -14,6 +14,7 @@ import { FollowingPayload } from '@/types';
 import BookmarkIcon from '@/assets/icons/bookmark';
 import EditIcon from '@/assets/icons/edit';
 import PlusIcon from '@/assets/icons/plus';
+import VerifiedWithTooltip from '../VerifiedWithTooltip';
 
 import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
@@ -132,9 +133,12 @@ const UserPage = ({
             username={user.username}
             size="xl"
           />
-          <h1 className="text-dark-blue text-5xl font-medium">
-            {user.username}
-          </h1>
+          <div className="flex flex-row items-center">
+            <h1 className="text-dark-blue text-5xl font-medium">
+              {user.username}
+            </h1>
+            {user.isVerified && <VerifiedWithTooltip />}
+          </div>
           {user.profileType && isProfile && (
             <p className="mb-[4px] font-inter text-dark-grey text-lg">
               (

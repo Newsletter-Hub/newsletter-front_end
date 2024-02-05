@@ -75,5 +75,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
     },
   };
 };
-
+ProfilePage.title = 'Profile | Newsletter Hub';
+ProfilePage.description = 'Edit your profile on Newsletter Hub.';
 export default ProfilePage;

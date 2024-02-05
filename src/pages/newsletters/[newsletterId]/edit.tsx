@@ -288,4 +288,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 EditNewsletter.layout = 'entry';
 EditNewsletter.type = 'newsletterEdit';
 
+EditNewsletter.title = 'Edit Newsletter | Newsletter Hub';
+EditNewsletter.description =
+  'Update information for a newsletter to ensure members of the Newsletter Hub community are seeing accurate and up-to date information.';
 export default EditNewsletter;

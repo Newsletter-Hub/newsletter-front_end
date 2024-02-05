@@ -89,4 +89,8 @@ export const getServerSideProps = async () => {
     },
   };
 };
+
+Categories.title = 'Categories | Newsletter Hub';
+Categories.description =
+  'Search through the most popular newsletter categories to find your next favorite newsletter or creator.';
 export default Categories;

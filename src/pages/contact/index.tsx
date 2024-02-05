@@ -76,5 +76,8 @@ const Contact = () => {
 
 Contact.layout = 'entry';
 Contact.type = 'contact';
+Contact.title = 'Contact Us | Newsletter Hub';
+Contact.description =
+  'Reach out to the Newsletter Hub team for any support, business inquires, feedback, or anything else.';
 
 export default Contact;

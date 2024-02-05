@@ -52,4 +52,7 @@ SignUp.type = 'signup';
 
 export { getServerSideProps };
 
+SignUp.title = 'Sign Up | Newsletter Hub';
+SignUp.description =
+  'Sign up today to Newsletter Hub and start curating and sharing your newsletter tastes.';
 export default SignUp;

@@ -14,6 +14,9 @@ const Login = () => {
 };
 
 Login.layout = 'entry';
+Login.title = 'Login| Newsletter Hub';
+Login.description =
+  'Login to your Newsletter Hub account, and continue discovering the best email newsletters.';
 
 export { getServerSideProps };
 

@@ -9,18 +9,42 @@ import { User } from '@/types/user';
 import NewslettersList from '@/components/Newsletter/NewsletterList';
 import { NewslettersPageProps } from '@/components/Newsletter/NewsletterList';
 import parseCookies from 'next-cookies';
+import Head from 'next/head';
 
 const NewslettersPage = ({
   newslettersListData,
   interests,
+  categoryId,
+  categoryName,
 }: NewslettersPageProps) => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
   return (
-    <NewslettersList
-      newslettersListData={newslettersListData}
-      interests={interests}
-      getNewslettersList={getNewslettersList}
-      type="newsletter"
-    />
+    <>
+      <Head>
+        <title>
+          {categoryName && categoryName !== ''
+            ? `${categoryName} | Newsletter Hub`
+            : 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
+        </title>
+        <meta
+          name="description"
+          content={
+            categoryName && categoryName !== ''
+              ? `Discover, rate and follow the best ${categoryName} newsletters of ${currentYear}, with user-submitted ratings and reviews.`
+              : 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.'
+          }
+        />
+      </Head>
+      <NewslettersList
+        newslettersListData={newslettersListData}
+        interests={interests}
+        getNewslettersList={getNewslettersList}
+        type="newsletter"
+        categoryId={categoryId}
+        categoryName={categoryName}
+      />
+    </>
   );
 };
 
@@ -31,12 +55,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
     : undefined;
   const interestName = params && params.id;
   const interests = await getInterests();
-  let categoryId;
+  let categoryId: number | string | null = null;
+  let categoryName: string | null = null;
   if (interestName !== 'all' && interests instanceof Array) {
     const category = interests.find(
       interest => interest.interestName === interestName
     );
     categoryId = category.id;
+    categoryName = category.interestName;
   }
   const search = (context.query && (context.query.search as string)) || '';
   const categoriesIds =
@@ -64,6 +90,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       newslettersListData: newsletterList.newslettersListData || null,
       interests: interests,
+      categoryName: categoryName,
+      categoryId: categoryId,
     },
   };
 };
