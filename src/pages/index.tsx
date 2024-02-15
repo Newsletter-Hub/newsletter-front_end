@@ -4,7 +4,6 @@ import { Review } from '@/types/newsletters';
 
 import MainBlock from '@/components/HomePage/MainBlock';
 import ReviewsBlock from '@/components/HomePage/ReviewsBlock';
-import GoogleAds from '@/components/GoogleAdsBlock';
 
 interface HomeProps {
   reviewData: { reviews: Review[]; nextPage: number; total: number };
@@ -16,7 +15,6 @@ const Home = ({ reviewData }: HomeProps) => {
       <div className="lg:pt-[88px] pt-16 max-w-[1280px] mx-auto px-4">
         <MainBlock />
         <ReviewsBlock reviewData={reviewData} />
-        <GoogleAds />
       </div>
     </main>
   );

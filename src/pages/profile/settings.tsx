@@ -3,7 +3,7 @@ import { getInterests } from '@/actions/user/interests';
 import { useUser } from '@/contexts/UserContext';
 import { useEffect, useRef, useState } from 'react';
 
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
 import format from 'date-fns/format';
@@ -218,7 +218,7 @@ const Settings = ({ interests }: SettingsProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const interests = await getInterests();
   return {
     props: {

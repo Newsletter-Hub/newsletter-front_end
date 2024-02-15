@@ -47,12 +47,13 @@ const Header = () => {
   const [showSearchResult, setShowSearchResults] = useState(false);
   const searchResultRef = useRef(null);
   const searchPayload: GlobalSearchPayload = { search: searchTerm };
+  const executeQuery = searchTerm !== '';
 
   const { data } = useQuery<GlobalSearchResponse | undefined, Error>(
     ['globalSearch', searchPayload],
     () => search(searchPayload),
     {
-      enabled: true,
+      enabled: executeQuery,
     }
   );
 

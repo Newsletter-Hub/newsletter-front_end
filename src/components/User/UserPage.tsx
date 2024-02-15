@@ -25,7 +25,6 @@ import { getNotifications } from '@/actions/user/notifications';
 import { useRouter } from 'next/router';
 
 interface UserPageProps {
-  newslettersListData: NewslettersListData;
   followingNewsletterListData?: NewslettersListData;
   user: User;
   isProfile?: boolean;
@@ -39,7 +38,6 @@ const UserPage = ({
 }: UserPageProps) => {
   const [user, setUser] = useState(userFromProps);
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
-  const [page, setPage] = useState(1);
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
   const notificationRecipientId = user && user.id ? +user.id : undefined;
@@ -48,17 +46,24 @@ const UserPage = ({
   const isProfile = isProfileFromProps || user.id === currentUser?.id;
   const loadMore = async () => {
     setNotificationLoading(true);
-    setPage(prevPage => prevPage + 1);
+    const nextPage = notificationsData.nextPage;
+    if (nextPage == null) return;
 
     const response = await getNotifications({
-      page: 1,
-      pageSize: 5 * (page + 1),
+      page: nextPage,
+      pageSize: 6,
       isOwnAccount: isProfile,
       notificationRecipientId,
     }).finally(() => setNotificationLoading(false));
-
+    const prevNotifications = notificationsInfo.notifications;
     if (response.notificationsData) {
-      setNotificationsInfo(response.notificationsData);
+      const newNotifications = response.notificationsData.notifications;
+      setNotificationsInfo({
+        ...response.notificationsData,
+        notifications: prevNotifications
+          ? prevNotifications.concat(newNotifications)
+          : newNotifications,
+      });
     }
   };
 
@@ -97,29 +102,6 @@ const UserPage = ({
     }
   };
 
-  // const tabs = [
-  //   {
-  //     title: 'Your Newsletters',
-  //     value: 'userNewsletters',
-  //     content: (
-  //       <UserNewsletters
-  //         newslettersListData={newslettersListData}
-  //         isProfile={isProfile}
-  //         user={user}
-  //       />
-  //     ),
-  //   },
-  //   {
-  //     title: 'Newsletters Following',
-  //     value: 'followngNewsletters',
-  //     content: (
-  //       <FollowingNewsletters
-  //         newslettersListData={followingNewsletterListData}
-  //         isProfile={isProfile}
-  //       />
-  //     ),
-  //   },
-  // ];
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
       {user && (
@@ -237,17 +219,6 @@ const UserPage = ({
         </>
       )}
       <div className="max-w-[1280px] px-5 w-full">
-        {/* {isProfile ? (
-          <div className="mb-[88px]">
-            <Tabs tabs={tabs} />
-          </div>
-        ) : (
-          <UserNewsletters
-            newslettersListData={newslettersListData}
-            isProfile={isProfile}
-            user={user}
-          />
-        )} */}
         {Boolean(notificationsInfo.total) && (
           <>
             <h3 className="font-medium text-5xl text-dark-blue mb-10">

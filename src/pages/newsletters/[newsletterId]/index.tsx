@@ -68,7 +68,6 @@ import ReviewModal from '@/components/Modals/ReviewModal';
 import EditReviewModal from '@/components/Modals/EditReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
-import GoogleAds from '@/components/GoogleAdsBlock';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -330,18 +329,27 @@ const NewsletterPage = ({
   };
 
   const loadMoreReviews = async () => {
-    setPage(prevPage => prevPage + 1);
+    const nextPage = reviewsData?.nextPage;
+    if (nextPage == null) return;
 
     const reviewsResponse: GetReviewResponse = await getReviews({
       newsletterId: parseInt(router.query.newsletterId as string),
-      page: 1,
-      pageSize: 5 * (page + 1),
+      page: nextPage,
+      pageSize: 5,
     });
 
+    const prevReviews = reviewsData?.reviews;
     if (reviewsResponse.error) {
       console.error(reviewsResponse.error);
     } else {
-      setReviewsData(reviewsResponse.reviews);
+      const newReviews = reviewsResponse.reviews?.reviews;
+      if (newReviews) {
+        setReviewsData({
+          ...reviewsResponse.reviews,
+          reviews: prevReviews ? prevReviews.concat(newReviews) : newReviews,
+        });
+      }
+      setPage(nextPage);
     }
   };
 
@@ -577,7 +585,6 @@ const NewsletterPage = ({
               </div> */}
             </div>
           </div>
-          <GoogleAds />
           <h2 className="text-lightBlack text-5xl font-medium mb-8">
             {newsletter?.title ? `Reviews for ${newsletter?.title}` : 'Reviews'}
           </h2>

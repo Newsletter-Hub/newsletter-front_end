@@ -2,6 +2,7 @@ import { getCategories } from '@/actions/user/interests';
 import SkeletonImage from '@/components/SkeletonImage';
 
 import Link from 'next/link';
+import { GetStaticProps } from 'next';
 
 interface Category {
   id: number;
@@ -76,7 +77,7 @@ const Categories = ({ categories }: CategoriesProps) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const categories = await getCategories();
   if (!categories) {
     return {
