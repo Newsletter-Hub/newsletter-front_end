@@ -1,5 +1,6 @@
 import { getInterests } from '@/actions/user/interests';
 import React, { useState } from 'react';
+import { GetStaticProps } from 'next';
 
 import { Interest } from '@/types/interests';
 import { Payload } from '@/types/signup';
@@ -75,7 +76,7 @@ const SignUpInfo = ({ interests }: SignUpInfoProps) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const interests = await getInterests();
   if (!interests) {
     return {

@@ -197,7 +197,7 @@ export const getNewslettersList = async ({
   page = 1,
   pageSize = 5,
   order,
-  orderDirection = 'ASC',
+  orderDirection = 'DESC',
   categoriesIds,
   pricingTypes,
   durationFrom,

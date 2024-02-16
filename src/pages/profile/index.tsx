@@ -14,14 +14,12 @@ import PrivateRoute from '@/components/PrivateRoute';
 import { getUserMe } from '@/actions/user';
 
 interface ProfilePageProps {
-  newslettersListData: NewslettersListData;
   followingNewsletterListData: NewslettersListData;
   notificationsData: NotificationData;
   userMe: User;
 }
 
 const ProfilePage = ({
-  newslettersListData,
   followingNewsletterListData,
   notificationsData,
   userMe,
@@ -31,7 +29,6 @@ const ProfilePage = ({
       <UserPage
         notificationsData={notificationsData}
         user={userMe}
-        newslettersListData={newslettersListData}
         followingNewsletterListData={followingNewsletterListData}
       />
     </PrivateRoute>

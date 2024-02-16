@@ -33,7 +33,6 @@ import Modal from '@/components/Modal';
 import Popover from '@/components/Popover';
 import Slider from '@/components/Slider';
 import StarRating from '@/components/StarRating';
-import GoogleAds from '@/components/GoogleAdsBlock';
 
 import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
@@ -81,6 +80,7 @@ export interface NewslettersPageProps {
 interface SortType {
   label: string;
   value: string;
+  pageTitle: string;
 }
 
 interface Filters {
@@ -102,18 +102,22 @@ const sortTypes: SortType[] = [
   {
     label: 'Date added',
     value: 'date',
+    pageTitle: 'New Newsletters',
   },
   {
     label: 'Number of followers',
     value: 'followers',
+    pageTitle: 'Most Followed Newsletters',
   },
   {
     label: 'Number of bookmarks',
     value: 'bookmarks',
+    pageTitle: 'Most Bookmarked Newsletters',
   },
   {
     label: 'Rating',
     value: 'rating',
+    pageTitle: 'Top Rated Newsletters',
   },
 ];
 
@@ -130,14 +134,16 @@ const NewslettersList = ({
   isNewsletterFollowed = false,
   authorId,
   defaultSortType = 'rating',
-  title = 'Newsletters',
+  title = 'Top Rated Newsletters',
   categoryId,
   categoryName,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
   const { userId } = router.query;
-  title = categoryName ? `Best ${categoryName} Newsletters` : title;
+  const [pageTitle, setPageTitle] = useState(
+    categoryName ? `Best ${categoryName} Newsletters` : title
+  );
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
   );
@@ -205,11 +211,7 @@ const NewslettersList = ({
       pageSize: 6,
       order: sortTypes[choosedSortType].value,
       authorId: authorId || (userId ? +userId : undefined),
-      orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ||
-        sortTypes[choosedSortType].value === 'date'
-          ? 'DESC'
-          : 'ASC',
+      orderDirection: 'DESC',
       entity: 'Newsletter',
       search,
       categoriesIds: filtersPayload.categories,
@@ -218,7 +220,7 @@ const NewslettersList = ({
     if (newsletterResponse.newslettersListData) {
       const newNewsletters = newsletterResponse.newslettersListData.newsletters;
       setNewslettersData({
-        ...(newsletterResponse.newslettersListData as Newsletter),
+        ...newsletterResponse.newslettersListData,
         newsletters: prevNewsletters
           ? prevNewsletters.concat(newNewsletters)
           : newNewsletters,
@@ -251,11 +253,7 @@ const NewslettersList = ({
         page: 1,
         pageSize: 6,
         order: sortTypes[choosedSortType].value,
-        orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ||
-          sortTypes[choosedSortType].value === 'date'
-            ? 'DESC'
-            : 'ASC',
+        orderDirection: 'DESC',
         search: search,
       });
 
@@ -282,11 +280,7 @@ const NewslettersList = ({
       categoriesIds: filtersPayload.categories,
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
-      orderDirection:
-        sortTypes[choosedSortType].value === 'rating' ||
-        sortTypes[choosedSortType].value === 'date'
-          ? 'DESC'
-          : 'ASC',
+      orderDirection: 'DESC',
     }).finally(() => setSearchLoading(false));
 
     if (newsletterResponse.newslettersListData) {
@@ -309,11 +303,7 @@ const NewslettersList = ({
         categoriesIds: filtersPayload.categories,
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
-        orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ||
-          sortTypes[choosedSortType].value === 'date'
-            ? 'DESC'
-            : 'ASC',
+        orderDirection: 'DESC',
       }).finally(() => setFiltersLoading(false));
       if (newsletterResponse.newslettersListData) {
         handleCloseModal();
@@ -342,14 +332,12 @@ const NewslettersList = ({
 
   const handleSort = async (value: number) => {
     setChoosedSortType(value);
+    setPageTitle(sortTypes[value].pageTitle);
     const newsletterResponse = await getNewslettersList({
       page: 1,
       pageSize: 6 * page,
       order: sortTypes[value].value,
-      orderDirection:
-        sortTypes[value].value === 'rating' || sortTypes[value].value === 'date'
-          ? 'DESC'
-          : 'ASC',
+      orderDirection: 'DESC',
       search,
       pricingTypes: filtersPayload.pricingType.map(item => item.toLowerCase()),
       ratings: filtersPayload.ratings,
@@ -368,11 +356,7 @@ const NewslettersList = ({
         page: 1,
         pageSize: 6 * page,
         order: sortTypes[choosedSortType].value,
-        orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ||
-          sortTypes[choosedSortType].value === 'date'
-            ? 'DESC'
-            : 'ASC',
+        orderDirection: 'DESC',
         search,
         pricingTypes: filtersPayload.pricingType.map(item =>
           item.toLowerCase()
@@ -395,11 +379,7 @@ const NewslettersList = ({
         page: 1,
         pageSize: 6 * page,
         order: sortTypes[choosedSortType].value,
-        orderDirection:
-          sortTypes[choosedSortType].value === 'rating' ||
-          sortTypes[choosedSortType].value === 'date'
-            ? 'DESC'
-            : 'ASC',
+        orderDirection: 'DESC',
         search,
         pricingTypes: filtersPayload.pricingType.map(item =>
           item.toLowerCase()
@@ -468,11 +448,7 @@ const NewslettersList = ({
             page: 1,
             pageSize: 6 * page,
             order: sortTypes[choosedSortType].value,
-            orderDirection:
-              sortTypes[choosedSortType].value === 'rating' ||
-              sortTypes[choosedSortType].value === 'date'
-                ? 'DESC'
-                : 'ASC',
+            orderDirection: 'DESC',
             search,
             pricingTypes: filtersPayload.pricingType.map(item =>
               item.toLowerCase()
@@ -494,11 +470,7 @@ const NewslettersList = ({
             page: 1,
             pageSize: 6 * page,
             order: sortTypes[choosedSortType].value,
-            orderDirection:
-              sortTypes[choosedSortType].value === 'rating' ||
-              sortTypes[choosedSortType].value === 'date'
-                ? 'DESC'
-                : 'ASC',
+            orderDirection: 'DESC',
             search,
             pricingTypes: filtersPayload.pricingType.map(item =>
               item.toLowerCase()
@@ -526,7 +498,7 @@ const NewslettersList = ({
         }`}
       >
         <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
-          {title}
+          {pageTitle}
         </h1>
         {isSeparated && (
           <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[1000px] flex-col md:flex-row gap-4 md:gap-0">
@@ -1009,7 +981,6 @@ const NewslettersList = ({
                 );
               })
             )}
-            <GoogleAds />
             {newslettersData && Boolean(newslettersData.nextPage) && (
               <Button
                 label="See more"
