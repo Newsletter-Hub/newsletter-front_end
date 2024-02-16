@@ -19,7 +19,6 @@ import Avatar from '../Avatar';
 import Link from 'next/link';
 import PlusIcon from '@/assets/icons/plus';
 import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
-import GoogleAds from '@/components/GoogleAdsBlock';
 
 const sortTypes: SortType[] = [
   {
@@ -68,10 +67,9 @@ const UsersList = ({
     setSearch(value);
     const usersListResponse = await getUsersList({
       page: 1,
-      pageSize: 6 * page,
+      pageSize: 9 * page,
       order: sortTypes[choosedSortType].value,
-      orderDirection:
-        sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
+      orderDirection: 'DESC',
       search: value,
     }).finally(() => setSearchLoading(false));
     if (usersListResponse.userList) {
@@ -83,9 +81,9 @@ const UsersList = ({
     setChoosedSortType(value);
     const usersListResponse = await getUsersList({
       page: 1,
-      pageSize: 6 * page,
+      pageSize: 9 * page,
       order: sortTypes[value].value,
-      orderDirection: sortTypes[value].value === 'dataJoined' ? 'DESC' : 'ASC',
+      orderDirection: 'DESC',
       search,
     });
     if (usersListResponse.userList) {
@@ -94,21 +92,26 @@ const UsersList = ({
   };
   const loadMoreUsers = async () => {
     setLoadMoreLoading(true);
-    setPage(prevPage => prevPage + 1);
+    const nextPage = usersData.nextPage;
+    if (nextPage == null) return;
 
     const usersListResponse = await getUsersList({
-      page: 1,
-      pageSize: 9 * (page + 1),
+      page: nextPage,
+      pageSize: 9,
       order: sortTypes[choosedSortType].value,
-      orderDirection:
-        sortTypes[choosedSortType].value === 'dataJoined' ? 'DESC' : 'ASC',
+      orderDirection: 'DESC',
       userId: isUserId
         ? Number(router.query.userId) || Number(user?.id)
         : undefined,
     }).finally(() => setLoadMoreLoading(false));
-
+    const prevUsers = usersData.users;
     if (usersListResponse.userList) {
-      setUsersData(usersListResponse.userList);
+      const newUsers = usersListResponse.userList.users;
+      setUsersData({
+        ...usersListResponse.userList,
+        users: prevUsers ? prevUsers.concat(newUsers) : newUsers,
+      });
+      setPage(nextPage);
     }
   };
   const handleFollow = async ({ entityId, followed }: FollowingPayload) => {
@@ -125,10 +128,7 @@ const UsersList = ({
             page: 1,
             pageSize: 9 * page,
             order: sortTypes[choosedSortType].value,
-            orderDirection:
-              sortTypes[choosedSortType].value === 'dataJoined'
-                ? 'DESC'
-                : 'ASC',
+            orderDirection: 'DESC',
             userId: isUserId
               ? Number(router.query.userId) || Number(user?.id)
               : undefined,
@@ -146,10 +146,7 @@ const UsersList = ({
             page: 1,
             pageSize: 9 * page,
             order: sortTypes[choosedSortType].value,
-            orderDirection:
-              sortTypes[choosedSortType].value === 'dataJoined'
-                ? 'DESC'
-                : 'ASC',
+            orderDirection: 'DESC',
             userId: isUserId
               ? Number(router.query.userId) || Number(user?.id)
               : undefined,
@@ -287,7 +284,6 @@ const UsersList = ({
                 </div>
               ))}
             </div>
-            <GoogleAds />
             {usersData.nextPage && (
               <Button
                 label="See more"

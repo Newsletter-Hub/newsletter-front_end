@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { GetStaticProps } from 'next';
 
 import { Interest } from '@/types/interests';
 import { AddNewsletterPayload } from '@/types/newsletters';
@@ -51,7 +52,7 @@ const AddNewsletter = ({ interests }: AddNewsletterProps) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const interests = await getInterests();
   if (!interests) {
     return {

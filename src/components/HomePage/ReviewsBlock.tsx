@@ -41,16 +41,22 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
   const { user } = useUser();
   const loadMore = async () => {
     setLoading(true);
-    setPage(prevPage => prevPage + 1);
+    const nextPage = reviewData.nextPage;
+    if (nextPage == null) return;
 
     const response = await getReviews({
-      page: 1,
-      pageSize: 5 * (page + 1),
+      page: nextPage,
+      pageSize: 5,
     });
-
+    const prevReviews = reviewsInfo.reviews;
     if (response.reviews) {
-      setReviewsInfo(response.reviews);
+      const newReviews = response.reviews.reviews;
+      setReviewsInfo({
+        ...response.reviews,
+        reviews: prevReviews ? prevReviews.concat(newReviews) : newReviews,
+      });
       setLoading(false);
+      setPage(nextPage);
     }
   };
   const handleAddBookmark = async (id: number) => {
@@ -77,7 +83,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
       if (!response.error) {
         const response = await getReviews({
           page: 1,
-          pageSize: 5 * (page + 1),
+          pageSize: 5 * page,
         });
 
         if (response.reviews) {
