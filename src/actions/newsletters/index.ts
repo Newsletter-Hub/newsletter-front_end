@@ -29,7 +29,7 @@ interface Newsletter {
   interests?: number[];
   newsletterAuthor?: string;
   averageDuration: string;
-  pricingType: 'free' | 'paid';
+  pricingType: 'free' | 'paid' | 'free_and_paid';
   router?: NextRouter;
 }
 

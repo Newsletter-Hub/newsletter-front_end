@@ -42,7 +42,9 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
   const [showAutoComplete, setShowAutoComplete] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [suggests, setSuggests] = useState<Interest[]>([]);
-  const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
+  const [pricingType, setPricingType] = useState<
+    'free' | 'paid' | 'free_and_paid'
+  >('free');
   const [averageDuration, setAverageDuration] = useState<number>(
     newsletterData.averageDuration || 1
   );
@@ -223,9 +225,10 @@ const EditNewsletter = ({ newsletterData, interests }: EditNewsletterProps) => {
                 options={[
                   { label: 'Free', value: 'free', id: '1' },
                   { label: 'Paid', value: 'paid', id: '2' },
+                  { label: 'Free & Paid', value: 'free_and_paid', id: '3' },
                 ]}
                 setValue={(value: string) =>
-                  setPricingType(value as 'free' | 'paid')
+                  setPricingType(value as 'free' | 'paid' | 'free_and_paid')
                 }
               />
             </div>

@@ -5,7 +5,6 @@ import Head from 'next/head';
 
 import Footer from './Footer';
 import Header from './Header';
-import AdblockModal from './Modals/AdblockModal';
 
 interface LayoutProps {
   children: ReactNode;
@@ -31,7 +30,6 @@ const Layout = ({
       </Head>
       <div className={alegreya.className}>
         <Header />
-        <AdblockModal />
         <div className={`overflow-x-hidden ${isFooter && 'pb-5'}`}>
           <div className="mx-auto">{children}</div>
           {isFooter && <Footer />}

@@ -543,12 +543,21 @@ const NewsletterPage = ({
                 {newsletter?.pricing && (
                   <>
                     <span className="text-sm text-dark-grey font-semibold">
-                      {newsletter.pricing.charAt(0).toUpperCase() +
-                        newsletter.pricing.slice(1)}
+                      {newsletter.pricing === 'free_and_paid'
+                        ? 'Free & Paid'
+                        : newsletter.pricing.charAt(0).toUpperCase() +
+                          newsletter.pricing.slice(1)}
                     </span>
                     <div className="w-1.5 h-1.5 bg-light-grey rounded-full hidden md:block"></div>
                   </>
                 )}
+                <p className="text-sm text-dark-grey">
+                  <span className="font-semibold">
+                    {newsletter.amountFollowers}
+                  </span>
+                  &nbsp;Follower
+                  {newsletter.amountFollowers !== 1 && 's'}
+                </p>
               </div>
               <div className="flex gap-2 items-center mb-3 md:mb-0">
                 <StarRating readonly value={newsletter?.averageRating} />
