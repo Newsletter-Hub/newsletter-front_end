@@ -80,7 +80,7 @@ export interface NewslettersPageProps {
 interface SortType {
   label: string;
   value: string;
-  pageTitle: string;
+  pageTitlePrefix: string;
 }
 
 interface Filters {
@@ -102,17 +102,17 @@ const sortTypes: SortType[] = [
   {
     label: 'Date added',
     value: 'date',
-    pageTitle: 'New Newsletters',
+    pageTitlePrefix: 'New',
   },
   {
     label: 'Number of followers',
     value: 'followers',
-    pageTitle: 'Most Followed Newsletters',
+    pageTitlePrefix: 'Most Followed',
   },
   {
     label: 'Rating',
     value: 'rating',
-    pageTitle: 'Top Rated Newsletters',
+    pageTitlePrefix: 'Top Rated',
   },
 ];
 
@@ -129,7 +129,7 @@ const NewslettersList = ({
   isNewsletterFollowed = false,
   authorId,
   defaultSortType = 'rating',
-  title = 'Top Rated Newsletters',
+  title,
   categoryId,
   categoryName,
 }: NewslettersPageProps) => {
@@ -137,7 +137,11 @@ const NewslettersList = ({
   const router = useRouter();
   const { userId } = router.query;
   const [pageTitle, setPageTitle] = useState(
-    categoryName ? `Best ${categoryName} Newsletters` : title
+    categoryName
+      ? `${sortTypes[2].pageTitlePrefix} ${categoryName} Newsletters`
+      : title
+      ? title
+      : `${sortTypes[2].pageTitlePrefix} Newsletters`
   );
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
@@ -327,7 +331,11 @@ const NewslettersList = ({
 
   const handleSort = async (value: number) => {
     setChoosedSortType(value);
-    setPageTitle(sortTypes[value].pageTitle);
+    setPageTitle(
+      categoryName
+        ? `${sortTypes[value].pageTitlePrefix} ${categoryName} Newsletters`
+        : `${sortTypes[value].pageTitlePrefix} Newsletters`
+    );
     const newsletterResponse = await getNewslettersList({
       page: 1,
       pageSize: 6 * page,
