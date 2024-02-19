@@ -110,11 +110,6 @@ const sortTypes: SortType[] = [
     pageTitle: 'Most Followed Newsletters',
   },
   {
-    label: 'Number of bookmarks',
-    value: 'bookmarks',
-    pageTitle: 'Most Bookmarked Newsletters',
-  },
-  {
     label: 'Rating',
     value: 'rating',
     pageTitle: 'Top Rated Newsletters',
@@ -597,7 +592,7 @@ const NewslettersList = ({
                       >
                         <div className="pt-4 pl-9 flex flex-col gap-2">
                           <Checkbox
-                            id="Free"
+                            id="free"
                             label="Free"
                             setChecked={value => {
                               if (value) {
@@ -605,7 +600,7 @@ const NewslettersList = ({
                                   ...filtersPayload,
                                   pricingType: [
                                     ...filtersPayload.pricingType,
-                                    'Free',
+                                    'free',
                                   ],
                                 });
                               } else {
@@ -613,17 +608,17 @@ const NewslettersList = ({
                                   ...filtersPayload,
                                   pricingType:
                                     filtersPayload.pricingType.filter(
-                                      item => item !== 'Free'
+                                      item => item !== 'free'
                                     ),
                                 });
                               }
                             }}
                             checked={filtersPayload.pricingType.includes(
-                              'Free'
+                              'free'
                             )}
                           />
                           <Checkbox
-                            id="Paid"
+                            id="paid"
                             label="Paid"
                             setChecked={value => {
                               if (value) {
@@ -631,7 +626,7 @@ const NewslettersList = ({
                                   ...filtersPayload,
                                   pricingType: [
                                     ...filtersPayload.pricingType,
-                                    'Paid',
+                                    'paid',
                                   ],
                                 });
                               } else {
@@ -639,13 +634,39 @@ const NewslettersList = ({
                                   ...filtersPayload,
                                   pricingType:
                                     filtersPayload.pricingType.filter(
-                                      item => item !== 'Paid'
+                                      item => item !== 'paid'
                                     ),
                                 });
                               }
                             }}
                             checked={filtersPayload.pricingType.includes(
-                              'Paid'
+                              'paid'
+                            )}
+                          />
+                          <Checkbox
+                            id="free_and_paid"
+                            label="Free & Paid"
+                            setChecked={value => {
+                              if (value) {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType: [
+                                    ...filtersPayload.pricingType,
+                                    'free_and_paid',
+                                  ],
+                                });
+                              } else {
+                                setFiltersPayload({
+                                  ...filtersPayload,
+                                  pricingType:
+                                    filtersPayload.pricingType.filter(
+                                      item => item !== 'free_and_paid'
+                                    ),
+                                });
+                              }
+                            }}
+                            checked={filtersPayload.pricingType.includes(
+                              'free_and_paid'
                             )}
                           />
                         </div>
@@ -847,15 +868,19 @@ const NewslettersList = ({
                             </>
                           )}
                           <span className="text-sm text-dark-grey font-semibold">
-                            {newsletter.pricing.charAt(0).toUpperCase() +
-                              newsletter.pricing.slice(1)}
+                            {newsletter.pricing === 'free_and_paid'
+                              ? 'Free & Paid'
+                              : newsletter.pricing.charAt(0).toUpperCase() +
+                                newsletter.pricing.slice(1)}
                           </span>
-                          <span className="text-sm text-grey">
-                            {format(
-                              parseISO(newsletter.createdAt),
-                              'dd.MM.yyyy'
-                            )}
-                          </span>
+                          <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                          <p className="text-sm text-dark-grey">
+                            <span className="font-semibold">
+                              {newsletter.amountFollowers}
+                            </span>
+                            &nbsp;Follower
+                            {newsletter.amountFollowers !== 1 && 's'}
+                          </p>
                         </div>
                       </div>
                       <Link

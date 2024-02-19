@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-before-interactive-script-outside-document */
 import { getUserMe } from '@/actions/user';
 import { UserProvider } from '@/contexts/UserContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -7,13 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { NextPage } from 'next';
 import parseCookies from 'next-cookies';
 import type { AppContext, AppProps } from 'next/app';
+import Script from 'next/script';
 
 import { User } from '@/types/user';
 
 import withLayout, { EntryType, LayoutType } from '@/components/withLayout';
 
 import '@/styles/globals.css';
-import Head from 'next/head';
+
 
 const queryClient = new QueryClient();
 
@@ -45,34 +47,11 @@ function MyApp({
   );
   return (
     <>
-      <Head>
-        <script
-          async
-          type="text/javascript"
-          src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
-        ></script>
-        <script>
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('consent', 'default', {
-              'ad_storage': 'granted',
-              'analytics_storage': 'granted',
-              'functionality_storage': 'denied',
-              'personalization_storage': 'denied',
-              'security_storage': 'denied',
-              'social_storage': 'denied',
-              'ad_user_data': 'granted',
-              'ad_personalization': 'granted',
-            });
-        `}
-        </script>
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_DATA_AD_CLIENT}`}
-          crossOrigin="anonymous"
-        ></script>
-      </Head>
+      <Script
+        src="https://app.termly.io/resource-blocker/b185aa98-dd3c-4278-ae9f-97c364ddebf5?autoBlock=on"
+        strategy="beforeInteractive"
+        async
+      />
       <QueryClientProvider client={queryClient}>
         <UserProvider defaultUser={user}>
           <LayoutComponent {...pageProps} />
