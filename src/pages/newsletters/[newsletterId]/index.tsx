@@ -423,7 +423,11 @@ const NewsletterPage = ({
           )}
           <div className="flex flex-col sm:flex-row gap-2 sm:pb-10 pb-5 border-b border-light-grey mb-10">
             {newsletter?.link && (
-              <Link href={newsletter.link} legacyBehavior passHref>
+              <Link
+                href={`${newsletter.link}?ref=newsletter-hub`}
+                legacyBehavior
+                passHref
+              >
                 <a target="_blank" rel="noopener noreferrer">
                   <Button
                     label="Read Newsletter"

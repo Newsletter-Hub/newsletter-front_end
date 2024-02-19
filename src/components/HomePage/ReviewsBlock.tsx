@@ -189,7 +189,11 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                     </div>
                   </div>
                 )}
-                <Link href={review.newsletter.link} legacyBehavior passHref>
+                <Link
+                  href={`${review.newsletter.link}?ref=newsletter-hub`}
+                  legacyBehavior
+                  passHref
+                >
                   <a target="_blank" rel="noopener noreferrer">
                     <Button
                       label="Read Newsletter"

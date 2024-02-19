@@ -967,7 +967,11 @@ const NewslettersList = ({
                           </div>
                         </div>
                         <div className="flex gap-2 justify-between w-full md:w-auto md:justify-normal">
-                          <Link href={newsletter.link} legacyBehavior passHref>
+                          <Link
+                            href={`${newsletter.link}?ref=newsletter-hub`}
+                            legacyBehavior
+                            passHref
+                          >
                             <a target="_blank" rel="noopener noreferrer">
                               <Button
                                 label="Read Newsletter"
