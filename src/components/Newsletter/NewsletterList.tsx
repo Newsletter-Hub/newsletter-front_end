@@ -137,10 +137,10 @@ const NewslettersList = ({
   const router = useRouter();
   const { userId } = router.query;
   const [pageTitle, setPageTitle] = useState(
-    categoryName
-      ? `${sortTypes[2].pageTitlePrefix} ${categoryName} Newsletters`
-      : title
+    title
       ? title
+      : categoryName
+      ? `${sortTypes[2].pageTitlePrefix} ${categoryName} Newsletters`
       : `${sortTypes[2].pageTitlePrefix} Newsletters`
   );
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
