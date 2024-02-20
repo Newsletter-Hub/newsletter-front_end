@@ -20,8 +20,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import clsx from 'clsx';
 
-import { format, parseISO } from 'date-fns';
-
 import { Interest } from '@/types/interests';
 import { Newsletter, NewslettersListData } from '@/types/newsletters';
 
