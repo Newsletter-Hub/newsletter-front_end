@@ -24,14 +24,17 @@ const sortTypes: SortType[] = [
   {
     label: 'Date joined',
     value: 'dataJoined',
+    pageTitle: 'New Users',
   },
-  // {
-  //   label: 'Number of followers',
-  //   value: 'followers',
-  // },
+  {
+    label: 'Number of followers',
+    value: 'followers',
+    pageTitle: 'Most Followed Users',
+  },
   {
     label: 'Number of reviews',
     value: 'numberOfReviews',
+    pageTitle: 'Most Active Users',
   },
 ];
 
@@ -48,19 +51,22 @@ const UsersList = ({
   usersList,
   getUsersList,
   isSortable = true,
-  title = 'Users',
+  title,
   isUserId = false,
   isFollowEnable = true,
 }: UsersListProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const [choosedSortType, setChoosedSortType] = useState(0);
+  const [choosedSortType, setChoosedSortType] = useState(2);
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState(usersList);
   const [search, setSearch] = useState((router.query.search as string) || '');
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<number | boolean>(false);
+  const [pageTitle, setPageTitle] = useState(
+    title ? title : `${sortTypes[2].pageTitle}`
+  );
 
   const handleChangeSearch = debounce(async (value: string) => {
     setSearchLoading(true);
@@ -79,6 +85,7 @@ const UsersList = ({
 
   const handleSort = async (value: number) => {
     setChoosedSortType(value);
+    setPageTitle(`${sortTypes[value].pageTitle}`);
     const usersListResponse = await getUsersList({
       page: 1,
       pageSize: 9 * page,
@@ -164,7 +171,7 @@ const UsersList = ({
     <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
       <div className="max-w-[1280px] sm:min-w-[400px] md:min-w-[700px] lg:min-w-[950px] min-w-[308px]">
         <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
-          {title}
+          {pageTitle}
         </h1>
         {isSortable && (
           <div className="flex mb-10 items-center justify-between md:flex-row flex-col gap-3 md:gap-0">
@@ -236,6 +243,24 @@ const UsersList = ({
                       className="rounded-full h-[112px] w-[112px]"
                     />
                     <div className="flex flex-col gap-3">
+                    <div className="flex gap-6 items-center">
+                      <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
+                        <span className="font-semibold">
+                          {item.amountUserFollowers}
+                        </span>
+                        &nbsp;Follower
+                        {item.amountUserFollowers !== 1 && 's'}
+                      </p>
+                      <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                      <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
+                        <span className="font-semibold">
+                          {item.amountFollowingNewsletters}
+                        </span>
+                        &nbsp;Newsletter
+                        {item.amountFollowingNewsletters !== 1 && 's'}
+                        &nbsp;Following
+                      </p>
+                    </div>
                       <div className="flex flex-row items-center">
                         <Link
                           href={`/users/${item.id}`}
