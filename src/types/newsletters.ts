@@ -28,7 +28,7 @@ export interface NewsletterData {
   image?: string;
   newsletterAuthor?: string;
   interests?: Interest[];
-  addedByUser?: User;
+  owner?: User;
   averageRating: number;
   amountRatings: number;
   link: string;
@@ -57,7 +57,7 @@ export interface Reviewer {
   avatar: string;
   country: string;
   id: number;
-  isVerified?: boolean;
+  isVerifiedOwner?: boolean;
 }
 
 export interface Review {

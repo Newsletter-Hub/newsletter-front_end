@@ -31,11 +31,6 @@ const sortTypes: SortType[] = [
     value: 'followers',
     pageTitle: 'Most Followed Users',
   },
-  {
-    label: 'Number of reviews',
-    value: 'numberOfReviews',
-    pageTitle: 'Most Active Users',
-  },
 ];
 
 interface UsersListProps {
@@ -57,7 +52,7 @@ const UsersList = ({
 }: UsersListProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const [choosedSortType, setChoosedSortType] = useState(2);
+  const [choosedSortType, setChoosedSortType] = useState(1);
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState(usersList);
   const [search, setSearch] = useState((router.query.search as string) || '');
@@ -65,7 +60,7 @@ const UsersList = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<number | boolean>(false);
   const [pageTitle, setPageTitle] = useState(
-    title ? title : `${sortTypes[2].pageTitle}`
+    title ? title : `${sortTypes[1].pageTitle}`
   );
 
   const handleChangeSearch = debounce(async (value: string) => {
@@ -268,7 +263,7 @@ const UsersList = ({
                         >
                           {item.username}
                         </Link>
-                        {item.isVerified && <VerifiedWithTooltip />}
+                        {item.isVerifiedOwner && <VerifiedWithTooltip />}
                       </div>
                       {item.description && (
                         <span className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
