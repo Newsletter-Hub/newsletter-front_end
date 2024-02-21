@@ -119,7 +119,7 @@ const UserPage = ({
             <h1 className="text-dark-blue text-5xl font-medium">
               {user.username}
             </h1>
-            {user.isVerified && <VerifiedWithTooltip />}
+            {user.isVerifiedOwner && <VerifiedWithTooltip />}
           </div>
           {user.profileType && isProfile && (
             <p className="mb-[4px] font-inter text-dark-grey text-lg">

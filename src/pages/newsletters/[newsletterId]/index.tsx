@@ -677,7 +677,9 @@ const NewsletterPage = ({
                           {review.reviewer.username}
                         </Link>
                       </p>
-                      {review.reviewer?.isVerified && <VerifiedWithTooltip />}
+                      {review.reviewer?.isVerifiedOwner && (
+                        <VerifiedWithTooltip />
+                      )}
                     </div>
                   </div>
                   <div className="w-full">
