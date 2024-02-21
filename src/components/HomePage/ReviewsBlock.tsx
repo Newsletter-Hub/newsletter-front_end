@@ -143,7 +143,9 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                           {review.reviewer.username}
                         </Link>
                       </p>
-                      {review.reviewer?.isVerified && <VerifiedWithTooltip />}
+                      {review.reviewer?.isVerifiedOwner && (
+                        <VerifiedWithTooltip />
+                      )}
                     </div>
                     <StarRating
                       readonly
