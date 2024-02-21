@@ -57,7 +57,6 @@ export interface Reviewer {
   avatar: string;
   country: string;
   id: number;
-  isVip?: boolean;
   isVerified?: boolean;
 }
 

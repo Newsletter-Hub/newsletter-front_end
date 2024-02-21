@@ -17,7 +17,6 @@ export interface User {
   amountUserFollowing: number;
   amountFollowingNewsletters: number;
   followed: boolean;
-  isVip?: boolean;
   isVerified?: boolean;
 }
 
