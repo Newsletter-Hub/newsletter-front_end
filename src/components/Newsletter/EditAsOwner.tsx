@@ -54,6 +54,7 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
     description: z
       .string()
       .min(1, { message: 'Description is required field' }),
+    link: z.string().min(1, { message: 'Link is required field' }),
     image: z
       .union([z.string(), z.unknown()])
       .refine(
@@ -93,7 +94,7 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
       id: Number(newsletterId),
       title: data.title,
       description: data.description,
-      link: newsletterData.link,
+      link: data.link,
       image: data.image as File,
       interests: tags.map(item => item.id),
       averageDuration: String(averageDuration),
@@ -176,6 +177,17 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
         <div className="mb-6">
           <div className="flex flex-col gap-12">
             <Input
+              label="Link"
+              placeholder="Link"
+              variant="filled"
+              register={{ ...register('link') }}
+              customStyles="w-full"
+              error={Boolean(errors.link)}
+              errorText={errors.link?.message}
+              defaultValue={newsletterData.link}
+            />
+            <Input
+              label="Title"
               placeholder="Title"
               variant="filled"
               register={{ ...register('title') }}
@@ -185,6 +197,7 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
               defaultValue={newsletterData.title}
             />
             <TextArea
+              label="Description"
               placeholder="Description"
               variant="filled"
               register={{ ...register('description') }}
@@ -217,6 +230,9 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
                   </React.Fragment>
                 ))}
               <div className="relative w-full">
+                <p className="mb-4 text-dark-blue text-xl font-medium">
+                Topics
+              </p>
                 {tags.length < 5 && (
                   <input
                     placeholder={
@@ -259,6 +275,9 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
               </div>
             </div>
             <div className="mb-4">
+            <p className="mb-4 text-dark-blue text-xl font-medium">
+                Pricing Type
+              </p>
               <RadioGroup
                 defaultValue={newsletterData.pricing}
                 options={[

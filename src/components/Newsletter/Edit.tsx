@@ -168,6 +168,9 @@ const Edit = ({ newsletterData, interests }: EditNewsletterProps) => {
                   </React.Fragment>
                 ))}
               <div className="relative w-full">
+                <p className="mb-4 text-dark-blue text-xl font-medium">
+                  Topics
+                </p>
                 {tags.length < 5 && (
                   <input
                     placeholder={
@@ -210,6 +213,9 @@ const Edit = ({ newsletterData, interests }: EditNewsletterProps) => {
               </div>
             </div>
             <div className="mb-4">
+              <p className="mb-4 text-dark-blue text-xl font-medium">
+                Pricing Type
+              </p>
               <RadioGroup
                 defaultValue={newsletterData.pricing}
                 options={[
