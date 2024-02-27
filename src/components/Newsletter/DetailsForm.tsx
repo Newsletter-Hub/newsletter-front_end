@@ -169,6 +169,7 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
                 </React.Fragment>
               ))}
             <div className="relative w-full">
+              <p className="mb-4 text-dark-blue text-xl font-medium">Topics</p>
               {tags.length < 5 && (
                 <input
                   placeholder={
@@ -211,6 +212,9 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
             </div>
           </div>
           <div className="mb-4">
+            <p className="mb-4 text-dark-blue text-xl font-medium">
+              Pricing Type
+            </p>
             <RadioGroup
               defaultValue="free"
               options={[
