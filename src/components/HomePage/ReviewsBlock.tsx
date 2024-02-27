@@ -144,7 +144,7 @@ const ReviewsBlock = ({ reviewData }: ReviewsBlockProps) => {
                         </Link>
                       </p>
                       {review.reviewer?.isVerifiedOwner && (
-                        <VerifiedWithTooltip />
+                        <VerifiedWithTooltip tooltipText="User is a verified newsletter owner" />
                       )}
                     </div>
                     <StarRating

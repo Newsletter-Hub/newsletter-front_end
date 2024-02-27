@@ -238,24 +238,24 @@ const UsersList = ({
                       className="rounded-full h-[112px] w-[112px]"
                     />
                     <div className="flex flex-col gap-3">
-                    <div className="flex gap-6 items-center">
-                      <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
-                        <span className="font-semibold">
-                          {item.amountUserFollowers}
-                        </span>
-                        &nbsp;Follower
-                        {item.amountUserFollowers !== 1 && 's'}
-                      </p>
-                      <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-                      <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
-                        <span className="font-semibold">
-                          {item.amountFollowingNewsletters}
-                        </span>
-                        &nbsp;Newsletter
-                        {item.amountFollowingNewsletters !== 1 && 's'}
-                        &nbsp;Following
-                      </p>
-                    </div>
+                      <div className="flex gap-6 items-center">
+                        <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
+                          <span className="font-semibold">
+                            {item.amountUserFollowers}
+                          </span>
+                          &nbsp;Follower
+                          {item.amountUserFollowers !== 1 && 's'}
+                        </p>
+                        <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                        <p className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">
+                          <span className="font-semibold">
+                            {item.amountFollowingNewsletters}
+                          </span>
+                          &nbsp;Newsletter
+                          {item.amountFollowingNewsletters !== 1 && 's'}
+                          &nbsp;Following
+                        </p>
+                      </div>
                       <div className="flex flex-row items-center">
                         <Link
                           href={`/users/${item.id}`}
@@ -263,7 +263,9 @@ const UsersList = ({
                         >
                           {item.username}
                         </Link>
-                        {item.isVerifiedOwner && <VerifiedWithTooltip />}
+                        {item.isVerifiedOwner && (
+                          <VerifiedWithTooltip tooltipText="User is a verified newsletter owner" />
+                        )}
                       </div>
                       {item.description && (
                         <span className="font-inter text-sm whitespace-nowrap lg:whitespace-normal text-dark-grey lg:max-w-[700px] md:max-w-[400px] sm:max-w-[250px] xs:max-w-[200px] max-w-[150px] overflow-hidden text-ellipsis">

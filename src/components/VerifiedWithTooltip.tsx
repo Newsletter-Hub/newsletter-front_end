@@ -2,7 +2,13 @@ import VerifiedIcon from '@/assets/icons/verified';
 import { useState } from 'react';
 import clsx from 'clsx';
 
-const VerifiedWithTooltip = () => {
+const VerifiedWithTooltip = ({
+  className,
+  tooltipText,
+}: {
+  className?: string;
+  tooltipText: string;
+}) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipStyles = clsx(
     'absolute z-10 w-56 p-2 -mt-2 text-sm text-white bg-black rounded-md shadow-lg',
@@ -17,10 +23,8 @@ const VerifiedWithTooltip = () => {
       onMouseLeave={() => setShowTooltip(false)}
       className="relative ml-0.5"
     >
-      <VerifiedIcon className="h-5 w-5 text-blue-500" />
-      {showTooltip && (
-        <div className={tooltipStyles}>User is a verified newsletter owner</div>
-      )}
+      <VerifiedIcon className={`h-5 w-5 text-blue-500 ${className}`} />
+      {showTooltip && <div className={tooltipStyles}>{tooltipText}</div>}
     </div>
   );
 };

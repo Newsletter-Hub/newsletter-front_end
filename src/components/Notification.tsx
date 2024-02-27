@@ -31,9 +31,6 @@ const Notification = ({
         >
           {notification.notificationAuthor?.username}
         </Link>
-        {notification.notificationAuthor?.isVerifiedOwner && (
-          <VerifiedWithTooltip />
-        )}
       </div>
     );
   const { user } = useUser();
@@ -117,9 +114,6 @@ const Notification = ({
                       ? 'You'
                       : notification.notificationAuthor?.username}
                   </Link>
-                  {notification.notificationAuthor?.username !==
-                    user?.username &&
-                    user?.isVerifiedOwner && <VerifiedWithTooltip />}
                 </div>
               </div>
               <span className="text-base text-dark-grey flex flex-row">
@@ -137,7 +131,6 @@ const Notification = ({
                       {'username' in notification.entity &&
                         notification.entity.username}
                     </Link>
-                    {user?.isVerifiedOwner && <VerifiedWithTooltip />}
                   </div>
                 )}
               </span>

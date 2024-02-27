@@ -392,18 +392,28 @@ const NewsletterPage = ({
               </span>
             </Link>
           </div>
-          <h1 className="text-lightBlack sm:text-7xl text-5xl font-medium mb-10">
-            {newsletter?.title}
-          </h1>
-          {newsletter?.image && (
-            <SkeletonImage
-              src={newsletter.image}
-              width={1280}
-              height={678}
-              alt="banner"
-              className="w-full h-auto mb-6"
-            />
-          )}
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex gap-1 flex-row items-center">
+              <h1 className="text-lightBlack sm:text-6xl text-5xl font-medium mb-12">
+                {newsletter?.title}
+              </h1>
+              {newsletter?.owner && (
+                <VerifiedWithTooltip
+                  className="mb-10"
+                  tooltipText="Newsletter is claimed by a verified user"
+                />
+              )}
+            </div>
+            {newsletter?.image && (
+              <SkeletonImage
+                src={newsletter.image}
+                width={1280}
+                height={678}
+                alt="banner"
+                className="w-fit h-auto mb-6 mx-auto"
+              />
+            )}
+          </div>
           {Boolean(newsletter?.interests?.length) && (
             <div className="flex gap-2 mb-10 max-w-[300px] sm:max-w-[400px] md:max-w-none flex-wrap">
               {newsletter?.interests?.map(interest => (
@@ -484,54 +494,33 @@ const NewsletterPage = ({
               handleClose={() => setIsReportModalOpen(false)}
             />
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:pb-10 pb-5 border-b border-light-grey mb-10">
-            <span className="font-inter text-sm text-dark-grey">
-              Share This Newsletter
-            </span>
-            <FacebookShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              quote={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <FacebookIcon size={32} round />
-            </FacebookShareButton>
-            <LinkedinShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <LinkedinIcon size={32} round />
-            </LinkedinShareButton>
-            <TwitterShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on @newsletter_hub`}
-            >
-              <TwitterIcon size={32} round />
-            </TwitterShareButton>
-            <RedditShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <RedditIcon size={32} round />
-            </RedditShareButton>
-            <EmailShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              subject={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <EmailIcon size={32} round />
-            </EmailShareButton>
-          </div>
-          <div className="flex justify-between font-inter items-center md:mb-20 mb-10 flex-col md:flex-row">
+          <div className="flex justify-between font-inter items-center mb-10 flex-col md:flex-row sm:pb-10 pb-5 border-b border-light-grey">
             <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">
               <div className="flex gap-6 items-center">
-                {newsletter?.newsletterAuthor && (
+                {newsletter?.owner ? (
                   <>
                     <p className="text-sm text-dark-grey">
-                      Author:&nbsp;
+                      Owned By:&nbsp;
                       <span className="font-semibold">
-                        {newsletter?.newsletterAuthor}
+                        <Link href={`/users/${newsletter?.owner?.id}`}>
+                          {newsletter?.owner?.username}
+                        </Link>
                       </span>{' '}
                     </p>
                     <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
                   </>
+                ) : (
+                  newsletter?.newsletterAuthor && (
+                    <>
+                      <p className="text-sm text-dark-grey">
+                        Author:&nbsp;
+                        <span className="font-semibold">
+                          {newsletter?.newsletterAuthor}
+                        </span>{' '}
+                      </p>
+                      <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                    </>
+                  )
                 )}
                 {newsletter?.averageDuration && (
                   <>
@@ -597,6 +586,41 @@ const NewsletterPage = ({
                 </span>
               </div> */}
             </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:pb-10 pb-5 mb-10">
+            <span className="font-inter text-sm text-dark-grey">
+              Share This Newsletter
+            </span>
+            <FacebookShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              quote={`Review ${newsletter.title} on Newsletter Hub`}
+            >
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <LinkedinShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              title={`Review ${newsletter.title} on Newsletter Hub`}
+            >
+              <LinkedinIcon size={32} round />
+            </LinkedinShareButton>
+            <TwitterShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              title={`Review ${newsletter.title} on @newsletter_hub`}
+            >
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <RedditShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              title={`Review ${newsletter.title} on Newsletter Hub`}
+            >
+              <RedditIcon size={32} round />
+            </RedditShareButton>
+            <EmailShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              subject={`Review ${newsletter.title} on Newsletter Hub`}
+            >
+              <EmailIcon size={32} round />
+            </EmailShareButton>
           </div>
           <h2 className="text-lightBlack text-5xl font-medium mb-8">
             {newsletter?.title ? `Reviews for ${newsletter?.title}` : 'Reviews'}
@@ -678,7 +702,7 @@ const NewsletterPage = ({
                         </Link>
                       </p>
                       {review.reviewer?.isVerifiedOwner && (
-                        <VerifiedWithTooltip />
+                        <VerifiedWithTooltip tooltipText="User is a verified newsletter owner"/>
                       )}
                     </div>
                   </div>
