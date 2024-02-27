@@ -127,6 +127,51 @@ export const newsletterUpdate = async ({
   }
 };
 
+export const newsletterUpdateAsOwner = async ({
+  id,
+  link,
+  title,
+  description,
+  image,
+  interests,
+  averageDuration,
+  pricingType,
+  router,
+}: Newsletter): Promise<NewsletterLinkResponse | undefined> => {
+  try {
+    const formData = new FormData();
+    link && formData.append('link', link as string);
+    title && formData.append('title', title as string);
+    description && formData.append('description', description as string);
+    averageDuration &&
+      formData.append('averageDuration', averageDuration as string);
+    pricingType && formData.append('pricingType', pricingType as string);
+    image && formData.append('image', image as Blob);
+    if (interests?.length) {
+      for (let i = 0; i < interests.length; i++) {
+        formData.append('interestIds[]', JSON.stringify(interests[i]));
+      }
+    }
+    const response = await api.put(`newsletters/owner-update/${id}`, {
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const res = (await response.json()) as NewsletterLinkResponse;
+    if (response.ok) {
+      if (router) {
+        toast.success('Newsletter succesfully updated');
+        router.push(`/newsletters/${res.id}`);
+      }
+    }
+    return res;
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to update newsletter');
+    return undefined;
+  }
+};
+
 export const createNewsletter = async ({
   link,
   title,
