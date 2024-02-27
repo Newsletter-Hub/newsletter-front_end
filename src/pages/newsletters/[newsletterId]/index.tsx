@@ -68,7 +68,6 @@ import ReviewModal from '@/components/Modals/ReviewModal';
 import EditReviewModal from '@/components/Modals/EditReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
-import ClaimedWithTooltip from '@/components/ClaimedWithTooltip';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
