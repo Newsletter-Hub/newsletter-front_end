@@ -6,7 +6,7 @@ export interface User {
   email: string;
   username: string;
   interests: Interest[];
-  profileType: 'reader' | 'writer';
+  profileType: 'reader' | 'writer' | 'admin';
   avatar: string;
   dateOfBirth: string;
   country: string;
@@ -17,7 +17,7 @@ export interface User {
   amountUserFollowing: number;
   amountFollowingNewsletters: number;
   followed: boolean;
-  isVerifiedOwner?: boolean;
+  isVerifiedOwner: boolean;
 }
 
 export interface UserList {

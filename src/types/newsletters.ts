@@ -33,7 +33,7 @@ export interface NewsletterData {
   amountRatings: number;
   link: string;
   averageDuration: number;
-  pricing: string;
+  pricing: 'free' | 'paid' | 'free_and_paid';
   createdAt: string;
   isFollower: boolean;
   isInBookmarks: boolean;

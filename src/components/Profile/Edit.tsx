@@ -34,7 +34,7 @@ export interface EditProfilePayload {
   dateOfBirth: string;
   username: string;
   email: string;
-  profileType: 'reader' | 'writer';
+  profileType: 'reader' | 'writer' | 'admin';
 }
 
 const validationSchema = z.object({
@@ -44,7 +44,7 @@ const validationSchema = z.object({
   dateOfBirth: z.any().optional(),
   username: z.string().nullable().optional(),
   email: z.string().email('Email need to be valid').optional(),
-  profileType: z.enum(['reader', 'writer']).optional(),
+  profileType: z.enum(['reader', 'writer', 'admin']).optional(),
   description: z.string().nullable().optional(),
 });
 

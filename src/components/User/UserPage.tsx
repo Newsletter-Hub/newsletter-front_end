@@ -119,7 +119,9 @@ const UserPage = ({
             <h1 className="text-dark-blue text-5xl font-medium">
               {user.username}
             </h1>
-            {user.isVerifiedOwner && <VerifiedWithTooltip />}
+            {user.isVerifiedOwner && (
+              <VerifiedWithTooltip tooltipText="User is a verified newsletter owner" />
+            )}
           </div>
           {user.profileType && isProfile && (
             <p className="mb-[4px] font-inter text-dark-grey text-lg">

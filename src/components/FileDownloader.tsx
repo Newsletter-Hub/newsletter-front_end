@@ -42,11 +42,10 @@ const FileDownloader = ({
 }: FileDownloaderProps) => {
   const user = useContext(UserContext);
   const ref = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<Blob | string>('');
+  const [file, setFile] = useState<Blob | string>(defaultValue || '');
   const [fileDataURL, setFileDataURL] = useState<
     StaticImageData | string | ArrayBuffer
-  >(user.avatarURL || defaultValue || fileDownloaderImage);
-
+  >(defaultValue || user.avatarURL || fileDownloaderImage);
   const handleClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
     e.preventDefault();
     if (ref.current) {
@@ -160,6 +159,11 @@ const FileDownloader = ({
             </span>
           )}
         </div>
+      )}
+      {error && (
+        <span className="absolute bottom-0 text-red font-inter text-sm">
+          {errorText}
+        </span>
       )}
     </div>
   );
