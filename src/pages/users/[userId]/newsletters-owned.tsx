@@ -1,59 +1,68 @@
-import { getNewsletterSubscriptions } from '@/actions/newsletters';
+import { getNewslettersList } from '@/actions/newsletters';
+import { getUserById } from '@/actions/user';
 
 import { NewslettersListData } from '@/types/newsletters';
+import { User } from '@/types/user';
 
 import NewslettersList from '@/components/Newsletter/NewsletterList';
-import parseCookies from 'next-cookies';
 import { GetServerSideProps } from 'next';
+import parseCookies from 'next-cookies';
 
 interface UserNewslettersProps {
   newslettersListData?: NewslettersListData;
   isProfile?: boolean;
+  user: User;
 }
 
-const FollowingNewsletters = ({
+const NewslettersOwned = ({
   newslettersListData,
   isProfile,
+  user,
 }: UserNewslettersProps) => {
   return (
     <NewslettersList
       newslettersListData={newslettersListData}
-      getNewslettersList={getNewsletterSubscriptions}
-      isSeparated={false}
+      getNewslettersList={getNewslettersList}
+      isSeparated={true}
       isRated={true}
       isFollowEnable={true}
       isNewsletterFollowed={isProfile}
       type="newsletter"
-      title="Newsletters Following"
+      title={
+        user ? `Newsletters Owned By ${user.username}` : 'Newsletters Owned'
+      }
+      authorId={user?.id}
     />
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const user =
-    context.req.cookies.user && JSON.parse(context.req.cookies.user as string);
-  const userId = user?.id;
+  const userId = Number(context.query.userId);
   const cookies = parseCookies(context);
   const token = cookies.accessToken ? cookies.accessToken : null;
-  const followingNewsletterList = await getNewsletterSubscriptions({
-    entity: 'Newsletter',
+  const newsletterList = await getNewslettersList({
     page: 1,
     pageSize: 6,
+    order: 'date',
+    orderDirection: 'DESC',
+    categoriesIds: [],
     authorId: userId,
     token,
   });
+  const user = await getUserById({ token, userId });
 
-  if (!followingNewsletterList) {
+  if (!newsletterList || !user) {
     return {
       notFound: true,
     };
   }
+
   return {
     props: {
-      newslettersListData: followingNewsletterList.newslettersListData || null,
-      isProfile: true,
+      newslettersListData: newsletterList.newslettersListData || null,
+      user: user.response,
     },
   };
 };
 
-export default FollowingNewsletters;
+export default NewslettersOwned;

@@ -19,7 +19,7 @@ const Users = ({ usersList }: UsersListProps) => {
       isSortable={false}
       title="Followers"
       isUserId={true}
-      isFollowEnable={false}
+      isFollowEnable={true}
     />
   );
 };

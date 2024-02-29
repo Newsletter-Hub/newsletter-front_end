@@ -46,7 +46,7 @@ const EntryLayout = ({
               <div className="flex flex-col items-center h-full">
                 {type === 'newsletter' ? (
                   <>
-                    <p className="font-bold text-3xl mb-3">Add a Newsletter</p>
+                    <p className="font-bold text-3xl mb-3">Add Newsletter</p>
                     <p className="max-w-xs text-center mb-28">
                       Whether you write it or read it, share it with the world
                     </p>

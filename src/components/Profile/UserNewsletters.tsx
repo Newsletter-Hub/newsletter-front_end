@@ -29,7 +29,7 @@ const UserNewsletters = ({
         <div className="w-fit">
           <Link href="/newsletters/add">
             <Button
-              label="Add a Newsletter"
+              label="Add Newsletter"
               rounded="xl"
               fontSize="md"
               customStyles="mb-8"

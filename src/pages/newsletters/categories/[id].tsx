@@ -32,7 +32,7 @@ const NewslettersPage = ({
           content={
             categoryName && categoryName !== ''
               ? `Discover, rate and follow the best ${categoryName} newsletters of ${currentYear}, with user-submitted ratings and reviews.`
-              : 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.'
+              : 'Search our extensive newsletter database to find the best newsletters to subscribe to across various categories. Follow newsletters and users, and be part of a community that celebrates quality content.'
           }
         />
       </Head>

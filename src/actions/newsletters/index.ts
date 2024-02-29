@@ -70,6 +70,15 @@ export interface ReportPayload {
   report: string;
 }
 
+export interface ClaimRequestPayload {
+  newsletterId: number;
+}
+
+export interface ClaimRequestResponse {
+  error?: string;
+  isRequested?: boolean;
+}
+
 export const parseNewsletter = async ({
   link,
 }: NewsletterLink): Promise<NewsletterLinkResponse | undefined> => {
@@ -366,5 +375,24 @@ export const newsletterReport = async ({
     console.log(error);
     throwErrorMessage(error as HTTPError, 'Failed to send report');
     return { error: 'Failed to send report' };
+  }
+};
+
+export const claimNewsletterRequest = async ({
+  newsletterId,
+}: ClaimRequestPayload): Promise<ReportNewsletterResponse | undefined> => {
+  try {
+    await api
+      .post('claims', {
+        json: { newsletterId },
+      })
+      .then(() => {
+        toast.success('Claim request was successful');
+        return { isRequested: true };
+      });
+  } catch (error) {
+    console.log(error);
+    throwErrorMessage(error as HTTPError, 'Failed to request newsletter claim');
+    return { error: 'Failed to request newsletter claim' };
   }
 };
