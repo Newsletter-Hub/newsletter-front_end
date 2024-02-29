@@ -23,8 +23,9 @@ const Users = ({ usersList }: UsersListProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const user = JSON.parse(context.req.cookies.user as string);
-  const userId = user.id;
+  const user =
+    context.req.cookies.user && JSON.parse(context.req.cookies.user as string);
+  const userId = user?.id;
   const usersResponse = await getFollowers({
     page: 1,
     pageSize: 9,

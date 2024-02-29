@@ -56,12 +56,21 @@ const LinkForm = ({
         the example below; prepend the full URL with &quot;https://&quot;.
         <br />
         <br />
-        In the event of a &quot;Newsletter will need to be manually added&quot;
-        error, rest assured that our team is actively addressing the issue
-        related to newsletter verification. We will promptly initiate manual
-        processing and keep you informed via email regarding the status of your
-        request. For any further inquiries, please don&apos;t hesitate to reach
-        out to us at&nbsp;
+        If you are the owner of the newsletter you are adding, you will be to
+        claim the newsletter after it is added. Just locate the &quot;Claim
+        Newsletter&quot; button on the newsletter page or find your newsletter
+        on&nbsp;
+        <Link href="/newsletters/claim" legacyBehavior passHref>
+          <a target="_blank" rel="noopener noreferrer">
+            this page.
+          </a>
+        </Link>
+        <br />
+        <br />
+        In the event of an error, rest assured our team will be alerted. We will
+        attempt to manually add the newsletter, and update you via email with
+        the result. For any further inquiries, please don&apos;t hesitate to
+        reach out to us at&nbsp;
         <Link href="mailto: team@newsletterhub.co">team@newsletterhub.co</Link>.
       </p>
       <p className="text-xs font-semibold text-lightDark mb-2 font-inter">

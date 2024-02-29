@@ -14,6 +14,7 @@ import { FollowingPayload } from '@/types';
 import BookmarkIcon from '@/assets/icons/bookmark';
 import EditIcon from '@/assets/icons/edit';
 import PlusIcon from '@/assets/icons/plus';
+import OwnerIcon from '@/assets/icons/owner';
 import VerifiedWithTooltip from '../VerifiedWithTooltip';
 
 import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
@@ -182,6 +183,15 @@ const UserPage = ({
                 </span>
               </Link>
               <Link
+                href="/profile/newsletters-owned"
+                className="flex items-center gap-2"
+              >
+                <OwnerIcon />
+                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                  Newsletters Owned
+                </span>
+              </Link>
+              <Link
                 href="/profile/bookmarks"
                 className="flex items-center gap-2"
               >
@@ -193,30 +203,41 @@ const UserPage = ({
             </div>
           )}
           {!isProfile && (
-            <Button
-              rounded="xl"
-              fontSize="md"
-              height="sm"
-              customStyles="w-full sm:w-fit"
-              loading={followLoading}
-              onClick={() =>
-                handleFollow({
-                  entityId: user.id,
-                  followed: user.followed,
-                })
-              }
-              variant={user.followed ? 'outlined-secondary' : 'primary'}
-              label={
-                user.followed ? (
-                  'Following'
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <PlusIcon />
-                    Follow
-                  </span>
-                )
-              }
-            />
+            <div className="flex gap-8 items-center mb-[88px]">
+              <Button
+                rounded="xl"
+                fontSize="md"
+                height="sm"
+                customStyles="w-full sm:w-fit"
+                loading={followLoading}
+                onClick={() =>
+                  handleFollow({
+                    entityId: user.id,
+                    followed: user.followed,
+                  })
+                }
+                variant={user.followed ? 'outlined-secondary' : 'primary'}
+                label={
+                  user.followed ? (
+                    'Following'
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <PlusIcon />
+                      Follow
+                    </span>
+                  )
+                }
+              />
+              <Link
+                href={`${router.asPath}/newsletters-owned`}
+                className="flex items-center gap-2"
+              >
+                <OwnerIcon />
+                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                  Newsletters Owned
+                </span>
+              </Link>
+            </div>
           )}
         </>
       )}

@@ -11,7 +11,8 @@ const productLinks = [
 const newsletterLinks = [
   { label: 'Explore Newsletters', href: '/newsletters/categories/all' },
   { label: 'Explore Categories', href: '/newsletters/categories' },
-  { label: 'Add a Newsletter', href: '/newsletters/add' },
+  { label: 'Add Newsletter', href: '/newsletters/add' },
+  { label: 'Claim Newsletter', href: '/newsletters/claim' },
 ];
 
 const socialMediaLinks = [

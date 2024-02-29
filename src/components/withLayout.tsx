@@ -24,8 +24,8 @@ interface EntryLayoutConfig {
 const withLayout = (
   WrappedComponent: React.ComponentType<WithLayoutProps>,
   layout: LayoutType = 'default',
-  title = 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today',
-  description = 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today',
+  title = 'Best Newsletters Discovery & Reviews | Join Newsletter Hub Today',
+  description = 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.',
   entryLayoutConfig?: EntryLayoutConfig
 ) => {
   const WithLayoutComponent = (props: WithLayoutProps) => {

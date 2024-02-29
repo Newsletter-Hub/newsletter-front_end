@@ -15,6 +15,7 @@ import Link from 'next/link';
 
 import ArrowDownIcon from '@/assets/icons/arrowDown';
 import BookmarkIcon from '@/assets/icons/bookmark';
+import OwnerIcon from '@/assets/icons/owner';
 import LogoutIcon from '@/assets/icons/logout';
 import ProfileIcon from '@/assets/icons/profile';
 import SearchResultsIcon from '@/assets/icons/searchResults';
@@ -38,8 +39,18 @@ const Header = () => {
     { label: 'Categories', href: '/newsletters/categories' },
     { label: 'Users', href: '/users' },
     {
-      label: 'Add a Newsletter',
+      label: 'Add Newsletter',
       href: `/${user ? 'newsletters/add' : 'sign-up'}`,
+      subLinks: [
+        {
+          label: 'Add Newsletter',
+          href: `/${user ? 'newsletters/add' : 'sign-up'}`,
+        },
+        {
+          label: 'Claim Newsletter',
+          href: `/${user ? 'newsletters/claim' : 'sign-up'}`,
+        },
+      ],
     },
   ];
 
@@ -195,9 +206,40 @@ const Header = () => {
                     )}
                   </div>
                 )}
-                <Link href={link.href} className="hidden lg:block">
-                  {link.label}
-                </Link>
+                {link.subLinks ? (
+                  <Popover
+                    triggerStyles="hidden lg:flex"
+                    customWrapperStyles="mr-2"
+                    triggerContent={
+                      <div className="lg:flex items-center">
+                        <div>
+                          <span className="hidden lg:block">{link.label}</span>
+                        </div>
+                        <div className="ml-2">
+                          <ArrowDownIcon />
+                        </div>
+                      </div>
+                    }
+                  >
+                    <div className="p-4 box-border">
+                      <div>
+                        {link.subLinks.map(subLink => (
+                          <Link
+                            href={subLink.href}
+                            key={subLink.href}
+                            className="flex gap-3 items-center text-dark-blue text-base p-2 hidden lg:block "
+                          >
+                            {subLink.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </Popover>
+                ) : (
+                  <Link href={link.href} className="hidden lg:block">
+                    {link.label}
+                  </Link>
+                )}
               </React.Fragment>
             );
           })}
@@ -248,12 +290,21 @@ const Header = () => {
                   <div className="pb-2 border-b border-b-porcelain">
                     <Link
                       href="/profile"
-                      className="flex gap-2 items-center text-dark-blue text-sm p-2 mb-1"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2"
                     >
                       <div className="w-6 h-6">
                         <ProfileIcon className="!w-5" />
                       </div>
-                      My profile
+                      My Profile
+                    </Link>
+                    <Link
+                      href="/profile/newsletters-owned"
+                      className="flex gap-3 items-center text-dark-blue text-sm p-2"
+                    >
+                      <div className="w-6 h-6">
+                        <OwnerIcon className="!w-5" />
+                      </div>
+                      My Newsletters
                     </Link>
                     <Link
                       href="/profile/bookmarks"
@@ -273,7 +324,7 @@ const Header = () => {
                       <div className="w-6 h-6">
                         <SettingsIcon className="!w-5" />
                       </div>
-                      Account settings
+                      Account Settings
                     </Link>
                     <span
                       className="flex gap-3 items-center text-dark-blue text-sm p-2 mb-1 cursor-pointer hover:text-primary"
@@ -288,9 +339,19 @@ const Header = () => {
                 </div>
                 <div className="flex flex-col gap-3">
                   {links.map(link => (
-                    <Link href={link.href} key={link.href}>
-                      {link.label}
-                    </Link>
+                    <>
+                      {link.subLinks ? (
+                        link.subLinks.map(subLink => (
+                          <Link href={subLink.href} key={subLink.href}>
+                            {subLink.label}
+                          </Link>
+                        ))
+                      ) : (
+                        <Link href={link.href} key={link.href}>
+                          {link.label}
+                        </Link>
+                      )}
+                    </>
                   ))}
                 </div>
               </div>
@@ -340,12 +401,21 @@ const Header = () => {
               <div className="pb-4 border-b border-b-porcelain">
                 <Link
                   href="/profile"
-                  className="flex gap-3 items-center text-dark-blue text-base p-2 mb-1"
+                  className="flex gap-3 items-center text-dark-blue text-base p-2"
                 >
                   <div className="w-6 h-6">
                     <ProfileIcon />
                   </div>
-                  My profile
+                  My Profile
+                </Link>
+                <Link
+                  href="/profile/newsletters-owned"
+                  className="flex gap-3 items-center text-dark-blue text-base p-2"
+                >
+                  <div className="w-6 h-6">
+                    <OwnerIcon />
+                  </div>
+                  My Newsletters
                 </Link>
                 <Link
                   href="/profile/bookmarks"
@@ -365,7 +435,7 @@ const Header = () => {
                   <div className="w-6 h-6">
                     <SettingsIcon />
                   </div>
-                  Account settings
+                  Account Settings
                 </Link>
                 <span
                   className="flex gap-3 items-center text-dark-blue text-base p-2 mb-1 cursor-pointer hover:text-primary"

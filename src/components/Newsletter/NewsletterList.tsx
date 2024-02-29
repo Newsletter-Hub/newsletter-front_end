@@ -63,22 +63,23 @@ export interface NewslettersPageProps {
   newslettersListData?: NewslettersListData;
   interests?: Interest[];
   getNewslettersList: GetNewslettersListType;
-  type: 'bookmark' | 'newsletter';
+  type: 'bookmark' | 'newsletter' | 'claim';
   isSeparated?: boolean;
   isRated?: boolean;
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
+  isOwner?: boolean;
   authorId?: number;
   defaultSortType?: 'date' | 'rating';
   title?: string;
   categoryName?: number | string | null;
   categoryId?: string | null;
+  subTitle?: string;
 }
 
 interface SortType {
   label: string;
   value: string;
-  pageTitlePrefix: string;
 }
 
 interface Filters {
@@ -100,17 +101,14 @@ const sortTypes: SortType[] = [
   {
     label: 'Date added',
     value: 'date',
-    pageTitlePrefix: 'New',
   },
   {
     label: 'Number of followers',
     value: 'followers',
-    pageTitlePrefix: 'Most Followed',
   },
   {
     label: 'Rating',
     value: 'rating',
-    pageTitlePrefix: 'Top Rated',
   },
 ];
 
@@ -125,21 +123,18 @@ const NewslettersList = ({
   isRated = true,
   isFollowEnable = true,
   isNewsletterFollowed = false,
+  isOwner = false,
   authorId,
   defaultSortType = 'rating',
-  title,
+  title = 'Trending Newsletters',
   categoryId,
   categoryName,
+  subTitle,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const { userId } = router.query;
-  const [pageTitle, setPageTitle] = useState(
-    title
-      ? title
-      : categoryName
-      ? `${sortTypes[2].pageTitlePrefix} ${categoryName} Newsletters`
-      : `${sortTypes[2].pageTitlePrefix} Newsletters`
+  const [pageTitle] = useState(
+    categoryName ? `Best ${categoryName} Newsletters` : title
   );
   const [newslettersData, setNewslettersData] = useState<Newsletter>(
     newslettersListData as Newsletter
@@ -207,7 +202,7 @@ const NewslettersList = ({
       page: nextPage,
       pageSize: 6,
       order: sortTypes[choosedSortType].value,
-      authorId: authorId || (userId ? +userId : undefined),
+      authorId: authorId || undefined,
       orderDirection: 'DESC',
       entity: 'Newsletter',
       search,
@@ -329,11 +324,6 @@ const NewslettersList = ({
 
   const handleSort = async (value: number) => {
     setChoosedSortType(value);
-    setPageTitle(
-      categoryName
-        ? `${sortTypes[value].pageTitlePrefix} ${categoryName} Newsletters`
-        : `${sortTypes[value].pageTitlePrefix} Newsletters`
-    );
     const newsletterResponse = await getNewslettersList({
       page: 1,
       pageSize: 6 * page,
@@ -458,7 +448,7 @@ const NewslettersList = ({
             categoriesIds: filtersPayload.categories,
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
-            authorId: authorId || (userId ? +userId : undefined),
+            authorId: authorId || undefined,
           });
           if (response.newslettersListData) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -480,7 +470,7 @@ const NewslettersList = ({
             categoriesIds: filtersPayload.categories,
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
-            authorId: authorId || (userId ? +userId : undefined),
+            authorId: authorId || undefined,
           });
           if (response) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -498,9 +488,16 @@ const NewslettersList = ({
           !isSeparated && 'xl:!w-fit max-w-[1280px]'
         }`}
       >
-        <h1 className="text-dark-blue md:text-7xl text-5xl font-medium mb-10">
+        <h1
+          className={`text-dark-blue md:text-7xl text-5xl font-medium ${
+            !subTitle && 'mb-10'
+          }`}
+        >
           {pageTitle}
         </h1>
+        {subTitle && (
+          <p className="font-inter text-dark-grey text-lg mb-10">{subTitle}</p>
+        )}
         {isSeparated && (
           <div className="flex mb-10 md:items-center justify-between md:min-w-[735px] lg:min-w-[1000px] flex-col md:flex-row gap-4 md:gap-0">
             <div className="lg:flex-grow">
@@ -916,21 +913,23 @@ const NewslettersList = ({
                             customStyles="flex-1"
                           />
                           <div className="flex md:mr-10">
-                            <div
-                              onClick={() =>
-                                handleClickBookmark(
-                                  String(newsletter.id),
-                                  newsletter.isInBookmarks
-                                )
-                              }
-                            >
-                              {newsletter.isInBookmarks ||
-                              type === 'bookmark' ? (
-                                <BookmarkIcon className="cursor-pointer fill-dark-blue" />
-                              ) : (
-                                <BookmarkPlusIcon className="cursor-pointer" />
-                              )}
-                            </div>
+                            {isOwner !== true && type !== 'claim' && (
+                              <div
+                                onClick={() =>
+                                  handleClickBookmark(
+                                    String(newsletter.id),
+                                    newsletter.isInBookmarks
+                                  )
+                                }
+                              >
+                                {newsletter.isInBookmarks ||
+                                type === 'bookmark' ? (
+                                  <BookmarkIcon className="cursor-pointer fill-dark-blue" />
+                                ) : (
+                                  <BookmarkPlusIcon className="cursor-pointer" />
+                                )}
+                              </div>
+                            )}
                             {isRated && (
                               <div
                                 onClick={() => {
@@ -965,20 +964,42 @@ const NewslettersList = ({
                           </div>
                         </div>
                         <div className="flex gap-2 justify-between w-full md:w-auto md:justify-normal">
-                          <Link
-                            href={`${newsletter.link}?ref=newsletter-hub`}
-                            legacyBehavior
-                            passHref
-                          >
-                            <a target="_blank" rel="noopener noreferrer">
+                          {type === 'claim' ? (
+                            <Link
+                              href={`/newsletters/${newsletter.id}/?claimModal=1`}
+                            >
                               <Button
-                                label="Read Newsletter"
+                                label="Claim Newsletter"
                                 rounded="xl"
                                 fontSize="md"
-                                customStyles="max-w-[150px] md:max-w-none"
+                                customStyles="w-full sm:w-fit"
                               />
-                            </a>
-                          </Link>
+                            </Link>
+                          ) : isOwner === true ? (
+                            <Link href={`/newsletters/${newsletter.id}/edit`}>
+                              <Button
+                                label="Edit Newsletter"
+                                rounded="xl"
+                                fontSize="md"
+                                customStyles="w-full sm:w-fit"
+                              />
+                            </Link>
+                          ) : (
+                            <Link
+                              href={`${newsletter.link}?ref=newsletter-hub`}
+                              legacyBehavior
+                              passHref
+                            >
+                              <a target="_blank" rel="noopener noreferrer">
+                                <Button
+                                  label="Read Newsletter"
+                                  rounded="xl"
+                                  fontSize="md"
+                                  customStyles="max-w-[150px] md:max-w-none"
+                                />
+                              </a>
+                            </Link>
+                          )}
                           {isFollowEnable && (
                             <Button
                               rounded="xl"

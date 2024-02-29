@@ -18,7 +18,7 @@ const Users = ({ usersList }: UsersListProps) => {
       getUsersList={getUserSubscriptions}
       isSortable={false}
       isUserId={true}
-      isFollowEnable={false}
+      isFollowEnable={true}
       title="Users Following"
     />
   );

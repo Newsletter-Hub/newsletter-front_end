@@ -25,14 +25,14 @@ const NewslettersPage = ({
         <title>
           {categoryName && categoryName !== ''
             ? `${categoryName} | Newsletter Hub`
-            : 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
+            : 'Trending Newsletters | Join Newsletter Hub Today'}
         </title>
         <meta
           name="description"
           content={
             categoryName && categoryName !== ''
               ? `Discover, rate and follow the best ${categoryName} newsletters of ${currentYear}, with user-submitted ratings and reviews.`
-              : 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.'
+              : 'Search our extensive newsletter database to find the best newsletters to subscribe to across various categories. Follow newsletters and users, and be part of a community that celebrates quality content.'
           }
         />
       </Head>
