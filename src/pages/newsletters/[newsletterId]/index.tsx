@@ -68,6 +68,7 @@ import ReviewModal from '@/components/Modals/ReviewModal';
 import EditReviewModal from '@/components/Modals/EditReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
+import ClaimModal from '@/components/Modals/ClaimModal';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -100,12 +101,21 @@ const NewsletterPage = ({
   const hasExistingReview: boolean =
     user !== null && reviewForNewsletterData?.review !== null;
   const isReviewModalOpenQueryParam = router.query.reviewModal === '1';
+  const isClaimModalOpenQueryParam =
+    !isReviewModalOpenQueryParam && router.query.claimModal === '1';
   const isReportModalOpenQueryParam =
-    !isReviewModalOpenQueryParam && router.query.reportModal === '1';
+    !isClaimModalOpenQueryParam &&
+    !isReviewModalOpenQueryParam &&
+    router.query.reportModal === '1';
 
-  const [isModalOpen, setIsModalOpen] = useState(isReviewModalOpenQueryParam);
+  const [isModalOpen, setIsModalOpen] = useState(
+    user !== null && isReviewModalOpenQueryParam
+  );
   const [isReportModalOpen, setIsReportModalOpen] = useState(
-    isReportModalOpenQueryParam
+    user !== null && isReportModalOpenQueryParam
+  );
+  const [isClaimModalOpen, setIsClaimModalOpen] = useState(
+    user !== null && isClaimModalOpenQueryParam
   );
 
   const handleOpenModal = () => {
@@ -130,6 +140,19 @@ const NewsletterPage = ({
       router.push('/sign-up');
     }
   };
+
+  const handleOpenClaimModal = () => {
+    if (user) {
+      setIsClaimModalOpen(true);
+    } else {
+      const storedRedirectPath = newsletter
+        ? `/newsletters/${newsletter.id}?claimModal=1`
+        : '/';
+      setRedirectPath(storedRedirectPath);
+      router.push('/sign-up');
+    }
+  };
+
   const reviewMutation = useMutation(createReview);
   const updateReviewMutation = useMutation(updateReview);
   const deleteReviewMutation = useMutation(deleteReview);
@@ -367,13 +390,13 @@ const NewsletterPage = ({
         <title>
           {newsletter?.title
             ? `${newsletter.title} | Newsletter Hub`
-            : 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
+            : 'Best Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
         </title>
         <meta
           name="description"
           content={
             newsletter?.description
-              ? `${newsletter.description.substring(0, 155)}...` // Truncate to ensure it's not too long
+              ? `${newsletter.description.substring(0, 155)}...`
               : 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.'
           }
         />
@@ -459,27 +482,16 @@ const NewsletterPage = ({
               />
             </Link>
             <Button
+              label="Claim Newsletter"
               rounded="xl"
               fontSize="md"
               height="sm"
               customStyles="w-full sm:w-fit"
-              onClick={() =>
-                handleFollow({
-                  entityId: newsletter.id,
-                  followed: newsletter.isFollower,
-                })
-              }
-              variant={newsletter.isFollower ? 'outlined-secondary' : 'primary'}
-              label={
-                newsletter.isFollower ? (
-                  'Following'
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <PlusIcon />
-                    Follow
-                  </span>
-                )
-              }
+              onClick={handleOpenClaimModal}
+            />
+            <ClaimModal
+              open={isClaimModalOpen}
+              handleClose={() => setIsClaimModalOpen(false)}
             />
             <Button
               label="Report"
@@ -562,7 +574,32 @@ const NewsletterPage = ({
                 </span>
               </div>
             </div>
-            <div className="flex gap-10">
+            <div className="flex gap-10 items-center">
+              <Button
+                rounded="xl"
+                fontSize="md"
+                height="sm"
+                customStyles="w-full sm:w-fit"
+                onClick={() =>
+                  handleFollow({
+                    entityId: newsletter.id,
+                    followed: newsletter.isFollower,
+                  })
+                }
+                variant={
+                  newsletter.isFollower ? 'outlined-secondary' : 'primary'
+                }
+                label={
+                  newsletter.isFollower ? (
+                    'Following'
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <PlusIcon />
+                      Follow
+                    </span>
+                  )
+                }
+              />
               <div
                 className="flex gap-2 cursor-pointer"
                 onClick={() =>
@@ -702,7 +739,7 @@ const NewsletterPage = ({
                         </Link>
                       </p>
                       {review.reviewer?.isVerifiedOwner && (
-                        <VerifiedWithTooltip tooltipText="User is a verified newsletter owner"/>
+                        <VerifiedWithTooltip tooltipText="User is a verified newsletter owner" />
                       )}
                     </div>
                   </div>

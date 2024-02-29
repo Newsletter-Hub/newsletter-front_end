@@ -231,8 +231,8 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
                 ))}
               <div className="relative w-full">
                 <p className="mb-4 text-dark-blue text-xl font-medium">
-                Topics
-              </p>
+                  Topics
+                </p>
                 {tags.length < 5 && (
                   <input
                     placeholder={
@@ -275,7 +275,7 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
               </div>
             </div>
             <div className="mb-4">
-            <p className="mb-4 text-dark-blue text-xl font-medium">
+              <p className="mb-4 text-dark-blue text-xl font-medium">
                 Pricing Type
               </p>
               <RadioGroup
