@@ -390,13 +390,13 @@ const NewsletterPage = ({
         <title>
           {newsletter?.title
             ? `${newsletter.title} | Newsletter Hub`
-            : 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
+            : 'Best Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
         </title>
         <meta
           name="description"
           content={
             newsletter?.description
-              ? `${newsletter.description.substring(0, 155)}...` // Truncate to ensure it's not too long
+              ? `${newsletter.description.substring(0, 155)}...`
               : 'Find the best newsletters to subscribe to across various categories. Follow leading newsletters and users, and be part of a community that celebrates quality content.'
           }
         />

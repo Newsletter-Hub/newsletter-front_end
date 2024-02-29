@@ -4,8 +4,14 @@ import { getInterests } from '@/actions/user/interests';
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
   const interests = await getInterests();
+  const defaultLastmod = new Date().toISOString();
 
   const fields: ISitemapField[] = [];
+
+  fields.push({
+    loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/categories/all`,
+    lastmod: defaultLastmod,
+  });
 
   if (interests instanceof Array) {
     interests.forEach(interest => {
@@ -15,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
       }
       const page = {
         loc: `${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/categories/${interestName}`,
-        lastmod: new Date().toISOString(),
+        lastmod: defaultLastmod,
       };
 
       fields.push(page);

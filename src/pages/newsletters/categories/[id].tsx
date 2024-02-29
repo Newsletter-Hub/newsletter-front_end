@@ -25,7 +25,7 @@ const NewslettersPage = ({
         <title>
           {categoryName && categoryName !== ''
             ? `${categoryName} | Newsletter Hub`
-            : 'Top Newsletters Discovery & Reviews | Join Newsletter Hub Today'}
+            : 'Trending Newsletters | Join Newsletter Hub Today'}
         </title>
         <meta
           name="description"
