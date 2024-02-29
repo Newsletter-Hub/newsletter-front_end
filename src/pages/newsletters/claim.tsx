@@ -32,7 +32,7 @@ const ClaimNewslettersPage = ({
           title="Claim a Newsletter"
           defaultSortType="date"
           subTitle="Locate your newsletter below to claim it.
-          If your newsletter has not been added yet, you can easily do so by clicking 'Add Newsletter' at the top of the page
+          If your newsletter has not been added yet, you can easily do so by clicking 'Add Newsletter' in the nav menu.
           "
         />
       </PrivateRoute>

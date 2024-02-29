@@ -58,7 +58,13 @@ const LinkForm = ({
         <br />
         If you are the owner of the newsletter you are adding, you will be to
         claim the newsletter after it is added. Just locate the &quot;Claim
-        Newsletter&quot; button on the newsletter page.
+        Newsletter&quot; button on the newsletter page or find your newsletter
+        on&nbsp;
+        <Link href="/newsletters/claim" legacyBehavior passHref>
+          <a target="_blank" rel="noopener noreferrer">
+            this page.
+          </a>
+        </Link>
         <br />
         <br />
         In the event of an error, rest assured our team will be alerted. We will
