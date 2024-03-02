@@ -74,20 +74,20 @@ const Contact = () => {
             passHref
           >
             <a target="_blank" rel="noopener noreferrer">
-              Facebook,&nbsp;
+              Facebook
             </a>
           </Link>
-          and&nbsp;
+          ,and&nbsp;
           <Link
             href="https://www.linkedin.com/company/newsletterhub"
             legacyBehavior
             passHref
           >
             <a target="_blank" rel="noopener noreferrer">
-              Linkedin&nbsp;
+              Linkedin
             </a>
           </Link>
-          at @newsletter_hub.
+          &nbsp;at @newsletter_hub.
         </p>
       </div>
     </div>
