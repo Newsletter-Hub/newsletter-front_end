@@ -37,7 +37,7 @@ const Header = () => {
   const links = [
     { label: 'Newsletters', href: '/newsletters/categories/all' },
     { label: 'Categories', href: '/newsletters/categories' },
-    { label: 'Users', href: '/users' },
+    { label: 'Community', href: '/users' },
     {
       label: 'Add Newsletter',
       href: `/${user ? 'newsletters/add' : 'sign-up'}`,

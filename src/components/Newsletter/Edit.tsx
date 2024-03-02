@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import useOnClickOutside from '@/hooks/useOnClickOutside';
 
@@ -128,6 +129,16 @@ const Edit = ({ newsletterData, interests }: EditNewsletterProps) => {
       <form onSubmit={handleSubmit(onAdd)}>
         <div className="mb-6">
           <div className="flex flex-col">
+            <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
+              In order to fully edit a newsletter - and its title, image, and
+              description, you must be the owner of the newsletter. If you are
+              the owner of this newsletter, you may claim it by clicking&nbsp;
+              <Link href="/newsletters/claim" legacyBehavior passHref>
+                <a target="_blank" rel="noopener noreferrer">
+                  here.
+                </a>
+              </Link>
+            </p>
             <Input
               label="Title"
               variant="filled"
