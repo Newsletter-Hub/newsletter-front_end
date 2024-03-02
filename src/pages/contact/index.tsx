@@ -77,7 +77,7 @@ const Contact = () => {
               Facebook
             </a>
           </Link>
-          ,and&nbsp;
+          , and&nbsp;
           <Link
             href="https://www.linkedin.com/company/newsletterhub"
             legacyBehavior
