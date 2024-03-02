@@ -84,7 +84,6 @@ const NewsletterPage = ({
     UserReviewForNewsletterResponse | null | undefined
   >(reviewForNewsletter);
   const [page, setPage] = useState(1);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
   const { user } = useUser();
   const router = useRouter();
 
@@ -369,21 +368,6 @@ const NewsletterPage = ({
   const handleModalClose = () => {
     setIsModalOpen(false);
     reset();
-  };
-
-  const handleCopyClick = () => {
-    const newsletterLink = `${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}?utm_source=(direct)&utm_medium=copy_link&utm_campaign=social_share`;
-    navigator.clipboard
-      .writeText(newsletterLink)
-      .then(() => {
-        // Success message
-        setIsCopied(true);
-        // Reset copied state after 2 seconds
-        setTimeout(() => setIsCopied(false), 2000);
-      })
-      .catch(err => {
-        console.error('Failed to copy: ', err);
-      });
   };
 
   if (!reviewsData || !newsletter) {
