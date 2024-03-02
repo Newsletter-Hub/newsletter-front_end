@@ -10,18 +10,6 @@ import parseCookies from 'next-cookies';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  LinkedinIcon,
-  LinkedinShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  EmailShareButton,
-  EmailIcon,
-  RedditIcon,
-  RedditShareButton,
-} from 'next-share';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -69,6 +57,7 @@ import EditReviewModal from '@/components/Modals/EditReviewModal';
 import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
 import ClaimModal from '@/components/Modals/ClaimModal';
+import NewsletterShareBlock from '@/components/Newsletter/NewsletterShareBlock';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -423,7 +412,7 @@ const NewsletterPage = ({
               {newsletter?.owner && (
                 <VerifiedWithTooltip
                   className="mb-10"
-                  tooltipText="Newsletter is claimed by a verified user"
+                  tooltipText="Newsletter claimed by verified user"
                 />
               )}
             </div>
@@ -489,10 +478,15 @@ const NewsletterPage = ({
               customStyles="w-full sm:w-fit"
               onClick={handleOpenClaimModal}
             />
-            <ClaimModal
-              open={isClaimModalOpen}
-              handleClose={() => setIsClaimModalOpen(false)}
-            />
+            {user && (
+              <ClaimModal
+                user={user}
+                newsletterId={newsletter.id}
+                newsletterTitle={newsletter.title}
+                open={isClaimModalOpen}
+                handleClose={() => setIsClaimModalOpen(false)}
+              />
+            )}
             <Button
               label="Report"
               rounded="xl"
@@ -628,36 +622,10 @@ const NewsletterPage = ({
             <span className="font-inter text-sm text-dark-grey">
               Share This Newsletter
             </span>
-            <FacebookShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              quote={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <FacebookIcon size={32} round />
-            </FacebookShareButton>
-            <LinkedinShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <LinkedinIcon size={32} round />
-            </LinkedinShareButton>
-            <TwitterShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on @newsletter_hub`}
-            >
-              <TwitterIcon size={32} round />
-            </TwitterShareButton>
-            <RedditShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              title={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <RedditIcon size={32} round />
-            </RedditShareButton>
-            <EmailShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-              subject={`Review ${newsletter.title} on Newsletter Hub`}
-            >
-              <EmailIcon size={32} round />
-            </EmailShareButton>
+            <NewsletterShareBlock
+              url={`${process.env.NEXT_PUBLIC_BASE_URL}/newsletters/${newsletter.id}`}
+              title={newsletter.title}
+            />
           </div>
           <h2 className="text-lightBlack text-5xl font-medium mb-8">
             {newsletter?.title ? `Reviews for ${newsletter?.title}` : 'Reviews'}

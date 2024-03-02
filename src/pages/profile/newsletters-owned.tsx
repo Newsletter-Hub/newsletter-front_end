@@ -29,7 +29,7 @@ const NewslettersOwned = ({
       type="newsletter"
       title={user ? 'Your Newsletters' : 'Newsletters Owned'}
       authorId={user.id}
-      isOwner={true}
+      layout="owned_newsletters"
     />
   );
 };
