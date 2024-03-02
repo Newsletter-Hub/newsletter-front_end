@@ -13,13 +13,13 @@ import {
   UserReviewForNewsletterResponse,
 } from '@/types/newsletters';
 
-interface ReviewPayload {
+export interface ReviewPayload {
   comment?: string;
   rating: number;
   newsletterId: number;
 }
 
-interface CreateReviewResponse {
+export interface CreateReviewResponse {
   error?: string;
 }
 

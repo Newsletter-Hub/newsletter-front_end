@@ -22,6 +22,7 @@ import clsx from 'clsx';
 
 import { Interest } from '@/types/interests';
 import { Newsletter, NewslettersListData } from '@/types/newsletters';
+import { NewsletterListCtaBlockLayoutType } from './NewsletterListCtaBlock';
 
 import Accordion from '@/components/Accordion';
 import Button from '@/components/Button';
@@ -31,21 +32,17 @@ import Modal from '@/components/Modal';
 import Popover from '@/components/Popover';
 import Slider from '@/components/Slider';
 import StarRating from '@/components/StarRating';
+import NewsletterListCtaBlock from './NewsletterListCtaBlock';
 
-import BookmarkIcon from '@/assets/icons/bookmark';
 import CheckIcon from '@/assets/icons/check';
 import FilterIcon from '@/assets/icons/filter';
-import PlusIcon from '@/assets/icons/plus';
 import SearchResultsIcon from '@/assets/icons/searchResults';
 import SortIcon from '@/assets/icons/sort';
-import StarIcon from '@/assets/icons/star';
 
 import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
-import ReviewModal from '../Modals/ReviewModal';
-import BookmarkPlusIcon from '@/assets/icons/bookmarkPlus';
 import SkeletonImage from '../SkeletonImage';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
@@ -63,12 +60,12 @@ export interface NewslettersPageProps {
   newslettersListData?: NewslettersListData;
   interests?: Interest[];
   getNewslettersList: GetNewslettersListType;
-  type: 'bookmark' | 'newsletter' | 'claim';
+  type: 'bookmark' | 'newsletter';
   isSeparated?: boolean;
   isRated?: boolean;
   isFollowEnable?: boolean;
   isNewsletterFollowed?: boolean;
-  isOwner?: boolean;
+  layout?: NewsletterListCtaBlockLayoutType;
   authorId?: number;
   defaultSortType?: 'date' | 'rating';
   title?: string;
@@ -123,7 +120,7 @@ const NewslettersList = ({
   isRated = true,
   isFollowEnable = true,
   isNewsletterFollowed = false,
-  isOwner = false,
+  layout = 'default',
   authorId,
   defaultSortType = 'rating',
   title = 'Trending Newsletters',
@@ -906,131 +903,26 @@ const NewslettersList = ({
                         ))}
                       </div>
                       <div className="flex items-center md:flex-row flex-col gap-5 md:gap-0 justify-between">
-                        <div className="flex w-full">
-                          <StarRating
-                            readonly
-                            value={newsletter.averageRating}
-                            customStyles="flex-1"
-                          />
-                          <div className="flex md:mr-10">
-                            {isOwner !== true && type !== 'claim' && (
-                              <div
-                                onClick={() =>
-                                  handleClickBookmark(
-                                    String(newsletter.id),
-                                    newsletter.isInBookmarks
-                                  )
-                                }
-                              >
-                                {newsletter.isInBookmarks ||
-                                type === 'bookmark' ? (
-                                  <BookmarkIcon className="cursor-pointer fill-dark-blue" />
-                                ) : (
-                                  <BookmarkPlusIcon className="cursor-pointer" />
-                                )}
-                              </div>
-                            )}
-                            {isRated && (
-                              <div
-                                onClick={() => {
-                                  if (user) {
-                                    setIsOpenReviewModal(
-                                      newsletter.id as number
-                                    );
-                                  } else {
-                                    const storedRedirectPath = newsletter
-                                      ? `/newsletters/${newsletter.id}?reviewModal=1`
-                                      : '/';
-                                    setRedirectPath(storedRedirectPath);
-                                    router.push('/sign-up');
-                                  }
-                                }}
-                              >
-                                <StarIcon className="stroke-lightBlack stroke-[1.5px] cursor-pointer md:ml-6 ml-3" />
-                              </div>
-                            )}
-                            <ReviewModal
-                              register={register}
-                              setValue={setValue}
-                              errors={errors}
-                              newsletter={newsletter}
-                              open={Boolean(
-                                isOpenReviewModal === newsletter.id
-                              )}
-                              handleClose={() => setIsOpenReviewModal(false)}
-                              onSubmit={handleSubmit(onSubmit)}
-                              loading={reviewMutation.isLoading}
-                            />
-                          </div>
-                        </div>
-                        <div className="flex gap-2 justify-between w-full md:w-auto md:justify-normal">
-                          {type === 'claim' ? (
-                            <Link
-                              href={`/newsletters/${newsletter.id}/?claimModal=1`}
-                            >
-                              <Button
-                                label="Claim Newsletter"
-                                rounded="xl"
-                                fontSize="md"
-                                customStyles="w-full sm:w-fit"
-                              />
-                            </Link>
-                          ) : isOwner === true ? (
-                            <Link href={`/newsletters/${newsletter.id}/edit`}>
-                              <Button
-                                label="Edit Newsletter"
-                                rounded="xl"
-                                fontSize="md"
-                                customStyles="w-full sm:w-fit"
-                              />
-                            </Link>
-                          ) : (
-                            <Link
-                              href={`${newsletter.link}?ref=newsletter-hub`}
-                              legacyBehavior
-                              passHref
-                            >
-                              <a target="_blank" rel="noopener noreferrer">
-                                <Button
-                                  label="Read Newsletter"
-                                  rounded="xl"
-                                  fontSize="md"
-                                  customStyles="max-w-[150px] md:max-w-none"
-                                />
-                              </a>
-                            </Link>
-                          )}
-                          {isFollowEnable && (
-                            <Button
-                              rounded="xl"
-                              fontSize="md"
-                              customStyles="md:!w-[140px] !min-w-[125px]"
-                              loading={Boolean(followLoading === newsletter.id)}
-                              onClick={() =>
-                                handleFollow({
-                                  entityId: newsletter.id,
-                                  followed: newsletter.isFollower,
-                                })
-                              }
-                              variant={
-                                isNewsletterFollowed || newsletter.isFollower
-                                  ? 'outlined-secondary'
-                                  : 'primary'
-                              }
-                              label={
-                                isNewsletterFollowed ||
-                                newsletter.isFollower ? (
-                                  'Following'
-                                ) : (
-                                  <span className="flex items-center gap-2">
-                                    <PlusIcon />
-                                    Follow
-                                  </span>
-                                )
-                              }
-                            />
-                          )}
-                        </div>
+                        <NewsletterListCtaBlock
+                          newsletter={newsletter}
+                          layout={layout}
+                          isRated={isRated}
+                          isFollowEnable={isFollowEnable}
+                          handleClickBookmark={handleClickBookmark}
+                          setIsOpenReviewModal={setIsOpenReviewModal}
+                          setRedirectPath={setRedirectPath}
+                          handleSubmit={handleSubmit}
+                          register={register}
+                          setValue={setValue}
+                          errors={errors}
+                          onSubmit={onSubmit}
+                          handleFollow={handleFollow}
+                          isOpenReviewModal={isOpenReviewModal}
+                          reviewMutation={reviewMutation}
+                          followLoading={followLoading}
+                          isNewsletterFollowed={isNewsletterFollowed}
+                          type={type}
+                        />
                       </div>
                     </div>
                   </div>
