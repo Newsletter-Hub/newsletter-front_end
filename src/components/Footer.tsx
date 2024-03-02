@@ -11,16 +11,18 @@ const productLinks = [
 const newsletterLinks = [
   { label: 'Explore Newsletters', href: '/newsletters/categories/all' },
   { label: 'Explore Categories', href: '/newsletters/categories' },
+  { label: 'Explore Community', href: '/users' },
   { label: 'Add Newsletter', href: '/newsletters/add' },
   { label: 'Claim Newsletter', href: '/newsletters/claim' },
 ];
 
 const socialMediaLinks = [
+  { label: 'X/Twitter', href: 'https://twitter.com/newsletter_hub' },
+  { label: 'Facebook', href: 'https://www.facebook.com/newsletterhub' },
   {
     label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/newsletter-hub',
+    href: 'https://www.linkedin.com/company/newsletterhub',
   },
-  { label: 'X/Twitter', href: 'https://twitter.com/newsletter_hub' },
 ];
 
 const additionalLinks = [

@@ -59,12 +59,32 @@ const Contact = () => {
         <p className="text-start max-w-[395px] font-inter text-sm mb-8 text-dark-blue">
           You can find us on&nbsp;
           <Link
-            href="https://twitter.com/newsletter_hub'"
+            href="https://twitter.com/newsletter_hub"
             legacyBehavior
             passHref
           >
             <a target="_blank" rel="noopener noreferrer">
-              X/Twitter&nbsp;
+              X/Twitter
+            </a>
+          </Link>
+          ,&nbsp;
+          <Link
+            href="https://www.facebook.com/newsletterhub"
+            legacyBehavior
+            passHref
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              Facebook,&nbsp;
+            </a>
+          </Link>
+          and&nbsp;
+          <Link
+            href="https://www.linkedin.com/company/newsletterhub"
+            legacyBehavior
+            passHref
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              Linkedin&nbsp;
             </a>
           </Link>
           at @newsletter_hub.
