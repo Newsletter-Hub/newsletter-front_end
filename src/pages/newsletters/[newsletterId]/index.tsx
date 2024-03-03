@@ -449,7 +449,7 @@ const NewsletterPage = ({
                 href={`${newsletter.link}?ref=newsletter-hub`}
                 legacyBehavior
                 passHref
-              > 
+              >
                 <a target="_blank" rel="noopener noreferrer">
                   <Button
                     label="Read Newsletter"
