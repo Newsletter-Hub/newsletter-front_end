@@ -35,6 +35,7 @@ const ClaimNewslettersPage = ({
           subTitle="Locate your newsletter below to claim it.
           If your newsletter has not been added yet, you can easily do so by clicking 'Add Newsletter' in the nav menu.
           "
+          onlyShowUnclaimed={true}
         />
       </PrivateRoute>
     </>
@@ -59,6 +60,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     order: 'date',
     orderDirection: 'DESC',
     categoriesIds: [],
+    onlyShowUnclaimed: true,
     token,
   });
 

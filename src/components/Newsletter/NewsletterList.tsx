@@ -72,6 +72,7 @@ export interface NewslettersPageProps {
   categoryName?: number | string | null;
   categoryId?: string | null;
   subTitle?: string;
+  onlyShowUnclaimed?: boolean;
 }
 
 interface SortType {
@@ -127,6 +128,7 @@ const NewslettersList = ({
   categoryId,
   categoryName,
   subTitle,
+  onlyShowUnclaimed = false,
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
@@ -204,6 +206,7 @@ const NewslettersList = ({
       entity: 'Newsletter',
       search,
       categoriesIds: filtersPayload.categories,
+      onlyShowUnclaimed: onlyShowUnclaimed,
     }).finally(() => setMoreNewslettersLoading(false));
     const prevNewsletters = newslettersData.newsletters;
     if (newsletterResponse.newslettersListData) {
@@ -244,6 +247,7 @@ const NewslettersList = ({
         order: sortTypes[choosedSortType].value,
         orderDirection: 'DESC',
         search: search,
+        onlyShowUnclaimed: onlyShowUnclaimed,
       });
 
       if (newsletterResponse.newslettersListData) {
@@ -270,6 +274,7 @@ const NewslettersList = ({
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
       orderDirection: 'DESC',
+      onlyShowUnclaimed: onlyShowUnclaimed,
     }).finally(() => setSearchLoading(false));
 
     if (newsletterResponse.newslettersListData) {
@@ -293,6 +298,7 @@ const NewslettersList = ({
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
         orderDirection: 'DESC',
+        onlyShowUnclaimed: onlyShowUnclaimed,
       }).finally(() => setFiltersLoading(false));
       if (newsletterResponse.newslettersListData) {
         handleCloseModal();
@@ -332,6 +338,7 @@ const NewslettersList = ({
       categoriesIds: filtersPayload.categories,
       durationFrom: filtersPayload.durationFrom,
       durationTo: filtersPayload.durationTo,
+      onlyShowUnclaimed: onlyShowUnclaimed,
     });
     if (newsletterResponse.newslettersListData) {
       setNewslettersData(newsletterResponse.newslettersListData as Newsletter);
@@ -353,6 +360,7 @@ const NewslettersList = ({
         categoriesIds: filtersPayload.categories,
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
+        onlyShowUnclaimed: onlyShowUnclaimed,
       });
       if (bookmarksResponse.newslettersListData) {
         setNewslettersData(bookmarksResponse.newslettersListData as Newsletter);
@@ -376,6 +384,7 @@ const NewslettersList = ({
         categoriesIds: filtersPayload.categories,
         durationFrom: filtersPayload.durationFrom,
         durationTo: filtersPayload.durationTo,
+        onlyShowUnclaimed: onlyShowUnclaimed,
       });
       if (bookmarksResponse.newslettersListData) {
         setNewslettersData(bookmarksResponse.newslettersListData as Newsletter);
@@ -446,6 +455,7 @@ const NewslettersList = ({
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
             authorId: authorId || undefined,
+            onlyShowUnclaimed: onlyShowUnclaimed,
           });
           if (response.newslettersListData) {
             setNewslettersData(response.newslettersListData as Newsletter);
@@ -468,6 +478,7 @@ const NewslettersList = ({
             durationFrom: filtersPayload.durationFrom,
             durationTo: filtersPayload.durationTo,
             authorId: authorId || undefined,
+            onlyShowUnclaimed: onlyShowUnclaimed,
           });
           if (response) {
             setNewslettersData(response.newslettersListData as Newsletter);
