@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const usersResponse = await getUsersList({
     page: 1,
     pageSize: 9,
-    order: 'dataJoined',
+    order: 'followers',
     orderDirection: 'DESC',
     search,
     token,

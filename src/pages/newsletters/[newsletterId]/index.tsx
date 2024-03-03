@@ -470,14 +470,16 @@ const NewsletterPage = ({
                 customStyles="w-full sm:w-fit"
               />
             </Link>
-            <Button
-              label="Claim Newsletter"
-              rounded="xl"
-              fontSize="md"
-              height="sm"
-              customStyles="w-full sm:w-fit"
-              onClick={handleOpenClaimModal}
-            />
+            {!newsletter.owner && (
+              <Button
+                label="Claim Newsletter"
+                rounded="xl"
+                fontSize="md"
+                height="sm"
+                customStyles="w-full sm:w-fit"
+                onClick={handleOpenClaimModal}
+              />
+            )}
             {user && (
               <ClaimModal
                 user={user}

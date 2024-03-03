@@ -53,6 +53,7 @@ export interface GetNewsletterListProps {
   myId?: number;
   entity?: 'Newsletter' | 'User';
   token?: string | null;
+  onlyShowUnclaimed?: boolean;
 }
 
 export interface FollowPayload {
@@ -260,6 +261,7 @@ export const getNewslettersList = async ({
   search,
   authorId,
   token,
+  onlyShowUnclaimed,
 }: GetNewsletterListProps) => {
   try {
     let url = `newsletters?page=${page}&pageSize=${pageSize}&order=${order}&orderDirection=${orderDirection}`;
@@ -288,6 +290,7 @@ export const getNewslettersList = async ({
       url += `&durationTo=${durationTo}`;
     if (search) url += `&search=${search}`;
     if (authorId) url += `&authorId=${authorId}`;
+    if (onlyShowUnclaimed) url += `&onlyShowUnclaimed=${onlyShowUnclaimed}`;
 
     const newslettersListData: NewslettersListData = await api
       .get(url, {
