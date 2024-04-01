@@ -1,0 +1,15 @@
+const ListItemIcon = () => {
+  return (
+    <svg
+      width="7"
+      height="10"
+      viewBox="0 0 7 10"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M7 5L0 0L2.5 5L0 10L7 5Z" fill="#01AAED" />
+    </svg>
+  );
+};
+
+export default ListItemIcon;
