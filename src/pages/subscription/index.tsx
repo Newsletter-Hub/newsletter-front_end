@@ -1,6 +1,7 @@
 import TopBanner from '@/components/Subscription/TopBanner';
 import Benefits from '@/components/Subscription/Benefits';
 import HowItWorks from '@/components/Subscription/HowItWorks';
+import ChoosePlan from '@/components/Subscription/ChoosePlan';
 
 const Subscription = () => {
   return (
@@ -8,6 +9,7 @@ const Subscription = () => {
       <TopBanner />
       <Benefits />
       <HowItWorks />
+      <ChoosePlan />
     </main>
   );
 };

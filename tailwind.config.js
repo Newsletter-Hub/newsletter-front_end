@@ -66,6 +66,7 @@ module.exports = {
       '7xl': ['72px', '98px'],
       '2xs': ['11px', '15px'],
       '3xl': ['32px', '38px'],
+      '6xl': ['64px', '87px'],
     },
     colors: {
       primary: '#01AAED',
