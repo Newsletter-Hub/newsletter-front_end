@@ -21,7 +21,7 @@ const TopBanner = () => {
         <Image
           src={topbannerImage}
           width={0}
-          alt="contact"
+          alt="Enable paied subscription"
           placeholder="blur"
           blurDataURL="src/assets/images/subscriptionTopbannerImg.webp"
           style={{ width: '100%', height: 'auto' }}

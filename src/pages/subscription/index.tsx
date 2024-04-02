@@ -1,11 +1,13 @@
 import TopBanner from '@/components/Subscription/TopBanner';
 import Benefits from '@/components/Subscription/Benefits';
+import HowItWorks from '@/components/Subscription/HowItWorks';
 
 const Subscription = () => {
   return (
     <main className="flex flex-col items-center pt-20 gap-y-24">
       <TopBanner />
       <Benefits />
+      <HowItWorks />
     </main>
   );
 };
