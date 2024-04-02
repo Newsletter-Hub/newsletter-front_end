@@ -5,7 +5,7 @@ import subscriptionBenefitsImg from '@/assets/images/subscriptionBenefitsImg.web
 
 const Benefits = () => {
   return (
-    <section className="flex flex-col md:flex-row min-w-[93%] xl:w-[1365px] min-h-[fit-content] h-[600px] md:h-[472px] px-3 bg-primary-light">
+    <section className="flex flex-col md:flex-row min-w-[93%] xl:w-[1365px] min-h-[fit-content] h-[600px] md:h-[472px] px-3 bg-primary-light rounded-lg">
       <div className="sm:flex-1 flex items-center justify-center">
         <Image
           src={subscriptionBenefitsImg}
@@ -15,7 +15,7 @@ const Benefits = () => {
           blurDataURL="src/assets/images/subscriptionBenefitsImg.webp"
         />
       </div>
-      <div className="sm:flex-1 flex items-center">
+      <div className="sm:flex-1 flex items-center justify-center md:justify-start">
         <div className="flex flex-col gap-y-4">
           <h3 className="font-medium text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-lightBlack">
             What you recieve
