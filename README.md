@@ -45,3 +45,13 @@ This project uses Google Ads for monetization. For setup instructions, please re
 
 - [Part 1](https://www.loom.com/share/18a2b8a37e9a4e5f9d32347e53e6087e?sid=0de39c43-8c2c-47b5-96ca-bd7835d21e45)
 - [Part 2](https://www.loom.com/share/f5783e1223764cf19f524975f0da49c3?sid=8d1901bc-656b-4424-a577-c4e01411aba2)
+
+## Payment Subscription
+
+Add .env variables (response from `http(s)://{BACKEND_URL}/paypal/billing-plans`):
+
+- `NEXT_PUBLIC_MONTHLY_PLAN_ID`;
+- `NEXT_PUBLIC_YEARLY_PLAN_ID`;
+- `NEXT_PUBLIC_PAYPAL_CLIENT_ID`;
+- `NEXT_PUBLIC_SUBSCRIPTION_MONTHLY_PRICE_USD`; // like on the back-end
+- `NEXT_PUBLIC_SUBSCRIPTION_YEARLY_PRICE_USD`; // like on the back-end
