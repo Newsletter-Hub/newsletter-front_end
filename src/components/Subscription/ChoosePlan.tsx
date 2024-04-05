@@ -1,13 +1,56 @@
-import { useState } from 'react';
-
+import Script from 'next/script';
 import Image from 'next/image';
+import React, { useEffect, useState, useRef } from 'react';
 
 import checkmarkWhiteIcon from '@/assets/images/checkmarkWhiteIcon.svg';
 
 import Button from '@/components/Button';
 
-const ChoosePlan = () => {
+import { User } from '@/types/user';
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    paypal: any;
+  }
+}
+
+interface SubscriptionProps {
+  userMe: User;
+}
+
+const ChoosePlan = ({ userMe }: SubscriptionProps) => {
   const [isChecked, setIsChecked] = useState(true);
+  const [isPaypalButtonsHidden, setIsPaypalButtonsHidden] = useState(true);
+
+  const paypalButtonContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const paypalButtonContainer = paypalButtonContainerRef.current;
+
+    if (paypalButtonContainer) {
+      while (paypalButtonContainer.firstChild) {
+        paypalButtonContainer.removeChild(paypalButtonContainer.firstChild);
+      }
+    }
+
+    if (window.paypal) {
+      window.paypal
+        .Buttons({
+          createSubscription: function (data, actions) {
+            return actions.subscription.create({
+              plan_id: isChecked
+                ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
+                : process.env.NEXT_PUBLIC_YEARLY_PLAN_ID,
+            });
+          },
+          onApprove: function (data, actions) {
+            alert('You have successfully subscribed, please reload your page!');
+          },
+        })
+        .render('#paypal-button-container');
+    }
+  }, [isChecked]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -45,7 +88,7 @@ const ChoosePlan = () => {
         </label>
 
         <div className="flex flex-col md:flex-row gap-x-8">
-          <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[428px] p-6 bg-white rounded-lg">
+          <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[460px] p-6 bg-white rounded-lg">
             <div className="w-full">
               <div className="flex justify-between">
                 <p className="font-inter text-lg font-semibold">Basic</p>
@@ -71,8 +114,8 @@ const ChoosePlan = () => {
             />
           </div>
 
-          <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[428px] p-6 bg-primary rounded-lg">
-            <div className="w-full">
+          <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[460px] p-6 bg-primary rounded-lg">
+            <div className="w-full relative">
               <div className="flex justify-between">
                 <p className="font-inter text-lg font-semibold text-white">
                   Hub Pro
@@ -83,13 +126,27 @@ const ChoosePlan = () => {
               </div>
 
               <div className="flex flex-col items-center justify-center mb-3">
-                <sup className="font-semibold text-base text-white top-10 -left-11">
+                <sup
+                  className={
+                    isChecked
+                      ? 'font-semibold text-base text-white top-10 -left-11'
+                      : 'font-semibold text-base text-white top-10 -left-16'
+                  }
+                >
                   $
                 </sup>
                 <span className="font-inter text-6xl font-medium text-white">
-                  10
+                  {isChecked
+                    ? process.env.NEXT_PUBLIC_SUBSCRIPTION_MONTHLY_PRICE_USD
+                    : process.env.NEXT_PUBLIC_SUBSCRIPTION_YEARLY_PRICE_USD}
                 </span>
-                <sub className="font-semibold text-base text-white -top-10 left-12">
+                <sub
+                  className={
+                    isChecked
+                      ? 'font-semibold text-base text-white -top-10 left-12'
+                      : 'font-semibold text-base text-white -top-10 left-16'
+                  }
+                >
                   /mo
                 </sub>
                 <p className="font-inter text-base font-normal text-light-porcelain">
@@ -144,15 +201,52 @@ const ChoosePlan = () => {
                 </li>
               </ul>
             </div>
-            <Button
-              label="Subscribe"
-              variant="tertiary"
-              rounded="xl"
-              size="full"
-            />
+            {isPaypalButtonsHidden && (
+              <Button
+                label="Subscribe"
+                variant="tertiary"
+                rounded="xl"
+                size="full"
+                onClick={() => setIsPaypalButtonsHidden(!isPaypalButtonsHidden)}
+              />
+            )}
+
+            <div
+              id="paypal-button-container"
+              ref={paypalButtonContainerRef}
+              style={
+                isPaypalButtonsHidden
+                  ? { opacity: 0, width: 0, height: 0, position: 'absolute' }
+                  : { opacity: 1, minWidth: '200px', maxWidth: '100%' }
+              }
+            ></div>
           </div>
         </div>
       </div>
+
+      <Script
+        src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&vault=true&intent=subscription`}
+        strategy="afterInteractive"
+        onLoad={() => {
+          if (window.paypal) {
+            window.paypal
+              .Buttons({
+                createSubscription: function (data, actions) {
+                  return actions.subscription.create({
+                    plan_id: isChecked
+                      ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
+                      : process.env.NEXT_PUBLIC_YEARLY_PLAN_ID,
+                    custom_id: userMe.email,
+                  });
+                },
+                onApprove: function (data, actions) {
+                  alert('You have successfully subscribed!');
+                },
+              })
+              .render('#paypal-button-container');
+          }
+        }}
+      />
     </section>
   );
 };

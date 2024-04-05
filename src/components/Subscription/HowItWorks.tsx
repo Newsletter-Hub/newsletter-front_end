@@ -32,7 +32,7 @@ const HowItWorks = () => {
               width={0}
               alt="contact"
               placeholder="blur"
-              blurDataURL="src/assets/images/subscriptionPlaneIcon.webp"
+              blurDataURL="src/assets/images/subscriptionPlaneIcon.svg"
               className="hidden lg:block"
               style={{
                 width: '37px',
