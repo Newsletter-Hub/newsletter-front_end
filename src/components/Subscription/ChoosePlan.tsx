@@ -70,6 +70,10 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
     setIsChecked(!isChecked);
   };
 
+  const onUnsubscribe = async () => {
+    console.log('Yes')!;
+  };
+
   return (
     <section className="flex items-center justify-center w-full bg-primary-light pt-20 pb-28">
       <div className="flex flex-col items-center gap-y-10">
