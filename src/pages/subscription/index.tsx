@@ -8,21 +8,27 @@ import HowItWorks from '@/components/Subscription/HowItWorks';
 import ChoosePlan from '@/components/Subscription/ChoosePlan';
 
 import { getUserMe } from '@/actions/user';
+import { getUserSubscription } from '@/actions/paymentSubscription';
 
 import { User } from '@/types/user';
+import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 interface SubscriptionProps {
   userMe: User;
+  subscription: GetUserSubscriptionResponse;
 }
 
-const Subscription = ({ userMe }: SubscriptionProps) => {
+const Subscription = ({ userMe, subscription }: SubscriptionProps) => {
   return (
     <PrivateRoute>
       <div className="flex flex-col items-center pt-20 gap-y-24">
         <TopBanner />
         <Benefits />
         <HowItWorks />
-        <ChoosePlan userMe={userMe} />
+        <ChoosePlan
+          userMe={userMe}
+          subscription={subscription?.response?.susbcription || null}
+        />
       </div>
     </PrivateRoute>
   );
@@ -43,13 +49,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   let userMe = null;
+  let subscription = null;
   if (token) {
     userMe = await getUserMe({ token });
+    subscription = await getUserSubscription({ token });
   }
 
   return {
     props: {
       userMe: userMe?.response,
+      subscription,
     },
   };
 };

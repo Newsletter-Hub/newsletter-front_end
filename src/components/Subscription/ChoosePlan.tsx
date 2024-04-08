@@ -17,9 +17,10 @@ declare global {
 
 interface SubscriptionProps {
   userMe: User;
+  subscription: null | boolean;
 }
 
-const ChoosePlan = ({ userMe }: SubscriptionProps) => {
+const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
   const [isChecked, setIsChecked] = useState(true);
   const [isPaypalButtonsHidden, setIsPaypalButtonsHidden] = useState(true);
 
@@ -42,6 +43,7 @@ const ChoosePlan = ({ userMe }: SubscriptionProps) => {
               plan_id: isChecked
                 ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
                 : process.env.NEXT_PUBLIC_YEARLY_PLAN_ID,
+              custom_id: userMe.email,
             });
           },
           onApprove: function (data, actions) {
@@ -50,10 +52,14 @@ const ChoosePlan = ({ userMe }: SubscriptionProps) => {
         })
         .render('#paypal-button-container');
     }
-  }, [isChecked]);
+  }, [isChecked, userMe.email]);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+  };
+
+  const onUnsubscribe = async () => {
+    console.log('Yes')!;
   };
 
   return (
@@ -106,7 +112,7 @@ const ChoosePlan = ({ userMe }: SubscriptionProps) => {
               </p>
             </div>
             <Button
-              label="Active"
+              label={!subscription ? 'Active' : 'Subscribed'}
               variant="primary"
               rounded="xl"
               size="full"
@@ -201,14 +207,27 @@ const ChoosePlan = ({ userMe }: SubscriptionProps) => {
                 </li>
               </ul>
             </div>
-            {isPaypalButtonsHidden && (
+
+            {subscription ? (
               <Button
-                label="Subscribe"
+                label="Unsubscribe"
                 variant="tertiary"
                 rounded="xl"
                 size="full"
-                onClick={() => setIsPaypalButtonsHidden(!isPaypalButtonsHidden)}
+                onClick={onUnsubscribe}
               />
+            ) : (
+              isPaypalButtonsHidden && (
+                <Button
+                  label="Subscribe"
+                  variant="tertiary"
+                  rounded="xl"
+                  size="full"
+                  onClick={() =>
+                    setIsPaypalButtonsHidden(!isPaypalButtonsHidden)
+                  }
+                />
+              )
             )}
 
             <div
