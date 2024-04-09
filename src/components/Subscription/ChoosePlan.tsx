@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Script from 'next/script';
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
@@ -68,10 +70,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-  };
-
-  const onUnsubscribe = async () => {
-    console.log('Yes')!;
   };
 
   return (
@@ -235,6 +233,7 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 }
               />
             ) : (
+              subscription.isExpired &&
               isPaypalButtonsHidden && (
                 <Button
                   label="Subscribe"

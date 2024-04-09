@@ -6,6 +6,8 @@ import { HTTPError } from 'ky';
 import api from '@/config/ky';
 
 import {
+  CancelSubscriptionPayload,
+  CancelSubscriptionResponse,
   GetUserSubscriptionPayload,
   GetUserSubscriptionResponse,
   PaymentSubscription,
@@ -26,5 +28,25 @@ export const getUserSubscription = async ({
   } catch (error) {
     throwErrorMessage(error as HTTPError, 'Failed to get subscription');
     return { error: 'Failed to get subscription' };
+  }
+};
+
+export const cancelSubscription = async ({
+  token,
+  reason,
+}: CancelSubscriptionPayload) => {
+  try {
+    const headers = token ? { Cookie: `accessToken=${token}` } : {};
+    const response: CancelSubscriptionResponse = await api
+      .post('payment-subscription/cancel-subscription', {
+        headers,
+        credentials: 'include',
+        json: { reason },
+      })
+      .json();
+    return { response };
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to cancel subscription');
+    return { error: 'Failed to cancel subscription' };
   }
 };

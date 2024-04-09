@@ -8,5 +8,17 @@ export interface GetUserSubscriptionResponse {
 }
 
 export type PaymentSubscription = {
-  susbcription: null | boolean;
+  susbcription: {
+    isActive: null | boolean;
+    isExpired: null | boolean;
+  };
+};
+
+export interface CancelSubscriptionPayload {
+  token?: string | null;
+  reason: string;
+}
+
+export type CancelSubscriptionResponse = {
+  susbcription: boolean;
 };
