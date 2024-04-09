@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Script from 'next/script';
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
@@ -5,8 +7,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import checkmarkWhiteIcon from '@/assets/images/checkmarkWhiteIcon.svg';
 
 import Button from '@/components/Button';
+import CancelSubscriptionModal from '../Modals/CancelSubscriptionModal';
 
 import { User } from '@/types/user';
+import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 declare global {
   interface Window {
@@ -17,12 +21,19 @@ declare global {
 
 interface SubscriptionProps {
   userMe: User;
-  subscription: null | boolean;
+  subscription: {
+    isActive: null | boolean;
+    isExpired: null | boolean;
+  };
+  token: null | string;
 }
 
-const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
-  const [isChecked, setIsChecked] = useState(true);
-  const [isPaypalButtonsHidden, setIsPaypalButtonsHidden] = useState(true);
+const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
+  const [isChecked, setIsChecked] = useState<boolean>(true);
+  const [isPaypalButtonsHidden, setIsPaypalButtonsHidden] =
+    useState<boolean>(true);
+  const [isOpenCancelSubscriptionModal, setIsOpenCancelSubscriptionModal] =
+    useState<boolean>(false);
 
   const paypalButtonContainerRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +49,7 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
     if (window.paypal) {
       window.paypal
         .Buttons({
-          createSubscription: function (data, actions) {
+          createSubscription: function (data: any, actions: any) {
             return actions.subscription.create({
               plan_id: isChecked
                 ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
@@ -46,7 +57,7 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
               custom_id: userMe.email,
             });
           },
-          onApprove: function (data, actions) {
+          onApprove: function (data: any, actions: any) {
             alert('You have successfully subscribed, please reload your page!');
           },
         })
@@ -56,10 +67,6 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-  };
-
-  const onUnsubscribe = async () => {
-    console.log('Yes')!;
   };
 
   return (
@@ -112,7 +119,7 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
               </p>
             </div>
             <Button
-              label={!subscription ? 'Active' : 'Subscribed'}
+              label={!subscription.isActive ? 'Active' : 'Subscribed'}
               variant="primary"
               rounded="xl"
               size="full"
@@ -208,15 +215,28 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
               </ul>
             </div>
 
-            {subscription ? (
+            {subscription.isActive && !subscription.isExpired ? (
               <Button
                 label="Unsubscribe"
                 variant="tertiary"
                 rounded="xl"
                 size="full"
-                onClick={onUnsubscribe}
+                onClick={() =>
+                  setIsOpenCancelSubscriptionModal(
+                    !isOpenCancelSubscriptionModal
+                  )
+                }
+              />
+            ) : !subscription.isActive && !subscription.isExpired ? (
+              <Button
+                label="Canceled"
+                variant="tertiary"
+                rounded="xl"
+                size="full"
+                disabled={true}
               />
             ) : (
+              subscription.isExpired &&
               isPaypalButtonsHidden && (
                 <Button
                   label="Subscribe"
@@ -243,6 +263,14 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
         </div>
       </div>
 
+      <CancelSubscriptionModal
+        open={isOpenCancelSubscriptionModal}
+        handleClose={() => {
+          setIsOpenCancelSubscriptionModal(false);
+        }}
+        token={token}
+      />
+
       <Script
         src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&vault=true&intent=subscription`}
         strategy="afterInteractive"
@@ -250,7 +278,7 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
           if (window.paypal) {
             window.paypal
               .Buttons({
-                createSubscription: function (data, actions) {
+                createSubscription: function (data: any, actions: any) {
                   return actions.subscription.create({
                     plan_id: isChecked
                       ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
@@ -258,8 +286,10 @@ const ChoosePlan = ({ userMe, subscription }: SubscriptionProps) => {
                     custom_id: userMe.email,
                   });
                 },
-                onApprove: function (data, actions) {
-                  alert('You have successfully subscribed!');
+                onApprove: function (data: any, actions: any) {
+                  alert(
+                    'You have successfully subscribed, please reload your page!'
+                  );
                 },
               })
               .render('#paypal-button-container');
