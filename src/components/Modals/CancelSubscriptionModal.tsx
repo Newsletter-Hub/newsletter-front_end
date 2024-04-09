@@ -40,9 +40,9 @@ const CancelSubscriptionModal = ({
       token,
     });
 
-    const subcription = response.response?.susbcription;
+    const isSuccess = response.response?.isSuccess;
 
-    if (!subcription) {
+    if (isSuccess) {
       toast.success('Subscription successfully canceled!');
     } else {
       toast.error('Subscription was not canceled! Please, tty again!');

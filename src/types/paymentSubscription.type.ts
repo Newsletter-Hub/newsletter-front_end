@@ -8,7 +8,7 @@ export interface GetUserSubscriptionResponse {
 }
 
 export type PaymentSubscription = {
-  susbcription: {
+  subscription: {
     isActive: null | boolean;
     isExpired: null | boolean;
   };
@@ -20,5 +20,5 @@ export interface CancelSubscriptionPayload {
 }
 
 export type CancelSubscriptionResponse = {
-  susbcription: boolean;
+  isSuccess: boolean;
 };
