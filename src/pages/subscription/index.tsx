@@ -29,8 +29,8 @@ const Subscription = ({ userMe, subscription, token }: SubscriptionProps) => {
         <ChoosePlan
           userMe={userMe}
           subscription={{
-            isActive: subscription.response?.susbcription.isActive || null,
-            isExpired: subscription.response?.susbcription.isExpired || null,
+            isActive: subscription.response?.subscription?.isActive || null,
+            isExpired: subscription.response?.subscription?.isExpired || null,
           }}
           token={token}
         />
