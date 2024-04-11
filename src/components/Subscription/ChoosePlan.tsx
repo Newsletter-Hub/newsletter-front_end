@@ -58,7 +58,9 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
             });
           },
           onApprove: function (data: any, actions: any) {
-            alert('You have successfully subscribed, please reload your page!');
+            alert(
+              'Thanks for subscribing! Your reqeuest is being processed. This might take a few minutes'
+            );
           },
         })
         .render('#paypal-button-container');
@@ -288,7 +290,7 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 },
                 onApprove: function (data: any, actions: any) {
                   alert(
-                    'You have successfully subscribed, please reload your page!'
+                    'Thanks for subscribing! Your reqeuest is being processed. This might take a few minutes'
                   );
                 },
               })
