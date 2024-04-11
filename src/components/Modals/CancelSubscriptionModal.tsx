@@ -54,7 +54,11 @@ const CancelSubscriptionModal = ({
   return (
     <Modal open={open} handleClose={handleClose} spacing="sm">
       <div className="pt-10 md:pt-0">
-        <p>Confirm unsubscription</p>
+        <p>
+          Are you certain you wish to cancel your subscription to Newsletters
+          Hub Pro? Once confirmed, your subscription will be automatically
+          terminated at the end of the paid period.
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-y-7">

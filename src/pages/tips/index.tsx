@@ -1,39 +1,47 @@
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import parseCookies from 'next-cookies';
 
 import PrivateRoute from '@/components/PrivateRoute';
-// import TopBanner from '@/components/Subscription/TopBanner';
-// import Benefits from '@/components/Subscription/Benefits';
-// import HowItWorks from '@/components/Subscription/HowItWorks';
-// import ChoosePlan from '@/components/Subscription/ChoosePlan';
 
-// import { getUserMe } from '@/actions/user';
+import ArrowLeft from '@/assets/icons/arrowLeft';
+import TipItem from '@/components/Tips/TipItem';
+
 import { getTips } from '@/actions/tips/index';
 
 import { User } from '@/types/user';
-// import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
+import { GetTipsResponse } from '@/types/tips.type';
 
-interface TipsProps {
-  tips: any;
-}
-
-const Tips = ({ tips }: TipsProps) => {
+const Tips = ({ tips }: GetTipsResponse) => {
   console.log('tips', tips);
 
   return (
     <PrivateRoute>
-      <div className="flex flex-col items-center pt-20 gap-y-24">
-        {/* <TopBanner />
-        <Benefits />
-        <HowItWorks />
-        <ChoosePlan
-          userMe={userMe}
-          subscription={{
-            isActive: subscription.response?.subscription?.isActive || null,
-            isExpired: subscription.response?.subscription?.isExpired || null,
-          }}
-          token={token}
-        /> */}
+      <div className="flex flex-col items-start xs:pt-6 xs:px-2.5 pt-20 gap-y-10 max-w-[1062px] mx-auto">
+        <Link
+          href="/profile/newsletters-owned"
+          className="flex items-center gap-x-3 font-inter text-lg"
+        >
+          <ArrowLeft className="stroke-black" />
+          Back to Your Newsletters
+        </Link>
+
+        <h2 className="font-medium text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-lightBlack">
+          Tips
+        </h2>
+
+        <ul className="w-full">
+          {tips.map(({ tipper, amount, note, createdAt }, i) => (
+            <TipItem
+              key={i}
+              tipper={tipper}
+              amount={amount}
+              note={note || ''}
+              date={createdAt}
+              isLastItem={tips.length - 1 === i ? true : false}
+            />
+          ))}
+        </ul>
       </div>
     </PrivateRoute>
   );
