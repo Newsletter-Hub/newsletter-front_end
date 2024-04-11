@@ -15,6 +15,7 @@ import Link from 'next/link';
 
 import ArrowDownIcon from '@/assets/icons/arrowDown';
 import BookmarkIcon from '@/assets/icons/bookmark';
+import CheckVerifiedIcon from '@/assets/icons/checkVerified';
 import OwnerIcon from '@/assets/icons/owner';
 import LogoutIcon from '@/assets/icons/logout';
 import ProfileIcon from '@/assets/icons/profile';
@@ -315,6 +316,17 @@ const Header = () => {
                       </div>
                       Bookmarks
                     </Link>
+                    {user?.isVerifiedOwner && (
+                      <Link
+                        href="/subscription"
+                        className="flex gap-3 items-center text-dark-blue text-sm p-2"
+                      >
+                        <div className="w-6 h-6">
+                          <CheckVerifiedIcon className="!w-4" />
+                        </div>
+                        NewsLet Pro
+                      </Link>
+                    )}
                   </div>
                   <div className="pt-2">
                     <Link
@@ -426,6 +438,17 @@ const Header = () => {
                   </div>
                   Bookmarks
                 </Link>
+                {user?.isVerifiedOwner && (
+                  <Link
+                    href="/subscription"
+                    className="flex gap-3 items-center text-dark-blue text-base p-2"
+                  >
+                    <div className="w-6 h-6">
+                      <CheckVerifiedIcon />
+                    </div>
+                    NewsLet Pro
+                  </Link>
+                )}
               </div>
               <div className="pt-4">
                 <Link
