@@ -1,19 +1,44 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import parseCookies from 'next-cookies';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import PrivateRoute from '@/components/PrivateRoute';
 
 import ArrowLeft from '@/assets/icons/arrowLeft';
 import TipItem from '@/components/Tips/TipItem';
+import Button from '@/components/Button';
 
 import { getTips } from '@/actions/tips/index';
 
 import { User } from '@/types/user';
 import { GetTipsResponse } from '@/types/tips.type';
 
-const Tips = ({ tips }: GetTipsResponse) => {
-  console.log('tips', tips);
+const TIPS_PER_PAGE = '5';
+
+const Tips = ({ tips: initialTips, token }: GetTipsResponse) => {
+  const [tips, setTips] = useState(initialTips);
+
+  const router = useRouter();
+  const { query } = router;
+
+  const newsletterId = query.newsletterId as string;
+
+  const loadMore = async () => {
+    const response = await getTips({
+      token,
+      newsletterId,
+      page: String(tips.nextPage),
+      limit: TIPS_PER_PAGE,
+    });
+
+    setTips(prevTips => ({
+      ...prevTips,
+      ...response.response?.tips,
+      tips: [...prevTips.tips, ...(response.response?.tips.tips || [])],
+    }));
+  };
 
   return (
     <PrivateRoute>
@@ -31,17 +56,26 @@ const Tips = ({ tips }: GetTipsResponse) => {
         </h2>
 
         <ul className="w-full">
-          {tips.map(({ tipper, amount, note, createdAt }, i) => (
+          {tips.tips.map(({ tipper, amount, note, createdAt }, i) => (
             <TipItem
               key={i}
               tipper={tipper}
               amount={amount}
               note={note || ''}
               date={createdAt}
-              isLastItem={tips.length - 1 === i ? true : false}
+              isLastItem={tips.tips.length - 1 === i ? true : false}
             />
           ))}
         </ul>
+
+        <Button
+          label={tips.nextPage ? 'Load more' : "That's all"}
+          variant="outlined-secondary"
+          size="md"
+          customStyles="mx-auto"
+          disabled={!tips.nextPage}
+          onClick={loadMore}
+        />
       </div>
     </PrivateRoute>
   );
@@ -49,7 +83,8 @@ const Tips = ({ tips }: GetTipsResponse) => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { query } = context;
-  const { newsletterId } = query;
+  const newsletterId =
+    typeof query.newsletterId === 'string' && query.newsletterId;
   const cookies = parseCookies(context);
   const user = cookies.user as User | undefined;
   const token = cookies.accessToken ? cookies.accessToken : null;
@@ -64,12 +99,17 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   let tips = null;
-  if (token) {
-    tips = await getTips({ token });
+  if (token && newsletterId) {
+    tips = await getTips({
+      token,
+      newsletterId,
+      page: '1',
+      limit: TIPS_PER_PAGE,
+    });
   }
 
   return {
-    props: { newsletterId, tips: tips?.response?.tips },
+    props: { tips: tips?.response?.tips, token },
   };
 };
 

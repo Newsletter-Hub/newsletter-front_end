@@ -7,11 +7,16 @@ import api from '@/config/ky';
 
 import { GetTipsPayload, GetTipsResponse } from '@/types/tips.type';
 
-export const getTips = async ({ token }: GetTipsPayload) => {
+export const getTips = async ({
+  token,
+  newsletterId,
+  page,
+  limit,
+}: GetTipsPayload) => {
   try {
     const headers = token ? { Cookie: `accessToken=${token}` } : {};
     const response: GetTipsResponse = await api
-      .get('tips', {
+      .get(`tips?newsletterId=${newsletterId}&page=${page}&limit=${limit}`, {
         headers,
         credentials: 'include',
       })

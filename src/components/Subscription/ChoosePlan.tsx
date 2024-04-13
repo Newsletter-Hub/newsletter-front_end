@@ -10,7 +10,6 @@ import Button from '@/components/Button';
 import CancelSubscriptionModal from '../Modals/CancelSubscriptionModal';
 
 import { User } from '@/types/user';
-import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 declare global {
   interface Window {
