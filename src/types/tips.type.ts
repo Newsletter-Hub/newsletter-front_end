@@ -1,5 +1,8 @@
 export interface GetTipsPayload {
   token?: string | null;
+  newsletterId: string;
+  page: string;
+  limit: string;
 }
 
 type TipItem = {
@@ -10,7 +13,15 @@ type TipItem = {
 };
 
 export interface GetTipsResponse {
-  tips: TipItem[];
+  tips: {
+    tips: TipItem[];
+    total: number;
+    currentPage: 1;
+    nextPage: null | number;
+    prevPage: null | number;
+    lastPage: number;
+  };
+  token: string;
 }
 
 export interface Tipper {
