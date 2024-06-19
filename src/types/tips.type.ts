@@ -1,3 +1,23 @@
+export interface GetPaypalPartnerLinksOptions {
+  email: string;
+}
+
+export enum PayPalReferralLinkRelation {
+  Self = 'self',
+  ActionUrl = 'action_url',
+}
+
+type PayPalReferralLinkModel = {
+  description: string;
+  href: string;
+  method: string;
+  rel: PayPalReferralLinkRelation;
+};
+
+export interface GetPaypalPartnerLinksResponse {
+  data: PayPalReferralLinkModel[];
+}
+
 export interface GetTipsPayload {
   token?: string | null;
   newsletterId: string;
