@@ -1,9 +1,14 @@
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import Script from 'next/script';
+import { useRouter } from 'next/router';
+
 import { NotificationData } from '@/actions/user/notifications';
 import { follow, unfollow } from '@/actions/newsletters';
 import { getUserById } from '@/actions/user';
-import Button from '../Button';
+import { getPaypalPartnerLinks } from '@/actions/tips';
 
-import Link from 'next/link';
+import Button from '../Button';
 
 import { useUser } from '@/contexts/UserContext';
 
@@ -21,9 +26,15 @@ import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import Avatar from '../Avatar';
 import Notification from '../Notification';
-import { useState } from 'react';
 import { getNotifications } from '@/actions/user/notifications';
-import { useRouter } from 'next/router';
+import TipsIcon from '@/assets/icons/tips';
+import { PayPalReferralLinkRelation } from '@/types/tips.type';
+
+declare global {
+  interface Window {
+    onboardedCallback?: (authCode: string, sharedId: string) => void;
+  }
+}
 
 interface UserPageProps {
   followingNewsletterListData?: NewslettersListData;
@@ -41,6 +52,12 @@ const UserPage = ({
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
+  const [isLoadingPartnerLinks, setIsLoadingPartnerLinks] = useState(false);
+  const [partnerReferralLink, setPartnerReferralLink] = useState<string | null>(
+    null
+  );
+
+  const paypalLinkRef = useRef<HTMLAnchorElement>(null);
   const notificationRecipientId = user && user.id ? +user.id : undefined;
   const router = useRouter();
   const currentUser = useUser().user;
@@ -102,6 +119,52 @@ const UserPage = ({
       }
     }
   };
+
+  const connectPartner = async () => {
+    setIsLoadingPartnerLinks(true);
+
+    const response = await getPaypalPartnerLinks({
+      email: user.email,
+    }).finally(() => setNotificationLoading(false));
+
+    if (!response) return;
+
+    const partnerReferralLink = response.data.find(
+      link => link.rel === PayPalReferralLinkRelation.ActionUrl
+    );
+
+    partnerReferralLink && setPartnerReferralLink(partnerReferralLink.href);
+  };
+
+  const onboardedCallback = (authCode: string, sharedId: string) => {
+    fetch('/seller-server/login-seller', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        authCode: authCode,
+        sharedId: sharedId,
+      }),
+    }).then(res => {
+      if (!res.ok) {
+        alert('Something went wrong!');
+      }
+    });
+  };
+
+  useEffect(() => {
+    window.onboardedCallback = onboardedCallback;
+    return () => {
+      window.onboardedCallback = undefined;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (partnerReferralLink && paypalLinkRef.current) {
+      paypalLinkRef.current.click();
+    }
+  }, [partnerReferralLink]);
 
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
@@ -200,6 +263,16 @@ const UserPage = ({
                   Bookmarks
                 </span>
               </Link>
+              <button
+                className="flex items-center gap-2"
+                onClick={connectPartner}
+                disabled={isLoadingPartnerLinks}
+              >
+                <TipsIcon className="h-6 w-6" />
+                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                  Connect tips
+                </span>
+              </button>
             </div>
           )}
           {!isProfile && (
@@ -273,6 +346,26 @@ const UserPage = ({
           </>
         )}
       </div>
+
+      <Script
+        id="paypal-js"
+        src={process.env.NEXT_PUBLIC_PAYPAL_MERCHANTBOARDING_SDK_URL}
+        strategy="afterInteractive"
+      />
+
+      <a
+        ref={paypalLinkRef}
+        target="_blank"
+        data-paypal-onboard-complete="onboardedCallback"
+        href={`${partnerReferralLink}&displayMode=minibrowser`}
+        // style={{ display: 'none' }}
+        data-paypal-button="true"
+        // onClick={() =>
+        //   window.onboardedCallback?.('yourAuthCode', 'yourSharedId')
+        // }
+      >
+        Sign up for PayPal
+      </a>
     </div>
   );
 };
