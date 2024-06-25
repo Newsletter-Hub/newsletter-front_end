@@ -11,6 +11,8 @@ import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import Image from 'next/image';
+import { format } from 'date-fns';
 
 import { Alegreya } from 'next/font/google';
 import Link from 'next/link';
@@ -843,6 +845,10 @@ const NewslettersList = ({
               </div>
             ) : (
               newslettersData.newsletters.map((newsletter, index) => {
+                // TODO: add isVeryfiedOwner on the back-end
+                const { owner } = newsletter;
+                const isVeryfiedOwner = !!owner;
+
                 return (
                   <div
                     key={newsletter.id}
@@ -865,6 +871,34 @@ const NewslettersList = ({
                       />
                     </div>
                     <div className="w-full flex flex-col justify-between">
+                      {isVeryfiedOwner && (
+                        <div className="flex justify-between items-center mb-4">
+                          <div className="flex items-center gap-x-3">
+                            {owner.avatar ? (
+                              <Image
+                                src={owner.avatar}
+                                alt="Author avatar"
+                                width={40}
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-primary" />
+                            )}
+                            <p className="text-sm text-dark-blue">
+                              {owner.username}
+                            </p>
+                            <p className="text-sm text-grey">
+                              {format(
+                                new Date(newsletter.createdAt),
+                                'dd.MM.yyyy'
+                              )}
+                            </p>
+                          </div>
+                          <button className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary">
+                            Leave a tip
+                          </button>
+                        </div>
+                      )}
+
                       <div className="flex flex-col md:flex-row mb-4 font-inter items-center">
                         <div className="flex gap-6 items-center">
                           {newsletter.averageDuration && (
