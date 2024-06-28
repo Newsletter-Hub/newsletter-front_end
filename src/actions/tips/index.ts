@@ -6,8 +6,11 @@ import { toast } from 'react-toastify';
 import api from '@/config/ky';
 
 import {
+  CreateTipOrderOptions,
+  CreateTipOrderResponse,
   GetPaypalPartnerLinksOptions,
   GetPaypalPartnerLinksResponse,
+  HandleTipCaptureResponse,
 } from '@/types/tips.type';
 
 export const getPaypalPartnerLinks = async ({
@@ -35,23 +38,52 @@ export const getPaypalPartnerLinks = async ({
   }
 };
 
-// export const getTips = async ({
-//   token,
-//   newsletterId,
-//   page,
-//   limit,
-// }: GetTipsPayload) => {
-//   try {
-//     const headers = token ? { Cookie: `accessToken=${token}` } : {};
-// const response: GetTipsResponse = await api
-//   .get(`tips?newsletterId=${newsletterId}&page=${page}&limit=${limit}`, {
-//     headers,
-//     credentials: 'include',
-//   })
-//   .json();
-// return { response };
-//   } catch (error) {
-//     throwErrorMessage(error as HTTPError, 'Failed to get tips');
-//     return { error: 'Failed to get tips' };
-//   }
-// };
+export const createTipOrder = async ({
+  clientId,
+  partnerId,
+  tipAmount,
+}: CreateTipOrderOptions): Promise<CreateTipOrderResponse | undefined> => {
+  const payload = {
+    clientId,
+    partnerId,
+    tipAmount,
+  };
+
+  try {
+    const response = await api.post('paypal/create-order', {
+      json: payload,
+    });
+
+    if (!response) {
+      toast.error('Failed to create tip order!');
+      return;
+    }
+
+    return response.json();
+  } catch (error) {
+    throwErrorMessage(error as HTTPError, 'Failed to create tip order');
+  }
+};
+
+export const handleTipCapture = async (
+  orderId?: string
+): Promise<HandleTipCaptureResponse | undefined> => {
+  const payload = {
+    orderId,
+  };
+
+  try {
+    const response = await api.post('paypal/tip-capture', {
+      json: payload,
+    });
+
+    if (!response) {
+      toast.error('Failed to capture tip');
+      return;
+    }
+
+    return response.json();
+  } catch (error) {
+    // throwErrorMessage(error as HTTPError, 'Failed to capture tip');
+  }
+};

@@ -50,3 +50,21 @@ export interface Tipper {
   lastName: string;
   username: string;
 }
+
+export type CreateTipOrderOptions = {
+  clientId: number;
+  partnerId: number;
+  tipAmount: string;
+};
+
+export type CreateTipOrderResponse = {
+  data: {
+    checkoutUrl: string;
+  };
+};
+
+export type HandleTipCaptureResponse = {
+  data: {
+    orderId: string;
+  };
+};
