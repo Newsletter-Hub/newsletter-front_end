@@ -8,7 +8,7 @@ import { createReview } from '@/actions/newsletters/reviews';
 import { useUser } from '@/contexts/UserContext';
 import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Image from 'next/image';
@@ -46,6 +46,8 @@ import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import SkeletonImage from '../SkeletonImage';
+import LeaveTipModal from '../Modals/LeaveTipModal';
+import { handleTipCapture } from '@/actions/tips';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -134,6 +136,7 @@ const NewslettersList = ({
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
+  const { query } = router;
   const [pageTitle] = useState(
     categoryName ? `Best ${categoryName} Newsletters` : title
   );
@@ -166,6 +169,8 @@ const NewslettersList = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [moreNewslettersLoading, setMoreNewslettersLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean | number>(false);
+  const [isLeaveTipModalOpen, setIsLeaveTipModalOpen] = useState(false);
+
   const filtersCount = useMemo(() => {
     let count = 0;
     if (filtersPayload.categories.length > 0) count++;
@@ -490,6 +495,24 @@ const NewslettersList = ({
       setFollowLoading(false);
     }
   };
+
+  useEffect(() => {
+    const onTipCapture = async () => {
+      const response = await handleTipCapture(query?.orderId as string);
+
+      if (!response?.data) return;
+
+      const { orderId } = response.data;
+
+      if (orderId === query?.orderId) {
+        router.replace('/newsletters/categories/all');
+      }
+    };
+
+    if (query?.orderId) {
+      onTipCapture();
+    }
+  }, [query?.orderId, router]);
 
   return (
     <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
@@ -893,9 +916,25 @@ const NewslettersList = ({
                               )}
                             </p>
                           </div>
-                          <button className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary">
+                          <button
+                            className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                            onClick={() =>
+                              setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                            }
+                          >
                             Leave a tip
                           </button>
+
+                          {isLeaveTipModalOpen && (
+                            <LeaveTipModal
+                              open={isLeaveTipModalOpen}
+                              handleClose={() =>
+                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                              }
+                              clientId={user?.id}
+                              partnerId={owner?.id}
+                            />
+                          )}
                         </div>
                       )}
 
