@@ -10,6 +10,7 @@ import {
   CreateTipOrderResponse,
   GetPaypalPartnerLinksOptions,
   GetPaypalPartnerLinksResponse,
+  GetTipsResponse,
   HandleTipCaptureResponse,
 } from '@/types/tips.type';
 
@@ -42,11 +43,13 @@ export const createTipOrder = async ({
   clientId,
   partnerId,
   tipAmount,
+  comment,
 }: CreateTipOrderOptions): Promise<CreateTipOrderResponse | undefined> => {
   const payload = {
     clientId,
     partnerId,
     tipAmount,
+    ...(comment && { comment }),
   };
 
   try {
@@ -85,5 +88,23 @@ export const handleTipCapture = async (
     return response.json();
   } catch (error) {
     // throwErrorMessage(error as HTTPError, 'Failed to capture tip');
+  }
+};
+
+export const getTips = async (
+  newsletterId: number
+): Promise<GetTipsResponse | undefined> => {
+  try {
+    const response = await api.get(`tips/tips?newsletterId=${newsletterId}`);
+
+    if (!response) {
+      toast.error('Failed to get tips');
+      return;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Failed to get tips', error);
+    return;
   }
 };

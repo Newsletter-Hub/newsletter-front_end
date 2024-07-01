@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export interface GetPaypalPartnerLinksOptions {
   email: string;
 }
@@ -25,24 +27,30 @@ export interface GetTipsPayload {
   limit: string;
 }
 
-type TipItem = {
-  amount: number;
+type NewsletterModel = {
+  id: number;
+  link: string;
+  title: string;
+  description: null | string;
+  averageDuration: number;
+  pricing: string;
+  newsletterAuthor: null | User;
+  image: null | string;
+  ownerId: number;
   createdAt: string;
-  note: string;
-  tipper: Tipper;
+  updatedAt: string;
 };
 
-export interface GetTipsResponse {
-  tips: {
-    tips: TipItem[];
-    total: number;
-    currentPage: 1;
-    nextPage: null | number;
-    prevPage: null | number;
-    lastPage: number;
-  };
-  token: string;
-}
+export type TipItem = {
+  id: number;
+  amount: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: User;
+  payer: User;
+  newsletter: NewsletterModel;
+  comment?: string;
+};
 
 export interface Tipper {
   avatar: string;
@@ -55,6 +63,7 @@ export type CreateTipOrderOptions = {
   clientId: number;
   partnerId: number;
   tipAmount: string;
+  comment?: string;
 };
 
 export type CreateTipOrderResponse = {
@@ -66,5 +75,11 @@ export type CreateTipOrderResponse = {
 export type HandleTipCaptureResponse = {
   data: {
     orderId: string;
+  };
+};
+
+export type GetTipsResponse = {
+  data: {
+    tips: TipItem[];
   };
 };
