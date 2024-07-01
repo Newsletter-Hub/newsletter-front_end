@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Modal from '../Modal';
 import Button from '../Button';
 import Input from '../Input';
+import TextArea from '../TextArea';
 
 import { createTipOrder } from '@/actions/tips';
 
@@ -30,6 +31,7 @@ const LeaveTipModal = ({
   partnerId,
 }: LeaveTipModalProps) => {
   const [tipAmount, setTipAmount] = useState('');
+  const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -44,6 +46,7 @@ const LeaveTipModal = ({
       clientId,
       partnerId,
       tipAmount,
+      ...(comment && { comment }),
     }).finally(() => setIsLoading(false));
 
     if (!response) return;
@@ -80,6 +83,12 @@ const LeaveTipModal = ({
             placeholder="Enter your tip in USD"
             onChange={e => handleChangeTips(e.target.value)}
             customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px] mx-auto"
+          />
+
+          <TextArea
+            variant="filled"
+            label="Enter comment"
+            onChange={e => setComment(e.target.value)}
           />
 
           <Button
