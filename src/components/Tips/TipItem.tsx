@@ -1,24 +1,17 @@
 import Image from 'next/image';
 import { parseISO, format } from 'date-fns';
 
-import { Tipper } from '../../types/tips.type';
+import { User } from '@/types/user';
 
 interface TipItemProps {
-  tipper: Tipper;
-  amount: number;
+  tipper: User;
+  amount: string;
   note: string;
   date: string;
   isLastItem: boolean;
 }
 
 const TipItem = ({ tipper, amount, note, date, isLastItem }: TipItemProps) => {
-  const userFullName =
-    tipper?.lastName && tipper?.firstName
-      ? `${tipper.firstName} ${tipper.lastName}`
-      : tipper?.firstName
-      ? tipper.firstName
-      : tipper.username;
-
   const parsedDate = parseISO(date);
   const formattedDate = format(parsedDate, 'MMM d yyyy');
 
@@ -48,7 +41,7 @@ const TipItem = ({ tipper, amount, note, date, isLastItem }: TipItemProps) => {
       </div>
       <div className="flex flex-col justify-between w-full">
         <p className="font-alegreya text-xl text-dark-blue mb-2">
-          {userFullName}
+          {tipper.username}
         </p>
         <p className="font-inter font-normal text-base text-dark-blue mb-4">
           {note}
