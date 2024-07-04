@@ -97,7 +97,7 @@ const LeaveTipModal = ({
             rounded="md"
             type="button"
             onClick={handleCreateTipOrder}
-            disabled={!isValidData || isLoading}
+            disabled={isLoading || !isValidData}
           />
         </div>
       </>

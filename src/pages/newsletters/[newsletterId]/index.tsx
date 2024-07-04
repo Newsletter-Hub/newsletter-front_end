@@ -58,6 +58,7 @@ import SkeletonImage from '@/components/SkeletonImage';
 import ReportModal from '@/components/Modals/ReportModal';
 import ClaimModal from '@/components/Modals/ClaimModal';
 import NewsletterShareBlock from '@/components/Newsletter/NewsletterShareBlock';
+import LeaveTipModal from '@/components/Modals/LeaveTipModal';
 
 interface NewsletterPageProps {
   newsletterData?: NewsletterData;
@@ -84,6 +85,7 @@ const NewsletterPage = ({
     UserReviewForNewsletterResponse | null | undefined
   >(reviewForNewsletter);
   const [page, setPage] = useState(1);
+  const [isLeaveTipModalOpen, setIsLeaveTipModalOpen] = useState(false);
   const { user } = useUser();
   const router = useRouter();
 
@@ -96,6 +98,7 @@ const NewsletterPage = ({
     !isClaimModalOpenQueryParam &&
     !isReviewModalOpenQueryParam &&
     router.query.reportModal === '1';
+  const isNewsletterOwner = newsletter?.owner?.id === user?.id;
 
   const [isModalOpen, setIsModalOpen] = useState(
     user !== null && isReviewModalOpenQueryParam
@@ -443,64 +446,93 @@ const NewsletterPage = ({
               {newsletter?.description}
             </p>
           )}
-          <div className="flex flex-col sm:flex-row gap-2 sm:pb-10 pb-5 border-b border-light-grey mb-10">
-            {newsletter?.link && (
-              <Link
-                href={`${newsletter.link}?ref=newsletter-hub`}
-                legacyBehavior
-                passHref
-              >
-                <a target="_blank" rel="noopener noreferrer">
-                  <Button
-                    label="Read Newsletter"
-                    rounded="xl"
-                    fontSize="md"
-                    height="sm"
-                    customStyles="w-full sm:w-fit"
-                  />
-                </a>
+          <div className="flex justify-between sm:pb-10 pb-5 border-b border-light-grey mb-10">
+            <div className="flex flex-col sm:flex-row gap-2">
+              {newsletter?.link && (
+                <Link
+                  href={`${newsletter.link}?ref=newsletter-hub`}
+                  legacyBehavior
+                  passHref
+                >
+                  <a target="_blank" rel="noopener noreferrer">
+                    <Button
+                      label="Read Newsletter"
+                      rounded="xl"
+                      fontSize="md"
+                      height="sm"
+                      customStyles="w-full sm:w-fit"
+                    />
+                  </a>
+                </Link>
+              )}
+              <Link href={user ? `${newsletter.id}/edit` : '/sign-up'}>
+                <Button
+                  label="Edit Newsletter"
+                  rounded="xl"
+                  fontSize="md"
+                  height="sm"
+                  customStyles="w-full sm:w-fit"
+                />
               </Link>
-            )}
-            <Link href={user ? `${newsletter.id}/edit` : '/sign-up'}>
+              {!newsletter.owner && (
+                <Button
+                  label="Claim Newsletter"
+                  rounded="xl"
+                  fontSize="md"
+                  height="sm"
+                  customStyles="w-full sm:w-fit"
+                  onClick={handleOpenClaimModal}
+                />
+              )}
+              {user && (
+                <ClaimModal
+                  user={user}
+                  newsletterId={newsletter.id}
+                  newsletterTitle={newsletter.title}
+                  open={isClaimModalOpen}
+                  handleClose={() => setIsClaimModalOpen(false)}
+                />
+              )}
               <Button
-                label="Edit Newsletter"
+                label="Report"
                 rounded="xl"
                 fontSize="md"
                 height="sm"
                 customStyles="w-full sm:w-fit"
+                onClick={handleOpenReportModal}
               />
-            </Link>
-            {!newsletter.owner && (
-              <Button
-                label="Claim Newsletter"
-                rounded="xl"
-                fontSize="md"
-                height="sm"
-                customStyles="w-full sm:w-fit"
-                onClick={handleOpenClaimModal}
+              <ReportModal
+                open={isReportModalOpen}
+                handleClose={() => setIsReportModalOpen(false)}
+              />
+            </div>
+
+            {!isNewsletterOwner ? (
+              <button
+                className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                onClick={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
+              >
+                Leave a tip
+              </button>
+            ) : (
+              <button
+                className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                onClick={() =>
+                  router.push(`/tips?newsletterId=${newsletter.id}`)
+                }
+              >
+                Tips
+              </button>
+            )}
+
+            {isLeaveTipModalOpen && (
+              <LeaveTipModal
+                open={isLeaveTipModalOpen}
+                handleClose={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
+                clientId={user?.id}
+                partnerId={newsletterData?.owner?.id}
               />
             )}
-            {user && (
-              <ClaimModal
-                user={user}
-                newsletterId={newsletter.id}
-                newsletterTitle={newsletter.title}
-                open={isClaimModalOpen}
-                handleClose={() => setIsClaimModalOpen(false)}
-              />
-            )}
-            <Button
-              label="Report"
-              rounded="xl"
-              fontSize="md"
-              height="sm"
-              customStyles="w-full sm:w-fit"
-              onClick={handleOpenReportModal}
-            />
-            <ReportModal
-              open={isReportModalOpen}
-              handleClose={() => setIsReportModalOpen(false)}
-            />
           </div>
           <div className="flex justify-between font-inter items-center mb-10 flex-col md:flex-row sm:pb-10 pb-5 border-b border-light-grey">
             <div className="flex md:gap-6 gap-3 items-center flex-col md:flex-row">

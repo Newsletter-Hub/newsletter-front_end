@@ -871,6 +871,7 @@ const NewslettersList = ({
                 // TODO: add isVeryfiedOwner on the back-end
                 const { owner } = newsletter;
                 const isVeryfiedOwner = !!owner;
+                const isNewsletterOwner = owner?.id === user?.id;
 
                 return (
                   <div
@@ -916,14 +917,27 @@ const NewslettersList = ({
                               )}
                             </p>
                           </div>
-                          <button
-                            className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
-                            onClick={() =>
-                              setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
-                            }
-                          >
-                            Leave a tip
-                          </button>
+                          {!isNewsletterOwner ? (
+                            <button
+                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                              onClick={() =>
+                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                              }
+                            >
+                              Leave a tip
+                            </button>
+                          ) : (
+                            <button
+                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                              onClick={() =>
+                                router.push(
+                                  `/tips?newsletterId=${newsletter.id}`
+                                )
+                              }
+                            >
+                              Tips
+                            </button>
+                          )}
 
                           {isLeaveTipModalOpen && (
                             <LeaveTipModal
