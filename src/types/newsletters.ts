@@ -39,6 +39,7 @@ export interface NewsletterData {
   isInBookmarks: boolean;
   followersIds: number[];
   amountFollowers: number;
+  merchantIdInPayPal: null | string;
 }
 
 export interface Newsletter {

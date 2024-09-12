@@ -12,17 +12,21 @@ import { User } from '@/types/user';
 import UserPage from '@/components/User/UserPage';
 import PrivateRoute from '@/components/PrivateRoute';
 import { getUserMe } from '@/actions/user';
+import { getUserSubscription } from '@/actions/paymentSubscription';
+import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 interface ProfilePageProps {
   followingNewsletterListData: NewslettersListData;
   notificationsData: NotificationData;
   userMe: User;
+  subscription: GetUserSubscriptionResponse;
 }
 
 const ProfilePage = ({
   followingNewsletterListData,
   notificationsData,
   userMe,
+  subscription,
 }: ProfilePageProps) => {
   return (
     <PrivateRoute>
@@ -30,6 +34,7 @@ const ProfilePage = ({
         notificationsData={notificationsData}
         user={userMe}
         followingNewsletterListData={followingNewsletterListData}
+        subscription={subscription}
       />
     </PrivateRoute>
   );
@@ -57,8 +62,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   });
 
   let userMe = null;
+  let subscription = null;
   if (token) {
     userMe = await getUserMe({ token });
+    subscription = await getUserSubscription({ token });
   }
   if (!notificationsList) {
     return {
@@ -69,6 +76,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     props: {
       notificationsData: notificationsList.notificationsData,
       userMe: userMe?.response,
+      subscription,
     },
   };
 };

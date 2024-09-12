@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Script from 'next/script';
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';

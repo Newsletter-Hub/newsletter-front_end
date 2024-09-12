@@ -4,6 +4,11 @@ export interface GetPaypalPartnerLinksOptions {
   email: string;
 }
 
+export interface HandlePaypalPartnerStatusOptions {
+  trackingId: string;
+  merchantIdInPayPal: string;
+}
+
 export enum PayPalReferralLinkRelation {
   Self = 'self',
   ActionUrl = 'action_url',
@@ -43,25 +48,6 @@ export type TipItemModel = {
   payer: User;
   newsletter: NewsletterModel;
   comment?: string;
-};
-
-export type CreateTipOrderOptions = {
-  clientId: number;
-  partnerId: number;
-  tipAmount: string;
-  comment?: string;
-};
-
-export type CreateTipOrderResponse = {
-  data: {
-    checkoutUrl: string;
-  };
-};
-
-export type HandleTipCaptureResponse = {
-  data: {
-    orderId: string;
-  };
 };
 
 export type GetTipsOptions = {

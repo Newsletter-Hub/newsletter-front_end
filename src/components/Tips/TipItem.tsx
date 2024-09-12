@@ -55,7 +55,7 @@ const TipItem = ({ tipper, amount, note, date, isLastItem }: TipItemProps) => {
               Donated{' '}
             </span>
             <span className="font-inter font-semibold text-base text-primary">
-              {amount}
+              ${amount}
             </span>
           </p>
         </div>

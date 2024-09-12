@@ -1,18 +1,15 @@
 import throwErrorMessage from '@/helpers/throwErrorMessage';
-// import Cookies from 'js-cookie';
 import { HTTPError } from 'ky';
 import { toast } from 'react-toastify';
 
 import api from '@/config/ky';
 
 import {
-  CreateTipOrderOptions,
-  CreateTipOrderResponse,
   GetPaypalPartnerLinksOptions,
   GetPaypalPartnerLinksResponse,
   GetTipsOptions,
   GetTipsResponse,
-  HandleTipCaptureResponse,
+  HandlePaypalPartnerStatusOptions,
 } from '@/types/tips.type';
 
 export const getPaypalPartnerLinks = async ({
@@ -40,55 +37,30 @@ export const getPaypalPartnerLinks = async ({
   }
 };
 
-export const createTipOrder = async ({
-  clientId,
-  partnerId,
-  tipAmount,
-  comment,
-}: CreateTipOrderOptions): Promise<CreateTipOrderResponse | undefined> => {
+export const handlePaypalPartnerStatus = async ({
+  trackingId,
+  merchantIdInPayPal,
+}: HandlePaypalPartnerStatusOptions): Promise<
+  GetPaypalPartnerLinksResponse | undefined
+> => {
   const payload = {
-    clientId,
-    partnerId,
-    tipAmount,
-    ...(comment && { comment }),
+    trackingId,
+    merchantIdInPayPal,
   };
 
   try {
-    const response = await api.post('paypal/create-order', {
+    const response = await api.post('paypal/partner-status', {
       json: payload,
     });
 
     if (!response) {
-      toast.error('Failed to create tip order!');
+      toast.error('Failed to get partner status!');
       return;
     }
 
     return response.json();
   } catch (error) {
-    throwErrorMessage(error as HTTPError, 'Failed to create tip order');
-  }
-};
-
-export const handleTipCapture = async (
-  orderId?: string
-): Promise<HandleTipCaptureResponse | undefined> => {
-  const payload = {
-    orderId,
-  };
-
-  try {
-    const response = await api.post('paypal/tip-capture', {
-      json: payload,
-    });
-
-    if (!response) {
-      toast.error('Failed to capture tip');
-      return;
-    }
-
-    return response.json();
-  } catch (error) {
-    throwErrorMessage(error as HTTPError, 'Failed to capture tip');
+    throwErrorMessage(error as HTTPError, 'Failed to get partner status');
   }
 };
 

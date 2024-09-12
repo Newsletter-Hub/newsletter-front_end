@@ -50,8 +50,12 @@ This project uses Google Ads for monetization. For setup instructions, please re
 
 Add .env variables (response from `http(s)://{BACKEND_URL}/paypal/billing-plans`):
 
-- `NEXT_PUBLIC_MONTHLY_PLAN_ID`;
-- `NEXT_PUBLIC_YEARLY_PLAN_ID`;
-- `NEXT_PUBLIC_PAYPAL_CLIENT_ID`;
-- `NEXT_PUBLIC_SUBSCRIPTION_MONTHLY_PRICE_USD`; // like on the back-end
-- `NEXT_PUBLIC_SUBSCRIPTION_YEARLY_PRICE_USD`; // like on the back-end
+- `NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_CLIENT_ID`; // Client id from PayPal Subscription App
+- `NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PLAN_ID`; // like on the back-end
+- `NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PLAN_ID`; // like on the back-end
+- `NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PRICE_USD`; // like on the back-end
+- `NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PRICE_USD`; // like on the back-end
+
+## Payment Tipping Feature
+
+- `NEXT_PUBLIC_PAYPAL_TIPPING_CLIENT_ID`; // Client id from PayPal Tipping App

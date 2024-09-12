@@ -8,7 +8,7 @@ import { createReview } from '@/actions/newsletters/reviews';
 import { useUser } from '@/contexts/UserContext';
 import { FollowingPayload } from '@/types';
 import { debounce } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Image from 'next/image';
@@ -47,7 +47,6 @@ import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import SkeletonImage from '../SkeletonImage';
 import LeaveTipModal from '../Modals/LeaveTipModal';
-import { handleTipCapture } from '@/actions/tips';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -136,7 +135,7 @@ const NewslettersList = ({
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const { query } = router;
+  // const { query } = router;
   const [pageTitle] = useState(
     categoryName ? `Best ${categoryName} Newsletters` : title
   );
@@ -496,24 +495,6 @@ const NewslettersList = ({
     }
   };
 
-  useEffect(() => {
-    const onTipCapture = async () => {
-      const response = await handleTipCapture(query?.orderId as string);
-
-      if (!response?.data) return;
-
-      const { orderId } = response.data;
-
-      if (orderId === query?.orderId) {
-        router.replace('/newsletters/categories/all');
-      }
-    };
-
-    if (query?.orderId) {
-      onTipCapture();
-    }
-  }, [query?.orderId, router]);
-
   return (
     <div className="flex justify-center items-center flex-col md:pt-20 pt-3 px-3">
       <div
@@ -868,10 +849,10 @@ const NewslettersList = ({
               </div>
             ) : (
               newslettersData.newsletters.map((newsletter, index) => {
-                // TODO: add isVeryfiedOwner on the back-end
                 const { owner } = newsletter;
                 const isVeryfiedOwner = !!owner;
                 const isNewsletterOwner = owner?.id === user?.id;
+                const isPaypalPartner = !!newsletter.merchantIdInPayPal;
 
                 return (
                   <div
@@ -895,7 +876,7 @@ const NewslettersList = ({
                       />
                     </div>
                     <div className="w-full flex flex-col justify-between">
-                      {isVeryfiedOwner && (
+                      {isVeryfiedOwner && isPaypalPartner && (
                         <div className="flex justify-between items-center mb-4">
                           <div className="flex items-center gap-x-3">
                             {owner.avatar ? (
@@ -945,8 +926,10 @@ const NewslettersList = ({
                               handleClose={() =>
                                 setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
                               }
-                              clientId={user?.id}
-                              partnerId={owner?.id}
+                              merchantIdInPayPal={newsletter.merchantIdInPayPal}
+                              partnerId={owner.id}
+                              userId={user?.id}
+                              newsletterId={newsletter.id}
                             />
                           )}
                         </div>
