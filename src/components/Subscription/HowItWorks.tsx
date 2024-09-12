@@ -7,7 +7,7 @@ const HowItWorks = () => {
   return (
     <section className="flex flex-col min-w-[93%] xl:w-[1365px] gap-y-12">
       <h4 className="text-2xl md:text-3xl lg:text-5xl">How it works</h4>
-      <div className="flex flex-col lg:flex-row md:gap-x-12 xl:gap-x-40 relative">
+      <div className="flex flex-col lg:flex-row md:gap-x-12 xl:gap-x-40 relative mx-auto">
         <Image
           src={subscriptionDecoLine}
           width={0}

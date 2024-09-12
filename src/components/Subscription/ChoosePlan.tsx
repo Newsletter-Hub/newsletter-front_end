@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Script from 'next/script';
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
@@ -10,6 +8,7 @@ import Button from '@/components/Button';
 import CancelSubscriptionModal from '../Modals/CancelSubscriptionModal';
 
 import { User } from '@/types/user';
+import { toast } from 'react-toastify';
 
 declare global {
   interface Window {
@@ -48,16 +47,17 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
     if (window.paypal) {
       window.paypal
         .Buttons({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           createSubscription: function (data: any, actions: any) {
             return actions.subscription.create({
               plan_id: isChecked
-                ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
-                : process.env.NEXT_PUBLIC_YEARLY_PLAN_ID,
+                ? process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PLAN_ID
+                : process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PLAN_ID,
               custom_id: userMe.email,
             });
           },
-          onApprove: function (data: any, actions: any) {
-            alert(
+          onApprove: function () {
+            toast.success(
               'Thanks for subscribing! Your reqeuest is being processed. This might take a few minutes'
             );
           },
@@ -151,8 +151,10 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 </sup>
                 <span className="font-inter text-6xl font-medium text-white">
                   {isChecked
-                    ? process.env.NEXT_PUBLIC_SUBSCRIPTION_MONTHLY_PRICE_USD
-                    : process.env.NEXT_PUBLIC_SUBSCRIPTION_YEARLY_PRICE_USD}
+                    ? process.env
+                        .NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PRICE_USD
+                    : process.env
+                        .NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PRICE_USD}
                 </span>
                 <sub
                   className={
@@ -273,22 +275,25 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
       />
 
       <Script
-        src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&vault=true&intent=subscription`}
+        src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_CLIENT_ID}&vault=true&intent=subscription`}
         strategy="afterInteractive"
         onLoad={() => {
           if (window.paypal) {
             window.paypal
               .Buttons({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 createSubscription: function (data: any, actions: any) {
                   return actions.subscription.create({
                     plan_id: isChecked
-                      ? process.env.NEXT_PUBLIC_MONTHLY_PLAN_ID
-                      : process.env.NEXT_PUBLIC_YEARLY_PLAN_ID,
+                      ? process.env
+                          .NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PLAN_ID
+                      : process.env
+                          .NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PLAN_ID,
                     custom_id: userMe.email,
                   });
                 },
-                onApprove: function (data: any, actions: any) {
-                  alert(
+                onApprove: function () {
+                  toast.success(
                     'Thanks for subscribing! Your reqeuest is being processed. This might take a few minutes'
                   );
                 },

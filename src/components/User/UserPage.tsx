@@ -5,7 +5,10 @@ import { useRouter } from 'next/router';
 import { NotificationData } from '@/actions/user/notifications';
 import { follow, unfollow } from '@/actions/newsletters';
 import { getUserById } from '@/actions/user';
-import { getPaypalPartnerLinks } from '@/actions/tips';
+import {
+  getPaypalPartnerLinks,
+  // handlePaypalPartnerStatus,
+} from '@/actions/tips';
 
 import Button from '../Button';
 
@@ -35,18 +38,21 @@ import {
   PAYPAL_TOOLTIP_PARAGRAPH_3,
   PAYPAL_TOOLTIP_SUCCESSFULL,
 } from '@/constants/paypal.constants';
+import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 interface UserPageProps {
   followingNewsletterListData?: NewslettersListData;
   user: User;
   isProfile?: boolean;
   notificationsData: NotificationData;
+  subscription: GetUserSubscriptionResponse;
 }
 
 const UserPage = ({
   user: userFromProps,
   isProfile: isProfileFromProps = true,
   notificationsData,
+  subscription,
 }: UserPageProps) => {
   const [user, setUser] = useState(userFromProps);
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
@@ -57,9 +63,10 @@ const UserPage = ({
     null
   );
   const [showPaypalTooltip, setShowPaypalTooltip] = useState(false);
-  // TODO: Add check active subscription
   const isActivePaypalPartner =
     userFromProps.isVerifiedOwner && userFromProps?.isActivePartner;
+  const hasActivePaidSubscription =
+    subscription.response?.subscription?.isActive || null;
 
   const notificationRecipientId = user && user.id ? +user.id : undefined;
   const router = useRouter();
@@ -249,7 +256,14 @@ const UserPage = ({
                 </Link>
               </div>
 
-              {!isActivePaypalPartner ? (
+              {!hasActivePaidSubscription && (
+                <p className="mx-auto">
+                  To be able to receive tips, please sign up for a PayPal
+                  <Link href="/subscription"> subscription</Link>.
+                </p>
+              )}
+
+              {hasActivePaidSubscription && !isActivePaypalPartner && (
                 <div className="relative">
                   <button
                     className="flex items-center justify-center gap-x-2 bg-primary h-12 w-full rounded-full text-white text-lg py-2 px-8"
@@ -279,7 +293,9 @@ const UserPage = ({
                     )}
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {isActivePaypalPartner && (
                 <div className="relative">
                   <button className="flex items-center justify-center gap-x-2 bg-grey-0 h-12 w-full rounded-full text-white text-lg py-2 px-8 cursor-default">
                     <PaypalIcon />

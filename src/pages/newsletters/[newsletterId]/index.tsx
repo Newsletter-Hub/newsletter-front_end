@@ -99,6 +99,7 @@ const NewsletterPage = ({
     !isReviewModalOpenQueryParam &&
     router.query.reportModal === '1';
   const isNewsletterOwner = newsletter?.owner?.id === user?.id;
+  const hasOwner = !!newsletter?.owner;
 
   const [isModalOpen, setIsModalOpen] = useState(
     user !== null && isReviewModalOpenQueryParam
@@ -376,6 +377,7 @@ const NewsletterPage = ({
   if (!reviewsData || !newsletter) {
     return <Loading />;
   }
+
   return (
     <>
       <Head>
@@ -507,14 +509,16 @@ const NewsletterPage = ({
               />
             </div>
 
-            {!isNewsletterOwner ? (
+            {!isNewsletterOwner && hasOwner && (
               <button
                 className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
                 onClick={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
               >
                 Leave a tip
               </button>
-            ) : (
+            )}
+
+            {isNewsletterOwner && (
               <button
                 className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
                 onClick={() =>
@@ -529,8 +533,10 @@ const NewsletterPage = ({
               <LeaveTipModal
                 open={isLeaveTipModalOpen}
                 handleClose={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
-                clientId={user?.id}
-                partnerId={newsletterData?.owner?.id}
+                merchantIdInPayPal={newsletter.merchantIdInPayPal}
+                partnerId={newsletter.owner?.id}
+                userId={user?.id}
+                newsletterId={newsletter.id}
               />
             )}
           </div>

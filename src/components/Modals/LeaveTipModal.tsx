@@ -1,22 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import Script from 'next/script';
 import clsx from 'clsx';
 import { Alegreya } from 'next/font/google';
-import { useRouter } from 'next/router';
+import _ from 'lodash';
+import { toast } from 'react-toastify';
 
 import Modal from '../Modal';
-import Button from '../Button';
 import Input from '../Input';
 import TextArea from '../TextArea';
-
-import { createTipOrder } from '@/actions/tips';
+import Loading from '../Loading';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
 interface LeaveTipModalProps {
   open: boolean;
   handleClose: () => void;
-  clientId?: number;
+  merchantIdInPayPal: null | string;
   partnerId?: number;
+  userId?: null | number;
+  newsletterId: number;
 }
 
 const modalTitleStyles = clsx(
@@ -27,79 +29,171 @@ const modalTitleStyles = clsx(
 const LeaveTipModal = ({
   open,
   handleClose,
-  clientId,
+  merchantIdInPayPal,
   partnerId,
+  userId,
+  newsletterId,
 }: LeaveTipModalProps) => {
   const [tipAmount, setTipAmount] = useState('');
-  const [comment, setComment] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [isPayPalLoaded, setIsPayPalLoaded] = useState(false);
+  const [payPalPayerName, setPayPalPayerName] = useState('');
 
-  const isValidData = !!clientId && !!tipAmount && !!partnerId;
+  const commentRef = useRef('');
+  const paypalButtonsRef = useRef<HTMLDivElement | null>(null);
 
-  const handleCreateTipOrder = async () => {
-    setIsLoading(true);
+  const isValidData =
+    !!process.env.NEXT_PUBLIC_PAYPAL_TIPPING_CLIENT_ID &&
+    !!tipAmount &&
+    !!partnerId &&
+    !!userId &&
+    !!merchantIdInPayPal;
+  const isPayPalPayerName = !!payPalPayerName;
 
-    if (!isValidData) return;
-
-    const response = await createTipOrder({
-      clientId,
-      partnerId,
-      tipAmount,
-      ...(comment && { comment }),
-    }).finally(() => setIsLoading(false));
-
-    if (!response) return;
-
-    handleClose();
-    router.push(response.data.checkoutUrl);
-  };
-
-  const handleChangeTips = (tipValue: string) => {
-    const onlyNumbers = tipValue.replace(/[^\d.]/g, '');
-    const numberValue = parseFloat(onlyNumbers);
-
-    if (!isNaN(numberValue)) {
-      const formattedValue = numberValue.toFixed(2);
-
-      setTipAmount(String(formattedValue));
-    } else {
-      setTipAmount('');
+  useEffect(() => {
+    if (paypalButtonsRef.current && isPayPalPayerName) {
+      paypalButtonsRef.current.innerHTML = '';
     }
+  }, [isPayPalPayerName]);
+
+  useEffect(() => {
+    if (
+      window.paypal &&
+      isPayPalLoaded &&
+      isValidData &&
+      !isPayPalPayerName &&
+      paypalButtonsRef.current &&
+      paypalButtonsRef.current.children.length === 0
+    ) {
+      window.paypal
+        .Buttons({
+          style: {
+            color: 'blue',
+            shape: 'pill',
+            label: 'pay',
+            height: 40,
+          },
+          createOrder: function () {
+            return fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/create-order`,
+              {
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  clientId: userId,
+                  partnerId,
+                  tipAmount,
+                  newsletterId,
+                  ...(commentRef.current && { comment: commentRef.current }),
+                }),
+              }
+            )
+              .then(function (res) {
+                return res.json();
+              })
+              .then(function (data) {
+                return data?.data?.orderID;
+              });
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onApprove: function (data: any) {
+            return fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/tip-capture`,
+              {
+                method: 'post',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  orderID: data?.orderID,
+                }),
+              }
+            )
+              .then(function (res) {
+                return res.json();
+              })
+              .then(function (details) {
+                setPayPalPayerName(
+                  details?.data?.payer?.name?.given_name || ''
+                );
+              });
+          },
+          onCancel: function () {
+            toast.info('You canceled the tip payment');
+            handleClose();
+          },
+          onError: function () {
+            toast.error('There was an error during the tip payment process!');
+            handleClose();
+          },
+        })
+        .render('#paypal-button-container');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPayPalLoaded, isValidData]);
+
+  const handleChangeComment = (value: string) => {
+    commentRef.current = value;
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleChangeTips = useCallback(
+    _.debounce((tipValue: string) => {
+      const onlyNumbers = _.replace(tipValue, /[^0-9.]/g, '');
+      setTipAmount(onlyNumbers);
+    }, 300),
+    []
+  );
 
   return (
     <Modal open={open} handleClose={handleClose}>
       <>
-        <div className="flex flex-col items-center gap-y-4">
-          <h4 className={modalTitleStyles}>{`Leave a tip`}</h4>
+        <div className="flex flex-col items-center gap-y-4 mb-3">
+          {!isPayPalPayerName ? (
+            <h4 className={modalTitleStyles}>{'Leave a tip'}</h4>
+          ) : (
+            <h4 className={modalTitleStyles}>{'Thank you!'}</h4>
+          )}
 
-          <p className="text-start font-inter text-sm mb-4 text-dark-blue">
-            You agree to send the Author a tip. Please indicate the amount of
-            the tip.
-          </p>
+          {!isPayPalPayerName ? (
+            <>
+              <p className="text-start font-inter text-sm mb-4 text-dark-blue">
+                You agree to send the Author a tip. Please indicate the amount
+                of the tip.
+              </p>
 
-          <Input
-            placeholder="Enter your tip in USD"
-            onChange={e => handleChangeTips(e.target.value)}
-            customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px] mx-auto"
-          />
+              <Input
+                placeholder="Enter your tip in USD"
+                onChange={e => handleChangeTips(e.target.value)}
+                customStyles="xl:min-w-[400px] md:min-w-[450px] lg:min-w-[350px] max-w-[200px] mx-auto"
+              />
 
-          <TextArea
-            variant="filled"
-            label="Enter comment"
-            onChange={e => setComment(e.target.value)}
-          />
-
-          <Button
-            label="Leave tip"
-            size="md"
-            rounded="md"
-            type="button"
-            onClick={handleCreateTipOrder}
-            disabled={isLoading || !isValidData}
-          />
+              <TextArea
+                variant="filled"
+                label="Enter comment"
+                onChange={e => handleChangeComment(e.target.value)}
+              />
+            </>
+          ) : (
+            `Transaction completed by ${payPalPayerName}! The author is very grateful to you!`
+          )}
         </div>
+
+        <div className="flex justify-center">
+          {!isPayPalLoaded ? (
+            <Loading />
+          ) : (
+            <div ref={paypalButtonsRef} id="paypal-button-container"></div>
+          )}
+        </div>
+
+        <Script
+          src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_TIPPING_CLIENT_ID}&merchant-id=${merchantIdInPayPal}&currency=USD&intent=capture&locale=en_US&commit=true&vault=false&integration-date=2020-07-01&components=buttons`}
+          strategy="afterInteractive"
+          data-partner-attribution-id="NewsletterHubPartnerInt_Ecom"
+          onLoad={() => setIsPayPalLoaded(true)}
+        />
       </>
     </Modal>
   );
