@@ -66,7 +66,7 @@ const UserPage = ({
   const isActivePaypalPartner =
     userFromProps.isVerifiedOwner && userFromProps?.isActivePartner;
   const hasActivePaidSubscription =
-    subscription.response?.subscription?.isActive || null;
+    subscription?.response?.subscription?.isActive || null;
 
   const notificationRecipientId = user && user.id ? +user.id : undefined;
   const router = useRouter();
