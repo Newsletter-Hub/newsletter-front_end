@@ -30,10 +30,6 @@ interface UserPageProps {
   user: User;
   isProfile?: boolean;
   notificationsData: NotificationData;
-<<<<<<< Updated upstream
-=======
-  subscription: GetUserSubscriptionResponse | null;
->>>>>>> Stashed changes
 }
 
 const UserPage = ({

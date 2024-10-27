@@ -21,7 +21,6 @@ const ProfilePage = ({ notificationsData, user }: UserPageProps) => {
       notificationsData={notificationsData}
       user={user}
       isProfile={false}
-      subscription={null}
     />
   );
 };

@@ -17,10 +17,6 @@ interface ProfilePageProps {
   followingNewsletterListData: NewslettersListData;
   notificationsData: NotificationData;
   userMe: User;
-<<<<<<< Updated upstream
-=======
-  subscription: GetUserSubscriptionResponse | null;
->>>>>>> Stashed changes
 }
 
 const ProfilePage = ({
