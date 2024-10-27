@@ -19,7 +19,7 @@ interface ProfilePageProps {
   followingNewsletterListData: NewslettersListData;
   notificationsData: NotificationData;
   userMe: User;
-  subscription: GetUserSubscriptionResponse;
+  subscription: GetUserSubscriptionResponse | null;
 }
 
 const ProfilePage = ({

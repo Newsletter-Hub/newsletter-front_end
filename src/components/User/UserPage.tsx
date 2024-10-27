@@ -45,7 +45,7 @@ interface UserPageProps {
   user: User;
   isProfile?: boolean;
   notificationsData: NotificationData;
-  subscription: GetUserSubscriptionResponse;
+  subscription: GetUserSubscriptionResponse | null;
 }
 
 const UserPage = ({
