@@ -96,6 +96,12 @@ const NewsletterPage = ({
     !isClaimModalOpenQueryParam &&
     !isReviewModalOpenQueryParam &&
     router.query.reportModal === '1';
+<<<<<<< Updated upstream
+=======
+  const isNewsletterOwner = newsletter?.owner?.id === user?.id;
+  const hasOwner = !!newsletter?.owner;
+  const isOwnerActivePaypalPartner = newsletter?.owner?.isActivePartner;
+>>>>>>> Stashed changes
 
   const [isModalOpen, setIsModalOpen] = useState(
     user !== null && isReviewModalOpenQueryParam
@@ -479,6 +485,18 @@ const NewsletterPage = ({
                 customStyles="w-full sm:w-fit"
                 onClick={handleOpenClaimModal}
               />
+<<<<<<< Updated upstream
+=======
+            </div>
+
+            {!isNewsletterOwner && hasOwner && isOwnerActivePaypalPartner && (
+              <button
+                className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                onClick={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
+              >
+                Leave a tip
+              </button>
+>>>>>>> Stashed changes
             )}
             {user && (
               <ClaimModal
