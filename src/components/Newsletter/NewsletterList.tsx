@@ -11,6 +11,8 @@ import { debounce } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import Image from 'next/image';
+import { format } from 'date-fns';
 
 import { Alegreya } from 'next/font/google';
 import Link from 'next/link';
@@ -44,6 +46,7 @@ import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import SkeletonImage from '../SkeletonImage';
+import LeaveTipModal from '../Modals/LeaveTipModal';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -132,6 +135,7 @@ const NewslettersList = ({
 }: NewslettersPageProps) => {
   const { user } = useUser();
   const router = useRouter();
+  // const { query } = router;
   const [pageTitle] = useState(
     categoryName ? `Best ${categoryName} Newsletters` : title
   );
@@ -164,6 +168,8 @@ const NewslettersList = ({
   const [searchLoading, setSearchLoading] = useState(false);
   const [moreNewslettersLoading, setMoreNewslettersLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean | number>(false);
+  const [isLeaveTipModalOpen, setIsLeaveTipModalOpen] = useState(false);
+
   const filtersCount = useMemo(() => {
     let count = 0;
     if (filtersPayload.categories.length > 0) count++;
@@ -843,6 +849,11 @@ const NewslettersList = ({
               </div>
             ) : (
               newslettersData.newsletters.map((newsletter, index) => {
+                const { owner } = newsletter;
+                const isVeryfiedOwner = !!owner;
+                const isNewsletterOwner = owner?.id === user?.id;
+                const isPaypalPartner = !!newsletter.merchantIdInPayPal;
+
                 return (
                   <div
                     key={newsletter.id}
@@ -865,6 +876,65 @@ const NewslettersList = ({
                       />
                     </div>
                     <div className="w-full flex flex-col justify-between">
+                      {isVeryfiedOwner && isPaypalPartner && (
+                        <div className="flex justify-between items-center mb-4">
+                          <div className="flex items-center gap-x-3">
+                            {owner.avatar ? (
+                              <Image
+                                src={owner.avatar}
+                                alt="Author avatar"
+                                width={40}
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-primary" />
+                            )}
+                            <p className="text-sm text-dark-blue">
+                              {owner.username}
+                            </p>
+                            <p className="text-sm text-grey">
+                              {format(
+                                new Date(newsletter.createdAt),
+                                'dd.MM.yyyy'
+                              )}
+                            </p>
+                          </div>
+                          {!isNewsletterOwner ? (
+                            <button
+                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                              onClick={() =>
+                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                              }
+                            >
+                              Leave a tip
+                            </button>
+                          ) : (
+                            <button
+                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                              onClick={() =>
+                                router.push(
+                                  `/tips?newsletterId=${newsletter.id}`
+                                )
+                              }
+                            >
+                              Tips
+                            </button>
+                          )}
+
+                          {isLeaveTipModalOpen && (
+                            <LeaveTipModal
+                              open={isLeaveTipModalOpen}
+                              handleClose={() =>
+                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                              }
+                              merchantIdInPayPal={newsletter.merchantIdInPayPal}
+                              partnerId={owner.id}
+                              userId={user?.id}
+                              newsletterId={newsletter.id}
+                            />
+                          )}
+                        </div>
+                      )}
+
                       <div className="flex flex-col md:flex-row mb-4 font-inter items-center">
                         <div className="flex gap-6 items-center">
                           {newsletter.averageDuration && (
