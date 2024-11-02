@@ -1,22 +1,17 @@
 import Script from 'next/script';
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
-
 import checkmarkWhiteIcon from '@/assets/images/checkmarkWhiteIcon.svg';
-
 import Button from '@/components/Button';
 import CancelSubscriptionModal from '../Modals/CancelSubscriptionModal';
-
 import { User } from '@/types/user';
 import { toast } from 'react-toastify';
-
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     paypal: any;
   }
 }
-
 interface SubscriptionProps {
   userMe: User;
   subscription: {
@@ -25,25 +20,20 @@ interface SubscriptionProps {
   };
   token: null | string;
 }
-
 const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
   const [isChecked, setIsChecked] = useState<boolean>(true);
   const [isPaypalButtonsHidden, setIsPaypalButtonsHidden] =
     useState<boolean>(true);
   const [isOpenCancelSubscriptionModal, setIsOpenCancelSubscriptionModal] =
     useState<boolean>(false);
-
   const paypalButtonContainerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const paypalButtonContainer = paypalButtonContainerRef.current;
-
     if (paypalButtonContainer) {
       while (paypalButtonContainer.firstChild) {
         paypalButtonContainer.removeChild(paypalButtonContainer.firstChild);
       }
     }
-
     if (window.paypal) {
       window.paypal
         .Buttons({
@@ -65,11 +55,9 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
         .render('#paypal-button-container');
     }
   }, [isChecked, userMe.email]);
-
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
-
   return (
     <section className="flex items-center justify-center w-full bg-primary-light pt-20 pb-28">
       <div className="flex flex-col items-center gap-y-10">
@@ -81,7 +69,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
             No contracts, no surprise fees.
           </p>
         </div>
-
         <label className="relative inline-flex cursor-pointer items-center">
           <input
             type="checkbox"
@@ -90,7 +77,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
             onChange={handleCheckboxChange}
             className="peer sr-only"
           />
-
           <div className="peer flex w-[209px] h-[44px] items-center gap-16 rounded-full bg-white pl-8 pr-4 after:absolute after:left-1 after: after:h-[36px] after:w-[103px] after:rounded-full after:bg-primary after:transition-all after:content-[''] peer-checked:bg-stone-600 peer-checked:after:translate-x-full peer-focus:outline-none dark:border-slate-600 dark:bg-slate-700 text-s text-grey-chat">
             <span className={!isChecked ? 'z-20 text-white' : 'z-20'}>
               Yearly
@@ -100,7 +86,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
             </span>
           </div>
         </label>
-
         <div className="flex flex-col md:flex-row gap-x-8">
           <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[460px] p-6 bg-white rounded-lg">
             <div className="w-full">
@@ -110,11 +95,9 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                   Free
                 </p>
               </div>
-
               <div className="flex flex-col items-center justify-center">
                 <p className="text-6xl font-medium pt-5 pb-5">Free</p>
               </div>
-
               <p className="font-inter text-sm font-normal">
                 Default plan for activated users
               </p>
@@ -127,7 +110,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
               disabled={true}
             />
           </div>
-
           <div className="flex flex-col justify-between items-center gap-y-8 w-[328px] h-[460px] p-6 bg-primary rounded-lg">
             <div className="w-full relative">
               <div className="flex justify-between">
@@ -138,7 +120,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                   Save 20%
                 </p>
               </div>
-
               <div className="flex flex-col items-center justify-center mb-3">
                 <sup
                   className={
@@ -169,7 +150,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                   Everything you need to launch your professional author career
                 </p>
               </div>
-
               <ul>
                 <li className="flex gap-x-1">
                   <Image
@@ -217,7 +197,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 </li>
               </ul>
             </div>
-
             {subscription.isActive && !subscription.isExpired ? (
               <Button
                 label="Unsubscribe"
@@ -231,7 +210,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 }
               />
             ) : (
-              subscription.isExpired &&
               isPaypalButtonsHidden && (
                 <Button
                   label="Subscribe"
@@ -244,7 +222,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 />
               )
             )}
-
             <div
               id="paypal-button-container"
               ref={paypalButtonContainerRef}
@@ -257,7 +234,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
           </div>
         </div>
       </div>
-
       <CancelSubscriptionModal
         open={isOpenCancelSubscriptionModal}
         handleClose={() => {
@@ -265,7 +241,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
         }}
         token={token}
       />
-
       <Script
         src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_CLIENT_ID}&vault=true&intent=subscription`}
         strategy="afterInteractive"
@@ -297,5 +272,4 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
     </section>
   );
 };
-
 export default ChoosePlan;

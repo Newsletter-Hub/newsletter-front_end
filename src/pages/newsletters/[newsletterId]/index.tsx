@@ -510,7 +510,7 @@ const NewsletterPage = ({
               />
             </div>
 
-            {!isNewsletterOwner && hasOwner && (
+            {!isNewsletterOwner && hasOwner && isOwnerActivePaypalPartner && (
               <button
                 className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
                 onClick={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
