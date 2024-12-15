@@ -5,8 +5,7 @@ export interface GetPaypalPartnerLinksOptions {
 }
 
 export interface HandlePaypalPartnerStatusOptions {
-  trackingId: string;
-  merchantIdInPayPal: string;
+  userId: number;
 }
 
 export enum PayPalReferralLinkRelation {
@@ -22,7 +21,9 @@ type PayPalReferralLinkModel = {
 };
 
 export interface GetPaypalPartnerLinksResponse {
-  data: PayPalReferralLinkModel[];
+  data?: PayPalReferralLinkModel[];
+  errorMessage?: string;
+  isActivated?: boolean;
 }
 
 type NewsletterModel = {
