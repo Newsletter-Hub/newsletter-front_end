@@ -38,14 +38,12 @@ export const getPaypalPartnerLinks = async ({
 };
 
 export const handlePaypalPartnerStatus = async ({
-  trackingId,
-  merchantIdInPayPal,
+  userId,
 }: HandlePaypalPartnerStatusOptions): Promise<
   GetPaypalPartnerLinksResponse | undefined
 > => {
   const payload = {
-    trackingId,
-    merchantIdInPayPal,
+    userId,
   };
 
   try {

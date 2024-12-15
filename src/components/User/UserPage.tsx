@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useRouter as userRouterNavigation } from 'next/navigation';
 
 import { NotificationData } from '@/actions/user/notifications';
 import { follow, unfollow } from '@/actions/newsletters';
 import { getUserById } from '@/actions/user';
-import {
-  getPaypalPartnerLinks,
-  // handlePaypalPartnerStatus,
-} from '@/actions/tips';
+import { getPaypalPartnerLinks } from '@/actions/tips';
 
 import Button from '../Button';
 
@@ -39,6 +37,8 @@ import {
   PAYPAL_TOOLTIP_SUCCESSFULL,
 } from '@/constants/paypal.constants';
 import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
+import clsx from 'clsx';
+import { toast } from 'react-toastify';
 
 interface UserPageProps {
   followingNewsletterListData?: NewslettersListData;
@@ -70,6 +70,7 @@ const UserPage = ({
 
   const notificationRecipientId = user && user.id ? +user.id : undefined;
   const router = useRouter();
+  const routerNavigation = userRouterNavigation();
   const currentUser = useUser().user;
   const isProfile = isProfileFromProps || user.id === currentUser?.id;
   const loadMore = async () => {
@@ -139,11 +140,21 @@ const UserPage = ({
 
     if (!response) return;
 
-    const partnerReferralLink = response.data.find(
-      link => link.rel === PayPalReferralLinkRelation.ActionUrl
-    );
+    if (response.isActivated) {
+      routerNavigation.refresh();
+    } else if (response.errorMessage) {
+      toast.error(response.errorMessage, {
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+      });
+    } else if (response.data) {
+      const partnerReferralLink = response.data.find(
+        link => link.rel === PayPalReferralLinkRelation.ActionUrl
+      );
 
-    partnerReferralLink && setPartnerReferralLink(partnerReferralLink.href);
+      partnerReferralLink && setPartnerReferralLink(partnerReferralLink.href);
+    }
   };
 
   const handlePaypalTooltip = () => {
@@ -155,6 +166,13 @@ const UserPage = ({
       router.push(partnerReferralLink);
     }
   }, [partnerReferralLink, router]);
+
+  const tooltipStyles = clsx(
+    'absolute z-10 w-56 p-2 -mt-2 text-sm text-white bg-black rounded-md shadow-lg',
+    'transition-opacity duration-300',
+    { 'opacity-0': !showPaypalTooltip, 'opacity-100': showPaypalTooltip },
+    'top-full left-full transform -translate-x-1/2'
+  );
 
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
@@ -266,7 +284,9 @@ const UserPage = ({
               {hasActivePaidSubscription && !isActivePaypalPartner && (
                 <div className="relative">
                   <button
-                    className="flex items-center justify-center gap-x-2 bg-primary h-12 w-full rounded-full text-white text-lg py-2 px-8"
+                    className={`flex items-center justify-center gap-x-2 bg-${
+                      isLoadingPartnerLinks ? 'grey-0' : 'primary'
+                    } h-12 w-full rounded-full text-white text-lg py-2 px-8 mb-[4px]`}
                     onClick={connectPartner}
                     disabled={isLoadingPartnerLinks}
                   >
@@ -280,7 +300,7 @@ const UserPage = ({
                   >
                     <QuestionIcon className="absolute right-[-32px] top-3 cursor-pointer" />
                     {showPaypalTooltip && (
-                      <div className="absolute">
+                      <div className={tooltipStyles}>
                         <p>{PAYPAL_TOOLTIP_PARAGRAPH_1}</p>
                         <p>{PAYPAL_TOOLTIP_PARAGRAPH_2}</p>
                         <p>
