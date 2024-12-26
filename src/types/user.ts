@@ -18,6 +18,7 @@ export interface User {
   amountFollowingNewsletters: number;
   followed: boolean;
   isVerifiedOwner: boolean;
+  isActivePartner?: boolean;
 }
 
 export interface UserList {

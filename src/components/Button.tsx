@@ -14,7 +14,8 @@ interface ButtonProps {
     | 'outlined'
     | 'outlined-primary'
     | 'outlined-secondary'
-    | 'porcelain';
+    | 'porcelain'
+    | 'tertiary';
   weight?: 'base' | 'bold';
   fontSize?: 'base' | 'xs' | 'md' | 'sm';
   size?: 'base' | 'md' | 'full';
@@ -44,6 +45,7 @@ const variants = {
   'outlined-secondary':
     'border-[1.5px] flex justify-center items-center px-3 rounded-full text-dark-grey border-light-grey px-7 transition-colors duration-200 ease-in-out hover:bg-blue hover:text-white hover:border-blue',
   porcelain: 'bg-porcelain flex justify-center items-center text-lightBlack',
+  tertiary: 'text-primary bg-white',
 };
 
 const weights = {

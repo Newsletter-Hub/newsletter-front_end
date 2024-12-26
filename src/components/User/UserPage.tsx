@@ -1,9 +1,14 @@
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useRouter as userRouterNavigation } from 'next/navigation';
+
 import { NotificationData } from '@/actions/user/notifications';
 import { follow, unfollow } from '@/actions/newsletters';
 import { getUserById } from '@/actions/user';
-import Button from '../Button';
+import { getPaypalPartnerLinks } from '@/actions/tips';
 
-import Link from 'next/link';
+import Button from '../Button';
 
 import { useUser } from '@/contexts/UserContext';
 
@@ -21,28 +26,51 @@ import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 
 import Avatar from '../Avatar';
 import Notification from '../Notification';
-import { useState } from 'react';
 import { getNotifications } from '@/actions/user/notifications';
-import { useRouter } from 'next/router';
+import { PayPalReferralLinkRelation } from '@/types/tips.type';
+import PaypalIcon from '@/assets/icons/paypal';
+import QuestionIcon from '@/assets/icons/question';
+import {
+  PAYPAL_TOOLTIP_PARAGRAPH_1,
+  PAYPAL_TOOLTIP_PARAGRAPH_2,
+  PAYPAL_TOOLTIP_PARAGRAPH_3,
+  PAYPAL_TOOLTIP_SUCCESSFULL,
+} from '@/constants/paypal.constants';
+import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
+import clsx from 'clsx';
+import { toast } from 'react-toastify';
 
 interface UserPageProps {
   followingNewsletterListData?: NewslettersListData;
   user: User;
   isProfile?: boolean;
   notificationsData: NotificationData;
+  subscription: GetUserSubscriptionResponse | null;
 }
 
 const UserPage = ({
   user: userFromProps,
   isProfile: isProfileFromProps = true,
   notificationsData,
+  subscription,
 }: UserPageProps) => {
   const [user, setUser] = useState(userFromProps);
   const [notificationsInfo, setNotificationsInfo] = useState(notificationsData);
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState<boolean>(false);
+  const [isLoadingPartnerLinks, setIsLoadingPartnerLinks] = useState(false);
+  const [partnerReferralLink, setPartnerReferralLink] = useState<string | null>(
+    null
+  );
+  const [showPaypalTooltip, setShowPaypalTooltip] = useState(false);
+  const isActivePaypalPartner =
+    userFromProps.isVerifiedOwner && userFromProps?.isActivePartner;
+  const hasActivePaidSubscription =
+    subscription?.response?.subscription?.isActive || null;
+
   const notificationRecipientId = user && user.id ? +user.id : undefined;
   const router = useRouter();
+  const routerNavigation = userRouterNavigation();
   const currentUser = useUser().user;
   const isProfile = isProfileFromProps || user.id === currentUser?.id;
   const loadMore = async () => {
@@ -102,6 +130,49 @@ const UserPage = ({
       }
     }
   };
+
+  const connectPartner = async () => {
+    setIsLoadingPartnerLinks(true);
+
+    const response = await getPaypalPartnerLinks({
+      email: user.email,
+    }).finally(() => setNotificationLoading(false));
+
+    if (!response) return;
+
+    if (response.isActivated) {
+      routerNavigation.refresh();
+    } else if (response.errorMessage) {
+      toast.error(response.errorMessage, {
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+      });
+    } else if (response.data) {
+      const partnerReferralLink = response.data.find(
+        link => link.rel === PayPalReferralLinkRelation.ActionUrl
+      );
+
+      partnerReferralLink && setPartnerReferralLink(partnerReferralLink.href);
+    }
+  };
+
+  const handlePaypalTooltip = () => {
+    setShowPaypalTooltip(!showPaypalTooltip);
+  };
+
+  useEffect(() => {
+    if (partnerReferralLink) {
+      router.push(partnerReferralLink);
+    }
+  }, [partnerReferralLink, router]);
+
+  const tooltipStyles = clsx(
+    'absolute z-10 w-56 p-2 -mt-2 text-sm text-white bg-black rounded-md shadow-lg',
+    'transition-opacity duration-300',
+    { 'opacity-0': !showPaypalTooltip, 'opacity-100': showPaypalTooltip },
+    'top-full left-full transform -translate-x-1/2'
+  );
 
   return (
     <div className="bg-profile bg-cover bg-no-repeat bg-top w-screen pt-20 flex flex-col items-center">
@@ -172,34 +243,98 @@ const UserPage = ({
             )}
           </div>
           {isProfile && (
-            <div className="flex gap-8 items-center mb-[88px]">
-              <Link
-                href="/profile/settings"
-                className="flex items-center gap-2"
-              >
-                <EditIcon />
-                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
-                  Edit profile
-                </span>
-              </Link>
-              <Link
-                href="/profile/newsletters-owned"
-                className="flex items-center gap-2"
-              >
-                <OwnerIcon />
-                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
-                  Newsletters Owned
-                </span>
-              </Link>
-              <Link
-                href="/profile/bookmarks"
-                className="flex items-center gap-2"
-              >
-                <BookmarkIcon />
-                <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
-                  Bookmarks
-                </span>
-              </Link>
+            <div className="flex flex-col gap-y-6 mb-[88px]">
+              <div className="flex gap-8 items-center">
+                <Link
+                  href="/profile/settings"
+                  className="flex items-center gap-2"
+                >
+                  <EditIcon />
+                  <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                    Edit profile
+                  </span>
+                </Link>
+                <Link
+                  href="/profile/newsletters-owned"
+                  className="flex items-center gap-2"
+                >
+                  <OwnerIcon />
+                  <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                    Newsletters Owned
+                  </span>
+                </Link>
+                <Link
+                  href="/profile/bookmarks"
+                  className="flex items-center gap-2"
+                >
+                  <BookmarkIcon />
+                  <span className="font-inter font-semibold text-base text-dark-blue border-b border-b-dark-blue transition-colors duration-200 ease-in-out hover:text-primary hover:border-b-primary">
+                    Bookmarks
+                  </span>
+                </Link>
+              </div>
+
+              {!hasActivePaidSubscription && (
+                <p className="mx-auto">
+                  To be able to receive tips, please sign up for a PayPal
+                  <Link href="/subscription"> subscription</Link>.
+                </p>
+              )}
+
+              {hasActivePaidSubscription && !isActivePaypalPartner && (
+                <div className="relative">
+                  <button
+                    className={`flex items-center justify-center gap-x-2 bg-${
+                      isLoadingPartnerLinks ? 'grey-0' : 'primary'
+                    } h-12 w-full rounded-full text-white text-lg py-2 px-8 mb-[4px]`}
+                    onClick={connectPartner}
+                    disabled={isLoadingPartnerLinks}
+                  >
+                    <PaypalIcon />
+                    <span>Connect PayPal account</span>
+                  </button>
+
+                  <div
+                    onMouseEnter={handlePaypalTooltip}
+                    onMouseLeave={handlePaypalTooltip}
+                  >
+                    <QuestionIcon className="absolute right-[-32px] top-3 cursor-pointer" />
+                    {showPaypalTooltip && (
+                      <div className={tooltipStyles}>
+                        <p>{PAYPAL_TOOLTIP_PARAGRAPH_1}</p>
+                        <p>{PAYPAL_TOOLTIP_PARAGRAPH_2}</p>
+                        <p>
+                          {PAYPAL_TOOLTIP_PARAGRAPH_3.replace(
+                            '{email}',
+                            userFromProps.email
+                          )}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {isActivePaypalPartner && (
+                <div className="relative">
+                  <button className="flex items-center justify-center gap-x-2 bg-grey-0 h-12 w-full rounded-full text-white text-lg py-2 px-8 cursor-default">
+                    <PaypalIcon />
+                    <span>PayPal account connected</span>
+                  </button>
+
+                  <div
+                    onMouseEnter={handlePaypalTooltip}
+                    onMouseLeave={handlePaypalTooltip}
+                  >
+                    <QuestionIcon className="absolute right-[-32px] top-3 cursor-pointer" />
+                    {showPaypalTooltip && (
+                      <div className="absolute">
+                        <p>{PAYPAL_TOOLTIP_SUCCESSFULL}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
           {!isProfile && (
