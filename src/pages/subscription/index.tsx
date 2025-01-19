@@ -24,7 +24,6 @@ const Subscription = ({ userMe, subscription, token }: SubscriptionProps) => {
     <PrivateRoute>
       <div className="flex flex-col items-center pt-20 gap-y-24">
         <TopBanner />
-        <Benefits />
         <HowItWorks />
         <ChoosePlan
           userMe={userMe}

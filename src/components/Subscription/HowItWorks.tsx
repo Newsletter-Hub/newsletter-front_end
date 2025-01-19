@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import subscriptionDecoLine from '@/assets/images/subscriptionDecoLine.webp';
 import subscriptionPlaneIcon from '@/assets/images/subscriptionPlaneIcon.svg';
@@ -44,10 +45,17 @@ const HowItWorks = () => {
             />
           </div>
           <div className="flex flex-col gap-y-4 w-[210px]">
-            <p className="font-inter font-semibold text-lg">Account</p>
+            <p className="font-inter font-semibold text-lg">
+              Be a Verified Owner
+            </p>
             <p className="font-inter font-normal text-lg text-dark-grey">
-              Ensure that you are a verified owner. If you are unsure, you can
-              learn more here.
+              Ensure that you are a verified owner of a newsletter. If you are
+              unsure, you can learn more by clicking&nbsp;
+              <Link href="/newsletters/claim" legacyBehavior passHref>
+                <a target="_blank" rel="noopener noreferrer">
+                  here.
+                </a>
+              </Link>
             </p>
           </div>
         </div>
@@ -58,10 +66,12 @@ const HowItWorks = () => {
             </p>
           </div>
           <div className="flex flex-col gap-y-4 w-[210px]">
-            <p className="font-inter font-semibold text-lg">Plans</p>
+            <p className="font-inter font-semibold text-lg">
+              Subscribe to a Plan
+            </p>
             <p className="font-inter font-normal text-lg text-dark-grey">
-              Take a look at the tariff plans below and select the one that best
-              fits your needs.
+              Select a subscription plan below and complete the payment process
+              through PayPal.
             </p>
           </div>
         </div>
@@ -72,10 +82,17 @@ const HowItWorks = () => {
             </p>
           </div>
           <div className="flex flex-col gap-y-4 w-[210px]">
-            <p className="font-inter font-semibold text-lg">Payment</p>
+            <p className="font-inter font-semibold text-lg">
+              Connect Your PayPal Account to Newsletter Hub
+            </p>
             <p className="font-inter font-normal text-lg text-dark-grey">
-              Please complete the payment form with your information and then
-              click &apos;Purchase&apos;
+              Go to&nbsp;
+              <Link href="/profile" legacyBehavior passHref>
+                <a target="_blank" rel="noopener noreferrer">
+                  your profile
+                </a>
+              </Link>
+              &nbsp;and click on &apos;Connect PayPal Account&apos;
             </p>
           </div>
         </div>
@@ -88,8 +105,8 @@ const HowItWorks = () => {
           <div className="flex flex-col gap-y-4 w-[210px]">
             <p className="font-inter font-semibold text-lg">Enjoy</p>
             <p className="font-inter font-normal text-lg text-dark-grey">
-              Enjoy your new Newsletters Hub Pro account and explore its
-              exciting new features!
+              Link your readers to your newsletter page on Newsletter Hub and
+              start receiving tips directly to your PayPal account
             </p>
           </div>
         </div>
