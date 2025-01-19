@@ -22,18 +22,16 @@ const Benefits = () => {
           </h3>
           <div>
             <p className="font-inter font-semibold text-lg text-dark-grey mb-3">
-              With Newsletters Hub pro you will have:
+              With Newsletters Hub Pro you will have:
             </p>
 
             <p className="flex items-center gap-x-2 text-lg font-inter text-dark-grey mb-1">
-              <ListItemIcon /> The opportunity to collect tips from your
-              articles.
+              <ListItemIcon /> The opportunity to collect tips for your
+              newsletters.
             </p>
             <p className="flex items-center gap-x-2 text-lg font-inter text-dark-grey mb-1">
-              <ListItemIcon /> The behefit to be on top of articles list.
-            </p>
-            <p className="flex items-center gap-x-2 text-lg font-inter text-dark-grey mb-1">
-              <ListItemIcon /> Morbi bibendum finibus eros tempus lacinia.
+              <ListItemIcon /> Gain social proof with the combination of tips
+              and reviews from your readers.
             </p>
           </div>
         </div>
