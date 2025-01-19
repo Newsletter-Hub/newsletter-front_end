@@ -324,7 +324,7 @@ const Header = () => {
                         <div className="w-6 h-6">
                           <CheckVerifiedIcon className="!w-4" />
                         </div>
-                        NewsLet Pro
+                        Newsletter Hub Pro
                       </Link>
                     )}
                   </div>
@@ -446,7 +446,7 @@ const Header = () => {
                     <div className="w-6 h-6">
                       <CheckVerifiedIcon />
                     </div>
-                    NewsLet Pro
+                    Newsletter Hub Pro
                   </Link>
                 )}
               </div>

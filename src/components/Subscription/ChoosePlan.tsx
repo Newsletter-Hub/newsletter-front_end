@@ -99,7 +99,7 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 <p className="text-6xl font-medium pt-5 pb-5">Free</p>
               </div>
               <p className="font-inter text-sm font-normal">
-                Default plan for activated users
+                Default plan for newsletter owners
               </p>
             </div>
             <Button
@@ -115,9 +115,6 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
               <div className="flex justify-between">
                 <p className="font-inter text-lg font-semibold text-white">
                   Hub Pro
-                </p>
-                <p className="font-inter text-sm font-normal text-white">
-                  Save 20%
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center mb-3">
@@ -163,37 +160,9 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                       height: 'auto',
                     }}
                   />
-                  <p className="font-inter text-sm text-white">First benefit</p>
-                </li>
-                <li className="flex gap-x-1">
-                  <Image
-                    src={checkmarkWhiteIcon}
-                    width={0}
-                    alt="contact"
-                    placeholder="blur"
-                    blurDataURL="src/assets/images/checkmarkWhiteIcon.svg"
-                    style={{
-                      width: '16px',
-                      height: 'auto',
-                    }}
-                  />
                   <p className="font-inter text-sm text-white">
-                    Second benefit
+                    Receive tips directly on Newsletter Hub
                   </p>
-                </li>
-                <li className="flex gap-x-1">
-                  <Image
-                    src={checkmarkWhiteIcon}
-                    width={0}
-                    alt="contact"
-                    placeholder="blur"
-                    blurDataURL="src/assets/images/checkmarkWhiteIcon.svg"
-                    style={{
-                      width: '16px',
-                      height: 'auto',
-                    }}
-                  />
-                  <p className="font-inter text-sm text-white">Third benefit</p>
                 </li>
               </ul>
             </div>
