@@ -44,6 +44,7 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                 ? process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_MONTHLY_PLAN_ID
                 : process.env.NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PLAN_ID,
               custom_id: userMe.email,
+              'PayPal-Partner-Attribution-Id': 'NewsletterHubDirect_Ecom',
             });
           },
           onApprove: function () {
@@ -226,6 +227,7 @@ const ChoosePlan = ({ userMe, subscription, token }: SubscriptionProps) => {
                       : process.env
                           .NEXT_PUBLIC_PAYPAL_SUBSCRIPTION_YEARLY_PLAN_ID,
                     custom_id: userMe.email,
+                    'PayPal-Partner-Attribution-Id': 'NewsletterHubDirect_Ecom',
                   });
                 },
                 onApprove: function () {
