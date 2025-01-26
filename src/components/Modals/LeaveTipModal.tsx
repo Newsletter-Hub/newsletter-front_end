@@ -74,7 +74,7 @@ const LeaveTipModal = ({
           },
           createOrder: function () {
             return fetch(
-              `${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/create-order`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/paypal/create-order`,
               {
                 method: 'post',
                 headers: {
@@ -99,7 +99,7 @@ const LeaveTipModal = ({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onApprove: function (data: any) {
             return fetch(
-              `${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/tip-capture`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}/api/paypal/tip-capture`,
               {
                 method: 'post',
                 headers: {
