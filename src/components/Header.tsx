@@ -48,6 +48,10 @@ const Header = () => {
           href: `/${user ? 'newsletters/add' : 'sign-up'}`,
         },
         {
+          label: 'Claim Newsletter',
+          href: `/${user ? 'newsletters/claim' : 'sign-up'}`,
+        },
+        {
           label: 'Newsletter Hub Pro',
           href: '/subscription',
         },
