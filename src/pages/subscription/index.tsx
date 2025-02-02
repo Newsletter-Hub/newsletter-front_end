@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next';
 import parseCookies from 'next-cookies';
 
-import PrivateRoute from '@/components/PrivateRoute';
 import TopBanner from '@/components/Subscription/TopBanner';
 import Benefits from '@/components/Subscription/Benefits';
 import HowItWorks from '@/components/Subscription/HowItWorks';
@@ -14,17 +13,17 @@ import { User } from '@/types/user';
 import { GetUserSubscriptionResponse } from '@/types/paymentSubscription.type';
 
 interface SubscriptionProps {
-  userMe: User;
+  userMe: User | null;
   subscription: GetUserSubscriptionResponse;
   token: null | string;
 }
 
 const Subscription = ({ userMe, subscription, token }: SubscriptionProps) => {
   return (
-    <PrivateRoute>
-      <div className="flex flex-col items-center pt-20 gap-y-24">
-        <TopBanner />
-        <HowItWorks />
+    <div className="flex flex-col items-center pt-20 gap-y-24">
+      <TopBanner />
+      <HowItWorks />
+      {userMe?.isVerifiedOwner && (
         <ChoosePlan
           userMe={userMe}
           subscription={{
@@ -33,24 +32,14 @@ const Subscription = ({ userMe, subscription, token }: SubscriptionProps) => {
           }}
           token={token}
         />
-      </div>
-    </PrivateRoute>
+      )}
+    </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const cookies = parseCookies(context);
-  const user = cookies.user as User | undefined;
   const token = cookies.accessToken ? cookies.accessToken : null;
-
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
 
   let userMe = null;
   let subscription = null;
@@ -61,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return {
     props: {
-      userMe: userMe?.response,
+      userMe: userMe?.response ?? null,
       subscription,
       token,
     },
