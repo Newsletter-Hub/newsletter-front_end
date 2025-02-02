@@ -40,7 +40,7 @@ const Header = () => {
     { label: 'Categories', href: '/newsletters/categories' },
     { label: 'Community', href: '/users' },
     {
-      label: 'Add Newsletter',
+      label: 'Newsletter Owners',
       href: `/${user ? 'newsletters/add' : 'sign-up'}`,
       subLinks: [
         {
@@ -48,8 +48,8 @@ const Header = () => {
           href: `/${user ? 'newsletters/add' : 'sign-up'}`,
         },
         {
-          label: 'Claim Newsletter',
-          href: `/${user ? 'newsletters/claim' : 'sign-up'}`,
+          label: 'Newsletter Hub Pro',
+          href: '/subscription',
         },
       ],
     },
@@ -438,17 +438,15 @@ const Header = () => {
                   </div>
                   Bookmarks
                 </Link>
-                {user?.isVerifiedOwner && (
-                  <Link
-                    href="/subscription"
-                    className="flex gap-3 items-center text-dark-blue text-base p-2"
-                  >
-                    <div className="w-6 h-6">
-                      <CheckVerifiedIcon />
-                    </div>
-                    Newsletter Hub Pro
-                  </Link>
-                )}
+                <Link
+                  href="/subscription"
+                  className="flex gap-3 items-center text-dark-blue text-base p-2"
+                >
+                  <div className="w-6 h-6">
+                    <CheckVerifiedIcon />
+                  </div>
+                  Newsletter Hub Pro
+                </Link>
               </div>
               <div className="pt-4">
                 <Link
