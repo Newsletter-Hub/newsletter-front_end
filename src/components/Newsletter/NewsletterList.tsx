@@ -850,9 +850,7 @@ const NewslettersList = ({
             ) : (
               newslettersData.newsletters.map((newsletter, index) => {
                 const { owner } = newsletter;
-                const isVeryfiedOwner = !!owner;
                 const isNewsletterOwner = owner?.id === user?.id;
-                const isPaypalPartner = !!newsletter.merchantIdInPayPal;
 
                 return (
                   <div
@@ -876,62 +874,16 @@ const NewslettersList = ({
                       />
                     </div>
                     <div className="w-full flex flex-col justify-between">
-                      {isVeryfiedOwner && isPaypalPartner && (
+                      {isNewsletterOwner && (
                         <div className="flex justify-between items-center mb-4">
-                          <div className="flex items-center gap-x-3">
-                            {owner.avatar ? (
-                              <Image
-                                src={owner.avatar}
-                                alt="Author avatar"
-                                width={40}
-                              />
-                            ) : (
-                              <div className="w-10 h-10 rounded-full bg-primary" />
-                            )}
-                            <p className="text-sm text-dark-blue">
-                              {owner.username}
-                            </p>
-                            <p className="text-sm text-grey">
-                              {format(
-                                new Date(newsletter.createdAt),
-                                'dd.MM.yyyy'
-                              )}
-                            </p>
-                          </div>
-                          {!isNewsletterOwner ? (
-                            <button
-                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
-                              onClick={() =>
-                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
-                              }
-                            >
-                              Leave a tip
-                            </button>
-                          ) : (
-                            <button
-                              className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
-                              onClick={() =>
-                                router.push(
-                                  `/tips?newsletterId=${newsletter.id}`
-                                )
-                              }
-                            >
-                              Tips
-                            </button>
-                          )}
-
-                          {isLeaveTipModalOpen && (
-                            <LeaveTipModal
-                              open={isLeaveTipModalOpen}
-                              handleClose={() =>
-                                setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
-                              }
-                              merchantIdInPayPal={newsletter.merchantIdInPayPal}
-                              partnerId={owner.id}
-                              userId={user?.id}
-                              newsletterId={newsletter.id}
-                            />
-                          )}
+                          <button
+                            className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
+                            onClick={() =>
+                              router.push(`/tips?newsletterId=${newsletter.id}`)
+                            }
+                          >
+                            Tips
+                          </button>
                         </div>
                       )}
 

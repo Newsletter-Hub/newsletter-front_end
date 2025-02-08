@@ -41,7 +41,6 @@ const Header = () => {
     { label: 'Community', href: '/users' },
     {
       label: 'Newsletter Owners',
-      href: `/${user ? 'newsletters/add' : 'sign-up'}`,
       subLinks: [
         {
           label: 'Add Newsletter',
@@ -57,6 +56,21 @@ const Header = () => {
         },
       ],
     },
+  ];
+
+  const mobileLinks = [
+    { label: 'Newsletters', href: '/newsletters/categories/all' },
+    { label: 'Categories', href: '/newsletters/categories' },
+    { label: 'Community', href: '/users' },
+    {
+      label: 'Add Newsletter',
+      href: `/${user ? 'newsletters/add' : 'sign-up'}`,
+    },
+    {
+      label: 'Claim Newsletter',
+      href: `/${user ? 'newsletters/claim' : 'sign-up'}`,
+    },
+    { label: 'Newsletter Hub Pro', href: '/subscription' },
   ];
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -254,7 +268,7 @@ const Header = () => {
             {!user ? (
               <div>
                 <div className="flex flex-col gap-3 border-b border-b-light-grey pb-3 mb-3">
-                  {links.map(link => (
+                  {mobileLinks.map(link => (
                     <Link href={link.href} key={link.href}>
                       {link.label}
                     </Link>

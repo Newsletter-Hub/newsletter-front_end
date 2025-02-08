@@ -513,7 +513,11 @@ const NewsletterPage = ({
             {!isNewsletterOwner && hasOwner && isOwnerActivePaypalPartner && (
               <button
                 className="py-1.5 px-5 bg-primary-light rounded-3xl text-primary"
-                onClick={() => setIsLeaveTipModalOpen(!isLeaveTipModalOpen)}
+                onClick={() =>
+                  user
+                    ? setIsLeaveTipModalOpen(!isLeaveTipModalOpen)
+                    : router.push('/sign-up')
+                }
               >
                 Leave a tip
               </button>
