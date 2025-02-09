@@ -573,17 +573,6 @@ const NewsletterPage = ({
                     </>
                   )
                 )}
-                {newsletter?.averageDuration && (
-                  <>
-                    <p className="text-sm text-dark-grey">
-                      <span className="font-semibold">
-                        {newsletter?.averageDuration} min
-                      </span>{' '}
-                      read
-                    </p>
-                    <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-                  </>
-                )}
                 {newsletter?.pricing && (
                   <>
                     <span className="text-sm text-dark-grey font-semibold">

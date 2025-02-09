@@ -46,7 +46,6 @@ import { setRedirectPath } from '@/helpers/redirectPathLocalStorage';
 import Loading from '../Loading';
 import { useMutation } from 'react-query';
 import SkeletonImage from '../SkeletonImage';
-import LeaveTipModal from '../Modals/LeaveTipModal';
 
 const alegreya = Alegreya({ subsets: ['latin'] });
 
@@ -689,54 +688,6 @@ const NewslettersList = ({
                         </div>
                       </Accordion>
                       <Accordion
-                        label="Duration"
-                        isOpen={filters.duration}
-                        isSelected={Boolean(
-                          filtersPayload.durationFrom !== 1 ||
-                            filtersPayload.durationTo !== 60
-                        )}
-                        setIsOpen={value => {
-                          setFilters({ ...filters, duration: value });
-                        }}
-                      >
-                        <div className="md:pl-9">
-                          <div className="pt-[18px] mb-2">
-                            <Slider
-                              min={1}
-                              max={60}
-                              step={1}
-                              values={[
-                                filtersPayload.durationFrom,
-                                filtersPayload.durationTo,
-                              ]}
-                              setValues={values => {
-                                if (Array.isArray(values)) {
-                                  setFiltersPayload({
-                                    ...filtersPayload,
-                                    durationFrom: values[0],
-                                    durationTo: values[1],
-                                  });
-                                }
-                              }}
-                            />
-                          </div>
-                          <div className="flex justify-between">
-                            <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
-                              from&nbsp;
-                              <span className="font-semibold">
-                                {filtersPayload.durationFrom} minute
-                              </span>
-                            </p>
-                            <p className="text-lightBlack md:pl-4 md:pr-[43px] py-2 border-b-2 border-grey text-sm md:text-base">
-                              to&nbsp;
-                              <span className="font-semibold">
-                                {filtersPayload.durationTo} minute
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </Accordion>
-                      <Accordion
                         label="Rating"
                         isOpen={filters.rating}
                         isSelected={Boolean(filtersPayload.ratings.length)}
@@ -889,17 +840,6 @@ const NewslettersList = ({
 
                       <div className="flex flex-col md:flex-row mb-4 font-inter items-center">
                         <div className="flex gap-6 items-center">
-                          {newsletter.averageDuration && (
-                            <>
-                              <p className="text-sm text-dark-grey">
-                                <span className="font-semibold">
-                                  {newsletter.averageDuration} min&nbsp;
-                                </span>
-                                read
-                              </p>
-                              <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
-                            </>
-                          )}
                           <span className="text-sm text-dark-grey font-semibold">
                             {newsletter.pricing === 'free_and_paid'
                               ? 'Free & Paid'
@@ -916,6 +856,7 @@ const NewslettersList = ({
                           </p>
                         </div>
                       </div>
+
                       <Link
                         href={`/newsletters/${newsletter.id}`}
                         className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
