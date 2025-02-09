@@ -28,7 +28,7 @@ interface Newsletter {
   image?: Blob | string;
   interests?: number[];
   newsletterAuthor?: string;
-  averageDuration: string;
+  averageDuration?: string;
   pricingType: 'free' | 'paid' | 'free_and_paid';
   router?: NextRouter;
 }

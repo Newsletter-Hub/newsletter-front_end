@@ -30,7 +30,6 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
   const [pricingType, setPricingType] = useState<
     'free' | 'paid' | 'free_and_paid'
   >('free');
-  const [averageDuration, setAverageDuration] = useState<number>(1);
   const autoCompleteRef = useRef(null);
   const newsletterMutation = useMutation(createNewsletter);
 
@@ -60,7 +59,6 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
       description: payload.description,
       image: payload.image,
       interests: tags.map(item => item.id),
-      averageDuration: String(averageDuration),
       pricingType,
       router,
       newsletterAuthor: payload.author,
@@ -226,21 +224,6 @@ const DetailsForm = ({ payload, interests, setStep }: NewsletterFormProps) => {
                 setPricingType(value as 'free' | 'paid' | 'free_and_paid')
               }
             />
-          </div>
-          <div>
-            <p className="mb-4 text-dark-blue text-xl font-medium">Duration</p>
-            <Slider
-              min={1}
-              max={60}
-              step={1}
-              values={averageDuration}
-              setValues={values => setAverageDuration(values as number)}
-            />
-            <p className="text-lightBlack px-2 py-2 border-b-2 border-grey w-fit font-inter pt-2">
-              <span className="font-semibold">
-                {averageDuration} minute{averageDuration > 1 && 's'}
-              </span>
-            </p>
           </div>
         </div>
       </div>

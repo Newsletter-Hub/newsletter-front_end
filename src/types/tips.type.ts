@@ -31,7 +31,7 @@ type NewsletterModel = {
   link: string;
   title: string;
   description: null | string;
-  averageDuration: number;
+  averageDuration?: number;
   pricing: string;
   newsletterAuthor: null | User;
   image: null | string;

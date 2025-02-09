@@ -40,9 +40,6 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
   const [pricingType, setPricingType] = useState<
     'free' | 'paid' | 'free_and_paid'
   >(newsletterData.pricing || 'free');
-  const [averageDuration, setAverageDuration] = useState<number>(
-    newsletterData.averageDuration || 1
-  );
   const autoCompleteRef = useRef(null);
   const newsletterMutation = useMutation(newsletterUpdateAsOwner);
 
@@ -97,7 +94,6 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
       link: data.link,
       image: data.image as File,
       interests: tags.map(item => item.id),
-      averageDuration: String(averageDuration),
       pricingType,
       router,
     });
@@ -289,23 +285,6 @@ const EditAsOwner = ({ newsletterData, interests }: EditNewsletterProps) => {
                   setPricingType(value as 'free' | 'paid' | 'free_and_paid')
                 }
               />
-            </div>
-            <div>
-              <p className="mb-4 text-dark-blue text-xl font-medium">
-                Duration
-              </p>
-              <Slider
-                min={1}
-                max={60}
-                step={1}
-                values={averageDuration}
-                setValues={values => setAverageDuration(values as number)}
-              />
-              <p className="text-lightBlack px-2 py-2 border-b-2 border-grey w-fit font-inter pt-2">
-                <span className="font-semibold">
-                  {averageDuration} minute{averageDuration > 1 && 's'}
-                </span>
-              </p>
             </div>
           </div>
         </div>

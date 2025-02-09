@@ -32,7 +32,7 @@ export interface NewsletterData {
   averageRating: number;
   amountRatings: number;
   link: string;
-  averageDuration: number;
+  averageDuration?: number;
   pricing: 'free' | 'paid' | 'free_and_paid';
   createdAt: string;
   isFollower: boolean;
