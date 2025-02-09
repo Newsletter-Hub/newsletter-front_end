@@ -838,6 +838,25 @@ const NewslettersList = ({
                         </div>
                       )}
 
+                      <div className="flex flex-col md:flex-row mb-4 font-inter items-center">
+                        <div className="flex gap-6 items-center">
+                          <span className="text-sm text-dark-grey font-semibold">
+                            {newsletter.pricing === 'free_and_paid'
+                              ? 'Free & Paid'
+                              : newsletter.pricing.charAt(0).toUpperCase() +
+                                newsletter.pricing.slice(1)}
+                          </span>
+                          <div className="w-1.5 h-1.5 bg-light-grey rounded-full"></div>
+                          <p className="text-sm text-dark-grey">
+                            <span className="font-semibold">
+                              {newsletter.amountFollowers}
+                            </span>
+                            &nbsp;Follower
+                            {newsletter.amountFollowers !== 1 && 's'}
+                          </p>
+                        </div>
+                      </div>
+
                       <Link
                         href={`/newsletters/${newsletter.id}`}
                         className="block max-w-[650px] whitespace-nowrap text-ellipsis overflow-hidden text-lightBlack font-medium text-xl mb-2 cursor-pointer"
