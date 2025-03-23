@@ -189,7 +189,7 @@ const LeaveTipModal = ({
         </div>
 
         <Script
-          src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_TIPPING_CLIENT_ID}&merchant-id=${merchantIdInPayPal}&currency=USD&intent=capture&locale=en_US&commit=true&vault=false&integration-date=2020-07-01&components=buttons`}
+          src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_TIPPING_CLIENT_ID}&merchant-id=${merchantIdInPayPal}&currency=USD&intent=capture&locale=en_US&commit=true&vault=false&integration-date=2020-07-01&components=buttons&enable-funding=venmo,paylater`}
           strategy="afterInteractive"
           data-partner-attribution-id="NewsletterHubPartnerInt_Ecom"
           onLoad={() => setIsPayPalLoaded(true)}
